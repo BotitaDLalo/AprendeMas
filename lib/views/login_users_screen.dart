@@ -1,6 +1,5 @@
 import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-
 class LoginUsersScreen extends StatelessWidget {
   const LoginUsersScreen({super.key});
 
@@ -25,22 +24,29 @@ class LoginUsersScreen extends StatelessWidget {
                 color: Colors.grey.shade400,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Column(
+              child:  Column(
                 children: [
-                  Text('Inicia sesión',),
-                  const SizedBox(height: 10,),
+                  Text(
+                    'Inicia sesión',
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   _RegisterForm(),
 
                   Text('¿Olvidaste tu contraseña?'),
 
                   //todo: button
-                  const SizedBox(height: 15,),
+                  const SizedBox(
+                    height: 15,
+                  ),
 
-                  Text('No tienes cuenta'),
+                  Text('No tienes cuenta',style: Theme.of(context).textTheme.bodySmall,),
 
                   //todo: button
-                  const SizedBox(height: 15,),
-
+                  const SizedBox(
+                    height: 15,
+                  ),
                 ],
               ),
             )
@@ -61,15 +67,17 @@ class _RegisterForm extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
-            CustomTextFormField(), 
-            const SizedBox(height: 10,),
             CustomTextFormField(),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomTextFormField(),
+            const SizedBox(
+              height: 10,
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
