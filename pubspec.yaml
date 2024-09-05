@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   go_router: ^14.2.7
-  riverpod: ^2.5.1
+  flutter_riverpod: ^2.5.1
 
 dev_dependencies:
   flutter_lints: ^4.0.0
