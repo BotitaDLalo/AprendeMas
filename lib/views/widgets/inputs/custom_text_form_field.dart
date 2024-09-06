@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({super.key});
+  final String? label;
+  final String? hint;
+  final String? errorMessage;
+  final bool obscureText;
+  final Function(String)? onChanged;
+  final String? Function(String?)? validator;
+
+  const CustomTextFormField({
+    super.key, 
+    this.label, 
+    this.hint, 
+    this.errorMessage, 
+    this.onChanged, 
+    this.validator, 
+    this.obscureText = false
+    });
 
   @override
   Widget build(BuildContext context) {
-    //?final colors = Theme.of(context).colorScheme;
-    final colors = Colors.black; 
+    final colors = Theme.of(context);
 
     final border = OutlineInputBorder(
       // borderSide: BorderSide(color: colors),
@@ -14,19 +28,22 @@ class CustomTextFormField extends StatelessWidget {
     );
     
     return TextFormField(
-      onChanged: (value) {
-        print('value $value');
-      },
-
-      //todo: validator esta sujeto a camsbios por Riverpood
-      validator: (value) {
-        if (value == null) return 'Campo requerido';
-        return  null;
-      },
-
+      onChanged: onChanged,
+      validator: validator,
+      obscureText: obscureText,
       decoration: InputDecoration(
         enabledBorder: border,
-        focusedBorder: border.copyWith(borderSide: BorderSide(color: Colors.purple)),
+        focusedBorder: border.copyWith(borderSide: BorderSide(color: Colors.blue)),
+        errorBorder: border.copyWith(borderSide: BorderSide(color: Colors.red.shade800)),
+        focusedErrorBorder: border.copyWith(borderSide: BorderSide(color: Colors.red.shade800)),
+        isDense: true,
+        label: label != null ? Text(label!): null,
+        labelStyle: TextStyle(
+          color: Colors.green
+        ),
+        hintText: hint,
+        errorText: errorMessage, 
+        focusColor: colors.primaryColor
       ),
     );
   }
