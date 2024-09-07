@@ -1,5 +1,6 @@
-import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/views/widgets/forms/form_login.dart';
 import 'package:flutter/material.dart';
+
 class LoginUsersScreen extends StatelessWidget {
   const LoginUsersScreen({super.key});
 
@@ -21,20 +22,26 @@ class LoginUsersScreen extends StatelessWidget {
               width: 350,
               height: 400,
               decoration: BoxDecoration(
-                color: Colors.grey.shade400,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(20),
               ),
               child:  Column(
                 children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  
                   Text(
-                    'Inicia sesión',
+                    'Inicia sesión', style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
-                  _RegisterForm(),
 
-                  Text('¿Olvidaste tu contraseña?'),
+                  //?Llamar al  FormLogin
+                  FormLogin(),
+
+                  Text('¿Olvidaste tu contraseña?', style: Theme.of(context).textTheme.bodySmall,),
 
                   //todo: button
                   const SizedBox(
@@ -50,31 +57,6 @@ class LoginUsersScreen extends StatelessWidget {
                 ],
               ),
             )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RegisterForm extends StatelessWidget {
-  const _RegisterForm();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Form(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            CustomTextFormField(),
-            const SizedBox(
-              height: 10,
-            ),
-            CustomTextFormField(),
-            const SizedBox(
-              height: 10,
-            ),
           ],
         ),
       ),
