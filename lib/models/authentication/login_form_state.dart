@@ -1,11 +1,11 @@
-class FormState {
+class LoginFormState {
   final String email;
   final String password;
 
-  FormState({required this.email, required this.password});
+  LoginFormState({required this.email, required this.password});
 
-  FormState copyWith({String? email, String? password}) {
-    return FormState(
+  LoginFormState copyWith({String? email, String? password}) {
+    return LoginFormState(
         email: email ?? this.email, password: password ?? this.password);
   }
 }
