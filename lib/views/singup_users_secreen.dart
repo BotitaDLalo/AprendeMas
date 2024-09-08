@@ -1,9 +1,10 @@
-import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/config/router/router.dart';
+import 'package:aprende_mas/views/widgets/forms/form_login.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginUsersScreen extends StatelessWidget {
-  const LoginUsersScreen({super.key});
+class SingupUsersScreen extends StatelessWidget {
+  const SingupUsersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class LoginUsersScreen extends StatelessWidget {
                   Container(
                     alignment: const Alignment(-0.8, 1),
                     child: Text(
-                      'Inicia sesión', style: Theme.of(context).textTheme.bodyMedium,
+                      'Registrate', style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                   
@@ -43,34 +44,29 @@ class LoginUsersScreen extends StatelessWidget {
                     height: 15,
                   ),
 
-                  //?Llamar al  FormLogin
-                  FormLogin(),
-
-                  Container(
-                    alignment: const Alignment(-0.8, 1),
-                    child: Text('¿Olvidaste tu contraseña?', 
-                    style: Theme.of(context).textTheme.bodySmall,)),
+                  //?Llamar al  FormSingup
+                    FormLogin(),
 
                   //todo: button
                   Container(
                     alignment: const Alignment(0.7, 2),
-                    child: FilledButton(onPressed: () {}, 
-                    child: const Text('Entra')),
+                    child: FilledButton(onPressed: () {
+                      
+                    }, child: const Text('Entra')),
                   ),
 
                   const SizedBox(
                     height: 15,
                   ),
 
-                  Text(
-                    '¿No tienes cuenta?',
-                    style: Theme.of(context).textTheme.bodySmall,),
+                  Text('¿Ya tienes una cuenta?',style: Theme.of(context).textTheme.bodySmall,),
 
                   //todo: button
-                  FilledButton(onPressed: () {
-                    context.go('/sing-up-users');
-                  }, 
-                    child: const Text('Registrate')),
+                  FilledButton(
+                    onPressed: () {
+                      context.go('/');
+                    },
+                   child: const Text('Inicia sesión')),
 
                   const SizedBox(
                     height: 15,
@@ -84,3 +80,4 @@ class LoginUsersScreen extends StatelessWidget {
     );
   }
 }
+

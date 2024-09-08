@@ -20,6 +20,7 @@ class FormLogin extends ConsumerWidget {
             ),
             CustomTextFormField(
               label: 'Contraseña',
+              obscureText: true,
             ),
             const SizedBox(
               height: 10,
