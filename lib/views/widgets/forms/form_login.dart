@@ -29,6 +29,7 @@ class FormLogin extends ConsumerWidget {
               onChanged: (value) {
                 loginNotifier.writePassword(value);
               },
+              obscureText: true,
             ),
             const SizedBox(
               height: 10,
