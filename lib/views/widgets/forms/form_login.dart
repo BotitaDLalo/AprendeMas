@@ -1,25 +1,34 @@
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FormLogin extends ConsumerWidget {
   const FormLogin({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef) {
-    return const Form(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final loginState = ref.watch(loginFormStateNotifierProvider);
+    final loginNotifier = ref.read(loginFormStateNotifierProvider.notifier);
+
+    return Form(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             CustomTextFormField(
               label: 'Correo',
+              onChanged: (value) {
+                loginNotifier.writeEmail(value);
+              },
             ),
             const SizedBox(
               height: 20,
             ),
             CustomTextFormField(
               label: 'Contraseña',
+              onChanged: (value) {
+                loginNotifier.writePassword(value);
+              },
             ),
             const SizedBox(
               height: 10,
@@ -30,5 +39,3 @@ class FormLogin extends ConsumerWidget {
     );
   }
 }
-
-
