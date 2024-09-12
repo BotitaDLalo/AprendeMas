@@ -2,13 +2,9 @@
 import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
 
-final appRouter = GoRouter(routes: [
+final appRouter = GoRouter(initialLocation: '/login-user-screen', routes: [
   GoRoute(
-    path: '/',
-    builder: (context, state) => const LoginUsersScreen(),
-  ),
-  GoRoute(
-    path: '/sing-up-users',
-    builder: (context, state) => const SingupUsersScreen(),
+    path: '/login-user-screen',
+    builder: (context, state) => const LoginUserScreen(),
   )
 ]);
