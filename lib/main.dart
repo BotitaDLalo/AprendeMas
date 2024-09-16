@@ -1,11 +1,12 @@
+import 'package:aprende_mas/config/environment/environmen.dart';
 import 'package:aprende_mas/config/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
-void main() {
-  runApp(
-    const ProviderScope(child: MainApp())
-  );
+
+void main() async{
+  await Environment.initEnvironment();
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
