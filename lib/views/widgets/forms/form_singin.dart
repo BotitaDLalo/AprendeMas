@@ -2,25 +2,13 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../../providers/authentication/auth_provider.dart';
 
-class FormLogin extends ConsumerWidget {
-  const FormLogin({super.key});
-
-  void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-  }
+class FormSingin extends ConsumerWidget {
+  const FormSingin({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
-
-    ref.listen(authProvider, (previous, next) {
-      if (next.errorMessage.isEmpty) return;
-      showSnackbar(context, next.errorMessage);
-    });
-
     return Form(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -32,7 +20,7 @@ class FormLogin extends ConsumerWidget {
             Container(
               alignment: const Alignment(-0.8, 1),
               child: Text(
-                'Inicia Sesión',
+                'Registrate',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -60,34 +48,26 @@ class FormLogin extends ConsumerWidget {
             const SizedBox(
               height: 10,
             ),
-            FilledButton(
-                onPressed: () {
-                  ref.read(loginFormProvider.notifier).onFormSubmit();
-                  print('Bien al parecer');
-                },
-                child: const Text('Submit')),
             Container(
-                alignment: const Alignment(-0.8, 1),
-                child: Text(
-                  '¿Olvidaste tu contraseña?',
-                  style: Theme.of(context).textTheme.bodySmall,
-                )),
-            Container(
-              alignment: const Alignment(0.7, 2),
-              child: FilledButton(onPressed: () {}, child: const Text('Entra')),
+              alignment: const Alignment(0.9, 2),
+              child: FilledButton(
+                  onPressed: () {
+                    ref.read(loginFormProvider.notifier).onFormSubmit();
+                  },
+                  child: const Text('Entra')),
             ),
             const SizedBox(
               height: 15,
             ),
             Text(
-              '¿No tienes cuenta?',
+              '¿Ya tienes una cuenta?',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             FilledButton(
                 onPressed: () {
-                  context.go('/singin-user');
+                  context.go('/login-user');
                 },
-                child: const Text('Registrate')),
+                child: const Text('Inicia Sesión')),
             const SizedBox(
               height: 15,
             ),
