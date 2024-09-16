@@ -4,7 +4,11 @@ import 'login_form_state.dart';
 import 'package:aprende_mas/views/views.dart';
 
 class LoginFormNotifier extends StateNotifier<LoginFormState> {
-  LoginFormNotifier() : super(LoginFormState());
+  final Function(String, String) loginUserCallback;
+
+  LoginFormNotifier({
+    required this.loginUserCallback,
+  }) : super(LoginFormState());
 
   onEmailChanged(String value) {
     final newEmail = Email.dirty(value);
@@ -20,10 +24,10 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     );
   }
 
-  onFormSubmit() {
+  onFormSubmit() async{
     _touchEveryField();
     if (!state.isValid) return;
-    print(state);
+    await loginUserCallback(state.email.value, state.password.value);
   }
 
   _touchEveryField() {

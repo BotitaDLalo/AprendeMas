@@ -2,13 +2,25 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
+import '../../../providers/authentication/auth_provider.dart';
 
 class FormLogin extends ConsumerWidget {
   const FormLogin({super.key});
 
+  void showSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
+
+    ref.listen(authProvider, (previous, next) {
+      if (next.errorMessage.isEmpty) return;
+      showSnackbar(context, next.errorMessage);
+    });
+
     return Form(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
