@@ -3,8 +3,8 @@ import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 
-class FormLogin extends ConsumerWidget {
-  const FormLogin({super.key});
+class FormSingin extends ConsumerWidget {
+  const FormSingin({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +20,7 @@ class FormLogin extends ConsumerWidget {
             Container(
               alignment: const Alignment(-0.8, 1),
               child: Text(
-                'Inicia Sesión',
+                'Registrate',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
@@ -48,33 +48,26 @@ class FormLogin extends ConsumerWidget {
             const SizedBox(
               height: 10,
             ),
-            FilledButton(
-                onPressed: () {
-                  ref.read(loginFormProvider.notifier).onFormSubmit();
-                },
-                child: const Text('Submit')),
             Container(
-                alignment: const Alignment(-0.8, 1),
-                child: Text(
-                  '¿Olvidaste tu contraseña?',
-                  style: Theme.of(context).textTheme.bodySmall,
-                )),
-            Container(
-              alignment: const Alignment(0.7, 2),
-              child: FilledButton(onPressed: () {}, child: const Text('Entra')),
+              alignment: const Alignment(0.9, 2),
+              child: FilledButton(
+                  onPressed: () {
+                    ref.read(loginFormProvider.notifier).onFormSubmit();
+                  },
+                  child: const Text('Entra')),
             ),
             const SizedBox(
               height: 15,
             ),
             Text(
-              '¿No tienes cuenta?',
+              '¿Ya tienes una cuenta?',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             FilledButton(
                 onPressed: () {
-                  context.go('/singin-user');
+                  context.go('/login-user');
                 },
-                child: const Text('Registrate')),
+                child: const Text('Inicia Sesión')),
             const SizedBox(
               height: 15,
             ),
