@@ -1,4 +1,4 @@
 export 'infrastructure/inputs.dart';
 export 'users/users.dart';
-export 'widgets/forms/forms.dart';
-export 'teacher/teacher.dart';
+export 'widgets/widgets.dart';
+export 'teacher/teacher_home_screen.dart';
