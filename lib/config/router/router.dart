@@ -1,4 +1,3 @@
-// import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
 

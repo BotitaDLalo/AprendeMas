@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 import '../../../providers/authentication/auth_provider.dart';
@@ -60,12 +61,12 @@ class FormLogin extends ConsumerWidget {
             const SizedBox(
               height: 10,
             ),
-            FilledButton(
-                onPressed: () {
-                  ref.read(loginFormProvider.notifier).onFormSubmit();
-                  print('Bien al parecer');
-                },
-                child: const Text('Submit')),
+            // ButtonForm(
+            //     buttonName: "Submit",
+            //     onPressed: () {
+            //       ref.read(loginFormProvider.notifier).onFormSubmit();
+            //       print('Bien al parecer');
+            //     }),
             Container(
                 alignment: const Alignment(-0.8, 1),
                 child: Text(
@@ -73,9 +74,12 @@ class FormLogin extends ConsumerWidget {
                   style: Theme.of(context).textTheme.bodySmall,
                 )),
             Container(
-              alignment: const Alignment(0.7, 2),
-              child: FilledButton(onPressed: () {}, child: const Text('Entra')),
-            ),
+                alignment: const Alignment(0.7, 2),
+                child: ButtonForm(
+                    buttonName: "Entra",
+                    onPressed: () {
+                      ref.read(loginFormProvider.notifier).onFormSubmit();
+                    })),
             const SizedBox(
               height: 15,
             ),
@@ -83,11 +87,11 @@ class FormLogin extends ConsumerWidget {
               '¿No tienes cuenta?',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            FilledButton(
+            ButtonForm(
+                buttonName: "Registrate",
                 onPressed: () {
                   context.go('/singin-user');
-                },
-                child: const Text('Registrate')),
+                }),
             const SizedBox(
               height: 15,
             ),
