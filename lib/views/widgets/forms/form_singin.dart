@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,13 +50,12 @@ class FormSingin extends ConsumerWidget {
               height: 10,
             ),
             Container(
-              alignment: const Alignment(0.9, 2),
-              child: FilledButton(
-                  onPressed: () {
-                    ref.read(loginFormProvider.notifier).onFormSubmit();
-                  },
-                  child: const Text('Entra')),
-            ),
+                alignment: const Alignment(0.9, 2),
+                child: ButtonForm(
+                    buttonName: "Entra",
+                    onPressed: () {
+                      ref.read(loginFormProvider.notifier).onFormSubmit();
+                    })),
             const SizedBox(
               height: 15,
             ),
@@ -63,11 +63,11 @@ class FormSingin extends ConsumerWidget {
               '¿Ya tienes una cuenta?',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            FilledButton(
+            ButtonForm(
+                buttonName: "Inicia sesión",
                 onPressed: () {
                   context.go('/login-user');
-                },
-                child: const Text('Inicia Sesión')),
+                }),
             const SizedBox(
               height: 15,
             ),

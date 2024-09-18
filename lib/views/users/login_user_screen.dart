@@ -23,7 +23,7 @@ class LoginUserScreen extends StatelessWidget {
                 ),
                 Container(
                   width: 350,
-                  height: 500,
+                  height: 450,
                   decoration: BoxDecoration(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     borderRadius: BorderRadius.circular(20),
