@@ -33,6 +33,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     );
   }
 
+  void resetState(){
+    state = AuthState();
+  }
+
   Future<void> logout([String? errorMessage]) async {
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,

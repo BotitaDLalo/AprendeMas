@@ -4,22 +4,35 @@ import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
 import '../../../providers/authentication/auth_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FormLogin extends ConsumerWidget {
   const FormLogin({super.key});
 
   void showSnackbar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
 
+    void resetState() {
+      ref.read(authProvider.notifier).resetState();
+    }
+
     ref.listen(authProvider, (previous, next) {
       if (next.errorMessage.isEmpty) return;
-      showSnackbar(context, next.errorMessage);
+      Fluttertoast.showToast(
+          msg: next.errorMessage,
+          toastLength: Toast.LENGTH_SHORT,
+          timeInSecForIosWeb: 1,
+          backgroundColor: const Color.fromARGB(255, 207, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      resetState();
     });
 
     return Form(
@@ -44,8 +57,8 @@ class FormLogin extends ConsumerWidget {
               label: 'Correo',
               keyboardType: TextInputType.emailAddress,
               onChanged: ref.read(loginFormProvider.notifier).onEmailChanged,
-              errorMessage:
-                  loginForm.isFormPosted ? loginForm.email.errorMessage : null,
+              // errorMessage:
+              //     loginForm.isFormPosted ? loginForm.email.errorMessage : null,
             ),
             const SizedBox(
               height: 20,
@@ -54,9 +67,9 @@ class FormLogin extends ConsumerWidget {
               label: 'Contraseña',
               obscureText: true,
               onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
-              errorMessage: loginForm.isFormPosted
-                  ? loginForm.password.errorMessage
-                  : null,
+              // errorMessage: loginForm.isFormPosted
+              //     ? loginForm.password.errorMessage
+              //     : null,
             ),
             const SizedBox(
               height: 10,
