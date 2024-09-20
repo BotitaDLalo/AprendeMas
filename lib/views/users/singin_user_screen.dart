@@ -9,6 +9,9 @@ class SinginUserScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
+        appBar: AppBar(
+          title: Text("Ya estas registrado", style: TextStyle(color: Colors.black),),
+        ),
         body: Center(
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),

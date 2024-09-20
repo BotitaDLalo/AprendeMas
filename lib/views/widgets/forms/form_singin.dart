@@ -66,7 +66,7 @@ class FormSingin extends ConsumerWidget {
             ButtonForm(
                 buttonName: "Inicia sesión",
                 onPressed: () {
-                  context.go('/login-user');
+                  context.push('/login-user');
                 }),
             const SizedBox(
               height: 15,
