@@ -14,8 +14,8 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<User> login(String email, String password) async {
     try {
-      final res = await dio
-          .post('/auth/login', data: {'email': email, 'password': password});
+      // final res = await dio.post('/auth/login', data: {'email': email, 'password': password});
+      final res = await dio.post('/AppMovilLogin/IniciarSesion', data: {'correo': email, 'clave': password});
 
       final user = UserMapper.userJsonToEntity(res.data);
 
@@ -25,6 +25,8 @@ class AuthDataSourceImpl implements AuthDataSource {
       if (e.type == DioExceptionType.connectionTimeout) throw ConnectionTimeout();
       throw CustomError(message: 'Ocurrio un error', errorCode: 1);
     } catch (e) {
+      print('Error');
+      print(e);
       throw CustomError(message: 'Ocurrio un error', errorCode: 1);
     }
   }

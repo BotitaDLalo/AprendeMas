@@ -1,8 +1,10 @@
+import 'package:aprende_mas/config/router/router.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/auth_repository.dart';
 import 'package:aprende_mas/models/authentication/auth_errors.dart';
 import '../../models/authentication/user.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
@@ -22,7 +24,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void registerUser(String email, String password) async {}
+  Future<void> registerUser(String email, String password) async {}
 
   void checkAuthStatus() async {}
 
@@ -33,7 +35,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  void resetState(){
+  void resetState() {
     state = AuthState();
   }
 
