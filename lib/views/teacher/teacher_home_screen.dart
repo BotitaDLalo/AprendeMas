@@ -2,7 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/views.dart';
 
-class TeacherHomeScreen extends ConsumerWidget {
+class TeacherHomeScreen extends ConsumerStatefulWidget {
   const TeacherHomeScreen({super.key});
 
   @override
