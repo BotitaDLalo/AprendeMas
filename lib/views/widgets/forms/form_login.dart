@@ -3,33 +3,21 @@ import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:go_router/go_router.dart';
-import '../../../providers/authentication/auth_provider.dart';
 
 class FormLogin extends ConsumerWidget {
   const FormLogin({super.key});
 
-  void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
-
-    ref.listen(authProvider, (previous, next) {
-      if (next.errorMessage.isEmpty) return;
-      showSnackbar(context, next.errorMessage);
-    });
+    final loginFormNotifier = ref.read(loginFormProvider.notifier);
 
     return Container(
-      //color: Colors.white,
       width: 350,
-      height: MediaQuery.of(context).size.height * 0.45,
-      padding: EdgeInsets.all(20),
+      height: MediaQuery.of(context).size.height * 0.55,
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
-          borderRadius: BorderRadius.circular(20)),
+          color: Colors.white, borderRadius: BorderRadius.circular(20)),
       child: Column(
         children: [
           Container(
@@ -44,8 +32,9 @@ class FormLogin extends ConsumerWidget {
           ),
           CustomTextFormField(
             label: 'Correo',
+            textEditingController: loginFormNotifier.emailController,
             keyboardType: TextInputType.emailAddress,
-            onChanged: ref.read(loginFormProvider.notifier).onEmailChanged,
+            onChanged: loginFormNotifier.onEmailChanged,
             errorMessage:
                 loginForm.isFormPosted ? loginForm.email.errorMessage : null,
           ),
@@ -54,33 +43,32 @@ class FormLogin extends ConsumerWidget {
           ),
           CustomTextFormField(
             label: 'Contraseña',
+            textEditingController: loginFormNotifier.passwordController,
             obscureText: true,
-            onChanged: ref.read(loginFormProvider.notifier).onPasswordChanged,
-            errorMessage: loginForm.isFormPosted
-                ? loginForm.password.errorMessage
-                : null,
+            onChanged: loginFormNotifier.onPasswordChanged,
+            errorMessage:
+                loginForm.isFormPosted ? loginForm.password.errorMessage : null,
           ),
           const SizedBox(
             height: 10,
           ),
-          // ButtonForm(
-          //     buttonName: "Submit",
-          //     onPressed: () {
-          //       ref.read(loginFormProvider.notifier).onFormSubmit();
-          //       print('Bien al parecer');
-          //     }),
-          Container(
-              alignment: const Alignment(-0.8, 1),
-              child: Text(
-                '¿Olvidaste tu contraseña?',
-                style: Theme.of(context).textTheme.bodySmall,
-              )),
+          GestureDetector(
+            onTap: () {
+              context.push('/forgot-password');
+            },
+            child: Container(
+                alignment: const Alignment(-0.8, 1),
+                child: Text(
+                  '¿Olvidaste tu contraseña?',
+                  style: Theme.of(context).textTheme.bodySmall,
+                )),
+          ),
           Container(
               alignment: const Alignment(0.7, 2),
               child: ButtonForm(
                   buttonName: "Entra",
                   onPressed: () {
-                    ref.read(loginFormProvider.notifier).onFormSubmit();
+                    loginFormNotifier.onFormSubmit();
                   })),
           const SizedBox(
             height: 15,
@@ -92,7 +80,9 @@ class FormLogin extends ConsumerWidget {
           ButtonForm(
               buttonName: "Registrate",
               onPressed: () {
-                context.push('/singin-user');
+                // FocusScope.of(context).unfocus();
+                loginFormNotifier.resetStateForm();
+                context.push('/sigin-user');
               }),
           const SizedBox(
             height: 15,

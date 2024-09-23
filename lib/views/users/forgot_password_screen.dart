@@ -1,10 +1,9 @@
-import 'package:aprende_mas/config/router/router.dart';
-import 'package:aprende_mas/views/widgets/forms/form_singin.dart';
-import 'package:flutter/material.dart';
+import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 
-class SinginUserScreen extends StatelessWidget {
-  const SinginUserScreen({super.key});
+class ForgotPasswordScreen extends StatelessWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +23,13 @@ class SinginUserScreen extends StatelessWidget {
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/logo.png', width: 150),
+                Image.asset('assets/logo.png',width: 150),
                 const SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
-                const FormSingin(),
+                const FormForgotPassword()
               ],
             ),
           ),

@@ -1,4 +1,4 @@
-import 'package:aprende_mas/models/authentication/user.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Implement_repos/auth_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/auth_data_source.dart';
 import 'package:aprende_mas/repositories/Interface_repos/auth_repository.dart';
@@ -17,5 +17,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<User> login(String email, String password) {
     return dataSource.login(email, password);
+  }
+
+  @override
+  Future<UserSigin> sigin(String name, String email, String password, String role) {
+    return dataSource.sigin(name, email, password, role);
   }
 }

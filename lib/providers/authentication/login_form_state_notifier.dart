@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'login_form_state.dart';
@@ -5,10 +6,14 @@ import 'package:aprende_mas/views/views.dart';
 
 class LoginFormNotifier extends StateNotifier<LoginFormState> {
   final Function(String, String) loginUserCallback;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
   LoginFormNotifier({
     required this.loginUserCallback,
-  }) : super(LoginFormState());
+  })  : emailController = TextEditingController(),
+        passwordController = TextEditingController(),
+        super(LoginFormState());
 
   onEmailChanged(String value) {
     final newEmail = Email.dirty(value);
@@ -24,7 +29,7 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     );
   }
 
-  onFormSubmit() async{
+  onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
     await loginUserCallback(state.email.value, state.password.value);
@@ -39,5 +44,11 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
         email: email,
         password: password,
         isValid: Formz.validate([email, password]));
+  }
+
+  resetStateForm() {
+    emailController.clear();
+    passwordController.clear();
+    state = LoginFormState();
   }
 }

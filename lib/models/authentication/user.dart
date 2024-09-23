@@ -1,30 +1,12 @@
 class User {
-  final String id;
+  final String nombre;
   final String email;
-  final List<String> roles;
+  final String rol;
   final String token;
 
-  User({required this.id, required this.email,  required this.roles, required this.token});
-
-
-
+  User(
+      {required this.nombre,
+      required this.email,
+      required this.rol,
+      required this.token});
 }
-
-// class User {
-//   final String id;
-//   final String email;
-//   final String fullName;
-//   final List<String> roles;
-//   final String token;
-
-//   User(
-//       {required this.id,
-//       required this.email,
-//       required this.fullName,
-//       required this.roles,
-//       required this.token});
-
-//   bool get isAdmin {
-//     return roles.contains('admin');
-//   }
-// }

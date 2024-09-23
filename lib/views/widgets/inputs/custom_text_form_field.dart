@@ -8,6 +8,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool obscureText;
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
+  final TextEditingController? textEditingController;
 
   const CustomTextFormField(
       {super.key,
@@ -17,7 +18,8 @@ class CustomTextFormField extends StatelessWidget {
       this.onChanged,
       this.validator,
       this.obscureText = false,
-      this.keyboardType = TextInputType.text});
+      this.keyboardType = TextInputType.text,
+      this.textEditingController});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class CustomTextFormField extends StatelessWidget {
     );
 
     return TextFormField(
+      controller: textEditingController,
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
@@ -39,9 +42,9 @@ class CustomTextFormField extends StatelessWidget {
           floatingLabelStyle: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
           enabledBorder:
-              border.copyWith(borderSide: BorderSide(color: Colors.black)),
+              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
           focusedBorder:
-              border.copyWith(borderSide: BorderSide(color: Colors.black)),
+              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
           errorBorder: border.copyWith(
               borderSide: BorderSide(color: Colors.red.shade800)),
           focusedErrorBorder: border.copyWith(

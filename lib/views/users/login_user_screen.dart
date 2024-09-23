@@ -8,20 +8,18 @@ class LoginUserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: const Scaffold(
+      child: Scaffold(
         body: Center(
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: Column(
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const FlutterLogo(
-                  size: 150,
-                ),
+                Image.asset('assets/logo.png', width: 150),
                 const SizedBox(
-                  height: 100,
+                  height: 40,
                 ),
-                FormLogin()
+                const FormLogin()
               ],
             ),
           ),
