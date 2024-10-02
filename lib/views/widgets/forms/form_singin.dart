@@ -5,6 +5,7 @@ import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
+import 'package:aprende_mas/views/widgets/inputs/role_dropdown.dart';
 import 'package:go_router/go_router.dart';
 
 class FormSingin extends ConsumerWidget {
@@ -66,12 +67,7 @@ class FormSingin extends ConsumerWidget {
           const SizedBox(
             height: 10,
           ),
-          CustomTextFormField(
-            label: "Tipo",
-            onChanged: siginFormNotifier.onRoleChanged,
-            errorMessage:
-                siginForm.isFormPosted ? siginForm.role.errorMessage : null,
-          ),
+          const RoleDropdown(),
           const SizedBox(
             height: 10,
           ),
