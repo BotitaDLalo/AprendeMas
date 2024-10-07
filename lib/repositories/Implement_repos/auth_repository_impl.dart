@@ -9,18 +9,29 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({AuthDataSource? dataSource})
       : dataSource = dataSource ?? AuthDataSourceImpl();
 
-  @override
-  Future<User> checkAuthStatus(String token) {
-    return dataSource.checkAuthStatus(token);
-  }
 
   @override
-  Future<User> login(String email, String password) {
+  Future<AuthUser> login(String email, String password) {
     return dataSource.login(email, password);
   }
 
   @override
-  Future<UserSigin> sigin(String name, String email, String password, String role) {
-    return dataSource.sigin(name, email, password, role);
+  Future<User> signin(String name, String email, String password, String role) {
+    return dataSource.signin(name, email, password, role);
+  }
+
+  @override
+  Future<AuthUser> checkAuthStatus(String token) {
+    return dataSource.checkAuthStatus(token);
+  }
+
+  @override
+  Future<bool> resetPasswordRequest(String email) {
+    return dataSource.resetPasswordRequest(email);
+  }
+  
+  @override
+  Future<AuthUser> loginGoogle() {
+    return dataSource.loginGoogle();
   }
 }

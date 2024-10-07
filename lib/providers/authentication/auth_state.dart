@@ -1,36 +1,45 @@
 import 'package:aprende_mas/models/models.dart';
 
-import '../../models/authentication/user.dart';
+enum AuthStatus { checking, authenticated, notAuthenticated}
 
-enum AuthStatus { checking, authenticated, notAuthenticated }
+
+enum AuthGoogleStatus { checking, authenticated, notAuthenticated}
 
 enum RegisterStatus { registered, notRegistered }
 
+
 class AuthState {
-  final AuthStatus authStatus;
+  final AuthStatus? authStatus;
   final RegisterStatus registerStatus;
+  final AuthUser? authUser;
   final User? user;
-  final UserSigin? userSigin;
   final String errorMessage;
+  final AuthGoogleStatus? authGoogleStatus;
 
   AuthState(
-      {this.authStatus = AuthStatus.checking,
+      {
+      this.authStatus = AuthStatus.checking,
       this.registerStatus = RegisterStatus.notRegistered,
+      this.authUser,
       this.user,
-      this.userSigin,
-      this.errorMessage = ''});
+      this.errorMessage = '',
+      this.authGoogleStatus = AuthGoogleStatus.checking,
+      });
 
   AuthState copyWith({
     AuthStatus? authStatus,
     RegisterStatus? registerStatus,
+    AuthUser? authUser,
     User? user,
-    UserSigin? userSigin,
     String? errorMessage,
+    AuthGoogleStatus? authGoogleStatus,
   }) =>
       AuthState(
           authStatus: authStatus ?? this.authStatus,
           registerStatus: registerStatus ?? this.registerStatus,
+          authUser: authUser ?? this.authUser,
           user: user ?? this.user,
-          userSigin: userSigin ?? this.userSigin,
-          errorMessage: errorMessage ?? this.errorMessage);
+          errorMessage: errorMessage ?? this.errorMessage,
+          authGoogleStatus: authGoogleStatus ?? this.authGoogleStatus
+          );
 }

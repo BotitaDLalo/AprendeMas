@@ -1,6 +1,8 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
+import 'package:aprende_mas/views/student/student_home_screen.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +12,6 @@ final goRouterProvider = Provider((ref) {
 
   return GoRouter(
     initialLocation: '/loading',
-    // initialLocation: '/login-user',
     refreshListenable: routerNotifier,
     routes: [
       GoRoute(
@@ -30,6 +31,10 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const TeacherHomeScreen(),
       ),
       GoRoute(
+        path: '/student-home',
+        builder: (context, state) => const StudentHomeScreen(),
+      ),
+      GoRoute(
         path: '/forgot-password',
         builder: (context, state) => const ForgotPasswordScreen(),
       )
@@ -37,24 +42,43 @@ final goRouterProvider = Provider((ref) {
     redirect: (context, state) async {
       final isGoingTo = state.matchedLocation;
       final authStatus = routerNotifier.authStatus;
+      final authGoogleStatus = routerNotifier.authGoogleStatus;
+
+      final authState = ref.read(authProvider);
+      final authUser = authState.authUser;
+      final user = authState.user;
+      final role = authUser?.rol;
+      final roleGoogle = user?.rol;
 
       if (isGoingTo == '/login-user' ||
           isGoingTo == '/sigin-user' ||
           isGoingTo == '/forgot-password') {
-        if (authStatus == AuthStatus.authenticated) {
-          await Future.delayed(const Duration(milliseconds: 800));
-          return '/teacher-home';
+        if (authStatus == AuthStatus.authenticated ||
+            authGoogleStatus == AuthGoogleStatus.authenticated) {
+          await Future.delayed(const Duration(milliseconds: 8000));
+          if (role == "Docente" || roleGoogle == "Docente") {
+            return '/teacher-home';
+          } else if (role == "Alumno" || roleGoogle == "Alumno") {
+            // await Future.delayed(const Duration(milliseconds: 8000));
+            return '/student-home';
+          }
         }
-
         return null;
       }
 
-      if (authStatus == AuthStatus.authenticated) {
+      if (authStatus == AuthStatus.authenticated ||
+          authGoogleStatus == AuthGoogleStatus.authenticated) {
         await Future.delayed(const Duration(milliseconds: 800));
-        return '/teacher-home';
+        if (role == "Docente" || roleGoogle == "Docente") {
+          return '/teacher-home';
+        } else if (role == "Alumno" || roleGoogle == "Alumno") {
+          // await Future.delayed(const Duration(milliseconds: 8000));
+          return '/student-home';
+        }
       }
 
-      if (authStatus == AuthStatus.notAuthenticated) {
+      if (authStatus == AuthStatus.notAuthenticated ||
+          authGoogleStatus == AuthGoogleStatus.notAuthenticated) {
         await Future.delayed(const Duration(milliseconds: 800));
         return '/login-user';
       }

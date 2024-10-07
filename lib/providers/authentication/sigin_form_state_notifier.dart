@@ -46,8 +46,10 @@ class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
   onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    await siginUserCallback(state.name.value, state.email.value,
+    final result = await siginUserCallback(state.name.value, state.email.value,
         state.password.value, state.role.value);
+
+    return result;
   }
 
   _touchEveryField() {

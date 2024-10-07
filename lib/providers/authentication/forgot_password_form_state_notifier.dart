@@ -6,10 +6,11 @@ import 'package:formz/formz.dart';
 class ForgotPasswordFormStateNotifier
     extends StateNotifier<ForgotPasswordFormState> {
   final TextEditingController emailController;
+  final Function(String) forgotPasswordCallback;
 
-  ForgotPasswordFormStateNotifier(super.state):emailController=TextEditingController();
-
-
+  ForgotPasswordFormStateNotifier({required this.forgotPasswordCallback})
+      : emailController = TextEditingController(),
+        super(ForgotPasswordFormState());
 
   onEmailChanged(String value) {
     final newEmail = Email.dirty(value);
@@ -17,17 +18,21 @@ class ForgotPasswordFormStateNotifier
         state.copyWith(email: newEmail, isValid: Formz.validate([newEmail]));
   }
 
-  onFormSubmit() async {
+   onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    //TODO: Logica para envio de correo de recuperacion de contra
-    print("Correo enviar");
+    final result = await forgotPasswordCallback(state.email.value);
+    return result;
   }
 
   _touchEveryField() {
     final email = Email.dirty(state.email.value);
-
     state = state.copyWith(
         isFormPosted: true, email: email, isValid: Formz.validate([email]));
   }
+
+  // reseStatetForm(){
+  //   emailController.clear();
+  //   state = ForgotPasswordFormState();
+  // }
 }

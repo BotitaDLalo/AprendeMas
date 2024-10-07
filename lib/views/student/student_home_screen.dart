@@ -4,15 +4,15 @@ import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/views.dart';
 
-class TeacherHomeScreen extends ConsumerStatefulWidget {
-  const TeacherHomeScreen({super.key});
+class StudentHomeScreen extends ConsumerStatefulWidget {
+  const StudentHomeScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _TeacherHomeScreenState();
 }
 
-class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
+class _TeacherHomeScreenState extends ConsumerState<StudentHomeScreen> {
   int _selectedIndex = 0;
 
   static const List<Widget> _widgetOptions = <Widget>[

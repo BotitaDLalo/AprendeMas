@@ -1,14 +1,21 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
+import 'package:aprende_mas/providers/providers.dart';
 class FormForgotPassword extends ConsumerWidget {
   const FormForgotPassword({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final forgotPassword = ref.watch(forgotPasswordFormProvider);
+    final forgotPasswordNotifier =
+        ref.read(forgotPasswordFormProvider.notifier);
+
+    returnLogin() {
+      context.pop();
+    }
+
     return Container(
       width: 350,
       height: MediaQuery.of(context).size.height * 0.35,
@@ -29,18 +36,27 @@ class FormForgotPassword extends ConsumerWidget {
           ),
           CustomTextFormField(
             label: 'Correo',
-            // textEditingController: loginFormNotifier.emailController,
+            textEditingController: forgotPasswordNotifier.emailController,
             keyboardType: TextInputType.emailAddress,
-            // onChanged: loginFormNotifier.onEmailChanged,
-            // errorMessage: loginForm.isFormPosted ? loginForm.email.errorMessage : null,
+            onChanged: forgotPasswordNotifier.onEmailChanged,
+            errorMessage: forgotPassword.isFormPosted
+                ? forgotPassword.email.errorMessage
+                : null,
           ),
           const SizedBox(
             height: 20,
           ),
-          ButtonForm(buttonName: "Enviar", onPressed: () {
-            //TODO: Logica para recuperacion de password
-            context.pop();
-          })
+          ButtonForm(
+              buttonName: "Enviar",
+              onPressed: () async {
+                final bool? result =
+                    await forgotPasswordNotifier.onFormSubmit();
+                if (result == true) {
+                  returnLogin();
+                } else {
+                  return;
+                }
+              })
         ],
       ),
     );

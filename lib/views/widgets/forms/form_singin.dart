@@ -1,8 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/auth_provider.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
-import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:aprende_mas/views/widgets/inputs/role_dropdown.dart';
@@ -17,7 +14,7 @@ class FormSingin extends ConsumerWidget {
     final siginFormNotifier = ref.read(siginFormProvider.notifier);
 
     void returnToLogin() {
-      context.pop();
+      context.go('/login-user');
     }
 
     return Container(
@@ -78,6 +75,13 @@ class FormSingin extends ConsumerWidget {
                   onPressed: () async {
                     await siginFormNotifier.onFormSubmit();
                     returnToLogin();
+
+                    // final result = await siginFormNotifier.onFormSubmit();
+                    // if (result != null) {
+                    //   returnToLogin();
+                    // } else {
+                    //   return;
+                    // }
                   })),
           const SizedBox(
             height: 15,

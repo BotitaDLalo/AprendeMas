@@ -2,6 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
 class FormLogin extends ConsumerWidget {
@@ -11,6 +12,8 @@ class FormLogin extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loginForm = ref.watch(loginFormProvider);
     final loginFormNotifier = ref.read(loginFormProvider.notifier);
+
+    // final LoginGoogleNotifier = ref.read(loginGoogleProvider.notifier);
 
     return Container(
       width: 350,
@@ -80,13 +83,22 @@ class FormLogin extends ConsumerWidget {
           ButtonForm(
               buttonName: "Registrate",
               onPressed: () {
-                // FocusScope.of(context).unfocus();
                 loginFormNotifier.resetStateForm();
                 context.push('/sigin-user');
               }),
           const SizedBox(
             height: 15,
           ),
+          ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                  // primary: Colors.white,
+                  // onPrimary: Colors.black,
+                  minimumSize: const Size(double.infinity, 50)),
+              icon: const FaIcon(FontAwesomeIcons.google),
+              onPressed: () {
+                loginFormNotifier.onGoogleSubmit();
+              },
+              label: const Text("Inicio de sesion con Google")),
         ],
       ),
     );
