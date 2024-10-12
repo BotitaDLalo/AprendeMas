@@ -5,6 +5,7 @@ import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/student/student_home_screen.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/widgets/loading/check_auth_status_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouterProvider = Provider((ref) {

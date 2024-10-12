@@ -5,6 +5,6 @@ class AgendaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Agenda screen prueba');
+    return Text('Notificaciones screen prueba');
   }
 }
