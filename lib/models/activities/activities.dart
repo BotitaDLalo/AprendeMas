@@ -1,14 +1,11 @@
 class Activities {
-  final String name;
-  final String description;
-  final DateTime deadline;
-  final DateTime registrationDate;
-  final dynamic recurses;
+ final String nombreActividad;
+  final String? descripcion;
+  final String fechaCreacion;
 
-  Activities(
-      {required this.name,
-      required this.description,
-      required this.deadline,
-      required this.registrationDate,
-      required this.recurses});
+  Activities({
+    required this.nombreActividad,
+    this.descripcion,
+    required this.fechaCreacion,
+  });
 }
