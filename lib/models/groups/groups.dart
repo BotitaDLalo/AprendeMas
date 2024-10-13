@@ -5,6 +5,7 @@ class Group {
   final String? descripcion;
   final String codigoAcceso;
   final String tipoUsuario;
+  final String codigoColor;
   final List<Subject> materias;
 
   Group({
@@ -12,6 +13,7 @@ class Group {
     this.descripcion,
     required this.codigoAcceso,
     required this.tipoUsuario,
+    required this.codigoColor,
     required this.materias,
   });
 }

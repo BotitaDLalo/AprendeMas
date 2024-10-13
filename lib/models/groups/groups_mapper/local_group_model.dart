@@ -6,6 +6,7 @@ class LocalGroupModel {
   final String? descripcion;
   final String codigoAcceso;
   final String tipoUsuario;
+  final String codigoColor;
   final List<LocalSubjectModel> materias;
 
   LocalGroupModel({
@@ -13,6 +14,7 @@ class LocalGroupModel {
     this.descripcion,
     required this.codigoAcceso,
     required this.tipoUsuario,
+    required this.codigoColor,
     required this.materias,
   });
 
@@ -22,6 +24,7 @@ class LocalGroupModel {
     descripcion: json['descripcion'],
     codigoAcceso: json['codigoAcceso'],
     tipoUsuario: json['tipoUsuario'],
+    codigoColor: json['codigoColor'],
     materias: List<LocalSubjectModel>.from(json['materias'].map((materia) => LocalSubjectModel.fromJson(materia))),
   );
 
@@ -31,6 +34,7 @@ class LocalGroupModel {
     descripcion: descripcion,
     codigoAcceso: codigoAcceso,
     tipoUsuario: tipoUsuario,
+    codigoColor: codigoColor,
     materias: materias.map((materia) => materia.toEntity()).toList(),
   );
 }

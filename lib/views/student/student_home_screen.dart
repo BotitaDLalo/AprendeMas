@@ -17,7 +17,7 @@ class _TeacherHomeScreenState extends ConsumerState<StudentHomeScreen> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     AgendaScreen(),
-    MateriasScreen(),
+    // MateriasScreen(),
     NotificacionScreen(),
   ];
 

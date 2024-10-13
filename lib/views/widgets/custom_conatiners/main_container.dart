@@ -1,5 +1,4 @@
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
-import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/widgets/cards/subject_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
