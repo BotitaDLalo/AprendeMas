@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/views/teacher/chat_gemini_screen.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/views.dart';
 
@@ -17,6 +18,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     AgendaScreen(),
     SubjectScreen(),
     NotificacionScreen(),
+    ChatGeminiScreen(),
   ];
 
   void _onItemTapped(int index) {

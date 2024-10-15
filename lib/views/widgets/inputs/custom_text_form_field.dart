@@ -39,9 +39,9 @@ class CustomTextFormField extends StatelessWidget {
           floatingLabelStyle: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
           enabledBorder:
-              border.copyWith(borderSide: BorderSide(color: Colors.black)),
+              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
           focusedBorder:
-              border.copyWith(borderSide: BorderSide(color: Colors.black)),
+              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
           errorBorder: border.copyWith(
               borderSide: BorderSide(color: Colors.red.shade800)),
           focusedErrorBorder: border.copyWith(
