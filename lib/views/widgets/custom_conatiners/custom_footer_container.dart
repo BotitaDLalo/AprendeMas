@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomFooterContainer extends StatelessWidget {
   const CustomFooterContainer({super.key});
@@ -12,7 +13,9 @@ class CustomFooterContainer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.assignment)),
+          IconButton(onPressed: () {
+            context.go('/activities');
+          }, icon: const Icon(Icons.assignment)),
           const SizedBox(
             width: 60,
           ),
