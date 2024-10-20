@@ -1,12 +1,13 @@
-class Subjects {
-  final String name;
-  final String description;
-  final String acessCode;
-  // final DateTime hour;
+import 'package:aprende_mas/models/models.dart';
 
-  Subjects({
-    required this.name, 
-    required this.description, 
-    required this.acessCode});
+class Subject {
+  final String nombreMateria;
+  final String? descripcion;
+  final List<Activities>? actividades;
 
+  Subject({
+    required this.nombreMateria,
+    this.descripcion,
+    this.actividades, 
+  });
 }

@@ -13,7 +13,7 @@ class CustomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.red,
       currentIndex: selectedIndex,
       onTap: onItemSelected,
       items: const <BottomNavigationBarItem>[
@@ -29,8 +29,13 @@ class CustomNavbar extends StatelessWidget {
           icon: Icon(Icons.notifications),
           label: 'Notificaciones', 
           ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.app_shortcut_outlined),
+          label: 'Chat', 
+          ),
       ],
       selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey,
     );
   }
 }
