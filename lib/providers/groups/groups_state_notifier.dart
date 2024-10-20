@@ -1,16 +1,30 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../views/shared/local_data_groups.dart';
 
 // Clase Notifier para manejar el estado de los grupos
 class GroupsNotifier extends StateNotifier<List<Group>> {
   final GroupsRepository groupsRepository;
 
   GroupsNotifier({required this.groupsRepository}) : super([]) {
-    //* Cargar grupos inicialmente
     getGroups();
   }
+
+  Future<void> createGroup(
+      String nombreGrupo, String descripcion, Color codigoColor) async {
+    try {
+      final group = await groupsRepository.createGroup(
+          nombreGrupo, descripcion, codigoColor);
+      _setCreateGroup(group);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> deleteGroup() async {}
+
+  Future<void> updateGroup() async {}
 
   Future<void> getGroups() async {
     try {
@@ -21,7 +35,11 @@ class GroupsNotifier extends StateNotifier<List<Group>> {
     }
   }
 
-  void setGrupos(List<Group> groups){
+  void setGrupos(List<Group> groups) {
+    state = groups;
+  }
+
+  void _setCreateGroup(List<Group> groups) {
     state = groups;
   }
 

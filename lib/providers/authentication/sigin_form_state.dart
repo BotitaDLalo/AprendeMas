@@ -1,4 +1,4 @@
-import 'package:aprende_mas/views/infrastructure/name.dart';
+import 'package:aprende_mas/views/infrastructure/generic_input.dart';
 import 'package:aprende_mas/views/infrastructure/role.dart';
 import 'package:aprende_mas/views/views.dart';
 
@@ -6,7 +6,7 @@ class SiginFormState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
-  final Name name;
+  final GenericInput name;
   final Email email;
   final Password password;
   final Role role;
@@ -15,7 +15,7 @@ class SiginFormState {
       {this.isPosting = false,
       this.isFormPosted = false,
       this.isValid = false,
-      this.name = const Name.pure(),
+      this.name = const GenericInput.pure(),
       this.email = const Email.pure(),
       this.password = const Password.pure(),
       this.role = const Role.pure()});
@@ -24,7 +24,7 @@ class SiginFormState {
     bool? isPosting,
     bool? isFormPosted,
     bool? isValid,
-    Name? name,
+    GenericInput? name,
     Email? email,
     Password? password,
     Role? role,

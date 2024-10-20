@@ -1,6 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_state.dart';
-import 'package:aprende_mas/views/infrastructure/name.dart';
+import 'package:aprende_mas/views/infrastructure/generic_input.dart';
 import 'package:aprende_mas/views/infrastructure/role.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:formz/formz.dart';
@@ -12,7 +12,7 @@ class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
       : super(SiginFormState());
 
   onNameChanged(String value) {
-    final newName = Name.dirty(value);
+    final newName = GenericInput.dirty(value);
     state = state.copyWith(
         name: newName,
         isValid:
@@ -53,7 +53,7 @@ class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
   }
 
   _touchEveryField() {
-    final name = Name.dirty(state.name.value);
+    final name = GenericInput.dirty(state.name.value);
     final email = Email.dirty(state.email.value);
     final password = Password.dirty(state.password.value);
     final role = Role.dirty(state.role.value);

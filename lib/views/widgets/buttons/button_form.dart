@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 class ButtonForm extends StatelessWidget {
   final String buttonName;
   final VoidCallback onPressed;
+  final ButtonStyle style;
 
   const ButtonForm(
-      {super.key, required this.buttonName, required this.onPressed});
+      {super.key, required this.buttonName, required this.onPressed, required this.style});
 
   @override
   Widget build(BuildContext context) {
     return FilledButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF212B40),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5), // border radius
-          ),
-        ),
+        style: style,
         onPressed: onPressed,
         child: Text(buttonName));
   }

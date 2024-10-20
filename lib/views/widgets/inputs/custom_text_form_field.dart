@@ -26,8 +26,8 @@ class CustomTextFormField extends StatelessWidget {
     final colors = Theme.of(context);
 
     final border = OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.transparent),
-      borderRadius: BorderRadius.circular(20),
+      borderSide: const BorderSide(color: Colors.black),
+      borderRadius: BorderRadius.circular(15),
     );
 
     return TextFormField(
@@ -41,10 +41,12 @@ class CustomTextFormField extends StatelessWidget {
       decoration: InputDecoration(
           floatingLabelStyle: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-          enabledBorder:
-              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
-          focusedBorder:
-              border.copyWith(borderSide: const BorderSide(color: Colors.black)),
+          enabledBorder: border.copyWith(
+              borderSide:
+                  const BorderSide(color: Color.fromARGB(100, 0, 0, 0))),
+          focusedBorder: border.copyWith(
+              borderSide:
+                  const BorderSide(color: Color.fromARGB(255, 0, 0, 0))),
           errorBorder: border.copyWith(
               borderSide: BorderSide(color: Colors.red.shade800)),
           focusedErrorBorder: border.copyWith(

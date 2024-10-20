@@ -3,6 +3,8 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/student/student_home_screen.dart';
+import 'package:aprende_mas/views/teacher/create_group_screen.dart';
+import 'package:aprende_mas/views/teacher/create_subject_screen.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/loading/check_auth_status_screen.dart';
@@ -38,6 +40,14 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/forgot-password',
         builder: (context, state) => const ForgotPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/create-group',
+        builder: (context, state) => const CreateGroupScreen(),
+      ),
+      GoRoute(
+        path: '/create-subject',
+        builder: (context, state) => const CreateSubjectsScreen(),
       )
     ],
     redirect: (context, state) async {
@@ -48,8 +58,18 @@ final goRouterProvider = Provider((ref) {
       final authState = ref.read(authProvider);
       final authUser = authState.authUser;
       final user = authState.user;
+      // final role = "Docente";
       final role = authUser?.rol;
       final roleGoogle = user?.rol;
+
+      // if (isGoingTo == "/loading" &&
+      //     (authStatus == AuthStatus.notAuthenticated ||
+      //         authGoogleStatus == AuthGoogleStatus.notAuthenticated)) {
+      //   return '/login-user';
+      // }
+      if (isGoingTo == '/create-group'|| isGoingTo=='/create-subject') {
+        return null;
+      }
 
       if (isGoingTo == '/login-user' ||
           isGoingTo == '/sigin-user' ||

@@ -33,7 +33,7 @@ class LocalGroupModel {
     nombreGrupo: nombreGrupo,
     descripcion: descripcion,
     codigoAcceso: codigoAcceso,
-    tipoUsuario: tipoUsuario,
+    // tipoUsuario: tipoUsuario,
     codigoColor: codigoColor,
     materias: materias.map((materia) => materia.toEntity()).toList(),
   );

@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
@@ -17,7 +18,7 @@ class FormLogin extends ConsumerWidget {
 
     return Container(
       width: 350,
-      height: MediaQuery.of(context).size.height * 0.55,
+      height: MediaQuery.of(context).size.height * 0.60,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
@@ -69,6 +70,7 @@ class FormLogin extends ConsumerWidget {
           Container(
               alignment: const Alignment(0.7, 2),
               child: ButtonForm(
+                style: AppTheme.buttonPrimary,
                   buttonName: "Entra",
                   onPressed: () {
                     loginFormNotifier.onFormSubmit();
@@ -81,6 +83,7 @@ class FormLogin extends ConsumerWidget {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           ButtonForm(
+            style: AppTheme.buttonPrimary,
               buttonName: "Registrate",
               onPressed: () {
                 loginFormNotifier.resetStateForm();

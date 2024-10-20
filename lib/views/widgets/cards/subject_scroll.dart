@@ -1,5 +1,5 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/providers/subject/subject_provider.dart';
+import 'package:aprende_mas/providers/subjects/subjects_provider.dart';
 import 'package:aprende_mas/views/widgets/cards/subject_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +14,7 @@ class SubjectScroll extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // final materias = ref.watch(subjectsProvider);
     final materias = ref.watch(subjectProvider);
 
     return SingleChildScrollView(

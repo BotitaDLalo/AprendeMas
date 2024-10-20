@@ -10,7 +10,8 @@ class GroupsMapper {
 
     for (var group in groupsAndSubject) {
       // Cargar materias de cada grupo
-      List<Subject> materias = (group['materias'] as List).map((materia) {
+      List<Subject> materias = (group['materias'] as List? ?? []).map((materia) {
+      // List<Subject> materias = (group['materias'] as List).map((materia) {
         // Cargar actividades de cada materia
         List<Activities> actividades =
             (materia['actividades'] as List).map((actividad) {
@@ -34,7 +35,7 @@ class GroupsMapper {
         nombreGrupo: group['nombreGrupo'],
         descripcion: group['descripcion'],
         codigoAcceso: group['codigoAcceso'],
-        tipoUsuario: group['tipoUsuario'],
+        // tipoUsuario: group['tipoUsuario'],
         codigoColor: group['codigoColor'],
         materias: materias, // Asignar las materias al grupo
       ));

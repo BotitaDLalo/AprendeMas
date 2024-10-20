@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
@@ -47,6 +48,7 @@ class FormForgotPassword extends ConsumerWidget {
             height: 20,
           ),
           ButtonForm(
+            style: AppTheme.buttonPrimary,
               buttonName: "Enviar",
               onPressed: () async {
                 final bool? result =

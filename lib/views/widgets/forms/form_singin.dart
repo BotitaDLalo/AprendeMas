@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
@@ -71,6 +72,7 @@ class FormSingin extends ConsumerWidget {
           Container(
               alignment: const Alignment(0.9, 2),
               child: ButtonForm(
+                style: AppTheme.buttonPrimary,
                   buttonName: "Registrate",
                   onPressed: () async {
                     await siginFormNotifier.onFormSubmit();
