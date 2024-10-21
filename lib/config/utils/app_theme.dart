@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 const List<Color> _colorThemes = [
-  Color.fromARGB(255, 255, 255, 255),
-  Color.fromARGB(255, 52, 115, 250),
-  Color.fromARGB(255, 0, 0, 0),
-  Color.fromARGB(100, 0, 0, 0)
+  Color.fromARGB(255, 255, 255, 255), //$White
+  Color.fromARGB(255, 52, 115, 250), //$Blue
+  Color.fromARGB(255, 0, 0, 0), //$ Black
+  Color.fromARGB(100, 0, 0, 0), //$Negro palido
+  Color.fromARGB(150, 0, 0, 0) //$Negro palido 2
 ];
 
 class AppTheme {
@@ -16,8 +17,11 @@ class AppTheme {
 //#Text theme style
   final TextTheme textThemes = const TextTheme(
     titleLarge: TextStyle(
-        fontSize: 22, color: Colors.black, fontWeight: FontWeight.w600),
-    bodyLarge: TextStyle(fontSize: 22, color: Colors.black),
+        fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500),
+    bodyLarge: TextStyle(
+      fontSize: 22,
+      color: Colors.black,
+    ),
     bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
     bodySmall: TextStyle(fontSize: 14, color: Colors.black),
   );
@@ -41,9 +45,20 @@ class AppTheme {
     backgroundColor: _colorThemes[0],
     foregroundColor: _colorThemes[2],
     fixedSize: const Size.fromHeight(45),
-    side: BorderSide(color: _colorThemes[1]),
+    // side: BorderSide(color: _colorThemes[1]),
+    side: BorderSide(color: _colorThemes[3]),
     shape: RoundedRectangleBorder(
       borderRadius: borderRadius, // border radius
+    ),
+  );
+
+  static final ButtonStyle buttonTertiary = ElevatedButton.styleFrom(
+    backgroundColor: _colorThemes[0],
+    foregroundColor: _colorThemes[4],
+    fixedSize: const Size.fromHeight(35),
+    side: BorderSide(color: _colorThemes[3]),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50), // border radius
     ),
   );
 

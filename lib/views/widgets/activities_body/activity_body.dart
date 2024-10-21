@@ -64,7 +64,7 @@ class _DateBody extends StatelessWidget {
           Icon(Icons.assignment_outlined, size: 30,),
           SizedBox(width: 10,),
           _ActivityDates(),
-          SizedBox(width: 70,),
+          SizedBox(width: 40,),
           _DeliveryDate()
         ],
       ),

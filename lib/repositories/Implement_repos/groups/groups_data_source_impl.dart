@@ -8,7 +8,7 @@ import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_sour
 class GroupsDataSourceImpl implements GroupsDataSource{
   @override
   Future<List<Group>> getGroups() async{
-    const uri = "/Grupo";
+    const uri = "/Grupo/ObtenerGrupo";
     try {
       final  res = await dio.get(uri);
       final resLista = List<Map<String, dynamic>>.from(res.data);
@@ -21,13 +21,14 @@ class GroupsDataSourceImpl implements GroupsDataSource{
   
   @override
   Future<List<Group>> createGroup(String nombreGrupo, String descripcion, Color codigoColor) async{
-      const uri = "/Grupo";
+      const uri = "/Grupo/CrearGrupo";
     try {
-      final res = await dio.post(uri, data: {"nombreGrupo":nombreGrupo, "descripcion":descripcion, "codigoColor":codigoColor});
+      final res = await dio.post(uri, data: {"nombreGrupo":nombreGrupo, "descripcion":descripcion, "codigoColor":codigoColor.toString()});
       final resLista = List<Map<String, dynamic>>.from(res.data);
       final groups =  GroupsMapper.groupsJsonToEntityList(resLista);
       return groups;
     } catch (e) {
+      print(e);
       throw Exception(e);
     }
   }

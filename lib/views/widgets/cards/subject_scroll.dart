@@ -14,8 +14,7 @@ class SubjectScroll extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final materias = ref.watch(subjectsProvider);
-    final materias = ref.watch(subjectProvider);
+    // final materias = ref.watch(subjectProvider);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -24,6 +23,7 @@ class SubjectScroll extends ConsumerWidget {
           for(var materia in materias)
           SubjectCard(
             nombreMateria: materia.nombreMateria,
+            actividades: materia.actividades,
           )
         ],
       ),

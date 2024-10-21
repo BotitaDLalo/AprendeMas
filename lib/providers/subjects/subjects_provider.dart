@@ -10,7 +10,7 @@ final subjectProvider =
     StateNotifierProvider<SubjectsStateNotifier, List<Subject>>((ref) {
   // return MateriaNotifier(ref);
   final subjectsRepository = SubjectsRespositoryImpl();
-  return SubjectsStateNotifier(subjectsRepository: subjectsRepository);
+  return SubjectsStateNotifier(ref,subjectsRepository: subjectsRepository);
 });
 
 class MateriaNotifier extends StateNotifier<List<Subject>> {

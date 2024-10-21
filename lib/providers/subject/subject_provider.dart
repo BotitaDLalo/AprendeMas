@@ -39,7 +39,8 @@ class MateriaNotifier extends StateNotifier<List<Subject>> {
         materias.add(Subject(
           nombreMateria: materia.nombreMateria,
           descripcion: materia.descripcion,
-          actividades: actividades, // Asignar las actividades a la materia
+          codigoColor: materia.codigoColor,
+          actividades: actividades,
         ));
       }
     }

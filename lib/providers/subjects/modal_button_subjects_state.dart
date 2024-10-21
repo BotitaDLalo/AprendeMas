@@ -4,40 +4,40 @@ import 'package:aprende_mas/views/infrastructure/inputs.dart';
 
 import '../../views/infrastructure/color_input.dart';
 
-class FormSubjectsState {
+class ModalButtonSubjectsState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
   final GenericInput subjectName;
   final GenericInput description;
   final ColorInput colorCode;
-  final Color subPickerColor;
+  final Color pickerColor;
 
-  FormSubjectsState({
+  ModalButtonSubjectsState({
     this.isPosting = false,
     this.isFormPosted = false,
     this.isValid = false,
     this.subjectName = const GenericInput.pure(),
     this.description = const GenericInput.pure(),
     this.colorCode = const ColorInput.pure(),
-    this.subPickerColor = const Color.fromARGB(0, 255, 255, 255),
+    this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
   });
 
-  FormSubjectsState copyWith(
+  ModalButtonSubjectsState copyWith(
           {bool? isPosting,
           bool? isFormPosted,
           bool? isValid,
           GenericInput? subjectName,
           GenericInput? description,
           ColorInput? colorCode,
-          Color? subPickerColor}) =>
-      FormSubjectsState(
+          Color? pickerColor}) =>
+      ModalButtonSubjectsState(
           isPosting: isPosting ?? this.isPosting,
           isFormPosted: isFormPosted ?? this.isFormPosted,
           isValid: isValid ?? this.isValid,
           subjectName: subjectName ?? this.subjectName,
           description: description ?? this.description,
           colorCode: colorCode ?? this.colorCode,
-          subPickerColor: subPickerColor ?? this.subPickerColor
+          pickerColor: pickerColor ?? this.pickerColor
           );
 }

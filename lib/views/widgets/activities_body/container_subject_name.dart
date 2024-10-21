@@ -54,7 +54,7 @@ class ContainerSubjectName extends StatelessWidget {
                 const VerticalDivider(
                   color: Colors.white, // Color del divider
                   thickness: 2, // Grosor del divider
-                  width: 20, // Espacio antes y después del divider
+                  width: 10, // Espacio antes y después del divider
                 ),
                 IconButton(onPressed: () {}, icon: const Icon(Icons.settings, color: Colors.white, size: 40,) )
               ],

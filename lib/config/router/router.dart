@@ -15,19 +15,19 @@ final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
   GoRoute(
     path: '/login-user',
     builder: (context, state) => const LoginUserScreen(),
-  ), 
+  ),
   GoRoute(
     path: '/singin-user',
     builder: (context, state) => const SinginUserScreen(),
-    ),
+  ),
   GoRoute(
     path: '/teacher-home',
     builder: (context, state) => const TeacherHomeScreen(),
-    ),
+  ),
   GoRoute(
     path: '/activities',
     builder: (context, state) => const ActivitiesScreen(),
-    )
+  )
 ]);
 final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
@@ -67,6 +67,10 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/create-subject',
         builder: (context, state) => const CreateSubjectsScreen(),
+      ),
+      GoRoute(
+        path: '/activities',
+        builder: (context, state) => const ActivitiesScreen(),
       )
     ],
     redirect: (context, state) async {
@@ -80,13 +84,16 @@ final goRouterProvider = Provider((ref) {
       // final role = "Docente";
       final role = authUser?.rol;
       final roleGoogle = user?.rol;
-
+      print(isGoingTo);
       // if (isGoingTo == "/loading" &&
       //     (authStatus == AuthStatus.notAuthenticated ||
       //         authGoogleStatus == AuthGoogleStatus.notAuthenticated)) {
       //   return '/login-user';
       // }
-      if (isGoingTo == '/create-group'|| isGoingTo=='/create-subject') {
+      if (isGoingTo == '/create-group' ||
+          isGoingTo == '/create-subject' ||
+          isGoingTo == "/teacher-home" ||
+          isGoingTo == "/activities") {
         return null;
       }
 

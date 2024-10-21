@@ -28,7 +28,7 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
   onColorCodeChanged(Color color) {
     final newColorCode = ColorInput.dirty(color);
     state = state.copyWith(
-        pickerColor: color,
+        subPickerColor: color,
         colorCode: newColorCode,
         isValid: Formz.validate([state.subjectName, state.colorCode]));
  }
