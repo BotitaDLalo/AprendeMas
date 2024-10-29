@@ -12,22 +12,24 @@ class _ActivityOptionState extends ConsumerState<ActivitiesOptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _ButtonCreate(),
-          ActivityBody(),
-          SizedBox(height: 10,),
-          ActivityBodyRelleno(),
-          SizedBox(height: 10,),
-          Text('        Nombre Tema'),
-          _CustomDivider(),
-          ExamBody(),
-          SizedBox(height: 10,),
-          UploadBody(),
-        ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _ButtonCreate(),
+            ActivityBody(),
+            SizedBox(height: 10,),
+            ActivityBodyRelleno(),
+            SizedBox(height: 10,),
+            Text('        Nombre Tema'),
+            _CustomDivider(),
+            ExamBody(),
+            SizedBox(height: 10,),
+            UploadBody(),
+          ],
+        ),
       ),
     );
   }

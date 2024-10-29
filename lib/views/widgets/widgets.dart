@@ -1,9 +1,5 @@
 export 'forms/forms.dart';
 export 'inputs/custom_text_form_field.dart';
 export 'navbar/custom_navbar.dart';
-export 'activities_body/container_subject_name.dart';
-export 'activities_body/options_activities.dart';
-export 'activities_body/activity_body.dart';
-export 'activities_body/activity_body_relleno.dart';
-export 'activities_body/exam_body.dart';
-export 'activities_body/upload_body.dart';
+export 'activities_body/activities/activities.dart';
+export 'activities_body/notice/notice.dart';
