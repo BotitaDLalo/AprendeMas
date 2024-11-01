@@ -1,3 +1,4 @@
+import 'package:aprende_mas/views/views.dart';
 import 'package:flutter/material.dart';
 
 class AgendaScreen extends StatelessWidget {
@@ -5,6 +6,6 @@ class AgendaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('Notificaciones screen prueba');
+    return CalendarBody();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'activities/custom_container_style.dart';
+import 'custom_container_style.dart';
 
 class ContainerSubjectName extends StatelessWidget {
   final String subject;

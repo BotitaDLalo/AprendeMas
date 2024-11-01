@@ -1,7 +1,7 @@
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/views/widgets/activities_body/notice/notice_body/container_input.dart';
 import 'package:flutter/material.dart';
-import 'custom_divider.dart';
+import '../../custom_divider.dart';
+import 'container_input.dart';
 import 'data_body.dart';
 import 'notice_description.dart';
 

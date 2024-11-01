@@ -8,10 +8,26 @@ class ChatGeminiScreen extends ConsumerStatefulWidget {
   const ChatGeminiScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ChatGeminiScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ChatGeminiScreenState();
 }
 
 class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
+  void _onGenerateQuestionnaire(String inputText) {
+    // Expresión regular para buscar el formato de preguntas
+    final match = RegExp(r'(\d+)\s+preguntas sobre (.+)').firstMatch(inputText);
+    if (match != null) {
+      int quantity = int.parse(match.group(1)!);
+      String topic = match.group(2)!;
+
+      // Llamada a generar el cuestionario con la cantidad y el tema
+      ref.read(chatProvider).generateQuestionnaire(topic, quantity);
+    } else {
+      // Si no es un cuestionario, envía el mensaje como un mensaje general
+      ref.read(chatProvider).callGeminiModel(inputText);
+    }
+    ref.read(chatProvider).controller.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +40,7 @@ class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
           children: [
             Expanded(
               child: MessageList(
-                scrollController: messages.chatScrollController ,
+                scrollController: messages.chatScrollController,
                 messages: messages.messages,
               ),
             ),
@@ -33,8 +49,8 @@ class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
               onPressed: () {
                 final prompt = messages.controller.text.trim();
                 if (prompt.isNotEmpty) {
-                  ref.read(chatProvider).callGeminiModel(prompt);
-                  ref.read(chatProvider).controller.clear();
+                  _onGenerateQuestionnaire(
+                      prompt); // Llamada al método de interpretación
                 }
               },
             )
