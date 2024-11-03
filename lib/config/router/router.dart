@@ -1,4 +1,6 @@
 import 'package:aprende_mas/views/teacher/activities/activities_screen.dart';
+import 'package:aprende_mas/views/teacher/activities/options/create_activies/create_activities_screen.dart';
+import 'package:aprende_mas/views/teacher/subject_screen.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
@@ -11,6 +13,32 @@ import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/loading/loading_screen.dart';
 import 'package:go_router/go_router.dart';
 
+final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
+  GoRoute(
+    path: '/login-user',
+    builder: (context, state) => const LoginUserScreen(),
+  ), 
+  GoRoute(
+    path: '/singin-user',
+    builder: (context, state) => const SinginUserScreen(),
+    ),
+  GoRoute(
+    path: '/teacher-home',
+    builder: (context, state) => const TeacherHomeScreen(),
+    ),
+  GoRoute(
+    path: '/activities',
+    builder: (context, state) => const ActivitiesScreen(),
+    ),
+    GoRoute(
+      path: '/subject',
+      builder: (context, state) => const SubjectScreen(), 
+    ),
+    GoRoute(
+      path: '/create-activities',
+      builder: (context, state) => const CreateActivitiesScreen(), 
+    ),
+]);
 // final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
 //   GoRoute(
 //     path: '/login-user',

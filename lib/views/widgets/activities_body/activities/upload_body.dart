@@ -1,5 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'custom_container_style.dart';
+import '../custom_container_style.dart';
 
 class UploadBody extends StatelessWidget {
   const UploadBody({super.key});

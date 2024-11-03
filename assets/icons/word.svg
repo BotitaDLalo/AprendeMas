@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="IA" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #686667;
+      }
+
+      .cls-2 {
+        stroke: #3c5595;
+        stroke-miterlimit: 10;
+        stroke-width: 5.1px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        font-family: Figtree-Bold, Figtree;
+        font-size: 15.29px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-4 {
+        fill: #3c5595;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M150.14,13.86l-49.36-.75c-3.12,0-6.11,1.24-8.31,3.44l-19.79,18.75c-2.2,2.2-3.44,5.19-3.44,8.31l.9,81.48c0,6,4.86,10.86,10.86,10.86h69.65c6.05,0,10.95-4.9,10.95-10.95V25.33c0-6.33-5.13-11.47-11.47-11.47Z"/>
+  <rect class="cls-4" x="52.04" y="90.93" width="61.88" height="26.23" rx="7.83" ry="7.83"/>
+  <text class="cls-3" transform="translate(59.16 109.31)"><tspan x="0" y="0">WORD</tspan></text>
+  <rect class="cls-1" x="83.58" y="39.97" width="63.7" height="2.48"/>
+  <rect class="cls-1" x="83.58" y="46.22" width="63.7" height="2.48"/>
+  <rect class="cls-1" x="83.58" y="52.47" width="63.7" height="2.48"/>
+</svg>

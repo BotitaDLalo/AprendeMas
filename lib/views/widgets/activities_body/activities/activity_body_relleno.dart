@@ -1,8 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'custom_container_style.dart';
+import '../custom_container_style.dart';
 
-class ExamBody extends StatelessWidget {
-  const ExamBody({super.key});
+class ActivityBodyRelleno extends StatelessWidget {
+  const ActivityBodyRelleno({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _DateBody extends StatelessWidget {
       padding: EdgeInsets.all(8.0),
       child: Row(
         children: [
-          Icon(Icons.workspace_premium, size: 30,),
+          Icon(Icons.assignment_outlined, size: 30,),
           SizedBox(width: 10,),
           _ActivityDates(),
           SizedBox(width: 40,),
