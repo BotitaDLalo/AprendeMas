@@ -5,6 +5,4 @@ export 'authentication/user.dart';
 export 'groups/groups.dart';
 export 'subjects/subjects.dart';
 export 'activities/activities.dart';
-export 'groups/groups_mapper/local_group_model.dart';
-export 'subjects/mapper_subjects/local_subject_model.dart';
 export 'activities/activities_mapper/local_activities_model.dart';

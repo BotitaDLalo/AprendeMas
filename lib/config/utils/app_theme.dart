@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 
 const List<Color> _colorThemes = [
-  Color.fromARGB(255, 255, 255, 255), //$White
-  Color.fromARGB(255, 52, 115, 250), //$Blue
-  Color.fromARGB(255, 0, 0, 0), //$ Black
-  Color.fromARGB(100, 0, 0, 0), //$Negro palido
-  Color.fromARGB(150, 0, 0, 0) //$Negro palido 2
+  Color.fromARGB(255, 255, 255, 255), //$White 0
+  Color.fromARGB(255, 52, 115, 250), //$Blue 1
+  Color.fromARGB(255, 0, 0, 0), //$ Black 2
+  Color.fromARGB(100, 0, 0, 0), //$Negro palido 3
+  Color.fromARGB(150, 0, 0, 0), //$Negro palido 4
+  Color.fromARGB(100, 141, 141, 141), //$ Gris 5
+  Colors.grey //$ 6
 ];
 
 class AppTheme {
-  final Color backgroundColor = _colorThemes[0];
-  final Color buttonColor = _colorThemes[1];
-  static const Color pickedColor = Colors.white;
+  // final Color buttonColor = _colorThemes[1];
+  static final Color isSelectedGroup = _colorThemes[1];
+  static final Color notSelectedGroup = _colorThemes[6];
+
+  static final Color pickedColor = _colorThemes[0];
   static final BorderRadius borderRadius = BorderRadius.circular(10);
+
 
 //#Text theme style
   final TextTheme textThemes = const TextTheme(
@@ -24,6 +29,7 @@ class AppTheme {
     ),
     bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
     bodySmall: TextStyle(fontSize: 14, color: Colors.black),
+    // labelLarge: TextStyle(fontSize: 20, color: Colors.black)
   );
 
   //#Color picker box style
@@ -35,6 +41,7 @@ class AppTheme {
 //#Buttons styles
   static final ButtonStyle buttonPrimary = ElevatedButton.styleFrom(
     backgroundColor: _colorThemes[1],
+    // textStyle: const TextStyle(fontSize: 16),
     fixedSize: const Size.fromHeight(45),
     shape: RoundedRectangleBorder(
       borderRadius: borderRadius, // border radius
@@ -43,6 +50,7 @@ class AppTheme {
 
   static final ButtonStyle buttonSecondary = ElevatedButton.styleFrom(
     backgroundColor: _colorThemes[0],
+    // textStyle: const TextStyle(fontSize: 16),
     foregroundColor: _colorThemes[2],
     fixedSize: const Size.fromHeight(45),
     // side: BorderSide(color: _colorThemes[1]),
@@ -55,6 +63,7 @@ class AppTheme {
   static final ButtonStyle buttonTertiary = ElevatedButton.styleFrom(
     backgroundColor: _colorThemes[0],
     foregroundColor: _colorThemes[4],
+    // textStyle: const TextStyle(fontSize: 16),
     fixedSize: const Size.fromHeight(35),
     side: BorderSide(color: _colorThemes[3]),
     shape: RoundedRectangleBorder(
@@ -68,6 +77,6 @@ class AppTheme {
 
   ThemeData theme() {
     return ThemeData(
-        textTheme: textThemes, scaffoldBackgroundColor: backgroundColor);
+        textTheme: textThemes, scaffoldBackgroundColor: _colorThemes[0]);
   }
 }

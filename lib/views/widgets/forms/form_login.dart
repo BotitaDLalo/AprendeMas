@@ -3,6 +3,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
+import 'package:aprende_mas/views/widgets/loading/loading_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
@@ -70,9 +71,12 @@ class FormLogin extends ConsumerWidget {
           Container(
               alignment: const Alignment(0.7, 2),
               child: ButtonForm(
-                style: AppTheme.buttonPrimary,
+                  style: AppTheme.buttonPrimary,
                   buttonName: "Entra",
                   onPressed: () {
+                    if (loginForm.isPosting) {
+                      return;
+                    }
                     loginFormNotifier.onFormSubmit();
                   })),
           const SizedBox(
@@ -83,7 +87,7 @@ class FormLogin extends ConsumerWidget {
             style: Theme.of(context).textTheme.bodySmall,
           ),
           ButtonForm(
-            style: AppTheme.buttonPrimary,
+              style: AppTheme.buttonPrimary,
               buttonName: "Registrate",
               onPressed: () {
                 loginFormNotifier.resetStateForm();

@@ -1,8 +1,8 @@
 
 import 'package:aprende_mas/models/groups/groups.dart';
 
-import '../../activities/activities.dart';
-import '../../subjects/subjects.dart';
+import '../activities/activities.dart';
+import '../subjects/subjects.dart';
 
 class GroupsMapper {
   static List<Group> groupsJsonToEntityList(List<Map<String, dynamic>> groupsAndSubject){

@@ -1,7 +1,7 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/repositories/Implement_repos/auth_data_source_impl.dart';
-import 'package:aprende_mas/repositories/Interface_repos/auth_data_source.dart';
-import 'package:aprende_mas/repositories/Interface_repos/auth_repository.dart';
+import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_data_source_impl.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_data_source.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource dataSource;

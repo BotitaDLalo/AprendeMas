@@ -1,9 +1,7 @@
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
-import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/widgets/cards/subject_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../providers/groups/form_groups_provider.dart';
 import 'custom_expansion_tile.dart';
 
 class MainContainer extends ConsumerStatefulWidget {
@@ -18,8 +16,14 @@ class MainContainer extends ConsumerStatefulWidget {
 
 class _CustomExpansionState extends ConsumerState<MainContainer> {
   @override
+  void initState() {
+    super.initState();
+    ref.read(groupsProvider.notifier).getGroups();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final groups = ref.watch(groupsProvider);
+    final groups = ref.watch(groupsProvider).groups;
 
     return ListView.builder(
       itemCount: groups.length,

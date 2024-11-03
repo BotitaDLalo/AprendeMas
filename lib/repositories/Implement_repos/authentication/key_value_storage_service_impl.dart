@@ -1,4 +1,4 @@
-import 'package:aprende_mas/repositories/Interface_repos/key_value_storage_service.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/key_value_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KeyValueStorageServiceImpl implements KeyValueStorageService {

@@ -3,25 +3,6 @@ import 'package:aprende_mas/views/widgets/custom_conatiners/main_container.dart'
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// class SubjectScreen extends StatelessWidget {
-//   const SubjectScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // return const Scaffold(
-//     //   body: MainContainer(),
-//     // );
-//     return Scaffold(
-//       body: const MainContainer(),
-//     );
-//   }
-// }
- 
-//   }
-// }
-
-
-
 String createGroup = "Grupo";
 String createSubject = "Materia";
 

@@ -2,9 +2,9 @@ import 'package:aprende_mas/config/services/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/repositories/Interface_repos/auth_repository.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
 import 'package:aprende_mas/models/authentication/auth_errors.dart';
-import 'package:aprende_mas/repositories/Interface_repos/key_value_storage_service.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/key_value_storage_service.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;

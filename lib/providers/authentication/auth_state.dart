@@ -2,7 +2,6 @@ import 'package:aprende_mas/models/models.dart';
 
 enum AuthStatus { checking, authenticated, notAuthenticated}
 
-
 enum AuthGoogleStatus { checking, authenticated, notAuthenticated}
 
 enum RegisterStatus { registered, notRegistered }

@@ -2,10 +2,10 @@ import 'package:aprende_mas/config/network/dio_client.dart';
 import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/models/authentication/user_mapper.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/repositories/Interface_repos/auth_data_source.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_data_source.dart';
 import 'package:dio/dio.dart';
 import 'package:aprende_mas/models/authentication/auth_errors.dart';
-import '../../models/authentication/auth_user_mapper.dart';
+import '../../../models/authentication/auth_user_mapper.dart';
 
 class AuthDataSourceImpl implements AuthDataSource {
   @override
