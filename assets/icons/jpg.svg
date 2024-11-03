@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="IA" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Figtree-Bold, Figtree;
+        font-size: 15.38px;
+        font-variation-settings: 'wght' 700;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        fill: #3c5595;
+        stroke: #3c5595;
+        stroke-miterlimit: 10;
+        stroke-width: 5.13px;
+      }
+
+      .cls-3 {
+        fill: #d3e0ea;
+      }
+    </style>
+  </defs>
+  <path class="cls-2" d="M156.62,13.48l-49.66-.76c-3.14,0-6.14,1.25-8.36,3.46l-19.91,18.87c-2.22,2.22-3.46,5.23-3.46,8.36l.91,81.99c0,6.04,4.89,10.93,10.93,10.93h70.08c6.09,0,11.02-4.93,11.02-11.02V25.02c0-6.37-5.17-11.54-11.54-11.54Z"/>
+  <rect class="cls-3" x="57.91" y="91.03" width="62.27" height="26.39" rx="7.87" ry="7.87"/>
+  <text class="cls-1" transform="translate(74.45 109.69)"><tspan x="0" y="0">JPG</tspan></text>
+</svg>

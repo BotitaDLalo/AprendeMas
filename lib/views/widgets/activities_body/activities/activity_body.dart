@@ -1,25 +1,56 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'custom_container_style.dart';
+import '../custom_container_style.dart';
 
-class ActivityBodyRelleno extends StatelessWidget {
-  const ActivityBodyRelleno({super.key});
+class ActivityBody extends StatelessWidget {
+  const ActivityBody({super.key});
 
   @override
   Widget build(BuildContext context) {
     return const CustomContainerStyle(
-      height: 70,
+      height: 250,
       width: double.infinity, 
       color: Colors.white,
       borderColor: Colors.blue, 
       child: Column(
         children: [
           _DateBody(),          
+          _CustomDivider(),
+          _Description(),
+          _CustomDivider(),
+          Text('Ver Completo', style: TextStyle(fontSize: 12),),
         ],
       ),
     );
   }
 }
 
+class _Description extends StatelessWidget {
+  const _Description();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Text('Proident culpa officia velit elit commodo laboris velit voluptate mollit excepteur. Consectetur amet nisi velit non voluptate sit consectetur Lorem Lorem irure ea excepteur consequat labore. Quis et proident reprehenderit ad velit ad cupidatat reprehenderit non elit anim ut duis. Ullamco consectetur commodo sunt laboris nostrud amet aute elit cillum minim ullamco Lorem sint. Do culpa velit esse amet elit deserunt mollit occaecat dolor mollit enim ad veniam ut. Aliqua eiusmod quis consectetur minim consectetur nulla cillum ea excepteur elit sunt irure in.',
+      style: TextStyle(fontSize: 10),
+      ),
+    );
+  }
+}
+
+class _CustomDivider extends StatelessWidget {
+  const _CustomDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(right: 10, left: 10),
+      child: Divider(
+        color: Colors.grey,
+      ),
+    );
+  }
+}
 
 class _DateBody extends StatelessWidget {
   const _DateBody();
@@ -65,7 +96,7 @@ class _ActivityDates extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nombre del examen',
+          'Nombre de la tarea',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 12
