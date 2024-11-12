@@ -11,9 +11,32 @@ class EnrolledStudents extends StatelessWidget {
       width: double.infinity,
       color: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 80),
-        child: Text('Alumnos inscritos'),
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              const Center(
+                child: Text(
+                  'Alumnos',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  // Acción al presionar el ícono
+                },
+                splashColor: Colors.grey,
+                borderRadius: BorderRadius.circular(55),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: const Icon(
+                    Icons.person_add_alt,
+                    size: 30,
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }

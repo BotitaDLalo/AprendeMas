@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/activities_body/notice/notice_created/input_null.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,11 @@ class NoticeCreated extends StatelessWidget {
           SizedBox(width: 10,),
           Icon(Icons.person),
           InputNull(),
-          IconButton(onPressed: () {}, icon: Icon(Icons.assignment))
+          IconButton(
+          onPressed: () {
+            context.go('/create-notice');
+          }, 
+          icon: Icon(Icons.assignment))
 
         ],
       ),

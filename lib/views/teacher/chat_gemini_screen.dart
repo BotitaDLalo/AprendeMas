@@ -14,18 +14,20 @@ class ChatGeminiScreen extends ConsumerStatefulWidget {
 
 class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
   void _onGenerateQuestionnaire(String inputText) {
-    // Expresión regular para buscar el formato de preguntas
     final match = RegExp(r'(\d+)\s+preguntas sobre (.+)').firstMatch(inputText);
+
     if (match != null) {
+      // Si el prompt contiene información para un cuestionario, extrae cantidad y tema
       int quantity = int.parse(match.group(1)!);
       String topic = match.group(2)!;
 
-      // Llamada a generar el cuestionario con la cantidad y el tema
+      // Llama a sendMessage con los parámetros específicos del cuestionario
       ref.read(chatProvider).generateQuestionnaire(topic, quantity);
     } else {
-      // Si no es un cuestionario, envía el mensaje como un mensaje general
+      // Si es un mensaje general, solo envía el prompt
       ref.read(chatProvider).callGeminiModel(inputText);
     }
+
     ref.read(chatProvider).controller.clear();
   }
 
@@ -49,14 +51,14 @@ class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
               onPressed: () {
                 final prompt = messages.controller.text.trim();
                 if (prompt.isNotEmpty) {
-                  _onGenerateQuestionnaire(
-                      prompt); // Llamada al método de interpretación
+                  _onGenerateQuestionnaire(prompt);
                 }
               },
-            )
+            ),
           ],
         ),
       ),
     );
   }
 }
+

@@ -1,5 +1,4 @@
 import 'package:aprende_mas/views/teacher/activities/activities_screen.dart';
-import 'package:aprende_mas/views/teacher/activities/options/create_activies/create_activities_screen.dart';
 import 'package:aprende_mas/views/teacher/subject_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
@@ -28,5 +27,9 @@ final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
     GoRoute(
       path: '/create-activities',
       builder: (context, state) => const CreateActivitiesScreen(), 
+    ),
+    GoRoute(
+      path: '/create-notice',
+      builder: (context, state) => const CreateNoticeScreen(), 
     ),
 ]);
