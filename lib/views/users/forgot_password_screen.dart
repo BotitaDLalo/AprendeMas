@@ -1,4 +1,5 @@
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/widgets/forms/form_forgot_password.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 

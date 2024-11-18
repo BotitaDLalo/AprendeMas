@@ -1,4 +1,4 @@
-import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/widgets/activities_body/custom_container_style.dart';
 import 'package:aprende_mas/views/widgets/activities_body/notice/notice_created/input_null.dart';
 import 'package:flutter/material.dart';
 

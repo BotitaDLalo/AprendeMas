@@ -1,4 +1,5 @@
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/widgets/activities_body/custom_container_style.dart';
 import 'package:flutter/material.dart';
 import '../../custom_divider.dart';
 import 'container_input.dart';
