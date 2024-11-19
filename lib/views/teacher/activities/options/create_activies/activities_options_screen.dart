@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'activity_list.dart';
+import 'button_create_general.dart';
 
 class ActivitiesOptionScreen extends ConsumerStatefulWidget {
   const ActivitiesOptionScreen({super.key});
@@ -19,15 +20,9 @@ class _ActivityOptionState extends ConsumerState<ActivitiesOptionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ButtonCreateGeneral(),  
-            ActivityBody(),
-            SizedBox(height: 10,),
-            ActivityBodyRelleno(),
+            ActivityList(),
             SizedBox(height: 10,),
             Text('        Nombre Tema'),
-            _CustomDivider(),
-            ExamBody(),
-            SizedBox(height: 10,),
-            UploadBody(),
           ],
         ),
       ),

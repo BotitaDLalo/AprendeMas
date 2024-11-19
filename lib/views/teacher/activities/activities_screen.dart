@@ -1,6 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/activities/options/options.dart';
-import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
+import 'package:aprende_mas/views/widgets/activities_body/options_activities.dart';
+import 'package:go_router/go_router.dart';
 
 class ActivitiesScreen extends ConsumerStatefulWidget {
   final int subjectId;
@@ -55,12 +57,6 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
             },
             icon: const Icon(Icons.arrow_back)),
         title: const Text('Actividades screen'),
-        // leading: IconButton(
-        //   onPressed: () {
-        //     context.go('/teacher-home');
-        //   },
-        //   icon: const Icon(Icons.arrow_back),
-        // ),
       ),
       body: Column(
         children: [

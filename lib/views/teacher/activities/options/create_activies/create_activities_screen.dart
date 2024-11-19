@@ -1,5 +1,6 @@
 import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'form_activities.dart';
 
 class CreateActivitiesScreen extends StatelessWidget {
   const CreateActivitiesScreen({super.key});
