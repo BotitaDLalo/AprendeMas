@@ -9,7 +9,7 @@ class InputNull extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 5.0, top: 5.0),
       child: Container(
-        width: 250,
+        width: 230,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black),

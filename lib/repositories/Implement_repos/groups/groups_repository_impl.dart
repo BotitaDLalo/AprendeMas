@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/groups/groups.dart';
 import 'package:aprende_mas/models/groups/groups_created.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/models/subjects/subjects.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_source.dart';
@@ -37,7 +38,7 @@ class GroupsRepositoryImpl implements GroupsRepository {
 
   @override
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<Subject> subjectsList) {
+      Color colorCode, List<SubjectsRow> subjectsList) {
     return groupsDataSource.createGroupSubjects(
         groupName, description, colorCode, subjectsList);
   }

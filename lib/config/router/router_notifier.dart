@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 class RouterNotifier extends ChangeNotifier {
   final AuthStateNotifier _authStateNotifier;
   
-
   AuthStatus _authStatus = AuthStatus.checking;
   AuthGoogleStatus _authGoogleStatus = AuthGoogleStatus.checking;
 

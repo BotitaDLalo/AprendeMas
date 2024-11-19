@@ -6,7 +6,6 @@ class GroupsCreatedMapper {
     List<GroupsCreated> lsGroups = groupsCreated.map((e) {
       return GroupsCreated(groupId: e['grupoId'], groupName: e['nombreGrupo']);
     }).toList();
-
     return lsGroups;
   }
 }

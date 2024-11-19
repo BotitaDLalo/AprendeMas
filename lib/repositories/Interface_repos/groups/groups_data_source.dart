@@ -1,7 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/groups/groups.dart';
-import 'package:aprende_mas/models/groups/groups_created.dart';
-import 'package:aprende_mas/models/subjects/subjects.dart';
+import 'package:aprende_mas/models/models.dart';
 
 abstract class GroupsDataSource {
   Future<List<Group>> getGroups();
@@ -12,7 +10,7 @@ abstract class GroupsDataSource {
       String nombreGrupo, String descripcion, Color codigoColor);
 
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-     Color colorCode, List<Subject> subjectsList);
+     Color colorCode, List<SubjectsRow> subjectsList);
 
   Future<void> deleteGroup();
 

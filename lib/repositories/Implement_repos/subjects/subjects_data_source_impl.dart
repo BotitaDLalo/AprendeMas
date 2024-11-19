@@ -1,46 +1,38 @@
 import 'package:aprende_mas/config/network/dio_client.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/groups/groups.dart';
-import 'package:aprende_mas/models/groups/groups_mapper.dart';
-import 'package:aprende_mas/models/subjects/subjects.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_data_source.dart';
 
 class SubjectsDataSourceImpl implements SubjectsDataSource {
-  // @override
-  // Future<List<Subject>> createSubject(
-  //     String subjectName, String description, String colorCode) async {
-  //   const uri = "/Materia";
-  //   try {
-  //     final res = await dio.post(uri, data: {
-  //       "NombreMateria": subjectName,
-  //       "Descripcion": description,
-  //       "CodigoColor": colorCode
-  //     });
+  @override
+  Future<List<Subject>> getSubjects() async {
+    try {
+      const uri = "/Materias/ObtenerMaterias";
 
-  //     return "";
-  //   } catch (e) {
-  //     print(e);
-  //     throw Exception(e);
-  //   }
-  // }
+      final res = await dio.get(uri);
+
+      final resList = List<Map<String, dynamic>>.from(res.data);
+      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      return lsSubjects;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 
   @override
   Future<List<Group>> createSubjectWithGroup(String subjectName,
       String description, Color colorCode, List<int> groupsId) async {
     try {
-      const uri = "/Materia/MateriaGrupos";
-      List<int> pruebals = [];
-
-      pruebals.add(1);
+      const uri = "/Materias/MateriaGrupos";
       final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,
         // "CodigoColor": colorCode.toString(),
-        "Grupos": pruebals
+        "Grupos": groupsId
       });
 
-      final resLista = List<Map<String, dynamic>>.from(res.data);
-      final groups = GroupsMapper.groupsJsonToEntityList(resLista);
+      final resList = List<Map<String, dynamic>>.from(res.data);
+      final groups = GroupsMapper.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {
       throw Exception(e);
@@ -48,17 +40,19 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   }
 
   @override
-  Future<void> createSubjectWithoutGroup(
-      String subjectName, String description, Color colorCode) {
+  Future<List<Subject>> createSubjectWithoutGroup(
+      String subjectName, String description, Color colorCode) async {
     try {
-      const uri = "/Materia/MateriaSinGrupo";
+      const uri = "/Materias/MateriaSinGrupo";
 
-      final res = dio.post(uri, data: {
+      final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,
-        "CodigoColor": colorCode
+        // "CodigoColor": colorCode
       });
-      return res;
+      final resList = List<Map<String, dynamic>>.from(res.data);
+      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      return lsSubjects;
     } catch (e) {
       throw Exception(e);
     }
@@ -73,13 +67,6 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   @override
   Future<void> updateSubject() {
     // TODO: implement updateSubject
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Subject>> createSubject(
-      String subjectName, String description, Color colorCode) {
-    // TODO: implement createSubject
     throw UnimplementedError();
   }
 }

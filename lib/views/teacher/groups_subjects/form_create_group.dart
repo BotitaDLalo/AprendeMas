@@ -23,7 +23,7 @@ class FormCreateGroup extends ConsumerWidget {
           title: const Text('Escoge un color'),
           content: SingleChildScrollView(
             child: BlockPicker(
-              // availableColors: [Color(0xff8bc34a)],
+              availableColors: AppTheme.availableColors,
               pickerColor: formCreateGroup.pickerColor,
               onColorChanged: (color) {
                 formCreateGroupNotifier.onColorCodeChanged(color);

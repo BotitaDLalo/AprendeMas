@@ -1,62 +1,15 @@
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/teacher/activities/activities_screen.dart';
-import 'package:aprende_mas/views/teacher/activities/options/create_activies/create_activities_screen.dart';
-import 'package:aprende_mas/views/teacher/subject_screen.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/student/student_home_screen.dart';
-import 'package:aprende_mas/views/teacher/create_group_screen.dart';
-import 'package:aprende_mas/views/teacher/create_subject_screen.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/loading/loading_screen.dart';
-import 'package:go_router/go_router.dart';
-
-final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
-  GoRoute(
-    path: '/login-user',
-    builder: (context, state) => const LoginUserScreen(),
-  ), 
-  GoRoute(
-    path: '/singin-user',
-    builder: (context, state) => const SinginUserScreen(),
-    ),
-  GoRoute(
-    path: '/teacher-home',
-    builder: (context, state) => const TeacherHomeScreen(),
-    ),
-  GoRoute(
-    path: '/activities',
-    builder: (context, state) => const ActivitiesScreen(),
-    ),
-    GoRoute(
-      path: '/subject',
-      builder: (context, state) => const SubjectScreen(), 
-    ),
-    GoRoute(
-      path: '/create-activities',
-      builder: (context, state) => const CreateActivitiesScreen(), 
-    ),
-]);
-// final appRouter = GoRouter(initialLocation: '/teacher-home', routes: [
-//   GoRoute(
-//     path: '/login-user',
-//     builder: (context, state) => const LoginUserScreen(),
-//   ),
-//   GoRoute(
-//     path: '/singin-user',
-//     builder: (context, state) => const SinginUserScreen(),
-//   ),
-//   GoRoute(
-//     path: '/teacher-home',
-//     builder: (context, state) => const TeacherHomeScreen(),
-//   ),
-//   GoRoute(
-//     path: '/activities',
-//     builder: (context, state) => const ActivitiesScreen(),
-//   )
-// ]);
 
 final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
@@ -99,7 +52,15 @@ final goRouterProvider = Provider((ref) {
       ),
       GoRoute(
         path: '/activities',
-        builder: (context, state) => const ActivitiesScreen(),
+        builder: (context, state) {
+          final subjectData = state.extra as Subject;
+
+          return ActivitiesScreen(
+            subjectId: subjectData.subjectId,
+            subjectName: subjectData.nombreMateria,
+            description: subjectData.descripcion ?? "",
+          );
+        },
       )
     ],
     redirect: (context, state) async {
@@ -122,7 +83,6 @@ final goRouterProvider = Provider((ref) {
 
       *2. Si se esta autenticado o no
        */
-
       if (role != "") {
         switch (authStatus) {
           case AuthStatus.authenticated:
@@ -188,66 +148,6 @@ final goRouterProvider = Provider((ref) {
           default:
         }
       }
-
-      // if (isGoingTo == '/create-group' ||
-      //     isGoingTo == '/create-subject' ||
-      //     isGoingTo == "/teacher-home" ||
-      //     isGoingTo == "/activities") {
-      //   return null;
-      // }
-
-      // if (isGoingTo == '/login-user' ||
-      //     isGoingTo == '/sigin-user' ||
-      //     isGoingTo == '/forgot-password') {
-      //   if (authStatus == AuthStatus.authenticated ||
-      //       authGoogleStatus == AuthGoogleStatus.authenticated) {
-      //     await Future.delayed(const Duration(milliseconds: 8000));
-      //     if (role == "Docente" || roleGoogle == "Docente") {
-      //       return '/teacher-home';
-      //     } else if (role == "Alumno" || roleGoogle == "Alumno") {
-      //       // await Future.delayed(const Duration(milliseconds: 8000));
-      //       return '/student-home';
-      //     }
-      //   }
-      //   return null;
-      // }
-
-      // if (authStatus == AuthStatus.authenticated ||
-      //     authGoogleStatus == AuthGoogleStatus.authenticated) {
-      //   await Future.delayed(const Duration(milliseconds: 800));
-      //   if (role == "Docente" || roleGoogle == "Docente") {
-      //     return '/teacher-home';
-      //   } else if (role == "Alumno" || roleGoogle == "Alumno") {
-      //     // await Future.delayed(const Duration(milliseconds: 8000));
-      //     return '/student-home';
-      //   }
-      // }
-
-      // if (authStatus == AuthStatus.notAuthenticated ||
-      //     authGoogleStatus == AuthGoogleStatus.notAuthenticated) {
-      //   await Future.delayed(const Duration(milliseconds: 800));
-      //   return '/login-user';
-      // }
-
-      // if ( authStatus == AuthStatus.notAuthenticated) {
-      //   await Future.delayed(const Duration(milliseconds: 800));
-      //   if (isGoingTo == '/login-user' || isGoingTo == '/sigin-user') return null;
-      //   return '/login-user';
-      // }
-
-      // if (isGoingTo == '/loading' && authStatus == AuthStatus.checking) return null;
-
-      // if (authStatus == AuthStatus.notAuthenticated) {
-      //   if (isGoingTo == '/login-user' || isGoingTo == '/sigin-user') return null;
-
-      //   return '/sigin-user';
-      // }
-
-      // if (authStatus == AuthStatus.authenticated) {
-      //   if (isGoingTo == '/login-user' || isGoingTo == '/sigin-user' || isGoingTo=='/loading') return '/teacher-home';
-      //   return '/login-user';
-      // }
-
       return null;
     },
   );

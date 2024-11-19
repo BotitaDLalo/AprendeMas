@@ -14,7 +14,7 @@ class FormGroupsState {
   final int subjectIndex;
   final GenericInput subjectName;
   final GenericInput subjectDescription;
-  final List<Subject> subjectsRow;
+  final List<SubjectsRow> subjectsRow;
 
   FormGroupsState({
     this.subjectIndex = -1,
@@ -39,9 +39,10 @@ class FormGroupsState {
     GenericInput? description,
     ColorInput? colorCode,
     Color? pickerColor,
+    int? subjectId,
     GenericInput? subjectName,
     GenericInput? subjectDescription,
-    List<Subject>? subjectsRow,
+    List<SubjectsRow>? subjectsRow,
     int? subjectIndex,
   }) =>
       FormGroupsState(

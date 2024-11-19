@@ -4,7 +4,7 @@ import 'package:aprende_mas/views/views.dart';
 import 'package:go_router/go_router.dart';
 import '../../../config/utils/app_theme.dart';
 import '../../../providers/subjects/form_subjects_provider.dart';
-import '../buttons/button_form.dart';
+import '../../widgets/buttons/button_form.dart';
 
 class FormCreateSubject extends ConsumerStatefulWidget {
   const FormCreateSubject({super.key});
@@ -22,12 +22,9 @@ class FormCreateSubjectState extends ConsumerState<FormCreateSubject> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.read(groupsProvider.notifier).getCreatedGroups();
     final formCreateSubject = ref.watch(formSubjectsProvider);
     final formCreateSubjectNotifier = ref.read(formSubjectsProvider.notifier);
     final groups = ref.watch(groupsProvider);
-    List<int> selectedGroupsId = [];
-    Map<String, bool> lsGroups = {};
 
     // Future<void> showColorDialog() async {
     //   showDialog(
@@ -76,7 +73,7 @@ class FormCreateSubjectState extends ConsumerState<FormCreateSubject> {
           trailing: formCreateSubject.isSelectedGroup[groupId] ?? false
               ? Icon(Icons.check_circle, color: AppTheme.isSelectedGroup)
               : Icon(
-                  Icons.check_circle_outline,
+                  Icons.circle_outlined,
                   color: AppTheme.notSelectedGroup,
                 ),
         ),

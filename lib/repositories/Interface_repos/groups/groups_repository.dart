@@ -12,7 +12,7 @@ abstract class GroupsRepository {
       String nombreGrupo, String descripcion, Color codigoColor);
 
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-     Color colorCode, List<Subject> subjectsList);
+     Color colorCode, List<SubjectsRow> subjectsList);
 
   Future<void> deleteGroup();
 

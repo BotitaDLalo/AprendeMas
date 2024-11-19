@@ -23,6 +23,7 @@ class GroupsMapper {
         }).toList();
 
         return Subject(
+          subjectId: materia['materiaId'],
           nombreMateria: materia['nombreMateria'],
           descripcion: materia['descripcion'],
           codigoColor: materia['codigoColor'],

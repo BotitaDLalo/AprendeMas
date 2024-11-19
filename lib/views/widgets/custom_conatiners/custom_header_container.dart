@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class CustomHeaderContainer extends StatelessWidget {
@@ -13,9 +14,9 @@ class CustomHeaderContainer extends StatelessWidget {
       width: double.infinity,
       height: 60,
       padding: const EdgeInsets.all(16),
-      decoration: const BoxDecoration(
-          color: Colors.blueAccent,
-          borderRadius: BorderRadius.only(
+      decoration:BoxDecoration(
+          color: AppTheme.cardHeader,
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(12), topRight: Radius.circular(12))),
       child: Text(
         nombreMateria,

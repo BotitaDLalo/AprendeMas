@@ -9,7 +9,7 @@ class FormSubjectsState {
   final bool isFormPosted;
   final bool isValid;
   final GenericInput subjectName;
-  final GenericInput description;
+  final GenericInput subjectDescription;
   final ColorInput colorCode;
   final Color subPickerColor;
   final List<int> groupsId;
@@ -22,7 +22,7 @@ class FormSubjectsState {
     this.isValid = false,
     this.isSelectedGroup = const {},
     this.subjectName = const GenericInput.pure(),
-    this.description = const GenericInput.pure(),
+    this.subjectDescription = const GenericInput.pure(),
     this.colorCode = const ColorInput.pure(),
     this.subPickerColor = const Color.fromARGB(0, 255, 255, 255),
   });
@@ -33,7 +33,7 @@ class FormSubjectsState {
           bool? isValid,
           Map<int,bool>? isSelectedGroup,
           GenericInput? subjectName,
-          GenericInput? description,
+          GenericInput? subjectDescription,
           ColorInput? colorCode,
           Color? subPickerColor,
           List<int>? groupsId,
@@ -44,7 +44,7 @@ class FormSubjectsState {
           isValid: isValid ?? this.isValid,
           isSelectedGroup: isSelectedGroup ?? this.isSelectedGroup,
           subjectName: subjectName ?? this.subjectName,
-          description: description ?? this.description,
+          subjectDescription: subjectDescription ?? this.subjectDescription,
           colorCode: colorCode ?? this.colorCode,
           subPickerColor: subPickerColor ?? this.subPickerColor,
           groupsId: groupsId ?? this.groupsId);

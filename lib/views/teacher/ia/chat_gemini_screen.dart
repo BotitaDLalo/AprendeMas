@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/views/widgets/inputs/custom_input_message.dart';
-import '../../providers/chat_gemini/chat_provider.dart';
-import '../widgets/custom_chat/message_list.dart';
+import 'package:aprende_mas/views/teacher/ia/custom_input_message.dart';
+import '../../../providers/chat_gemini/chat_provider.dart';
+import 'message_list.dart';
 
 class ChatGeminiScreen extends ConsumerStatefulWidget {
   static const name = 'chat_screen';

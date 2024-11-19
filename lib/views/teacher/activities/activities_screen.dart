@@ -1,12 +1,17 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/activities/options/options.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
-import 'package:go_router/go_router.dart';
 
 class ActivitiesScreen extends ConsumerStatefulWidget {
-  static String name = 'activity_screen';
-  const ActivitiesScreen({super.key});
+  final int subjectId;
+  final String subjectName;
+  final String description;
 
+  const ActivitiesScreen(
+      {super.key,
+      required this.subjectId,
+      required this.subjectName,
+      required this.description});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _ActividadesScreenState();
@@ -23,7 +28,6 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String subjectName = 'Nombre de la materia';
     final String codeAccess = 'ABC1234';
 
     // Contenido correspondiente a cada opción
@@ -51,12 +55,12 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
             },
             icon: const Icon(Icons.arrow_back)),
         title: const Text('Actividades screen'),
-        leading: IconButton(
-          onPressed: () {
-            context.go('/teacher-home');
-          },
-          icon: const Icon(Icons.arrow_back),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     context.go('/teacher-home');
+        //   },
+        //   icon: const Icon(Icons.arrow_back),
+        // ),
       ),
       body: Column(
         children: [
@@ -64,15 +68,15 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
             height: 20,
           ),
           ContainerSubjectName(
-            subject: subjectName,
+            subject: widget.subjectName,
             codeAccess: codeAccess,
           ),
           OptionsActivities(
             onOptionSelected: onOptionSelected, // Pasa el callback
-            selectedOptionIndex: selectedOptionIndex, // Pasa el índice seleccionado
+            selectedOptionIndex:
+                selectedOptionIndex, // Pasa el índice seleccionado
           ),
           Expanded(
-              
             child: getContent(), // Muestra el contenido correspondiente
           ),
         ],
@@ -80,5 +84,3 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
     );
   }
 }
-
-

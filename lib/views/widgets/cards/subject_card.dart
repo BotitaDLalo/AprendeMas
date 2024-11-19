@@ -1,4 +1,3 @@
-import 'package:aprende_mas/providers/activities/activities_provider.dart';
 import 'package:aprende_mas/views/widgets/custom_conatiners/custom_activities_container.dart';
 import 'package:aprende_mas/views/widgets/custom_conatiners/custom_header_container.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +7,16 @@ import '../../../models/models.dart';
 import '../custom_conatiners/custom_footer_container.dart';
 
 class SubjectCard extends ConsumerWidget {
+  final int subjectId;
   final String nombreMateria;
+  final String description;
   final List<Activities>? actividades;
   
   const SubjectCard({
     super.key, 
+    required this.subjectId,
     required this.nombreMateria,
+    required this.description,
     required this.actividades, 
   });
 
@@ -35,7 +38,7 @@ class SubjectCard extends ConsumerWidget {
               color: Colors.black,
               height: 0.5,
             ),
-            const CustomFooterContainer(),            
+            CustomFooterContainer(subjectId: subjectId,subjectName: nombreMateria,description: description,),            
           ],
         ),
       ),

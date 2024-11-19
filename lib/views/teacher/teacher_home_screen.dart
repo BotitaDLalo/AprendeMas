@@ -1,5 +1,6 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/views/teacher/chat_gemini_screen.dart';
+import 'package:aprende_mas/views/teacher/ia/chat_gemini_screen.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
@@ -34,8 +35,23 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     final auth = ref.read(authProvider);
     return Scaffold(
       appBar: AppBar(
-          leading: const FlutterLogo(),
-          backgroundColor: Colors.blue.shade900,
+          leadingWidth: 200,
+          leading: Transform.scale(
+            scale: 2,
+            child: SvgPicture.asset(
+              "assets/icons/logo_horizontal-26.svg",
+              colorFilter: const ColorFilter.mode(
+                Colors.white, // Cambia el color del SVG aquí
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          backgroundColor: const Color.fromARGB(255, 13, 71, 161),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
+          ),
+          // backgroundColor: Colors.blue,
+          toolbarHeight: 60,
           actions: [
             IconButton(
                 color: Colors.white,
@@ -46,7 +62,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
                     ref.watch(authProvider.notifier).logout();
                   }
                 },
-                icon: const Icon(Icons.arrow_back))
+                icon: const Icon(Icons.logout))
           ]),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(

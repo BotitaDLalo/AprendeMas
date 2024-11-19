@@ -8,9 +8,9 @@ class InputNoticeComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5.0, right: 12.0),
+      padding: const EdgeInsets.only(top: 5.0, right: 8.0),
       child: Container(
-        width: 270,
+        width: 250,
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(color: Colors.black),
@@ -21,7 +21,7 @@ class InputNoticeComment extends StatelessWidget {
             Expanded(
               child: TextField(
                 decoration: const InputDecoration(
-                  hintText: 'Añadir un comentario',
+                  hintText: 'Añadir comentario',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),

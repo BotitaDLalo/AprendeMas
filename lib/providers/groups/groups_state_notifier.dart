@@ -36,7 +36,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   Future<void> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<Subject> subjectsList) async {
+      Color colorCode, List<SubjectsRow> subjectsList) async {
     try {
       final group = await groupsRepository.createGroupSubjects(
           groupName, description, colorCode, subjectsList);

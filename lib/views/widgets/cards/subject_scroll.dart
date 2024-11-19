@@ -22,7 +22,9 @@ class SubjectScroll extends ConsumerWidget {
         children: [
           for(var materia in materias)
           SubjectCard(
+            subjectId: materia.subjectId,
             nombreMateria: materia.nombreMateria,
+            description: materia.descripcion ?? "",
             actividades: materia.actividades,
           )
         ],

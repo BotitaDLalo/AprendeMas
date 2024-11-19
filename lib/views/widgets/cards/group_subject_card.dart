@@ -47,7 +47,7 @@ class GroupSubjectCard extends ConsumerWidget {
                   Container(
                     alignment: const Alignment(-0.8, 1),
                     child: Text(
-                      'Crear materia',
+                      'Modificar materia',
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -103,9 +103,9 @@ class GroupSubjectCard extends ConsumerWidget {
                 width: double.infinity,
                 height: 60,
                 padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(100, 141, 141, 141),
-                    borderRadius: BorderRadius.only(
+                decoration:  BoxDecoration(
+                    color: AppTheme.cardHeader,
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(12),
                         topRight: Radius.circular(12))),
                 child: Text(

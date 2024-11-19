@@ -5,11 +5,14 @@ import 'package:formz/formz.dart';
 import '../../views/infrastructure/color_input.dart';
 
 class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
-  // final Function(String, String, Color) createSubjectCallback;
   final Function(String, String, Color, List<int>)
       createSubjectWithGroupsCallback;
 
-  FormSubjectsStateNotifier({required this.createSubjectWithGroupsCallback})
+  final Function(String, String, Color) createSubjectWithoutGroup;
+
+  FormSubjectsStateNotifier(
+      {required this.createSubjectWithGroupsCallback,
+      required this.createSubjectWithoutGroup})
       : super(FormSubjectsState());
 
   onSubjectNameChanged(String value) {
@@ -21,7 +24,7 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
   onDescriptionChanded(String value) {
     final newDescription = GenericInput.dirty(value);
     state = state.copyWith(
-        description: newDescription,
+        subjectDescription: newDescription,
         isValid: Formz.validate([state.subjectName]));
   }
 
@@ -31,14 +34,22 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
     state = state.copyWith(
         groupsId: groupsId, isValid: Formz.validate([state.subjectName]));
   }
-                    //*   1
+
+  //*   1
   onSelectedGroup(int key) {
+    List<int> lsGroupsId = List.from(state.groupsId);
+
     state = state.copyWith(isSelectedGroup: {
       ...state.isSelectedGroup,
       key: !(state.isSelectedGroup[key] ?? false)
-  //*  1 :        true
-
+      //*  1 :        true
     });
+    if (state.isSelectedGroup[key] == true) {
+      lsGroupsId.add(key);
+    } else {
+      lsGroupsId.remove(key);
+    }
+    state = state.copyWith(groupsId: lsGroupsId);
   }
 
 //   onColorCodeChanged(Color color) {
@@ -53,22 +64,40 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
     _touchEveryField();
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
-    await createSubjectWithGroupsCallback(state.subjectName.value,
-        state.description.value, state.colorCode.value, state.groupsId);
+    if (state.groupsId.isNotEmpty) {
+      await createSubjectWithGroupsCallback(
+          state.subjectName.value,
+          state.subjectDescription.value,
+          state.colorCode.value,
+          state.groupsId);
+    } else {
+      await createSubjectWithoutGroup(state.subjectName.value,
+          state.subjectDescription.value, state.colorCode.value);
+    }
     state = state.copyWith(isPosting: false);
+    resetFormSubjects();
+  }
+
+  void resetFormSubjects() {
+    const resetFormSubjects = GenericInput.pure();
+    state = state.copyWith(
+        subjectName: resetFormSubjects,
+        subjectDescription: resetFormSubjects,
+        groupsId: [],
+        isValid: false);
   }
 
   _touchEveryField() {
     final subjectName = GenericInput.dirty(state.subjectName.value);
 
-    final description = GenericInput.dirty(state.description.value);
+    final description = GenericInput.dirty(state.subjectDescription.value);
 
     final colorCode = ColorInput.dirty(state.colorCode.value);
 
     state = state.copyWith(
         isFormPosted: true,
         subjectName: subjectName,
-        description: description,
+        subjectDescription: description,
         colorCode: colorCode,
         isValid: Formz.validate([subjectName]));
   }

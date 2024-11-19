@@ -14,14 +14,14 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
       : subjectsDataSource = subjectsDataSource ?? SubjectsDataSourceImpl();
 
   @override
-  Future<List<Subject>> createSubject(
-      String subjectName, String description, Color colorCode) {
-    return subjectsDataSource.createSubject(
-        subjectName, description, colorCode);
+  Future<List<Group>> createSubjectWithGroup(String subjectName,
+      String description, Color colorCode, List<int> groupsId) {
+    return subjectsDataSource.createSubjectWithGroup(
+        subjectName, description, colorCode, groupsId);
   }
 
   @override
-  Future<void> createSubjectWithoutGroup(
+  Future<List<Subject>> createSubjectWithoutGroup(
       String subjectName, String description, Color colorCode) {
     return subjectsDataSource.createSubjectWithoutGroup(
         subjectName, description, colorCode);
@@ -38,12 +38,10 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
     // TODO: implement updateSubject
     throw UnimplementedError();
   }
-
+  
   @override
-  Future<List<Group>> createSubjectWithGroup(String subjectName,
-      String description, Color colorCode, List<int> groupsId) {
-    return subjectsDataSource.createSubjectWithGroup(
-        subjectName, description, colorCode, groupsId);
+  Future<List<Subject>> getSubjects() {
+    return subjectsDataSource.getSubjects();
   }
 
 }

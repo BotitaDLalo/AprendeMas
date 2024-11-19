@@ -1,8 +1,16 @@
+import 'package:aprende_mas/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomFooterContainer extends StatelessWidget {
-  const CustomFooterContainer({super.key});
+  final int subjectId;
+  final String subjectName;
+  final String description;
+  const CustomFooterContainer(
+      {super.key,
+      required this.subjectId,
+      required this.subjectName,
+      required this.description});
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +21,18 @@ class CustomFooterContainer extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          IconButton(onPressed: () {
-            context.go('/activities');
-          }, icon: const Icon(Icons.assignment)),
+          IconButton(
+              onPressed: () {
+                // context.go('/activities?subjectId=$subjectId&subjectName=$subjectName&description=$description');
+
+                final data = Subject(
+                    subjectId: subjectId,
+                    nombreMateria: subjectName,
+                    descripcion: description);
+
+                context.go('/activities', extra: data);
+              },
+              icon: const Icon(Icons.assignment)),
           const SizedBox(
             width: 60,
           ),

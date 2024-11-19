@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'custom_container_style.dart';
 
@@ -16,7 +17,7 @@ class ContainerSubjectName extends StatelessWidget {
     return CustomContainerStyle(
       height: 90,
       width: double.infinity,
-      color: Colors.blue,
+      color: AppTheme.cardHeader,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

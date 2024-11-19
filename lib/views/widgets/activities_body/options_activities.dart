@@ -18,7 +18,7 @@ class OptionsActivities extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(4, (index) {
           String optionText;
-      
+
           switch (index) {
             case 0:
               optionText = 'Avisos';
@@ -35,9 +35,9 @@ class OptionsActivities extends StatelessWidget {
             default:
               optionText = '';
           }
-      
+
           return Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
               onTap: () {
                 onOptionSelected(index); // Llama al callback
@@ -49,13 +49,18 @@ class OptionsActivities extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: selectedOptionIndex == index ? Colors.blue : Colors.black,
+                      color: selectedOptionIndex == index
+                          ? Colors.blue
+                          : Colors.black,
                     ),
                   ),
                   AnimatedContainer(
-                    duration: const Duration(milliseconds: 500), // Duración de la animación
+                    duration: const Duration(
+                        milliseconds: 500), // Duración de la animación
                     height: 2,
-                    width: selectedOptionIndex == index ? 90 : 0, // Cambia el ancho basado en la selección
+                    width: selectedOptionIndex == index
+                        ? 90
+                        : 0, // Cambia el ancho basado en la selección
                     color: Colors.blue,
                     curve: Curves.easeInOut, // Curva de la animación
                   ),
@@ -68,5 +73,3 @@ class OptionsActivities extends StatelessWidget {
     );
   }
 }
-
-

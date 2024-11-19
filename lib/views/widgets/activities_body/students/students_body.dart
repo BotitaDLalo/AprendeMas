@@ -19,7 +19,7 @@ class StudentsBody extends ConsumerWidget {
             Icon(Icons.person),
             SizedBox(width: 20,),
             Text('Nombre del alumno'),
-            SizedBox(width: 50,),
+            SizedBox(width: 10,),
             IconButton(onPressed: () {}, icon: Icon(Icons.mail))
           ],
         ),

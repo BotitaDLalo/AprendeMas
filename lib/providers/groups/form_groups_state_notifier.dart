@@ -2,13 +2,11 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_state.dart';
 import 'package:aprende_mas/views/infrastructure/color_input.dart';
 import 'package:aprende_mas/views/infrastructure/inputs.dart';
-import 'package:formz/formz.dart';
-
 import '../../models/models.dart';
 
 class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   // final Function(String, String, Color) createGroupCallback;
-  final Function(String, String, Color, List<Subject>)
+  final Function(String, String, Color, List<SubjectsRow>)
       createGroupSubjectsCallback;
 
   FormGroupsStateNotifier({required this.createGroupSubjectsCallback})
@@ -77,7 +75,7 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   onSubjectSubmit() {
     _subjectTouchEveryField();
     if (!state.isValid) return;
-    final newSubject = Subject(
+    final newSubject = SubjectsRow(
         nombreMateria: state.subjectName.value,
         descripcion: state.subjectDescription.value);
     state = state.copyWith(subjectsRow: [newSubject, ...state.subjectsRow]);
@@ -119,12 +117,12 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   }
 
   onUpdateSubjectsSubmit() {
-    List<Subject> subjectsList = state.subjectsRow;
+    List<SubjectsRow> subjectsList = List.from(state.subjectsRow);
     final indexSubject = state.subjectIndex;
     final newSubjectName = state.subjectName.value;
     final newSubjectDescription = state.subjectDescription.value;
 
-    subjectsList[indexSubject] = Subject(
+    subjectsList[indexSubject] = SubjectsRow(
         nombreMateria: newSubjectName, descripcion: newSubjectDescription);
   }
 }

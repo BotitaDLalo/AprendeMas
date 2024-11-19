@@ -6,18 +6,35 @@ const List<Color> _colorThemes = [
   Color.fromARGB(255, 0, 0, 0), //$ Black 2
   Color.fromARGB(100, 0, 0, 0), //$Negro palido 3
   Color.fromARGB(150, 0, 0, 0), //$Negro palido 4
-  Color.fromARGB(100, 141, 141, 141), //$ Gris 5
-  Colors.grey //$ 6
+  Color.fromARGB(140, 141, 141, 141), //$ Gris 5
+  Colors.grey, //$ 6
 ];
 
 class AppTheme {
   // final Color buttonColor = _colorThemes[1];
   static final Color isSelectedGroup = _colorThemes[1];
   static final Color notSelectedGroup = _colorThemes[6];
+  static final Color cardHeader = _colorThemes[5];
 
   static final Color pickedColor = _colorThemes[0];
   static final BorderRadius borderRadius = BorderRadius.circular(10);
 
+
+//#Color picker availableColors
+static final List<Color> availableColors = [
+  const Color(0xFF00BCD4),
+  const Color(0xFF3F51B5),
+  const Color(0xFF673AB7),
+  const Color(0xFF9C27B0),
+  const Color(0xFF009688),
+  const Color(0xFF4CAF50),
+  const Color(0xFF8BC34A),
+  const Color(0xFFE91E63),
+  const Color(0xFFF44336),
+  const Color(0xFFFF5722),
+  const Color(0xFFFF9800),
+  const Color(0xFFFFC107),
+];
 
 //#Text theme style
   final TextTheme textThemes = const TextTheme(
@@ -30,6 +47,18 @@ class AppTheme {
     bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
     bodySmall: TextStyle(fontSize: 14, color: Colors.black),
     // labelLarge: TextStyle(fontSize: 20, color: Colors.black)
+  );
+
+
+
+//#Degradated general
+  static const LinearGradient degradedBlue = LinearGradient(
+    colors: [
+      Color.fromARGB(255, 52, 115, 250), // Color base
+      Color.fromARGB(255, 84, 171, 250), // Color base
+    ],
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
   );
 
   //#Color picker box style

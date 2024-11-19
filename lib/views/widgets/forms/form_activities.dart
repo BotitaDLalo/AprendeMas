@@ -12,35 +12,46 @@ class FormActivities extends ConsumerStatefulWidget {
 }
 
 class _FormAtivitiesState extends ConsumerState<FormActivities> {
-
   @override
   Widget build(BuildContext context) {
     return Form(
       child: Padding(
-        padding: const EdgeInsets.symmetric( vertical: 30, horizontal: 40),
+        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
         child: Column(
           children: [
             CustomTextFormField(
               label: 'Nombre Actividad',
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CustomTextFormField(
               label: 'Descripción',
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CustomDateFormField(
               label: 'Fecha de Entrega',
               isDateField: true, // Habilita el selector de fecha
               hint: 'Selecciona la fecha',
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             CustomHourFormField(
               label: 'Hora de Entrega',
               isTimeField: true, // Activa el selector de hora
               hint: 'Selecciona la hora',
             ),
-            SizedBox(height: 50,),
-            ButtonForm(buttonName: 'Crear', onPressed: () {})
+            SizedBox(
+              height: 50,
+            ),
+            ButtonForm(
+              buttonName: 'Crear',
+              onPressed: () {},
+              style: ButtonStyle(),
+            )
           ],
         ),
       ),

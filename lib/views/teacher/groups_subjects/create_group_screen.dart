@@ -1,5 +1,6 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/views/widgets/forms/form_create_group.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/form_create_group.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateGroupScreen extends ConsumerWidget {
@@ -11,13 +12,17 @@ class CreateGroupScreen extends ConsumerWidget {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          toolbarHeight: 60,
+          // backgroundColor: Colors.transparent,
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
+          ),
           leading: IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
                 context.pop();
               },
-              icon: const Icon(Icons.arrow_back)),
+              icon: const Icon(Icons.arrow_back ,color: Colors.white,)),
         ),
         body: const Center(
           child: SingleChildScrollView(
