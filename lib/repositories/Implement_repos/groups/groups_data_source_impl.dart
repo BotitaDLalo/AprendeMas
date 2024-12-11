@@ -1,14 +1,17 @@
 import 'package:aprende_mas/config/network/dio_client.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
+import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_source.dart';
 
 class GroupsDataSourceImpl implements GroupsDataSource {
   @override
-  Future<List<Group>> getGroups() async {
+  Future<List<Group>> getGroupsSubjects() async {
     const uri = "/Grupos/ObtenerGruposMaterias";
     try {
-      final res = await dio.get(uri);
+      final storageService = KeyValueStorageServiceImpl();
+      final id = await storageService.getValueToken<int>('id');
+      final res = await dio.get(uri, queryParameters: {'docenteid': id});
       final resList = List<Map<String, dynamic>>.from(res.data);
       final groups = GroupsMapper.groupsJsonToEntityList(resList);
       return groups;
@@ -21,7 +24,9 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   Future<List<GroupsCreated>> getCreatedGroups() async {
     try {
       const uri = "/Grupos/ObtenerGruposCreados";
-      final res = await dio.get(uri);
+      final storageService = KeyValueStorageServiceImpl();
+      final id = await storageService.getValueToken<int>('id');
+      final res = await dio.get(uri, queryParameters: {'docenteid': id});
       final resList = List<Map<String, dynamic>>.from(res.data);
       final lsGroups = GroupsCreatedMapper.groupsCreatedToEntityList(resList);
       return lsGroups;
@@ -35,12 +40,15 @@ class GroupsDataSourceImpl implements GroupsDataSource {
       Color colorCode, List<SubjectsRow> subjectsList) async {
     try {
       const uri = "/Grupos/CrearGrupoMaterias";
+      final storageService = KeyValueStorageServiceImpl();
+      final id = await storageService.getValueToken<int>('id');
       final String hexColor = colorCode.value.toRadixString(16).toUpperCase();
       final subList = subjectsList
           .map((subject) => subject.toJsonGroupsSubjects())
           .toList();
 
       final res = await dio.post(uri, data: {
+        "DocenteId": id,
         "NombreGrupo": groupName,
         "Descripcion": description,
         "CodigoColor": hexColor,
@@ -60,13 +68,15 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   Future<List<Group>> createGroup(
       String nombreGrupo, String descripcion, Color codigoColor) async {
     const uri = "/Grupos/CrearGrupo";
+    final storageService = KeyValueStorageServiceImpl();
+    final id = await storageService.getValueToken<int>('id');
     try {
       final res = await dio.post(uri, data: {
-        "nombreGrupo": nombreGrupo,
-        "descripcion": descripcion,
-        "codigoColor": codigoColor.toString()
+        "NombreGrupo": nombreGrupo,
+        "Descripcion": descripcion,
+        "CodigoColor": codigoColor.toString(),
+        "DocenteId": id
       });
-      // final resLista = List<Map<String, dynamic>>.from(res.data);
       final groups = GroupsMapper.groupsJsonToEntityList(res.data);
       return groups;
     } catch (e) {

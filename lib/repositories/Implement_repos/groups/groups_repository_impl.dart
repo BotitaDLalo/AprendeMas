@@ -1,8 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/groups/groups.dart';
-import 'package:aprende_mas/models/groups/groups_created.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/models/subjects/subjects.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_source.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
@@ -14,8 +11,8 @@ class GroupsRepositoryImpl implements GroupsRepository {
       : groupsDataSource = groupsDataSource ?? GroupsDataSourceImpl();
 
   @override
-  Future<List<Group>> getGroups() {
-    return groupsDataSource.getGroups();
+  Future<List<Group>> getGroupsSubjects() {
+    return groupsDataSource.getGroupsSubjects();
   }
 
   @override

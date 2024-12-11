@@ -4,7 +4,7 @@ import 'package:aprende_mas/models/models.dart';
 import '../../../models/groups/groups_created.dart';
 
 abstract class GroupsRepository {
-  Future<List<Group>> getGroups();
+  Future<List<Group>> getGroupsSubjects();
 
   Future<List<GroupsCreated>> getCreatedGroups();
   
