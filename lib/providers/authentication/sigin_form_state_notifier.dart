@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_state.dart';
-import 'package:aprende_mas/views/infrastructure/generic_input.dart';
-import 'package:aprende_mas/views/infrastructure/role.dart';
+import 'package:aprende_mas/views/inputs/generic_input.dart';
+import 'package:aprende_mas/views/inputs/role.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:formz/formz.dart';
 

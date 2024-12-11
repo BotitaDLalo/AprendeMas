@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/infrastructure/color_input.dart';
-import 'package:aprende_mas/views/infrastructure/inputs.dart';
+import 'package:aprende_mas/views/inputs/color_input.dart';
+import 'package:aprende_mas/views/inputs/inputs.dart';
 
 class FormGroupsState {
   final bool isPosting;

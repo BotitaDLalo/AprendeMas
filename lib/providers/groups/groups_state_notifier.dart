@@ -9,9 +9,9 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   GroupsNotifier({required this.groupsRepository}) : super(GroupsState());
 
-  Future<void> getGroups() async {
+  Future<void> getGroupsSubjects() async {
     try {
-      final groups = await groupsRepository.getGroups();
+      final groups = await groupsRepository.getGroupsSubjects();
       _setGroups(groups);
     } catch (e) {
       throw Exception(e);

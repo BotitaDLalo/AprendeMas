@@ -1,10 +1,11 @@
+import 'package:aprende_mas/repositories/Implement_repos/authentication/db_local_user_repository_impl.dart';
 import 'package:aprende_mas/config/services/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
-import 'package:aprende_mas/models/authentication/auth_errors.dart';
-import 'package:aprende_mas/repositories/Interface_repos/authentication/key_value_storage_service.dart';
+import 'package:aprende_mas/config/services/key_value_storage_service.dart';
+import 'package:aprende_mas/config/services/services.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
@@ -12,20 +13,33 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final KeyValueStorageService keyValueStorageService;
   final GoogleSigninApi googleSigninApi;
 
+  final DbLocalUserRepositoryImpl dbLocalUser;
+
   AuthStateNotifier(
-      {required this.authRepository,
+      {required this.dbLocalUser,
+      required this.authRepository,
       required this.keyValueStorageService,
       required this.googleSigninApi})
       : super(AuthState()) {
-    checkAuthStatus();
-    checkAuthGoogleStatus();
+    checkInternet();
+  }
+
+  void checkInternet() async {
+    final checkInternet = await ConnectivityCheck.checkInternetConnectivity();
+
+    if (checkInternet) {
+      checkAuthStatus();
+      checkAuthGoogleStatus();
+    } else {
+      checkAuthStatusOffline();
+    }
   }
 
   Future<void> loginUser(String email, String password) async {
-    // await Future.delayed(const Duration(milliseconds: 500));
     try {
+      const caller = "loginUser";
       final user = await authRepository.login(email, password);
-      _setLoggedUser(user);
+      _setLoggedUser(caller, user);
     } on WrongCredentials {
       logout('Credenciales no son correctas');
     } on ConnectionTimeout {
@@ -67,17 +81,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       }
       return true;
     } catch (e) {
-      //TODO: Checar lo de las excepcione
       throw Exception(e);
     }
   }
 
   void checkAuthStatus() async {
     try {
-      final token = await keyValueStorageService.getValue<String>('token');
+      const caller = "checkAuthStatus";
+      final token = await keyValueStorageService.getValueToken<String>('token');
       if (token == null) return logout();
       final user = await authRepository.checkAuthStatus(token);
-      _setLoggedUser(user);
+      _setLoggedUser(caller, user);
     } catch (e) {
       logout();
     }
@@ -87,7 +101,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       // final currentUser = await googleSigninApi.verifyExistingUser();
       final token =
-          await keyValueStorageService.getValue<String>('idTokenGoogle');
+          await keyValueStorageService.getValueToken<String>('idTokenGoogle');
       if (token == null) return logoutGoogle();
       final user = await googleSigninApi.checkSignInStatus(token);
       _setLoggedGoogleUser(user);
@@ -96,8 +110,44 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void _setLoggedUser(AuthUser user) async {
-    await keyValueStorageService.setKeyValue('token', user.token);
+  void checkAuthStatusOffline() async {
+    try {
+      DateTime dateNow = DateTime.now();
+      final dbUser = await dbLocalUser.getUser();
+      if (dbUser.isNotEmpty) {
+        final userOffline = AuthOfflineUser.userOffilineJsonToEntity(dbUser);
+        final userDateLimit = DateTime.parse(userOffline.fechaLimiteActivo);
+
+        if (dateNow.isBefore(userDateLimit)) {
+          _setLoggedOfflineUser(userOffline);
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  void _setLoggedUser(String caller, AuthUser user) async {
+    const limit = 7;
+    DateTime dateNow = DateTime.now();
+    DateTime date7Days = dateNow.add(const Duration(days: limit));
+
+    //TODO:
+    // await keyValueStorageService.setKeyValue( 'token', user.token, 'id', user.id, 'role', user.rol);
+    _setKeyValueStorage(
+        'token', user.token, 'id', user.id, 'role', user.rol);
+    if (caller == "loginUser") {
+      await dbLocalUser.insertUser(
+          user.id, user.nombre, user.email, date7Days.toString(), user.rol);
+      await FirebaseConfiguration.getFcmToken();
+    } else if (caller == "checkAuthStatus") {
+      dbLocalUser.updateUser(date7Days.toString());
+    }
+
     state = state.copyWith(
       authUser: user,
       authStatus: AuthStatus.authenticated,
@@ -106,15 +156,34 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void _setLoggedGoogleUser(AuthUser user) async {
-    await keyValueStorageService.setKeyValue('idTokenGoogle', user.token);
+    //TODO:
+    // await keyValueStorageService.setKeyValue('idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
+    _setKeyValueStorage(
+        'idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
     state = state.copyWith(
         authUser: user,
         authGoogleStatus: AuthGoogleStatus.authenticated,
         errorMessage: '');
   }
 
+  void _setLoggedOfflineUser(AuthOfflineUser userOffline) async {
+    final user = AuthUser(
+        id: userOffline.usuarioId,
+        nombre: userOffline.nombreUsuario,
+        email: userOffline.correo,
+        rol: 'Alumno',
+        token: "");
+
+    state = state.copyWith(
+      authUser: user,
+      authStatus: AuthStatus.authenticated,
+      errorMessage: '',
+    );
+  }
+
   Future<void> logout([String? errorMessage]) async {
-    await keyValueStorageService.removeKey('token');
+    await keyValueStorageService.removeKey('token', 'id', 'role');
+    await dbLocalUser.deleteUser();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
         user: null,
@@ -124,7 +193,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> logoutGoogle([String? errorMessage]) async {
     try {
       await googleSigninApi.handlerGoogleLogout();
-      await keyValueStorageService.removeKey('idTokenGoogle');
+      await keyValueStorageService.removeKey('idTokenGoogle', 'id', 'role');
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           user: null,
@@ -138,5 +207,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void _setRegisterUser(User user) {
     state =
         state.copyWith(user: user, registerStatus: RegisterStatus.registered);
+  }
+
+  void _setKeyValueStorage<T>(String keyToken, T valueToken, String keyId,
+      T valueId, String keyRole, T valueRole) async {
+    await keyValueStorageService.setKeyValue(keyToken, valueToken);
+    await keyValueStorageService.setKeyValue(keyId, valueId);
+    await keyValueStorageService.setKeyValue(keyRole, valueRole);
   }
 }

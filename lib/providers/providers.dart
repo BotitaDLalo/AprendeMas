@@ -14,3 +14,5 @@ export 'subjects/modal_button_subjects_provider.dart';
 export 'activities/activities_provider.dart';
 
 export 'chat_gemini/chat_provider.dart';
+
+export 'notices/fcm_provider.dart';

@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_state.dart';
-import 'package:aprende_mas/views/infrastructure/color_input.dart';
-import 'package:aprende_mas/views/infrastructure/inputs.dart';
+import 'package:aprende_mas/views/inputs/color_input.dart';
+import 'package:aprende_mas/views/inputs/inputs.dart';
 import '../../models/models.dart';
 
 class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
