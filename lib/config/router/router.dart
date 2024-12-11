@@ -7,6 +7,7 @@ import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/student/student_home_screen.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
+import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/loading/loading_screen.dart';
@@ -35,6 +36,10 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const TeacherHomeScreen(),
       ),
       GoRoute(
+        path: '/teacher-home-back',
+        builder: (context, state) => const TeacherHomeScreen(),
+      ),
+      GoRoute(
         path: '/student-home',
         builder: (context, state) => const StudentHomeScreen(),
       ),
@@ -54,13 +59,16 @@ final goRouterProvider = Provider((ref) {
         path: '/activities',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-
           return ActivitiesScreen(
             subjectId: subjectData.subjectId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
           );
         },
+      ),
+      GoRoute(
+        path: '/create-activities',
+        builder: (context, state) => const CreateActivitiesScreen(),
       )
     ],
     redirect: (context, state) async {
@@ -72,12 +80,8 @@ final goRouterProvider = Provider((ref) {
       final user = authState.user;
       final role = authUser?.rol;
       final roleGoogle = user?.rol;
-      // if (isGoingTo == "/loading" &&
-      //     (authStatus == AuthStatus.notAuthenticated ||
-      //         authGoogleStatus == AuthGoogleStatus.notAuthenticated)) {
-      //   return '/login-user';
-      // }
 
+      print(isGoingTo);
       /*
       *1. Si es googe o normal
 
@@ -97,6 +101,9 @@ final goRouterProvider = Provider((ref) {
 
                   case "/activities":
                     return "/activities";
+
+                  case "/create-activities":
+                    return "/create-activities";
                 }
                 return "/teacher-home";
               case "Alumno":
