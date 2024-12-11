@@ -1,6 +1,7 @@
 import 'package:aprende_mas/models/models.dart';
 
 class Group {
+  final int? grupoId;
   final String nombreGrupo;
   final String? descripcion;
   final String codigoAcceso;
@@ -9,6 +10,7 @@ class Group {
   final List<Subject> materias;
 
   Group({
+    this.grupoId,
     required this.nombreGrupo,
     this.descripcion,
     required this.codigoAcceso,
