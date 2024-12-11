@@ -12,8 +12,8 @@ class HeaderTile extends StatelessWidget {
     super.key,
     required this.svg,
     required this.titulo, 
-    this.colorUno = Colors.grey, 
-    this.colorDos = Colors.blueGrey, 
+    this.colorUno = const Color.fromARGB(255, 255, 255, 255), 
+    this.colorDos = const Color.fromARGB(255, 255, 255, 255), 
   });
 
   @override
@@ -39,7 +39,7 @@ class HeaderTile extends StatelessWidget {
         Column(
           children: [
             const SizedBox(height: 120, width: double.infinity,),
-            Text(titulo, style: TextStyle(color: colorWhite, fontSize: 30, fontWeight: FontWeight.bold),),
+            Text(titulo, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
             const SizedBox(height: 10,),
             SvgPicture.asset(
             width: 70,

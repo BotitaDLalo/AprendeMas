@@ -1,6 +1,4 @@
 import 'package:aprende_mas/views/widgets/cards/subject_card.dart';
-import 'package:aprende_mas/views/widgets/custom_conatiners/custom_expansion_tile.dart';
-
 import '../../../config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 

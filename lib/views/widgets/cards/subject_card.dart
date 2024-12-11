@@ -1,10 +1,10 @@
-import 'package:aprende_mas/views/widgets/custom_conatiners/custom_activities_container.dart';
-import 'package:aprende_mas/views/widgets/custom_conatiners/custom_header_container.dart';
+import 'package:aprende_mas/views/widgets/cards/subject_card_activities.dart';
+import 'package:aprende_mas/views/widgets/cards/subject_card_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/models.dart';
-import '../custom_conatiners/custom_footer_container.dart';
+import 'subject_card_footer.dart';
 
 class SubjectCard extends ConsumerWidget {
   final int subjectId;

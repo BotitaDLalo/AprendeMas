@@ -2,10 +2,9 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:aprende_mas/views/widgets/cards/group_subject_card.dart';
+import 'package:aprende_mas/views/widgets/cards/group_subjects_card.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:go_router/go_router.dart';
 
 class FormCreateGroup extends ConsumerWidget {
   const FormCreateGroup({super.key});

@@ -1,8 +1,8 @@
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
-import 'package:aprende_mas/views/widgets/cards/subject_scroll.dart';
+import 'package:aprende_mas/views/widgets/cards/subjects_scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../widgets/custom_conatiners/custom_expansion_tile.dart';
+import '../../widgets/cards/group_card.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
   const GroupsSubjectsContainer({
@@ -18,7 +18,7 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupsProvider.notifier).getGroups();
+    ref.read(groupsProvider.notifier).getGroupsSubjects();
   }
 
   Color stringToColor(String hexColor){
