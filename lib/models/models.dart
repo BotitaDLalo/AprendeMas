@@ -12,7 +12,8 @@ export 'authentication/user.dart';
 export 'groups/groups_created_mapper.dart';
 export 'groups/groups_created.dart';
 export 'groups/groups_mapper.dart';
-export 'groups/groups.dart';
+export 'groups/group_mapper.dart';
+export 'groups/group.dart';
 
 export 'subjects/subjects.dart';
 export 'subjects/subjects_row.dart';
