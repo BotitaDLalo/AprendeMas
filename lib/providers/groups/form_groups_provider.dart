@@ -6,8 +6,9 @@ import 'package:aprende_mas/providers/groups/groups_provider.dart';
 
 final formGroupsProvider = StateNotifierProvider.autoDispose<FormGroupsStateNotifier,FormGroupsState>((ref) {
   final createGroupSubjectsCallback = ref.watch(groupsProvider.notifier).createGroupSubjects;
-
+  final updateGroupCallback = ref.watch(groupsProvider.notifier).updateGroup;
   return FormGroupsStateNotifier(
-    createGroupSubjectsCallback: createGroupSubjectsCallback
+    createGroupSubjectsCallback: createGroupSubjectsCallback,
+    updateGroupCallback: updateGroupCallback
   );
 });

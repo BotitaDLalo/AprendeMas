@@ -7,6 +7,7 @@ class FormGroupsState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isValid;
+  final int groupId;
   final GenericInput groupName;
   final GenericInput description;
   final ColorInput colorCode;
@@ -17,6 +18,7 @@ class FormGroupsState {
   final List<SubjectsRow> subjectsRow;
 
   FormGroupsState({
+    this.groupId = -1,
     this.subjectIndex = -1,
     this.subjectsRow = const [],
     this.subjectName = const GenericInput.pure(),
@@ -27,7 +29,6 @@ class FormGroupsState {
     this.groupName = const GenericInput.pure(),
     this.description = const GenericInput.pure(),
     this.colorCode = const ColorInput.pure(),
-    // this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
     this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
   });
 
@@ -40,6 +41,7 @@ class FormGroupsState {
     ColorInput? colorCode,
     Color? pickerColor,
     int? subjectId,
+    int? groupId,
     GenericInput? subjectName,
     GenericInput? subjectDescription,
     List<SubjectsRow>? subjectsRow,
@@ -53,6 +55,7 @@ class FormGroupsState {
           description: description ?? this.description,
           colorCode: colorCode ?? this.colorCode,
           pickerColor: pickerColor ?? this.pickerColor,
+          groupId: groupId ?? this.groupId,
           subjectName: subjectName ?? this.subjectName,
           subjectDescription: subjectDescription ?? this.subjectDescription,
           subjectsRow: subjectsRow ?? this.subjectsRow,

@@ -1,7 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/activity_state/activity_form_state.dart';
-import 'package:aprende_mas/views/infrastructure/generic_input.dart';
-import 'package:formz/formz.dart';
+import 'package:aprende_mas/views/inputs/generic_input.dart';
 
 class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   ActivityFormNotifier() : super(ActivityFormState());

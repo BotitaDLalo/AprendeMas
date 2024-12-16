@@ -11,16 +11,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
 
   final KeyValueStorageService keyValueStorageService;
+
   final GoogleSigninApi googleSigninApi;
 
   final DbLocalUserRepositoryImpl dbLocalUser;
 
-  AuthStateNotifier(
-      {required this.dbLocalUser,
-      required this.authRepository,
-      required this.keyValueStorageService,
-      required this.googleSigninApi})
-      : super(AuthState()) {
+  AuthStateNotifier({
+    required this.dbLocalUser,
+    required this.authRepository,
+    required this.keyValueStorageService,
+    required this.googleSigninApi,
+  }) : super(AuthState()) {
     checkInternet();
   }
 
@@ -88,8 +89,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthStatus() async {
     try {
       const caller = "checkAuthStatus";
-      final token = await keyValueStorageService.getValueToken<String>('token');
-      if (token == null) return logout();
+      final token = await keyValueStorageService.getToken();
+      if (token == "") return logout();
       final user = await authRepository.checkAuthStatus(token);
       _setLoggedUser(caller, user);
     } catch (e) {
@@ -100,9 +101,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthGoogleStatus() async {
     try {
       // final currentUser = await googleSigninApi.verifyExistingUser();
-      final token =
-          await keyValueStorageService.getValueToken<String>('idTokenGoogle');
-      if (token == null) return logoutGoogle();
+      final token = await keyValueStorageService.getToken();
+      if (token == "") return logoutGoogle();
       final user = await googleSigninApi.checkSignInStatus(token);
       _setLoggedGoogleUser(user);
     } catch (e) {
@@ -139,11 +139,18 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     //TODO:
     // await keyValueStorageService.setKeyValue( 'token', user.token, 'id', user.id, 'role', user.rol);
     _setKeyValueStorage(
-        'token', user.token, 'id', user.id, 'role', user.rol);
+        keyValueStorageService.keyTokenName(),
+        user.token,
+        keyValueStorageService.keyIdName(),
+        user.id,
+        keyValueStorageService.keyRoleName(),
+        user.rol);
     if (caller == "loginUser") {
       await dbLocalUser.insertUser(
           user.id, user.nombre, user.email, date7Days.toString(), user.rol);
-      await FirebaseConfiguration.getFcmToken();
+      final tokenFCM = await FirebaseConfiguration.getFcmToken();
+      print("TOKEN FIREBASE");
+      print(tokenFCM);
     } else if (caller == "checkAuthStatus") {
       dbLocalUser.updateUser(date7Days.toString());
     }
@@ -158,8 +165,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void _setLoggedGoogleUser(AuthUser user) async {
     //TODO:
     // await keyValueStorageService.setKeyValue('idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
+    // _setKeyValueStorage(
+    //     'idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
     _setKeyValueStorage(
-        'idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
+        keyValueStorageService.keyTokenName(),
+        user.token,
+        keyValueStorageService.keyIdName(),
+        user.id,
+        keyValueStorageService.keyRoleName(),
+        user.rol);
     state = state.copyWith(
         authUser: user,
         authGoogleStatus: AuthGoogleStatus.authenticated,
@@ -182,7 +196,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout([String? errorMessage]) async {
-    await keyValueStorageService.removeKey('token', 'id', 'role');
+    await keyValueStorageService.removeKey(
+        keyValueStorageService.keyTokenName(),
+        keyValueStorageService.keyIdName(),
+        keyValueStorageService.keyRoleName());
     await dbLocalUser.deleteUser();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
@@ -193,7 +210,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> logoutGoogle([String? errorMessage]) async {
     try {
       await googleSigninApi.handlerGoogleLogout();
-      await keyValueStorageService.removeKey('idTokenGoogle', 'id', 'role');
+      await keyValueStorageService.removeKey(
+          keyValueStorageService.keyTokenName(),
+          keyValueStorageService.keyIdName(),
+          keyValueStorageService.keyRoleName());
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           user: null,

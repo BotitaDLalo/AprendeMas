@@ -3,13 +3,17 @@ import 'package:aprende_mas/providers/groups/form_groups_state.dart';
 import 'package:aprende_mas/views/inputs/color_input.dart';
 import 'package:aprende_mas/views/inputs/inputs.dart';
 import '../../models/models.dart';
+import 'package:aprende_mas/config/utils/app_theme.dart';
 
 class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   // final Function(String, String, Color) createGroupCallback;
   final Function(String, String, Color, List<SubjectsRow>)
       createGroupSubjectsCallback;
+  final Function(int, String, String, Color) updateGroupCallback;
 
-  FormGroupsStateNotifier({required this.createGroupSubjectsCallback})
+  FormGroupsStateNotifier(
+      {required this.createGroupSubjectsCallback,
+      required this.updateGroupCallback})
       : super(FormGroupsState());
 
 //#FORMULARIO PARA CREACION DE UN GRUPO
@@ -40,8 +44,9 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
     if (state.subjectsRow.isNotEmpty) {
-      await createGroupSubjectsCallback(state.groupName.value,
+      bool res = await createGroupSubjectsCallback(state.groupName.value,
           state.description.value, state.colorCode.value, state.subjectsRow);
+      state = state.copyWith(isFormPosted: res);
     }
     state = state.copyWith(isPosting: false);
   }
@@ -52,7 +57,6 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
     final colorCode = ColorInput.dirty(state.colorCode.value);
 
     state = state.copyWith(
-        isFormPosted: true,
         groupName: groupName,
         description: description,
         colorCode: colorCode,
@@ -124,5 +128,69 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
 
     subjectsList[indexSubject] = SubjectsRow(
         nombreMateria: newSubjectName, descripcion: newSubjectDescription);
+  }
+
+  //# FORMULARIO PARA ACTUALIZAR UN GRUPO
+
+  onGroupId(int value) {
+    state = state.copyWith(groupId: value);
+  }
+
+  onUpdateGroupNameChanged(String value) {
+    final newGroupName = GenericInput.dirty(value);
+    state = state.copyWith(
+        groupName: newGroupName, isValid: Formz.validate([state.groupName]));
+  }
+
+  onUpdateGroupDescriptionChanged(String value) {
+    final newGroupDescription = GenericInput.dirty(value);
+    state = state.copyWith(
+        description: newGroupDescription,
+        isValid: Formz.validate([state.description]));
+  }
+
+  onUpdateGroupColorChanged(Color color) {
+    final newGroupColor = ColorInput.dirty(color);
+    state = state.copyWith(
+        pickerColor: color,
+        colorCode: newGroupColor,
+        isValid: Formz.validate([state.colorCode]));
+  }
+
+  onUpdateGroupSubmit(int groupId, String groupName, String description,
+      String colorCode) async {
+    onGroupId(groupId);
+    _updateGroupTouchEveryField(groupId, groupName, description, colorCode);
+    if (!state.isValid) return;
+    state = state.copyWith(isPosting: true);
+    bool res = await updateGroupCallback(state.groupId, state.groupName.value,
+        state.description.value, state.colorCode.value);
+    state = state.copyWith(isFormPosted: res);
+    state = state.copyWith(isPosting: false);
+  }
+
+  _updateGroupTouchEveryField(
+      int groupId, String groupName, String description, String colorCode) {
+    final groupNameInput = GenericInput.dirty(
+        state.groupName.value == "" ? groupName : state.groupName.value);
+    final groupDescriptionInput = GenericInput.dirty(
+        state.description.value == "" ? description : state.description.value);
+
+    final colorCodeStr = state.pickerColor;
+    final String hexColor = colorCodeStr.value.toRadixString(16).toUpperCase();
+
+    final colorGroup = hexColor == "FFFFFF"
+        ? AppTheme.stringToColor(colorCode)
+        : state.pickerColor;
+
+    final groupColorInput = ColorInput.dirty(colorGroup);
+
+    state = state.copyWith(
+        groupName: groupNameInput,
+        description: groupDescriptionInput,
+        colorCode: groupColorInput,
+        isValid: Formz.validate([groupNameInput]) ||
+            Formz.validate([groupDescriptionInput]) ||
+            Formz.validate([groupColorInput]));
   }
 }
