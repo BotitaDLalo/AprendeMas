@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:aprende_mas/models/groups/groups.dart';
+import 'package:aprende_mas/models/groups/group.dart';
 import 'package:aprende_mas/models/subjects/subjects.dart';
 
 abstract class SubjectsRepository {

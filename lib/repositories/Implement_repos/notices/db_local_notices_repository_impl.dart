@@ -18,6 +18,13 @@ class DbLocalNoticesRepositoryImpl implements DbLocalNoticesRepository {
   Future<List<Notice>> getLastNotification() {
     return noticesDataSource.getLastNotification();
   }
+  
+  @override
+  Future<List<Notice>> getLsNotifications() {
+    return noticesDataSource.getLsNotifications();
+  }
+  
+
 
 
 }

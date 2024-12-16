@@ -22,18 +22,6 @@ class GroupsRepositoryImpl implements GroupsRepository {
   }
 
   @override
-  Future<void> deleteGroup() {
-    // TODO: implement deleteGroup
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> updateGroup() {
-    // TODO: implement updateGroup
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<Group>> createGroupSubjects(String groupName, String description,
       Color colorCode, List<SubjectsRow> subjectsList) {
     return groupsDataSource.createGroupSubjects(
@@ -43,5 +31,17 @@ class GroupsRepositoryImpl implements GroupsRepository {
   @override
   Future<List<GroupsCreated>> getCreatedGroups() {
     return groupsDataSource.getCreatedGroups();
+  }
+
+  @override
+  Future<void> deleteGroup(int teacherId, int groupId) {
+    return groupsDataSource.deleteGroup(teacherId, groupId);
+  }
+
+  @override
+  Future<Group> updateGroup(
+      int groupId, String groupName, String descriptionGroup, Color colorGroup) {
+    return groupsDataSource.updateGroup(
+        groupId, groupName, descriptionGroup, colorGroup);
   }
 }

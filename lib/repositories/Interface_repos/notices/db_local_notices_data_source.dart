@@ -4,4 +4,6 @@ abstract class DbLocalNoticesDataSource {
   Future<void> storeNotification(Notice notice);
 
   Future<List<Notice>> getLastNotification();
+
+  Future<List<Notice>> getLsNotifications();
 }
