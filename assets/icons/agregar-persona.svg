@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="IA" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 4.89px;
+      }
+
+      .cls-3 {
+        font-family: MontserratRoman-Medium, Montserrat;
+        font-size: 67.78px;
+        font-variation-settings: 'wght' 500;
+        font-weight: 500;
+      }
+
+      .cls-2 {
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="cls-2" d="M159.33,108.34c-3.14-18.17-13.66-31.23-30.29-37.64-4.12,2.63-9.01,4.18-14.26,4.18s-10.14-1.55-14.26-4.18c-16.63,6.41-27.15,19.48-30.29,37.64,0,0,15.22,18.8,44.55,18.8s44.55-18.8,44.55-18.8Z"/>
+    <circle class="cls-1" cx="114.78" cy="47.41" r="18.19"/>
+  </g>
+  <text class="cls-3" transform="translate(135.69 85.84)"><tspan x="0" y="0">+</tspan></text>
+</svg>

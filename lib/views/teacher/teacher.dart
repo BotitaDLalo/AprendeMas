@@ -1,19 +1,5 @@
-import 'package:flutter/material.dart';
-
-class Teacher extends StatelessWidget {
-  const Teacher({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text('Screen User Teacher')],
-        ),
-      ),
-    );
-  }
-}
+export 'agenda/agenda_teacher_screen.dart';
+export 'groups_subjects/subjects_teacher_screen.dart';
+export 'notices/notices_teacher_screen.dart';
+export 'activities/options/options.dart';
+export 'activities/options/create_activies/create_activities.dart';

@@ -1,3 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:aprende_mas/config/environment/environment.dart';
+import 'package:dio/dio.dart';
 
-class DioClient {}
+final dio = Dio(BaseOptions(baseUrl: Environment.apiUrl));
