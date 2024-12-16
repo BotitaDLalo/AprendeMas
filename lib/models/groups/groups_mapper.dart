@@ -1,17 +1,17 @@
-
-import 'package:aprende_mas/models/groups/groups.dart';
-
+import 'package:aprende_mas/models/groups/group.dart';
 import '../activities/activities.dart';
 import '../subjects/subjects.dart';
 
 class GroupsMapper {
-  static List<Group> groupsJsonToEntityList(List<Map<String, dynamic>> groupsAndSubject){
-     List<Group> groups = [];
+  static List<Group> groupsJsonToEntityList(
+      List<Map<String, dynamic>> groupsAndSubject) {
+    List<Group> groups = [];
 
     for (var group in groupsAndSubject) {
       // Cargar materias de cada grupo
-      List<Subject> materias = (group['materias'] as List? ?? []).map((materia) {
-      // List<Subject> materias = (group['materias'] as List).map((materia) {
+      List<Subject> materias =
+          (group['materias'] as List? ?? []).map((materia) {
+        // List<Subject> materias = (group['materias'] as List).map((materia) {
         // Cargar actividades de cada materia
         List<Activities> actividades =
             (materia['actividades'] as List).map((actividad) {
@@ -33,6 +33,7 @@ class GroupsMapper {
 
       // Crear el grupo y añadirlo a la lista
       groups.add(Group(
+        grupoId: group['grupoId'],
         nombreGrupo: group['nombreGrupo'],
         descripcion: group['descripcion'],
         codigoAcceso: group['codigoAcceso'],

@@ -4,18 +4,18 @@ class Group {
   final int? grupoId;
   final String nombreGrupo;
   final String? descripcion;
-  final String codigoAcceso;
+  final String? codigoAcceso;
   // final String tipoUsuario;
   final String codigoColor;
-  final List<Subject> materias;
+  final List<Subject>? materias;
 
   Group({
     this.grupoId,
     required this.nombreGrupo,
     this.descripcion,
-    required this.codigoAcceso,
+    this.codigoAcceso,
     // required this.tipoUsuario,
     required this.codigoColor,
-    required this.materias,
+    this.materias,
   });
 }
