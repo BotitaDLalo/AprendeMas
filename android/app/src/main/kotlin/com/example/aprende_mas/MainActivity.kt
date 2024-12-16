@@ -1,4 +1,4 @@
-package com.example.aprende_mas
+package com.siexa.aprendeMas
 
 import io.flutter.embedding.android.FlutterActivity
 
