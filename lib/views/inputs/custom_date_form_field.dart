@@ -72,7 +72,7 @@ class CustomDateFormField extends StatelessWidget {
         label: label != null ? Text(label!) : null,
         hintText: hint,
         errorText: errorMessage,
-        suffixIcon: isDateField ? Icon(Icons.calendar_today, color: Colors.black) : null,
+        suffixIcon: isDateField ? const Icon(Icons.calendar_today, color: Colors.black) : null,
         focusColor: colors.primaryColor,
       ),
       onTap: isDateField

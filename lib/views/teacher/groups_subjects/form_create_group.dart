@@ -2,9 +2,7 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:aprende_mas/views/widgets/cards/group_subjects_card.dart';
-import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:aprende_mas/views/views.dart';
 
 class FormCreateGroup extends ConsumerWidget {
   const FormCreateGroup({super.key});
@@ -97,7 +95,7 @@ class FormCreateGroup extends ConsumerWidget {
       );
     }
 
-    void regresar() {
+    void goRouterPop() {
       context.pop();
     }
 
@@ -213,7 +211,7 @@ class FormCreateGroup extends ConsumerWidget {
                 children: formCreateGroup.subjectsRow
                     .asMap()
                     .entries
-                    .map((item) => GroupSubjectCard(
+                    .map((item) => GroupModifySubjectCard(
                         index: item.key,
                         subjectName: item.value.nombreMateria,
                         description: item.value.descripcion ?? ""))
@@ -232,7 +230,9 @@ class FormCreateGroup extends ConsumerWidget {
                     return;
                   }
                   await formCreateGroupNotifier.onFormSubmit();
-                  regresar();
+                  if (formCreateGroup.isFormPosted) {
+                    goRouterPop();
+                  }
                 }),
           )
         ],

@@ -21,11 +21,6 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
     ref.read(groupsProvider.notifier).getGroupsSubjects();
   }
 
-  Color stringToColor(String hexColor){
-    Color colorCode = Color(int.parse("0xFF$hexColor"));
-    return colorCode;
-  }
-
   @override
   Widget build(BuildContext context) {
     final groups = ref.watch(groupsProvider).groups;
@@ -35,8 +30,11 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
       itemBuilder: (context, index) {
         final grupo = groups[index];
         return CustomExpansionTile(
+          id: grupo.grupoId ?? -1,
           title: grupo.nombreGrupo,
-          color: stringToColor(grupo.codigoColor),
+          description: grupo.descripcion ?? "",
+          accessCode: grupo.codigoAcceso ?? "",
+          color: grupo.codigoColor,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),

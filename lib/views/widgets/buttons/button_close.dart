@@ -8,9 +8,9 @@ class ButtonClose extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        context.go('/activities');
+        context.go('/teacher-home');
       },
-      icon: Icon(Icons.close, color: Colors.white, size: 40,),
+      icon: const Icon(Icons.close, color: Color.fromARGB(255, 0, 0, 0), size: 40,),
     );
   }
 }

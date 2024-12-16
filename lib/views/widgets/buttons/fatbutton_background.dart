@@ -1,5 +1,4 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:flutter_svg/svg.dart';
 
 class FatButtonBackground extends StatelessWidget {
   final String svg;

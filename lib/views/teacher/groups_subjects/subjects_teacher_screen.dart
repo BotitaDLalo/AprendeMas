@@ -2,14 +2,14 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/groups_subjects_container.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/subjects_without_groups_container.dart';
 
-class SubjectScreen extends ConsumerStatefulWidget {
-  const SubjectScreen({super.key});
+class SubjectTeacherScreen extends ConsumerStatefulWidget {
+  const SubjectTeacherScreen({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SubjectScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SubjectTeacherScreenState();
 }
 
-class _SubjectScreenState extends ConsumerState<SubjectScreen> {
+class _SubjectTeacherScreenState extends ConsumerState<SubjectTeacherScreen> {
   @override
   Widget build(BuildContext context) {
     final subjectScreenProvider = StateProvider<bool>((ref) => false);

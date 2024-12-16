@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/auth_provider.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/views/teacher/teacher.dart';
+import 'package:aprende_mas/views/student/agenda/agenda_student_screen.dart';
+import 'package:aprende_mas/views/student/groups_subjects/subjects_student_screen.dart';
+import 'package:aprende_mas/views/student/notices/notices_student_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
@@ -9,16 +9,35 @@ class StudentHomeScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _TeacherHomeScreenState();
+      _StudentHomeScreenState();
 }
 
-class _TeacherHomeScreenState extends ConsumerState<StudentHomeScreen> {
+class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    AgendaScreen(),
-    // MateriasScreen(),
-    NotificacionScreen(),
+  static const List<Widget> _widgetsOptions = <Widget>[
+    AgendaStudentScreen(),
+    SubjectsStudentScreen(),
+    NoticesStudentScreen()
+    // AgendaScreen(),
+    // SubjectScreen(),
+    // NoticesScreen(),
+    // ChatGeminiScreen(),
+  ];
+
+  static const List<BottomNavigationBarItem> _widgetsOptionsItems = [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.calendar_month_outlined),
+      label: 'Agenda',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.school_outlined),
+      label: 'Materias',
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.notifications),
+      label: 'Notificaciones',
+    ),
   ];
 
   void _onItemTapped(int index) {
@@ -29,30 +48,16 @@ class _TeacherHomeScreenState extends ConsumerState<StudentHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.read(authProvider);
     return Scaffold(
-      appBar: AppBar(
-          leading: const FlutterLogo(),
-          backgroundColor: Colors.blue.shade900,
-          actions: [
-            IconButton(
-                color: Colors.white,
-                onPressed: () {
-                  if (auth.authGoogleStatus == AuthGoogleStatus.authenticated) {
-                    ref.watch(authProvider.notifier).logoutGoogle();
-                  } else if (auth.authStatus == AuthStatus.authenticated) {
-                    ref.watch(authProvider.notifier).logout();
-                  }
-                },
-                icon: const Icon(Icons.arrow_back))
-          ]),
+      appBar: const AppBarHome(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetsOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: CustomNavbar(
         selectedIndex: _selectedIndex,
         onItemSelected: _onItemTapped,
+        widgetsOptionsItems: _widgetsOptionsItems,
       ),
     );
   }

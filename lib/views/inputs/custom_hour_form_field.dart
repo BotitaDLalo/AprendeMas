@@ -25,10 +25,10 @@ class CustomHourFormField extends StatefulWidget {
   });
 
   @override
-  _CustomHourFormFieldState createState() => _CustomHourFormFieldState();
+  CustomHourFormFieldState createState() => CustomHourFormFieldState();
 }
 
-class _CustomHourFormFieldState extends State<CustomHourFormField> {
+class CustomHourFormFieldState extends State<CustomHourFormField> {
   final TextEditingController _controller = TextEditingController();
 
   @override

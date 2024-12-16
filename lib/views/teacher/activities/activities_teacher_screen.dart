@@ -2,14 +2,13 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/activities/options/options.dart';
 import 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
 import 'package:aprende_mas/views/widgets/activities_body/options_activities.dart';
-import 'package:go_router/go_router.dart';
 
-class ActivitiesScreen extends ConsumerStatefulWidget {
+class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
   final int subjectId;
   final String subjectName;
   final String description;
 
-  const ActivitiesScreen(
+  const ActivitiesTeacherScreen(
       {super.key,
       required this.subjectId,
       required this.subjectName,
@@ -19,7 +18,7 @@ class ActivitiesScreen extends ConsumerStatefulWidget {
       _ActividadesScreenState();
 }
 
-class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
+class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
   int selectedOptionIndex = 0; // Estado para la opción seleccionada
 
   void onOptionSelected(int index) {
@@ -56,7 +55,6 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesScreen> {
               context.go("/teacher-home");
             },
             icon: const Icon(Icons.arrow_back)),
-        title: const Text('Actividades screen'),
       ),
       body: Column(
         children: [

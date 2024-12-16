@@ -18,8 +18,8 @@ class CreateActivitiesScreen extends StatelessWidget {
                   HeaderTile(
                     svg: 'assets/icons/agregar-tarea.svg', 
                     titulo: 'Crear Actividades',
-                    colorUno: Color(0xff536cf6),
-                    colorDos: Color(0xff66A9F2),
+                    // colorUno: Color(0xff536cf6),
+                    // colorDos: Color(0xff66A9F2),
                   ),
                   Positioned(
                     left: 10,

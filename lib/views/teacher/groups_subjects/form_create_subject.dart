@@ -52,7 +52,7 @@ class FormCreateSubjectState extends ConsumerState<FormCreateSubject> {
     //   );
     // }
 
-    void regresar() {
+    void goRouterPop() {
       context.pop();
     }
 
@@ -202,7 +202,7 @@ class FormCreateSubjectState extends ConsumerState<FormCreateSubject> {
                       return;
                     }
                     await formCreateSubjectNotifier.onFormSubmit();
-                    regresar();
+                    goRouterPop();
                   }),
             )
           ],
