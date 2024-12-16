@@ -7,11 +7,26 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   }
 
   @override
-  Future<bool> removeKey(String keyToken, String keyId, String keyRol) async {
+  String keyIdName() {
+    return 'id';
+  }
+
+  @override
+  String keyRoleName() {
+    return 'role';
+  }
+
+  @override
+  String keyTokenName() {
+    return 'token';
+  }
+
+  @override
+  Future<bool> removeKey(String keyToken, String keyId, String keyRole) async {
     final prefs = await getSharedPrefs();
     bool removeToken = await prefs.remove(keyToken);
     bool removeId = await prefs.remove(keyId);
-    bool removeRol = await prefs.remove(keyRol);
+    bool removeRol = await prefs.remove(keyRole);
     if (removeToken && removeId && removeRol) {
       return true;
     }
@@ -56,13 +71,13 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   }
 
   @override
-  Future<T?> getValueRol<T>(String keyRol) async {
+  Future<T?> getValueRole<T>(String keyRole) async {
     final prefs = await getSharedPrefs();
     switch (T) {
       case const (int):
-        return prefs.getInt(keyRol) as T?;
+        return prefs.getInt(keyRole) as T?;
       case const (String):
-        return prefs.getString(keyRol) as T?;
+        return prefs.getString(keyRole) as T?;
 
       default:
         throw UnimplementedError(
@@ -83,5 +98,20 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
         throw UnimplementedError(
             'Set not implemented for type ${T.runtimeType}');
     }
+  }
+
+  @override
+  Future<int> getId() async {
+    return await getValueId<int>(keyIdName()) ?? -1;
+  }
+
+  @override
+  Future<String> getRole() async {
+    return await getValueRole<String>(keyRoleName()) ?? "";
+  }
+
+  @override
+  Future<String> getToken() async {
+    return await getValueToken<String>(keyTokenName()) ?? "";
   }
 }

@@ -6,7 +6,7 @@ class Querys {
       "CREATE TABLE tbMateriasAlumno(MateriaId INTEGER PRIMARY KEY, NombreMateria TEXT, Descripcion TEXT);",
       "CREATE TABLE tbActividades(ActividadId INTEGER PRIMARY KEY, NombreActividad TEXT, Descripcion TEXT, FechaCreacion TEXT, FechaLimite TEXT, MateriaId);",
       "CREATE TABLE tbEntregaActividades(EntregaId INTEGER PRIMARY KEY, FechaEntrega TEXT, UsuarioId INTEGER, ActividadId INTEGER);",
-      "CREATE TABLE tbNotificaciones(MensajeId INTEGER PRIMARY KEY, Titulo TEXT, Descripcion TEXT, FechaEnvio TEXT, Data TEXT, ImagenURL TEXT);",
+      "CREATE TABLE tbNotificaciones(MensajeId TEXT PRIMARY KEY, Titulo TEXT, Descripcion TEXT, FechaEnvio TEXT, Data TEXT, ImagenURL TEXT);",
     ];
   }
 

@@ -104,6 +104,10 @@ static final List<Color> availableColors = [
   //     style: ButtonStyle(
   //         backgroundColor: WidgetStatePropertyAll(_colorThemes[1])));
 
+  static Color stringToColor(String hexColor) {
+    Color colorCode = Color(int.parse("0xFF$hexColor"));
+    return colorCode;
+  }
   ThemeData theme() {
     return ThemeData(
         textTheme: textThemes, scaffoldBackgroundColor: _colorThemes[0]);

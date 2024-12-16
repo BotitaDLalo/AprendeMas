@@ -1,17 +1,17 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/teacher/activities/activities_screen.dart';
+import 'package:aprende_mas/views/teacher/activities/activities_teacher_screen.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/views/student/student_home_screen.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/group_teacher_settings.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/views/widgets/loading/loading_screen.dart';
 
+String routeAux = "";
 final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
 
@@ -36,10 +36,6 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const TeacherHomeScreen(),
       ),
       GoRoute(
-        path: '/teacher-home-back',
-        builder: (context, state) => const TeacherHomeScreen(),
-      ),
-      GoRoute(
         path: '/student-home',
         builder: (context, state) => const StudentHomeScreen(),
       ),
@@ -52,6 +48,19 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const CreateGroupScreen(),
       ),
       GoRoute(
+        path: '/group-teacher-settings',
+        builder: (context, state) {
+          final groupData = state.extra as Group;
+          return GroupTeacherSettings(
+            id: groupData.grupoId ?? -1,
+            groupName: groupData.nombreGrupo,
+            description: groupData.descripcion ?? "",
+            accessCode: groupData.codigoAcceso ?? "",
+            colorCode: groupData.codigoColor,
+          );
+        },
+      ),
+      GoRoute(
         path: '/create-subject',
         builder: (context, state) => const CreateSubjectsScreen(),
       ),
@@ -59,7 +68,7 @@ final goRouterProvider = Provider((ref) {
         path: '/activities',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-          return ActivitiesScreen(
+          return ActivitiesTeacherScreen(
             subjectId: subjectData.subjectId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
@@ -71,7 +80,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const CreateActivitiesScreen(),
       )
     ],
-    redirect: (context, state) async {
+    redirect: (context, state) {
       final isGoingTo = state.matchedLocation;
       final authStatus = routerNotifier.authStatus;
       final authGoogleStatus = routerNotifier.authGoogleStatus;
@@ -80,8 +89,12 @@ final goRouterProvider = Provider((ref) {
       final user = authState.user;
       final role = authUser?.rol;
       final roleGoogle = user?.rol;
-
       print(isGoingTo);
+
+      if (isGoingTo == routeAux) {
+        routeAux = "";
+        return null;
+      }
       /*
       *1. Si es googe o normal
 
@@ -104,6 +117,9 @@ final goRouterProvider = Provider((ref) {
 
                   case "/create-activities":
                     return "/create-activities";
+
+                  case "/group-teacher-settings":
+                    return "/group-teacher-settings";
                 }
                 return "/teacher-home";
               case "Alumno":
