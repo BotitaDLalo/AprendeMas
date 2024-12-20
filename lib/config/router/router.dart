@@ -6,7 +6,7 @@ import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
 import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/group_teacher_settings.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/group_options/group_teacher_options.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
@@ -51,7 +51,7 @@ final goRouterProvider = Provider((ref) {
         path: '/group-teacher-settings',
         builder: (context, state) {
           final groupData = state.extra as Group;
-          return GroupTeacherSettings(
+          return GroupTeacherOptions(
             id: groupData.grupoId ?? -1,
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",

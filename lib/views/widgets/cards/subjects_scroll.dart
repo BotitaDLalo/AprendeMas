@@ -18,7 +18,8 @@ class SubjectScroll extends ConsumerWidget {
               subjectId: materia.subjectId,
               nombreMateria: materia.nombreMateria,
               description: materia.descripcion ?? "",
-              actividades: materia.actividades,
+              // actividades: materia.actividades,
+              actividades: [],
             )
         ],
       ),

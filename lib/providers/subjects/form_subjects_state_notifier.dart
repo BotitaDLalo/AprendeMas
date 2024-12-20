@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/subjects/form_subjects_state.dart';
-import 'package:aprende_mas/views/inputs/inputs.dart';
-import '../../views/inputs/color_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
+import '../../views/widgets/inputs/color_input.dart';
 
 class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
   final Function(String, String, Color, List<int>)

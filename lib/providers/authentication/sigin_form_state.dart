@@ -1,5 +1,5 @@
-import 'package:aprende_mas/views/inputs/generic_input.dart';
-import 'package:aprende_mas/views/inputs/role.dart';
+import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/role.dart';
 import 'package:aprende_mas/views/views.dart';
 
 class SiginFormState {

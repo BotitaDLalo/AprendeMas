@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/inputs/color_input.dart';
-import 'package:aprende_mas/views/inputs/inputs.dart';
+import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
 
 class FormGroupsState {
   final bool isPosting;
@@ -16,6 +16,8 @@ class FormGroupsState {
   final GenericInput subjectName;
   final GenericInput subjectDescription;
   final List<SubjectsRow> subjectsRow;
+  final String email;
+  final VerifyEmail? verifyEmail;
 
   FormGroupsState({
     this.groupId = -1,
@@ -30,23 +32,26 @@ class FormGroupsState {
     this.description = const GenericInput.pure(),
     this.colorCode = const ColorInput.pure(),
     this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
+    this.email = '',
+    this.verifyEmail,
   });
 
-  FormGroupsState copyWith({
-    bool? isPosting,
-    bool? isFormPosted,
-    bool? isValid,
-    GenericInput? groupName,
-    GenericInput? description,
-    ColorInput? colorCode,
-    Color? pickerColor,
-    int? subjectId,
-    int? groupId,
-    GenericInput? subjectName,
-    GenericInput? subjectDescription,
-    List<SubjectsRow>? subjectsRow,
-    int? subjectIndex,
-  }) =>
+  FormGroupsState copyWith(
+          {bool? isPosting,
+          bool? isFormPosted,
+          bool? isValid,
+          GenericInput? groupName,
+          GenericInput? description,
+          ColorInput? colorCode,
+          Color? pickerColor,
+          int? subjectId,
+          int? groupId,
+          GenericInput? subjectName,
+          GenericInput? subjectDescription,
+          List<SubjectsRow>? subjectsRow,
+          int? subjectIndex,
+          String? email,
+          VerifyEmail? verifyEmail}) =>
       FormGroupsState(
           isFormPosted: isFormPosted ?? this.isFormPosted,
           isPosting: isPosting ?? this.isPosting,
@@ -59,5 +64,7 @@ class FormGroupsState {
           subjectName: subjectName ?? this.subjectName,
           subjectDescription: subjectDescription ?? this.subjectDescription,
           subjectsRow: subjectsRow ?? this.subjectsRow,
-          subjectIndex: subjectIndex ?? this.subjectIndex);
+          subjectIndex: subjectIndex ?? this.subjectIndex,
+          email: email ?? this.email,
+          verifyEmail: verifyEmail ?? this.verifyEmail);
 }

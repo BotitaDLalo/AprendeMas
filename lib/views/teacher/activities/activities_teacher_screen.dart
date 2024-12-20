@@ -2,6 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/activities/options/options.dart';
 import 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
 import 'package:aprende_mas/views/widgets/activities_body/options_activities.dart';
+import 'package:aprende_mas/views/widgets/widgets.dart';
 
 class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
   final int subjectId;
@@ -19,12 +20,18 @@ class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
 }
 
 class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
-  int selectedOptionIndex = 0; // Estado para la opción seleccionada
+  // int selectedOptionIndex = 0; // Estado para la opción seleccionada
+
+  // void onOptionSelected(int index) {
+  //   setState(() {
+  //     selectedOptionIndex = index; // Actualiza el índice seleccionado
+  //   });
+  // }
+
+  final itemTappedProvider = StateProvider<int>((ref) => 0);
 
   void onOptionSelected(int index) {
-    setState(() {
-      selectedOptionIndex = index; // Actualiza el índice seleccionado
-    });
+    ref.read(itemTappedProvider.notifier).state = index;
   }
 
   @override
@@ -33,7 +40,7 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
 
     // Contenido correspondiente a cada opción
     Widget getContent() {
-      switch (selectedOptionIndex) {
+      switch (ref.read(itemTappedProvider)) {
         case 0:
           return const NoticeOptionsScreen(); // Tu pantalla de avisos
         case 1:
@@ -48,27 +55,19 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-              context.go("/teacher-home");
-            },
-            icon: const Icon(Icons.arrow_back)),
-      ),
+      appBar: const AppBarScreens(),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          ContainerSubjectName(
-            subject: widget.subjectName,
-            codeAccess: codeAccess,
+          ContainerNameGroupSubjects(
+            name: widget.subjectName,
+            accessCode: codeAccess,
           ),
           OptionsActivities(
             onOptionSelected: onOptionSelected, // Pasa el callback
-            selectedOptionIndex:
-                selectedOptionIndex, // Pasa el índice seleccionado
+            selectedOptionIndex: ref.read(itemTappedProvider), // Pasa el índice seleccionado
           ),
           Expanded(
             child: getContent(), // Muestra el contenido correspondiente

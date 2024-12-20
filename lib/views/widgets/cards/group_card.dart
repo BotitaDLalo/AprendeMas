@@ -97,6 +97,7 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
                     padding: const EdgeInsets.all(6.5),
                     child: Text(
                       widget.title,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),

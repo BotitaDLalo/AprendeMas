@@ -121,4 +121,57 @@ class GroupsDataSourceImpl implements GroupsDataSource {
       return GroupMapper.empty();
     }
   }
+
+  @override
+  Future<VerifyEmail> verifyEmail(String email) async {
+    try {
+      const uri = "/Alumnos/VerificarAlumnoEmail";
+      final res = await dio.post(uri, data: {"Email": email});
+
+      if (res.statusCode == 200) {
+        final verifyEmail = VerifyEmail.verifyEmailToEntity(res.data, true);
+        return verifyEmail;
+      }
+      return VerifyEmail.verifyEmailToEntity({}, false);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<StudentGroup>> addStudentsGroup(
+      int groupId, List<String> emails) async {
+    try {
+      const uri = "/Alumnos/RegistrarAlumnoGMDocente";
+
+      final res =
+          await dio.post(uri, data: {"Emails": emails, "GrupoId": groupId});
+
+      if (res.statusCode == 200) {
+        final resList = List<Map<String, dynamic>>.from(res.data);
+        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        return lsStudents;
+      }
+      return [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<StudentGroup>> getStudentsGroup(int groupId) async {
+    try {
+      const uri = "/Alumnos/ObtenerListaAlumnosGrupo";
+      final res = await dio.post(uri, data: {"GrupoId": groupId});
+
+      if (res.statusCode == 200) {
+        final resList = List<Map<String, dynamic>>.from(res.data);
+        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        return lsStudents;
+      }
+      return [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

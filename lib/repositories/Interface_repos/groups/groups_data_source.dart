@@ -16,4 +16,10 @@ abstract class GroupsDataSource {
 
   Future<Group> updateGroup(
       int groupId, String groupName, String descriptionGroup, Color colorGroup);
+  
+  Future<VerifyEmail> verifyEmail(String email);
+
+  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails);
+
+  Future<List<StudentGroup>> getStudentsGroup(int groupId);
 }

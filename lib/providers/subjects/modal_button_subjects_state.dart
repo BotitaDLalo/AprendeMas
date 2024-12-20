@@ -1,8 +1,8 @@
 import 'dart:ui';
 
-import 'package:aprende_mas/views/inputs/inputs.dart';
+import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
 
-import '../../views/inputs/color_input.dart';
+import '../../views/widgets/inputs/color_input.dart';
 
 class ModalButtonSubjectsState {
   final bool isPosting;

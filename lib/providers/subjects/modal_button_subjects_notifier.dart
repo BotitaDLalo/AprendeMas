@@ -1,6 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/subjects/modal_button_subjects_state.dart';
-import 'package:aprende_mas/views/inputs/color_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
 
 class ModalButtonSubjectsNotifier
     extends StateNotifier<ModalButtonSubjectsState> {

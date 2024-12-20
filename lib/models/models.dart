@@ -21,3 +21,8 @@ export 'subjects/subjects_mapper.dart';
 
 export 'authentication/auth_offline_user.dart';
 export 'notice_list/notice.dart';
+
+export 'various/widget_options.dart';
+export 'various/verify_email.dart';
+
+export 'users/student_group.dart';
