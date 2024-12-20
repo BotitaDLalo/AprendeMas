@@ -1,32 +1,35 @@
+import 'package:aprende_mas/config/utils/packages.dart';
+
 import 'activity.dart';
 import 'package:intl/intl.dart';
 
 class ActivityMapper {
-  static final DateFormat dateTimeFormat = DateFormat('dd/MM/yyyy HH:mm');
+  static final DateFormat dateTimeFormat = DateFormat('yyyy-MM-ddTHH:mm:ss');
 
-  static Activity fromMap(Map<String, dynamic> map) {
-    return Activity(
-      docenteId: map['docenteId'] as int,
-      nombre: map['nombre'] as String,
-      descripcion: map['descripcion'] as String,
-      tipoActividadId: map['tipoActividadId'] as int,
-      rubricaId: map['rubricaId'] as int,
-      fechaCreacion: dateTimeFormat.parse(map['fechaCreacion']),
-      fechaLimite: dateTimeFormat.parse(map['fechaLimite']),
-      puntuacion: map['puntuacion'] as int,
-    );
+  static List<Activity> fromMapList(List<Map<String, dynamic>> data) {
+    return data.map((map) {
+      debugPrint('Mapping data: $map');
+      return Activity(
+        activityId: map['actividadId'] as int,
+        nombreActividad: map['nombreActividad'] as String,
+        descripcion: map['descripcionActividad'] as String,
+        tipoActividadId: map['tipoActividadId'] as int,
+        fechaCreacion: dateTimeFormat.parse(map['fechaCreacionActividad']),
+        fechaLimite: dateTimeFormat.parse(map['fechaLimiteActividad']),
+        materiaId: map['materiaId'] as int,
+      );
+    }).toList();
   }
 
   static Map<String, dynamic> toMap(Activity activity) {
     return {
-      'docenteId': activity.docenteId,
-      'nombre': activity.nombre,
-      'descripcion': activity.descripcion,
+      'actividadId': activity.activityId,
+      'nombreActividad': activity.nombreActividad,
+      'descripcionActividad': activity.descripcion,
       'tipoActividadId': activity.tipoActividadId,
-      'rubricaId': activity.rubricaId,
-      'fechaCreacion': dateTimeFormat.format(activity.fechaCreacion),
-      'fechaLimite': dateTimeFormat.format(activity.fechaLimite),
-      'puntuacion': activity.puntuacion,
+      'fechaCreacionActividad': dateTimeFormat.format(activity.fechaCreacion),
+      'fechaLimiteActividad': dateTimeFormat.format(activity.fechaLimite),
+      'materiaId': activity.materiaId,
     };
   }
 }

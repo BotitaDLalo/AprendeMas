@@ -72,12 +72,18 @@ final goRouterProvider = Provider((ref) {
             subjectId: subjectData.subjectId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
+            codeAccess: subjectData.codeAccess ?? "",
           );
         },
       ),
       GoRoute(
         path: '/create-activities',
-        builder: (context, state) => const CreateActivitiesScreen(),
+        builder: (context, state)  {
+          final subjectData = state.extra as Subject;
+          return ActivitiesOptionScreen(
+            subjectId: subjectData.subjectId,
+            nombreMateria: subjectData.nombreMateria,);
+        },
       )
     ],
     redirect: (context, state) {
