@@ -3,43 +3,36 @@ import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/providers/activity_state/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
 
-class ActivityStateNotifier extends StateNotifier<ActivityState> {
-  final ActivityRepository repository;
+class ActivityNotifier extends StateNotifier<ActivityState> {
+  final ActivityRepository activityRepository;
 
-  ActivityStateNotifier({required this.repository}) : super(ActivityState());
+  ActivityNotifier({required this.activityRepository}) : super(ActivityState());
 
-  // Cargar actividades desde el repositorio
-  Future<void> loadActivities() async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-
+  // Método para cargar todas las actividades desde el repositorio
+  Future<void> getAllActivities(int materiaId) async {
     try {
-      print('Cargando actividades...');
-      final activities = await repository.getAllActivities();
-      print('Actividades cargadas: $activities');
-      state = state.copyWith(activities: activities, isLoading: false);
+      state = state.copyWith(isLoading: true); // Indicando que está cargando
+      debugPrint('ActivityNotifier Fetching activities for materiaId: $materiaId');
+      final activities = await activityRepository.getAllActivities(materiaId);
+      _setActivities(activities); // Aquí actualizamos el estado
+      debugPrint('Activities set in state: ${state.activities.length}');
     } catch (e) {
-      print('Error al cargar actividades: $e');
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: 'Error al cargar actividades',
-      );
+      debugPrint('Error fetching activities: $e');
+      state = state.copyWith(errorMessage: e.toString());
+    } finally {
+      state = state.copyWith(isLoading: false); // Indicando que terminó la carga
     }
   }
 
-  // Agregar una nueva actividad
-  Future<void> addActivity(Activity activity) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
+  // Método para filtrar actividades por subjectId
+  // List<Activity> getActivitiesBySubjectId(int materiaId) {
+  //   return state.activities
+  //       .where((activity) => activity.materiaId == materiaId)
+  //       .toList();
+  // }
 
-    try {
-      await repository.addActivity(activity);
-      // Agregar la actividad localmente
-      final updatedActivities = [...state.activities, activity];
-      state = state.copyWith(activities: updatedActivities, isLoading: false);
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: 'Error al agregar la actividad',
-      );
-    }
+  // Método privado para actualizar el estado con nuevas actividades
+  void _setActivities(List<Activity> activities) {
+    state = state.copyWith(activities: activities);
   }
 }

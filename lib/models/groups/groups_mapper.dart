@@ -27,6 +27,7 @@ class GroupsMapper {
           nombreMateria: materia['nombreMateria'],
           descripcion: materia['descripcion'],
           codigoColor: materia['codigoColor'],
+          codeAccess: materia['codeAcess'],
           actividades: actividades, // Asignar las actividades a la materia
         );
       }).toList();

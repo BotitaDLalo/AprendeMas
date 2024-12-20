@@ -1,6 +1,6 @@
 import 'package:aprende_mas/models/activities/activity/activity.dart';
 
-abstract class ActivityRepository {
+abstract class ActivityDataSource {
   Future<List<Activity>> getAllActivities(int materiaId);
 
   Future<List<Activity>> createdActivity(

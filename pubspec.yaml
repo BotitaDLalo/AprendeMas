@@ -40,6 +40,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/icons/
     - .env
     - assets/icons/grupo.svg
     - assets/icons/logo_horizontal-26.svg

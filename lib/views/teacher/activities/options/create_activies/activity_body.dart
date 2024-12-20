@@ -20,8 +20,7 @@ class ActivityBody extends StatelessWidget {
         children: [
           _DateBody(activity: activity), // Fechas dinámicas
           const _CustomDivider(),
-          _Description(
-              description: activity.descripcion), // Descripción dinámica
+          _Description(activity: activity,), // Descripción dinámica
           const _CustomDivider(),
           const Text(
             'Ver Completo',
@@ -34,16 +33,16 @@ class ActivityBody extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
-  final String description;
+  final Activity activity;
 
-  const _Description({required this.description});
+  const _Description({required this.activity});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Text(
-        description, // Descripción dinámica
+        activity.descripcion, // Descripción dinámica
         style: const TextStyle(fontSize: 10),
       ),
     );
@@ -86,7 +85,7 @@ class _DateBody extends StatelessWidget {
           const SizedBox(
             width: 70,
           ),
-          _DeliveryDate(fechaLimite: activity.fechaLimite), // Fecha límite
+          _DeliveryDate(activity: activity,), // Fecha límite
         ],
       ),
     );
@@ -104,11 +103,12 @@ class _ActivityDates extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          activity.nombre, // Nombre dinámico
+          activity.nombreActividad, // Nombre dinámico
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         ),
         Text(
-          'Publicado: ${DateFormat('dd/MM/yyyy HH:mm').format(activity.fechaCreacion)}',
+          'Publicado: ${activity.fechaCreacion}',
+          // 'Publicado: ${DateFormat('dd/MM/yyyy HH:mm').format(activity.fechaCreacion)}',
           style: const TextStyle(fontSize: 8),
         ),
       ],
@@ -117,9 +117,9 @@ class _ActivityDates extends StatelessWidget {
 }
 
 class _DeliveryDate extends StatelessWidget {
-  final DateTime fechaLimite;
+  final Activity activity;
 
-  const _DeliveryDate({required this.fechaLimite});
+  const _DeliveryDate({required this.activity});
 
   @override
   Widget build(BuildContext context) {
@@ -130,8 +130,8 @@ class _DeliveryDate extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
         ),
         Text(
-          DateFormat('dd/MM/yyyy HH:mm')
-              .format(fechaLimite), // Fecha límite dinámica
+          '${activity.fechaLimite}',
+          // DateFormat('dd/MM/yyyy HH:mm').format(activity.fechaLimite), // Fecha límite dinámica
           style: const TextStyle(fontSize: 8),
         )
       ],

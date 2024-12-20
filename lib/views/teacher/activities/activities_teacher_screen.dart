@@ -7,12 +7,14 @@ class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
   final int subjectId;
   final String subjectName;
   final String description;
+  final String codeAccess;
 
   const ActivitiesTeacherScreen(
       {super.key,
       required this.subjectId,
       required this.subjectName,
-      required this.description});
+      required this.description,
+      required this.codeAccess});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _ActividadesScreenState();
@@ -31,19 +33,21 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
   Widget build(BuildContext context) {
     final String codeAccess = 'ABC1234';
 
+     debugPrint('ActivitiesTeacherScreen subjectId from ActivitiesTeacherScreen: ${widget.subjectId}');
+
     // Contenido correspondiente a cada opción
     Widget getContent() {
       switch (selectedOptionIndex) {
         case 0:
           return const NoticeOptionsScreen(); // Tu pantalla de avisos
         case 1:
-          return const ActivitiesOptionScreen(); // Tu pantalla de actividades
+         return ActivitiesOptionScreen(subjectId: widget.subjectId, nombreMateria: widget.subjectName,);  // Tu pantalla de actividades
         case 2:
           return const StudentsOptionsScreen(); // Tu pantalla de alumnos
         case 3:
           return const RatingsOptionsScreen(); // Tu pantalla de calificaciones
         default:
-          return const ActivitiesOptionScreen(); // Por defecto, pantalla de actividades
+          return ActivitiesOptionScreen(subjectId: widget.subjectId, nombreMateria: widget.subjectName); // Por defecto, pantalla de actividades
       }
     }
 
@@ -63,7 +67,7 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
           ),
           ContainerSubjectName(
             subject: widget.subjectName,
-            codeAccess: codeAccess,
+            codeAccess: widget.subjectId.toString(),
           ),
           OptionsActivities(
             onOptionSelected: onOptionSelected, // Pasa el callback
