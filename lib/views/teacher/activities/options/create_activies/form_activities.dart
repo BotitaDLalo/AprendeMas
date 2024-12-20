@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/activity_state/activty_form_provider.dart';
 import 'package:aprende_mas/views/teacher/activities/options/create_activies/button_activity_form.dart';
-import 'package:aprende_mas/views/inputs/custom_hour_form_field.dart';
+import 'package:aprende_mas/views/widgets/inputs/custom_hour_form_field.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 
 class FormActivities extends ConsumerWidget {

@@ -44,4 +44,21 @@ class GroupsRepositoryImpl implements GroupsRepository {
     return groupsDataSource.updateGroup(
         groupId, groupName, descriptionGroup, colorGroup);
   }
+  
+  @override
+  Future<VerifyEmail> verifyEmail(String email) {
+    return groupsDataSource.verifyEmail(email);
+  }
+  
+  @override
+  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails) {
+    return groupsDataSource.addStudentsGroup(groupId, emails);
+  }
+  
+  @override
+  Future<List<StudentGroup>> getStudentsGroup(int groupId) {
+    return groupsDataSource.getStudentsGroup(groupId);
+  }
+
+  
 }

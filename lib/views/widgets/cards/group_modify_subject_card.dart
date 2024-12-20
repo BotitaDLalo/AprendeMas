@@ -2,7 +2,7 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:aprende_mas/views/inputs/custom_text_form_field.dart';
+import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 class GroupModifySubjectCard extends ConsumerWidget {
   final int index;
   final String subjectName;

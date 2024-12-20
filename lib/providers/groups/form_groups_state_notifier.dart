@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/form_groups_state.dart';
-import 'package:aprende_mas/views/inputs/color_input.dart';
-import 'package:aprende_mas/views/inputs/inputs.dart';
+import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
 import '../../models/models.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
 
@@ -10,10 +10,14 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   final Function(String, String, Color, List<SubjectsRow>)
       createGroupSubjectsCallback;
   final Function(int, String, String, Color) updateGroupCallback;
+  final Function(String) verifyEmailCallback;
+  final Function(int) addStudentsGroupCallback;
 
   FormGroupsStateNotifier(
       {required this.createGroupSubjectsCallback,
-      required this.updateGroupCallback})
+      required this.updateGroupCallback,
+      required this.verifyEmailCallback,
+      required this.addStudentsGroupCallback})
       : super(FormGroupsState());
 
 //#FORMULARIO PARA CREACION DE UN GRUPO
@@ -192,5 +196,28 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
         isValid: Formz.validate([groupNameInput]) ||
             Formz.validate([groupDescriptionInput]) ||
             Formz.validate([groupColorInput]));
+  }
+
+  //# Verificar email
+  Future<void> onVerifyEmailSubmit(String email) async {
+    state = state.copyWith(isPosting: true);
+    VerifyEmail e = await verifyEmailCallback(email);
+    _setVerifyEmail(e);
+    state = state.copyWith(isPosting: false);
+  }
+
+  _setVerifyEmail(VerifyEmail verifyEmail) {
+    state = state.copyWith(verifyEmail: verifyEmail);
+  }
+
+  //#Agregar alumnos a grupo
+
+  onAddStudentsGroup(int groupId) async {
+    state = state.copyWith(isPosting: true);
+    bool res = await addStudentsGroupCallback(groupId);
+    if (res) {
+      state = state.copyWith(isFormPosted: res);
+    }
+    state = state.copyWith(isPosting: false);
   }
 }

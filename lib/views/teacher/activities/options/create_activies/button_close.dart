@@ -10,7 +10,7 @@ class ButtonClose extends StatelessWidget {
       onPressed: () {
         context.go('/activities-options');
       },
-      icon: Icon(
+      icon: const Icon(
         Icons.close,
         color: Colors.white,
         size: 40,

@@ -16,7 +16,8 @@ class Querys {
       "DELETE FROM tbGruposAlumno;",
       "DELETE FROM tbMateriasAlumno;",
       "DELETE FROM tbActividades;",
-      "DELETE FROM tbEntregaActividades;"
+      "DELETE FROM tbEntregaActividades;",
+      "DELETE FROM tbNotificaciones"
     ];
   }
 

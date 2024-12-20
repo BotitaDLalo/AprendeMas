@@ -31,6 +31,9 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final res = await dio.post(uri, data: {
         'NombreUsuario': name,
+        'ApellidoPaterno':'prueba',
+        'ApellidoMaterno':'prueba', 
+        'Nombre': 'prueba',
         'Correo': email,
         'Clave': password,
         'TipoUsuario': role
@@ -101,7 +104,9 @@ class AuthDataSourceImpl implements AuthDataSource {
       if (e.type == DioExceptionType.connectionTimeout)throw ConnectionTimeout();
       throw CustomError(message: 'Ocurrio un error', errorCode: 1);
     } catch (e) {
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      // throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      print(e);
+      throw Exception(e);
     }
   }
 }

@@ -1,8 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/views/student/agenda/agenda_student_screen.dart';
-import 'package:aprende_mas/views/student/groups_subjects/subjects_student_screen.dart';
-import 'package:aprende_mas/views/student/notices/notices_student_screen.dart';
+import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/models/models.dart';
 
 class StudentHomeScreen extends ConsumerStatefulWidget {
   const StudentHomeScreen({super.key});
@@ -13,52 +12,23 @@ class StudentHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
-  int _selectedIndex = 0;
+  static List<BottomNavigationBarItem> lsBarItems =
+      CatalogButtonNavigationBarItems.lsBarItems;
 
-  static const List<Widget> _widgetsOptions = <Widget>[
-    AgendaStudentScreen(),
-    SubjectsStudentScreen(),
-    NoticesStudentScreen()
-    // AgendaScreen(),
-    // SubjectScreen(),
-    // NoticesScreen(),
-    // ChatGeminiScreen(),
+  List<WidgetOptions> lsWidgetsOptions = [
+    WidgetOptions(
+        bottomNavigationBarItem: lsBarItems[0],
+        widget: const AgendaStudentScreen()),
+    WidgetOptions(
+        bottomNavigationBarItem: lsBarItems[1],
+        widget: const SubjectsStudentScreen()),
+    WidgetOptions(
+        bottomNavigationBarItem: lsBarItems[2],
+        widget: const NoticesStudentScreen())
   ];
-
-  static const List<BottomNavigationBarItem> _widgetsOptionsItems = [
-    BottomNavigationBarItem(
-      icon: Icon(Icons.calendar_month_outlined),
-      label: 'Agenda',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.school_outlined),
-      label: 'Materias',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.notifications),
-      label: 'Notificaciones',
-    ),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarHome(),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Center(
-        child: _widgetsOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: CustomNavbar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _onItemTapped,
-        widgetsOptionsItems: _widgetsOptionsItems,
-      ),
-    );
+    return HomeScreen(lsWidgetsOptions: lsWidgetsOptions);
   }
 }

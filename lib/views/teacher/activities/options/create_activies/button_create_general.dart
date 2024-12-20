@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:aprende_mas/models/models.dart';
 
 class ButtonCreateGeneral extends StatelessWidget {
-  const ButtonCreateGeneral({super.key});
+  final int subjectId;
+  final String subjectName;
+  const ButtonCreateGeneral({
+    super.key, 
+    required this.subjectId, 
+    required this.subjectName});
 
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
@@ -16,7 +22,9 @@ class ButtonCreateGeneral extends StatelessWidget {
               title: const Text("Actividad"),
               onTap: () {
                 Navigator.pop(context);
-                context.go('/create-activities');
+                    final data = Subject(
+                    subjectId: subjectId, nombreMateria: subjectName,);
+                context.go('/create-activities', extra: data);
                 // Agregar lógica para crear Actividad
               },
             ),

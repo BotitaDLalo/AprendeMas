@@ -26,14 +26,14 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   Future<List<Group>> createSubjectWithGroup(String subjectName,
       String description, Color colorCode, List<int> groupsId) async {
     try {
-      const uri = "/Materias/MateriaGrupos";
+      const uri = "/Materias/CrearMateriaGrupos";
       final storageService = KeyValueStorageServiceImpl();
       final id = await storageService.getValueToken<int>('id');
       final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,
         // "CodigoColor": colorCode.toString(),
-        'DocenteId': id,
+        "DocenteId": id,
         "Grupos": groupsId
       });
 

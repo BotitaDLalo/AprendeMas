@@ -1,32 +1,30 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/activities/activity/activity.dart';
-import 'package:aprende_mas/models/activities/activity/activity_mapper.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
-import 'package:aprende_mas/views/shared/local_data_activities.dart';
-// import 'package:modulo_actividades/views/shared/local_data_activities.dart';
+import 'package:aprende_mas/repositories/Interface_repos/activity/activty_datasource.dart';
 
 class ActivityRepositoryImpl implements ActivityRepository {
-  @override
-  Future<List<Activity>> getAllActivities() async {
-    // Simulación de retraso de carga
-    await Future.delayed(Duration(milliseconds: 500));
+  final ActivityDataSource activityDataSource;
 
-    // Convierte el JSON simulado a una lista de objetos Activity
-    return activities.map((map) => ActivityMapper.fromMap(map)).toList();
+  ActivityRepositoryImpl({ActivityDataSource? activityDataSource})
+  : activityDataSource = activityDataSource ?? ActivityDataSourceImpl();
+  
+  @override
+  Future<List<Activity>> createdActivity(String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId) {
+    throw UnimplementedError();
   }
-
+  
   @override
-  Future<Activity?> getActivityByName(String nombre) async {
-    await Future.delayed(Duration(milliseconds: 500));
-    try {
-      final foundMap = activities.firstWhere((map) => map['nombre'] == nombre);
-      return ActivityMapper.fromMap(foundMap);
-    } catch (e) {
-      return null; // Retorna null si no encuentra la actividad
-    }
+  Future<Activity> updateActivity(int activityId, String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId) {
+    // TODO: implement updateActivity
+    throw UnimplementedError();
   }
-
+  
   @override
-  Future<void> addActivity(Activity activity) async {
-    activities.add(ActivityMapper.toMap(activity)); // Agrega al JSON simulado
+  Future<List<Activity>> getAllActivities(int materiaId) async {
+    final activities = await activityDataSource.getAllActivities(materiaId);
+    debugPrint('ActivityRepositoryImpl Activities fetched in repository: ${activities.length}');
+    return activities;
   }
 }

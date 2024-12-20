@@ -1,20 +1,19 @@
 class Activity {
-  final int docenteId;
-  final String nombre;
+  final int activityId;
+  final String nombreActividad;
   final String descripcion;
-  final int tipoActividadId;
-  final int rubricaId;
   final DateTime fechaCreacion;
   final DateTime fechaLimite;
-  final int puntuacion;
+  final int tipoActividadId;
+  final int materiaId;
 
   Activity(
-      {required this.docenteId,
-      required this.nombre,
+      {required this.activityId,
+      required this.nombreActividad,
       required this.descripcion,
       required this.tipoActividadId,
-      required this.rubricaId,
       required this.fechaCreacion,
       required this.fechaLimite,
-      required this.puntuacion});
+      required this.materiaId
+      });
 }
