@@ -12,7 +12,20 @@
           "package_name": "com.siexa.aprendeMas"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "700503342964-sjbkfmde8dfdohgrsrm65pee53oj48cn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.siexa.aprendeMas",
+            "certificate_hash": "c342eea536e1535c488ffccb106725cd8b717fab"
+          }
+        },
+        {
+          "client_id": "700503342964-6pl34jlup79qfvq5t928ud255udr5jcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBoZTa2crhCH6Kbaqu5vLWlkoq4ExT5Rto"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "700503342964-6pl34jlup79qfvq5t928ud255udr5jcb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
