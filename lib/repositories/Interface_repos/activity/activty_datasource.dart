@@ -4,8 +4,8 @@ abstract class ActivityDataSource {
   Future<List<Activity>> getAllActivities(int materiaId);
 
   Future<List<Activity>> createdActivity(
-    String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId);
+    int materiaId, String nombreActividad, String descripcion, DateTime fechaLimite);
   
   Future<Activity> updateActivity(
-    int activityId ,String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId);  
+    int activityId ,String nombreActividad, String descripcion, DateTime fechaLimite);  
 }

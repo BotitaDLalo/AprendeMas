@@ -1,4 +1,3 @@
-import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/repositories/Implement_repos/activity/activity_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
@@ -11,20 +10,19 @@ class ActivityRepositoryImpl implements ActivityRepository {
   : activityDataSource = activityDataSource ?? ActivityDataSourceImpl();
   
   @override
-  Future<List<Activity>> createdActivity(String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId) {
-    throw UnimplementedError();
+  Future<List<Activity>> getAllActivities(int materiaId) async {
+    final activities = await activityDataSource.getAllActivities(materiaId);
+    return activities;
   }
   
   @override
-  Future<Activity> updateActivity(int activityId, String nombreActividad, String descripcion, DateTime fechaCreacion, DateTime fechaLimite, int tipoActividadId) {
+  Future<Activity> updateActivity(int activityId, String nombreActividad, String descripcion, DateTime fechaLimite) {
     // TODO: implement updateActivity
     throw UnimplementedError();
   }
   
   @override
-  Future<List<Activity>> getAllActivities(int materiaId) async {
-    final activities = await activityDataSource.getAllActivities(materiaId);
-    debugPrint('ActivityRepositoryImpl Activities fetched in repository: ${activities.length}');
-    return activities;
+  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad, String descripcion, DateTime fechaLimite) {
+    return activityDataSource.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite);
   }
 }

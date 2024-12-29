@@ -8,7 +8,6 @@ class ActivityMapper {
 
   static List<Activity> fromMapList(List<Map<String, dynamic>> data) {
     return data.map((map) {
-      debugPrint('Mapping data: $map');
       return Activity(
         activityId: map['actividadId'] as int,
         nombreActividad: map['nombreActividad'] as String,

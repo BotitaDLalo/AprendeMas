@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomHourFormField extends StatefulWidget {
+class CustomTimeFormField extends StatefulWidget {
   final String? label;
   final String? hint;
   final String? errorMessage;
@@ -11,7 +11,7 @@ class CustomHourFormField extends StatefulWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
 
-  const CustomHourFormField({
+  const CustomTimeFormField({
     super.key,
     this.label,
     this.hint,
@@ -25,10 +25,10 @@ class CustomHourFormField extends StatefulWidget {
   });
 
   @override
-  CustomHourFormFieldState createState() => CustomHourFormFieldState();
+  CustomTimeFormFieldState createState() => CustomTimeFormFieldState();
 }
 
-class CustomHourFormFieldState extends State<CustomHourFormField> {
+class CustomTimeFormFieldState extends State<CustomTimeFormField> {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -46,22 +46,53 @@ class CustomHourFormFieldState extends State<CustomHourFormField> {
     );
 
     if (pickedDate != null) {
-      String formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
+      final formattedDate = "${pickedDate.toLocal()}".split(' ')[0];
       _controller.text = formattedDate; // Mostrar la fecha en el campo
       widget.onChanged?.call(formattedDate);
+      setState(() {}); // Actualiza el estado para que el validator se ejecute nuevamente
     }
   }
 
-  Future<void> _selectTime(BuildContext context) async {
-    TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+Future<void> _selectTime(BuildContext context) async {
+  TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+  );
 
-    if (pickedTime != null) {
-      final formattedTime = pickedTime.format(context);
-      _controller.text = formattedTime; // Mostrar la hora en el campo
-      widget.onChanged?.call(formattedTime);
+  if (pickedTime != null) {
+    // Formato de 24 horas
+    final formattedTime = pickedTime.format(context); // Obtiene la hora en formato 12 horas
+    final time24Hour = _convertTo24HourFormat(formattedTime); // Convierte a formato 24 horas
+    _controller.text = time24Hour; // Muestra la hora en el campo
+    widget.onChanged?.call(time24Hour);
+    setState(() {}); // Actualiza el estado para que el validator se ejecute nuevamente
+  }
+}
+
+String _convertTo24HourFormat(String time12Hour) {
+  final timeParts = time12Hour.split(' '); // Separa la hora y el AM/PM
+  final time = timeParts[0]; // Hora sin AM/PM
+  final period = timeParts[1]; // AM o PM
+
+  final hourMinute = time.split(':');
+  int hour = int.parse(hourMinute[0]);
+  final minute = hourMinute[1];
+
+  if (period == 'PM' && hour != 12) {
+    hour += 12; // Si es PM y la hora no es 12, sumamos 12
+  } else if (period == 'AM' && hour == 12) {
+    hour = 0; // Si es AM y la hora es 12, restamos 12
+  }
+
+  return '${hour.toString().padLeft(2, '0')}:$minute'; // Regresa la hora en formato 24 horas
+}
+
+
+  void _handleTap() {
+    if (widget.isDateField) {
+      _selectDate(context);
+    } else if (widget.isTimeField) {
+      _selectTime(context);
     }
   }
 
@@ -76,15 +107,14 @@ class CustomHourFormFieldState extends State<CustomHourFormField> {
 
     return TextFormField(
       controller: _controller, // Controlador para actualizar el texto
-      readOnly: widget.isDateField || widget.isTimeField,
-      onTap: () {
-        if (widget.isDateField) {
-          _selectDate(context);
-        } else if (widget.isTimeField) {
-          _selectTime(context);
+      readOnly: true,
+      onTap: _handleTap,
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return 'Este campo es obligatorio'; // Validación personalizada
         }
+        return null; // Sin errores
       },
-      validator: widget.validator,
       obscureText: widget.obscureText,
       keyboardType: widget.keyboardType,
       style: const TextStyle(fontSize: 20, color: Colors.black),
@@ -104,4 +134,3 @@ class CustomHourFormFieldState extends State<CustomHourFormField> {
     );
   }
 }
-

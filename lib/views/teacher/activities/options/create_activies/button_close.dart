@@ -9,6 +9,7 @@ class ButtonClose extends StatelessWidget {
     return IconButton(
       onPressed: () {
         context.go('/activities-options');
+        // context.pop();
       },
       icon: const Icon(
         Icons.close,

@@ -12,27 +12,39 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   Future<void> getAllActivities(int materiaId) async {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
-      debugPrint('ActivityNotifier Fetching activities for materiaId: $materiaId');
       final activities = await activityRepository.getAllActivities(materiaId);
       _setActivities(activities); // Aquí actualizamos el estado
-      debugPrint('Activities set in state: ${state.activities.length}');
     } catch (e) {
-      debugPrint('Error fetching activities: $e');
       state = state.copyWith(errorMessage: e.toString());
     } finally {
       state = state.copyWith(isLoading: false); // Indicando que terminó la carga
     }
   }
 
-  // Método para filtrar actividades por subjectId
-  // List<Activity> getActivitiesBySubjectId(int materiaId) {
-  //   return state.activities
-  //       .where((activity) => activity.materiaId == materiaId)
-  //       .toList();
-  // }
-
   // Método privado para actualizar el estado con nuevas actividades
   void _setActivities(List<Activity> activities) {
     state = state.copyWith(activities: activities);
   }
+
+  Future<void> createdActivity(
+    int materiaId, 
+    String nombreActividad,
+    String descripcion,
+    DateTime fechaLimite,) async {
+    
+    try {
+      state = state.copyWith(isLoading: true); // Indicando que está cargando
+      final activity = await activityRepository.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite);
+      _setCreatedActivity(activity);
+    } catch (e) {
+      state = state.copyWith(errorMessage: e.toString());
+    } finally {
+      state = state.copyWith(isLoading: false); // Indicando que terminó la carga
+    }
+  }
+
+  void _setCreatedActivity(List<Activity> activity) {
+    state = state.copyWith(activities: activity);
+  }
+  
 }

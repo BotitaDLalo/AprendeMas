@@ -1,7 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/providers/activity_state/activity_provider.dart';
-import 'package:aprende_mas/views/teacher/activities/options/create_activies/activity_body.dart';
 import 'package:aprende_mas/views/teacher/activities/options/create_activies/activity_body_molde.dart';
 
 
@@ -19,7 +17,6 @@ class _ActivityListState extends ConsumerState<ActivityList> {
   void initState() {
     super.initState();
     // Cargar actividades al inicializar el widget
-    print('ActivityList subjectId: ${widget.subjectId}');
     Future.microtask(() {
       ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
     });

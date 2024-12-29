@@ -9,33 +9,44 @@ class ActivityDataSourceImpl implements ActivityDataSource {
   Future<List<Activity>> getAllActivities(int materiaId) async {
     try {
       final uri = "/Actividades/ObtenerActividadesPorMateria/$materiaId";
-      debugPrint('ActivityDataSourceImpl Fetching activities from: $uri');
       final response = await dio.get(uri);
-      debugPrint('ActivityDataSourceImpl API Response: ${response.data}');
 
       final List<Map<String, dynamic>> data =
           List<Map<String, dynamic>>.from(response.data);
 
       final activities = ActivityMapper.fromMapList(data);
-      debugPrint('Mapped activities: ${activities.length}');
       return activities;
 
-
     } catch (e) {
-      debugPrint('Error in getAllActivities: $e');
-      throw Exception("Error al obtener actividades: $e");
+      throw Exception("ActivityDataSourceImpl get Error al obtener actividades: $e");
     }
   }
 
   @override
   Future<List<Activity>> createdActivity(
+      int materiaId,
       String nombreActividad,
       String descripcion,
-      DateTime fechaCreacion,
-      DateTime fechaLimite,
-      int tipoActividadId) {
-    // TODO: implement createdActivity
-    throw UnimplementedError();
+      DateTime fechaLimite,) async{
+      
+      try {
+        final uri = "/Actividades/CrearActividad/$materiaId";
+        final response = await dio.post(uri, data: {
+          "nombreActividad": nombreActividad,
+          "descripcion": descripcion,
+          "fechaLimite": fechaLimite.toIso8601String(),
+          "materiaId": materiaId
+        });
+        debugPrint("Response: ${response.data}");
+
+        final resList = List<Map<String, dynamic>>.from(response.data);
+        final activities = ActivityMapper.fromMapList(resList);
+
+        return activities;
+
+      } catch (e) {
+        throw Exception("ActivityDataSourceImpl post Error al crear una actividad: $e");
+      }
   }
 
   @override
@@ -43,9 +54,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       int activityId,
       String nombreActividad,
       String descripcion,
-      DateTime fechaCreacion,
-      DateTime fechaLimite,
-      int tipoActividadId) {
+      DateTime fechaLimite,) {
     // TODO: implement updateActivity
     throw UnimplementedError();
   }

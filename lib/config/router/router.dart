@@ -77,14 +77,25 @@ final goRouterProvider = Provider((ref) {
         },
       ),
       GoRoute(
-        path: '/create-activities',
+        path: '/activities-options',
         builder: (context, state)  {
           final subjectData = state.extra as Subject;
           return ActivitiesOptionScreen(
             subjectId: subjectData.subjectId,
             nombreMateria: subjectData.nombreMateria,);
         },
-      )
+      ),
+      GoRoute(
+        path: '/create-activities',
+        builder: (context, state) {
+          final subjectData = state.extra as Subject;
+           debugPrint('Route /create-activity: subjectId: ${subjectData.subjectId}, nombreMateria: ${subjectData.nombreMateria}');
+          return CreateActivitiesScreen(
+            subjectId: subjectData.subjectId,
+            nombreMateria: subjectData.nombreMateria
+          );
+        },
+      ), 
     ],
     redirect: (context, state) {
       final isGoingTo = state.matchedLocation;
@@ -126,6 +137,9 @@ final goRouterProvider = Provider((ref) {
 
                   case "/group-teacher-settings":
                     return "/group-teacher-settings";
+
+                  case "/activities-options":
+                    return "/activities-options";
                 }
                 return "/teacher-home";
               case "Alumno":
