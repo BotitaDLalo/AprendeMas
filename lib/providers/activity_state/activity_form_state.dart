@@ -1,5 +1,5 @@
 import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
-import 'package:aprende_mas/views/inputs/time_input.dart';
+import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
 
 class ActivityFormState {
   final bool isPosting; // Indica si se está enviando el formulario

@@ -30,7 +30,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       DateTime fechaLimite,) async{
       
       try {
-        final uri = "/Actividades/CrearActividad/$materiaId";
+        const uri = "/Actividades/CrearActividad";
         final response = await dio.post(uri, data: {
           "nombreActividad": nombreActividad,
           "descripcion": descripcion,

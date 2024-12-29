@@ -3,7 +3,7 @@ import 'package:aprende_mas/views/teacher/activities/options/options.dart';
 import 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
 import 'package:aprende_mas/views/widgets/activities_body/options_activities.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
-
+  final itemTappedProvider = StateProvider<int>((ref) => 0);
 class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
   final int subjectId;
   final String subjectName;
@@ -30,7 +30,7 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
   //   });
   // }
 
-  final itemTappedProvider = StateProvider<int>((ref) => 0);
+
 
   void onOptionSelected(int index) {
     ref.read(itemTappedProvider.notifier).state = index;
@@ -71,7 +71,7 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
           ),
           OptionsActivities(
             onOptionSelected: onOptionSelected, // Pasa el callback
-            selectedOptionIndex: ref.read(itemTappedProvider), // Pasa el índice seleccionado
+            selectedOptionIndex: ref.watch(itemTappedProvider), // Pasa el índice seleccionado
           ),
           Expanded(
             child: getContent(), // Muestra el contenido correspondiente
