@@ -1,4 +1,4 @@
-import 'package:aprende_mas/config/services/key_value_storage_service.dart';
+import 'package:aprende_mas/config/data/key_value_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class KeyValueStorageServiceImpl implements KeyValueStorageService {
@@ -22,12 +22,19 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   }
 
   @override
-  Future<bool> removeKey(String keyToken, String keyId, String keyRole) async {
+  String keyUserName() {
+    return 'username';
+  }
+
+  @override
+  Future<bool> removeKey(
+      String keyToken, String keyId, String keyRole, String keyUserName) async {
     final prefs = await getSharedPrefs();
     bool removeToken = await prefs.remove(keyToken);
     bool removeId = await prefs.remove(keyId);
     bool removeRol = await prefs.remove(keyRole);
-    if (removeToken && removeId && removeRol) {
+    bool removeUserName = await prefs.remove(keyUserName);
+    if (removeToken && removeId && removeRol && removeUserName) {
       return true;
     }
     return false;
@@ -36,16 +43,6 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   @override
   Future<void> setKeyValue<T>(String key, T value) async {
     final prefs = await getSharedPrefs();
-    // switch (T) {
-    //   case const (int):
-    //     prefs.setInt(key, value as int);
-    //     break;
-    //   case const (String):
-    //     prefs.setString(key, value as String);
-    //   default:
-    //     throw UnimplementedError(
-    //         'Set not implemented for type ${T.runtimeType}');
-    // }
     if (value is int) {
       prefs.setInt(key, value as int);
     } else if (value is String) {
@@ -101,6 +98,22 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   }
 
   @override
+  Future<T?> getValueUserName<T>(String keyUserName) async {
+    final prefs = await getSharedPrefs();
+    switch (T) {
+      case const (int):
+        return prefs.getInt(keyUserName) as T?;
+      case const (String):
+        return prefs.getString(keyUserName) as T?;
+
+      default:
+        throw UnimplementedError(
+            'Set not implemented for type ${T.runtimeType}');
+    }
+  }
+
+
+  @override
   Future<int> getId() async {
     return await getValueId<int>(keyIdName()) ?? -1;
   }
@@ -113,5 +126,10 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   @override
   Future<String> getToken() async {
     return await getValueToken<String>(keyTokenName()) ?? "";
+  }
+
+  @override
+  Future<String> getUserName() async {
+    return await getValueUserName<String>(keyUserName()) ?? "";
   }
 }

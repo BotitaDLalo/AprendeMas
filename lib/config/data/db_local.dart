@@ -1,4 +1,4 @@
-import 'package:aprende_mas/config/environment/db/querys.dart';
+import 'package:aprende_mas/config/data/querys.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 
 class DbLocal {
@@ -6,7 +6,6 @@ class DbLocal {
     try {
       final databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'Movil.db');
-      // await deleteDatabase(path);
       bool exist = await File(path).exists();
 
       if (!exist) {

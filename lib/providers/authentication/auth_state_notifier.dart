@@ -1,10 +1,10 @@
 import 'package:aprende_mas/repositories/Implement_repos/authentication/db_local_user_repository_impl.dart';
-import 'package:aprende_mas/config/services/google_signin_api.dart';
+import 'package:aprende_mas/config/services/google/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
-import 'package:aprende_mas/config/services/key_value_storage_service.dart';
+import 'package:aprende_mas/config/data/key_value_storage_service.dart';
 import 'package:aprende_mas/config/services/services.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
@@ -144,11 +144,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         keyValueStorageService.keyIdName(),
         user.id,
         keyValueStorageService.keyRoleName(),
-        user.rol);
+        user.rol,
+        keyValueStorageService.keyUserName(),
+        user.userName);
     if (caller == "loginUser") {
       await dbLocalUser.insertUser(
-          user.id, user.nombre, user.email, date7Days.toString(), user.rol);
-      final tokenFCM = await FirebaseConfiguration.getFcmToken();
+          user.id, user.userName, user.email, date7Days.toString(), user.rol);
+      final tokenFCM = await FirebaseCM.getFcmToken();
       print("TOKEN FIREBASE");
       print(tokenFCM);
     } else if (caller == "checkAuthStatus") {
@@ -173,7 +175,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         keyValueStorageService.keyIdName(),
         user.id,
         keyValueStorageService.keyRoleName(),
-        user.rol);
+        user.rol,
+        keyValueStorageService.keyUserName(),
+        user.userName);
     state = state.copyWith(
         authUser: user,
         authGoogleStatus: AuthGoogleStatus.authenticated,
@@ -183,7 +187,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void _setLoggedOfflineUser(AuthOfflineUser userOffline) async {
     final user = AuthUser(
         id: userOffline.usuarioId,
-        nombre: userOffline.nombreUsuario,
+        userName: userOffline.nombreUsuario,
         email: userOffline.correo,
         rol: 'Alumno',
         token: "");
@@ -199,7 +203,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await keyValueStorageService.removeKey(
         keyValueStorageService.keyTokenName(),
         keyValueStorageService.keyIdName(),
-        keyValueStorageService.keyRoleName());
+        keyValueStorageService.keyRoleName(),
+        keyValueStorageService.keyUserName());
     await dbLocalUser.deleteUser();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
@@ -213,7 +218,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await keyValueStorageService.removeKey(
           keyValueStorageService.keyTokenName(),
           keyValueStorageService.keyIdName(),
-          keyValueStorageService.keyRoleName());
+          keyValueStorageService.keyRoleName(),
+          keyValueStorageService.keyUserName());
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           user: null,
@@ -229,10 +235,18 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         state.copyWith(user: user, registerStatus: RegisterStatus.registered);
   }
 
-  void _setKeyValueStorage<T>(String keyToken, T valueToken, String keyId,
-      T valueId, String keyRole, T valueRole) async {
+  void _setKeyValueStorage<T>(
+      String keyToken,
+      T valueToken,
+      String keyId,
+      T valueId,
+      String keyRole,
+      T valueRole,
+      String keyUserName,
+      T valueUserName) async {
     await keyValueStorageService.setKeyValue(keyToken, valueToken);
     await keyValueStorageService.setKeyValue(keyId, valueId);
     await keyValueStorageService.setKeyValue(keyRole, valueRole);
+    await keyValueStorageService.setKeyValue(keyUserName, valueUserName);
   }
 }

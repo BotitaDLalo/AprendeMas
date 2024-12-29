@@ -1,18 +1,17 @@
-import 'package:aprende_mas/config/environment/db/querys.dart';
+import 'package:aprende_mas/config/data/data.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Interface_repos/notices/db_local_notices_data_source.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/config/environment/db/db_local.dart';
-import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/teacher/notices/notices_teacher_screen.dart';
-import 'package:aprende_mas/providers/notices/fcm_state_notifier.dart';
+
 class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
   @override
-  Future<void> storeNotification(Notice notice) async {
+  Future<bool> storeNotification(Notice notice) async {
     try {
+      bool inserted = false;
       Database db = await DbLocal.initDatabase();
       final query = Querys.querytbNotificacionesInsert();
       await db.transaction((txn) async {
-        await txn.rawInsert(query, [
+        int idRow = await txn.rawInsert(query, [
           notice.messageId,
           notice.title,
           notice.body,
@@ -20,10 +19,15 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
           "",
           ""
         ]);
+
+        if (idRow > 0) {
+          inserted = true;
+        }
       });
-      NoticesScreenState.streamController.add(null);
+      return inserted;
     } catch (e) {
-      throw Exception(e);
+      print(e);
+      return false;
     }
   }
 
@@ -45,29 +49,38 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
     }
   }
 
-  static Future<int> gettbNotificacionesCount() async {
+  @override
+  Future<List<Notice>> getLsNotifications() async {
     try {
       Database db = await DbLocal.initDatabase();
-      final result =
-          await db.rawQuery('SELECT COUNT(*) as count FROM tbNotificaciones');
-      return Sqflite.firstIntValue(result) ?? 0;
+      final ls = await db.query('tbNotificaciones', orderBy: 'FechaEnvio DESC');
+
+      final lsNotice = Notice.noticeJsonToEntity(ls);
+
+      for (var n in lsNotice) {
+        print("Aviso: " + n.toString());
+      }
+      return lsNotice;
     } catch (e) {
       throw Exception(e);
     }
   }
 
   @override
-  Future<List<Notice>> getLsNotifications() async {
+  Future<bool> deleteNotification(String sentDate) async {
     try {
       Database db = await DbLocal.initDatabase();
-      final ls = await db.query('SELECT * FROM tbNotificaciones',
-          orderBy: 'FechaEnvio DESC');
+      final query = Querys.querytbNotificacionesDeleteWhere();
+      int count = await db.rawDelete(query, [sentDate]);
 
-      
-      final lsNotice = Notice.noticeJsonToEntity(ls);
-      return lsNotice;
+      if (count == 1) {
+        return true;
+      }
+
+      return false;
     } catch (e) {
-      throw Exception(e);
+      print(e);
+      return false;
     }
   }
 }

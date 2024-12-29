@@ -1,5 +1,4 @@
-import 'package:aprende_mas/config/services/google_signin_api.dart';
-import 'package:aprende_mas/models/authentication/auth_user_mapper.dart';
+import 'package:aprende_mas/config/services/google/google_signin_api.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:aprende_mas/config/network/dio_client.dart';

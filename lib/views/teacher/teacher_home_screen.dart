@@ -17,15 +17,19 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
 
   List<WidgetOptions> lsWidgetsOptions = [
     WidgetOptions(
+        title: 'Agenda',
         bottomNavigationBarItem: lsBarItems[0],
         widget: const AgendaTeacherScreen()),
     WidgetOptions(
+        title: 'Grupos y Materias',
         bottomNavigationBarItem: lsBarItems[1],
         widget: const GroupsSubjectsTeacherScreen()),
     WidgetOptions(
+        title: 'Notificaciones',
         bottomNavigationBarItem: lsBarItems[2],
         widget: const NoticesTeacherScreen()),
     WidgetOptions(
+        title: 'Chat',
         bottomNavigationBarItem: lsBarItems[3],
         widget: const ChatGeminiScreen())
   ];

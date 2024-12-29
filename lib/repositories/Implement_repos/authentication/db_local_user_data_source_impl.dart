@@ -1,7 +1,7 @@
-import 'package:aprende_mas/config/environment/db/querys.dart';
+import 'package:aprende_mas/config/data/querys.dart';
 import 'package:aprende_mas/repositories/Interface_repos/authentication/db_local_user_data_source.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/config/environment/db/db_local.dart';
+import 'package:aprende_mas/config/data/db_local.dart';
 
 class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
   static const table = 'tbUsuarioActivo';
@@ -10,9 +10,11 @@ class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
   Future<void> deleteUser() async {
     try {
       Database db = await DbLocal.initDatabase();
-      final lsQuerys = Querys.querysDeleteTables();
-      for (var q in lsQuerys) {
-        await db.execute(q);
+      if (db.isOpen) {
+        final lsQuerys = Querys.querysDeleteTables();
+        for (var q in lsQuerys) {
+          await db.execute(q);
+        }
       }
     } catch (e) {
       throw Exception(e);
@@ -23,10 +25,10 @@ class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
   Future<void> updateUser(String fechaLimiteActivo) async {
     try {
       Database db = await DbLocal.initDatabase();
-      final query = Querys.querytbUsuarioActivoUpdate();
-
-      final ls = await db.rawUpdate(query, [fechaLimiteActivo]);
-      print(ls);
+      if (db.isOpen) {
+        final query = Querys.querytbUsuarioActivoUpdate();
+        await db.rawUpdate(query, [fechaLimiteActivo]);
+      }
     } catch (e) {
       throw Exception(e);
     }
@@ -53,16 +55,16 @@ class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
       String fechaLimiteActivo, rol) async {
     try {
       Database db = await DbLocal.initDatabase();
-      final query = Querys.querytbUsuarioActivoInsert();
+      if (db.isOpen) {
+        final query = Querys.querytbUsuarioActivoInsert();
 
-      final ls = await db.transaction(
-        (txn) async {
-          await txn.rawInsert(query,
-              [usuarioId, nombreUsuario, correo, fechaLimiteActivo, rol]);
-        },
-      );
-
-      print(ls);
+        await db.transaction(
+          (txn) async {
+            await txn.rawInsert(query,
+                [usuarioId, nombreUsuario, correo, fechaLimiteActivo, rol]);
+          },
+        );
+      }
     } catch (e) {
       throw Exception(e);
     }

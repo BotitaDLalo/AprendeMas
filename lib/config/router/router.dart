@@ -1,15 +1,9 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/teacher/activities/activities_teacher_screen.dart';
+import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/auth_provider.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/group_options/group_teacher_options.dart';
-import 'package:aprende_mas/views/teacher/teacher.dart';
-import 'package:aprende_mas/views/users/forgot_password_screen.dart';
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/teacher/teacher.dart';
 
 String routeAux = "";
 final goRouterProvider = Provider((ref) {
@@ -138,9 +132,6 @@ final goRouterProvider = Provider((ref) {
 
           case AuthStatus.notAuthenticated:
             switch (isGoingTo) {
-              // case "/login-user":
-              //   return "/login-user";
-
               case "/sigin-user":
                 return "/sigin-user";
 

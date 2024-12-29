@@ -1,7 +1,7 @@
-import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/groups/group.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/config/data/data.dart';
 
 class CustomExpansionTile extends ConsumerStatefulWidget {
   final int id;

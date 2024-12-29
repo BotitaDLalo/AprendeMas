@@ -1,6 +1,9 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
+import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/providers/authentication/auth_state.dart';
+import 'package:aprende_mas/providers/notices/notices_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final List<WidgetOptions> lsWidgetsOptions;
@@ -20,13 +23,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final element =
+        widget.lsWidgetsOptions.elementAt(ref.watch(itemTappedProvider));
+
+    final auth = ref.read(authProvider);
     return Scaffold(
-      appBar: const AppBarHome(),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      endDrawer: SizedBox(
+        width: 250,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const SizedBox(height: 80),
+              ListTile(
+                leading: const Icon(
+                  Icons.account_circle,
+                  size: 30,
+                ),
+                title: const Text(
+                  'Cuenta',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  // Acción al tocar el ítem
+                },
+              ),
+              const SizedBox(height: 10),
+              ListTile(
+                leading: const Icon(
+                  Icons.exit_to_app,
+                  size: 30,
+                ),
+                title: const Text(
+                  'Cerrar Sesión',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  if (auth.authGoogleStatus == AuthGoogleStatus.authenticated) {
+                    ref.watch(authProvider.notifier).logoutGoogle();
+                  } else if (auth.authStatus == AuthStatus.authenticated) {
+                    ref.watch(authProvider.notifier).logout();
+                  }
+                  ref.read(noticesProvider.notifier).clearNotifications();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      appBar: AppBarHome(
+        title: element.title,
+      ),
       body: Center(
-        child: widget.lsWidgetsOptions
-            .elementAt(ref.watch(itemTappedProvider))
-            .widget,
+        child: element.widget,
       ),
       bottomNavigationBar: CustomNavbar(
         selectedIndex: ref.watch(itemTappedProvider),

@@ -8,7 +8,7 @@ class CatalogButtonNavigationBarItems {
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.school_outlined),
-      label: 'Materias',
+      label: 'Clases',
     ),
     const BottomNavigationBarItem(
       icon: Icon(Icons.notifications),
