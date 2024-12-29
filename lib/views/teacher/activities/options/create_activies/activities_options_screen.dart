@@ -1,8 +1,4 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/subjects/subjects.dart';
-import 'package:aprende_mas/providers/activity_state/activity_provider.dart';
-import 'package:aprende_mas/providers/providers.dart';
-import 'package:aprende_mas/views/teacher/activities/options/create_activies/activity_body_molde.dart';
 import 'activity_list.dart';
 import 'button_create_general.dart';
 
@@ -30,13 +26,13 @@ class _ActivityOptionState extends ConsumerState<ActivitiesOptionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ButtonCreateGeneral(subjectId: widget.subjectId, subjectName: widget.nombreMateria),  
-          SizedBox(height: 10),
+          ButtonCreateGeneral( subjectId: widget.subjectId, nombreMateria: widget.nombreMateria,),  
+          const SizedBox(height: 10),
           // Asegúrate de envolver ActivityList en un ListView
           Expanded(
             child: ActivityList(subjectId: widget.subjectId),
           ),
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
         ],
       ),
     );

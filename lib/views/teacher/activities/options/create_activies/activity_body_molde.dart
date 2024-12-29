@@ -1,4 +1,3 @@
-import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/views/widgets/activities_body/custom_container_style.dart';
 import 'package:flutter/material.dart';
 

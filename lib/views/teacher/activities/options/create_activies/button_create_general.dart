@@ -4,11 +4,12 @@ import 'package:aprende_mas/models/models.dart';
 
 class ButtonCreateGeneral extends StatelessWidget {
   final int subjectId;
-  final String subjectName;
+  final String nombreMateria;
+
   const ButtonCreateGeneral({
     super.key, 
     required this.subjectId, 
-    required this.subjectName});
+    required this.nombreMateria,});
 
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
@@ -21,19 +22,21 @@ class ButtonCreateGeneral extends StatelessWidget {
               leading: const Icon(Icons.create),
               title: const Text("Actividad"),
               onTap: () {
+                final data = Subject(
+                  subjectId: subjectId, 
+                  nombreMateria: nombreMateria);
+
                 Navigator.pop(context);
-                    final data = Subject(
-                    subjectId: subjectId, nombreMateria: subjectName,);
                 context.go('/create-activities', extra: data);
-                // Agregar lógica para crear Actividad
               },
             ),
             ListTile(
               leading: const Icon(Icons.assignment),
               title: const Text("Examen"),
               onTap: () {
-                Navigator.pop(context);
+                // Navigator.pop(context);
                 // Agregar lógica para crear Examen
+                context.go('/create-activity');
               },
             ),
             ListTile(

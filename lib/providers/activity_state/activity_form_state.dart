@@ -1,22 +1,23 @@
 import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
+import 'package:aprende_mas/views/inputs/time_input.dart';
 
 class ActivityFormState {
   final bool isPosting; // Indica si se está enviando el formulario
-  final bool isValid; // Indica si el formulario es válido
   final bool isFormPosted;
+  final bool isValid; // Indica si el formulario es válido
   final GenericInput nombre; // Validación del campo 'nombre'
   final GenericInput descripcion; // Validación del campo 'descripcion'
-  final GenericInput horaLimite; // Validación del campo 'fechaEntrega'
-  final GenericInput fechaLimite; // Validación del campo 'horaEntrega'
+  final TimeInput fechaLimite;
+  final TimeInput horaLimite;
 
   ActivityFormState({
     this.isPosting = false,
-    this.isValid = false,
     this.isFormPosted = false,
+    this.isValid = false,
     this.nombre = const GenericInput.pure(),
     this.descripcion = const GenericInput.pure(),
-    this.horaLimite = const GenericInput.pure(),
-    this.fechaLimite = const GenericInput.pure(),
+    this.fechaLimite = const TimeInput.pure(),
+    this.horaLimite = const TimeInput.pure()
   });
 
   // Método para crear una nueva instancia con campos actualizados
@@ -26,8 +27,8 @@ class ActivityFormState {
     bool? isValid,
     GenericInput? nombre,
     GenericInput? descripcion,
-    GenericInput? fechaLimite,
-    GenericInput? horaLimite,
+    TimeInput? fechaLimite,
+    TimeInput? horaLimite,
   }) =>
       ActivityFormState(
           isPosting: isPosting ?? this.isPosting,
@@ -35,8 +36,9 @@ class ActivityFormState {
           isValid: isValid ?? this.isValid,
           nombre: nombre ?? this.nombre,
           descripcion: descripcion ?? this.descripcion,
-          horaLimite: horaLimite ?? this.horaLimite,
-          fechaLimite: fechaLimite ?? this.fechaLimite);
+          fechaLimite: fechaLimite ?? this.fechaLimite,
+          horaLimite:  horaLimite ?? this.horaLimite
+      );
 
   @override
   String toString() {
@@ -47,8 +49,8 @@ class ActivityFormState {
     isValid: $isValid
     nombre: $nombre
     descripcion: $descripcion
-    horaLimite: $horaLimite
     fechaLimite: $fechaLimite
+    horaLimite: $horaLimite
     ''';
   }
 }
