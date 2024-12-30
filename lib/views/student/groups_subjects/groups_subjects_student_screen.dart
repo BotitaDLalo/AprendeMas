@@ -6,21 +6,49 @@ class GroupsSubjectsStudentScreen extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _SubjectsStudentScreenState();
+      _GroupsSubjectsTeacherScreenState();
 }
 
-class _SubjectsStudentScreenState extends ConsumerState<GroupsSubjectsStudentScreen> {
+class _GroupsSubjectsTeacherScreenState
+    extends ConsumerState<GroupsSubjectsStudentScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Row(),
-          )
-        ],
-      ),
-    );
+    return Scaffold( body: Column(
+          children: [
+            TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.blue,
+              labelColor: Colors.blue,
+              tabs: const [
+                Tab(text: 'Grupos y Materias'),
+                Tab(text: 'Materias Sin Grupo'),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  GroupsSubjectsContainer(),
+                  SubjectsWithoutGroupsContainer(),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }

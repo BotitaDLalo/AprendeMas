@@ -38,9 +38,8 @@ class GroupsMapper {
         nombreGrupo: group['nombreGrupo'],
         descripcion: group['descripcion'],
         codigoAcceso: group['codigoAcceso'],
-        // tipoUsuario: group['tipoUsuario'],
         codigoColor: group['codigoColor'],
-        materias: materias, // Asignar las materias al grupo
+        materias: materias,
       ));
     }
     return groups;

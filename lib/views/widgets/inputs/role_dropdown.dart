@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
 
 
@@ -13,6 +13,7 @@ class RoleDropdown extends ConsumerStatefulWidget {
 
 class _RoleDropdownState extends ConsumerState<RoleDropdown> {
   String? selectedRole;
+  final cn = CatalogNames();
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +48,9 @@ class _RoleDropdownState extends ConsumerState<RoleDropdown> {
             setState(() {
               selectedRole = newValue;
             });
-            if (newValue == "Docente") {
+            if (newValue == cn.getRoleTeacherName) {
               siginFormNotifier.onRoleChanged(newValue.toString());
-            } else if (newValue == "Alumno") {
+            } else if (newValue == cn.getRoleStudentName) {
               siginFormNotifier.onRoleChanged(newValue.toString());
             }
           },

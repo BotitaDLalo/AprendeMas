@@ -4,13 +4,10 @@ import 'custom_container_style.dart';
 
 class ContainerNameGroupSubjects extends StatelessWidget {
   final String name;
-  final String accessCode;
+  final String? accessCode;
   final String? colorCode;
   const ContainerNameGroupSubjects(
-      {super.key,
-      required this.name,
-      required this.accessCode,
-      this.colorCode});
+      {super.key, required this.name, this.accessCode, this.colorCode});
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +37,24 @@ class ContainerNameGroupSubjects extends StatelessWidget {
                       fontSize: 26,
                       fontWeight: FontWeight.bold),
                 ),
-                Row(
-                  children: [
-                    const Text(
-                      'Código de clase: ',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      accessCode,
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                )
+                accessCode != null
+                    ? Row(
+                        children: [
+                          const Text(
+                            'Código de clase: ',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            accessCode ?? "",
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    : const SizedBox()
               ],
             ),
             const Spacer(),

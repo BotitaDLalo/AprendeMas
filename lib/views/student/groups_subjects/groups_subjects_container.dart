@@ -1,18 +1,17 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
-import 'package:aprende_mas/config/utils/packages.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
-  const GroupsSubjectsContainer({
-    super.key,
-  });
+  const GroupsSubjectsContainer({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _CustomExpansionState();
+      _GroupsSubjectsContainerState();
 }
 
-class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
+class _GroupsSubjectsContainerState
+    extends ConsumerState<GroupsSubjectsContainer> {
   @override
   void initState() {
     super.initState();
@@ -22,7 +21,6 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
   @override
   Widget build(BuildContext context) {
     final groups = ref.watch(groupsProvider).groups;
-
     return ListView.builder(
       itemCount: groups.length,
       itemBuilder: (context, index) {

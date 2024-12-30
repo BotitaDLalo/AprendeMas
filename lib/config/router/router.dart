@@ -49,7 +49,7 @@ final goRouterProvider = Provider((ref) {
             id: groupData.grupoId ?? -1,
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",
-            accessCode: groupData.codigoAcceso ?? "",
+            accessCode: groupData.codigoAcceso,
             colorCode: groupData.codigoColor,
           );
         },

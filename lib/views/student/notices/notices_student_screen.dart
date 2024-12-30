@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/views/users/users.dart';
 
 class NoticesStudentScreen extends ConsumerStatefulWidget {
   const NoticesStudentScreen({super.key});
@@ -11,6 +12,6 @@ class _NoticesStudentScreenState extends ConsumerState<NoticesStudentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const NoticesScreen();
   }
 }

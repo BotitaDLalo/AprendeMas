@@ -9,14 +9,14 @@ class GroupTeacherOptions extends ConsumerStatefulWidget {
   final int id;
   final String groupName;
   final String description;
-  final String accessCode;
+  final String? accessCode;
   final String colorCode;
   const GroupTeacherOptions(
       {super.key,
       required this.id,
       required this.groupName,
       required this.description,
-      required this.accessCode,
+      this.accessCode,
       required this.colorCode});
 
   @override

@@ -8,7 +8,7 @@ class FormUpdateGroup extends ConsumerStatefulWidget {
   final int id;
   final String groupName;
   final String description;
-  final String accesCode;
+  final String? accesCode;
   final String colorCode;
 
   const FormUpdateGroup(
@@ -16,7 +16,7 @@ class FormUpdateGroup extends ConsumerStatefulWidget {
       required this.id,
       required this.groupName,
       required this.description,
-      required this.accesCode,
+      this.accesCode,
       required this.colorCode});
 
   @override

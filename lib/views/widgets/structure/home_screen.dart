@@ -73,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       appBar: AppBarHome(
         title: element.title,
+        
       ),
       body: Center(
         child: element.widget,

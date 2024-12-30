@@ -5,6 +5,8 @@ export 'calendar/calendar_body.dart';
 export 'buttons/button_create_general.dart';
 export 'buttons/buttons.dart';
 export 'cards/group_modify_subject_card.dart';
+export 'cards/group_card.dart';
+export 'package:aprende_mas/views/widgets/cards/subjects_scroll.dart';
 
 export 'structure/header_tile.dart';
 export 'structure/app_bar_home.dart';
