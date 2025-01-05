@@ -4,16 +4,41 @@ import 'package:aprende_mas/views/teacher/activities/options/create_activies/but
 import 'package:aprende_mas/views/widgets/inputs/custom_time_form_field.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 
-class FormActivities extends ConsumerWidget {
+class FormActivities extends ConsumerStatefulWidget {
   final int subjectId;
   final String nombreMateria;
-  const FormActivities(
-      {super.key, required this.subjectId, required this.nombreMateria});
+
+  const FormActivities({
+    super.key,
+    required this.subjectId,
+    required this.nombreMateria,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _FormActivitiesState();
+}
+
+class _FormActivitiesState extends ConsumerState<FormActivities> {
+  @override
+  Widget build(BuildContext context) {
     final activityForm = ref.watch(activityFormProvider);
-      debugPrint('FormActivities subjectId from: ${subjectId}');
+    final activityCreated = ref.read(activityFormProvider.notifier);
+
+    void goRouterPop() {
+      context.pop();
+    }
+
+    @override
+    void initState() {
+      super.initState();
+      final refreshKey = StateProvider<bool>((ref) => false);
+      // Escuchar el estado del formulario para actualizar la lista y navegar
+      ref.listen(activityFormProvider, (previous, next) {
+        if (next.isFormPosted) {
+          ref.read(refreshKey.notifier).state = true; // Actualiza el estado
+        }
+      });
+    }
 
     return Form(
       child: Padding(
@@ -21,6 +46,8 @@ class FormActivities extends ConsumerWidget {
         child: Column(
           children: [
             CustomTextFormField(
+                capitalizeFirstLetter: true,
+                textEditingController: activityCreated.nombreController,
                 label: 'Nombre Actividad',
                 onChanged:
                     ref.read(activityFormProvider.notifier).onNombreChanged,
@@ -31,6 +58,10 @@ class FormActivities extends ConsumerWidget {
               height: 20,
             ),
             CustomTextFormField(
+                enableLineBreak: true,
+                capitalizeFirstLetter: true,
+                customHeight: 60,
+                textEditingController: activityCreated.descripcionController,
                 label: 'Descripción',
                 onChanged: ref
                     .read(activityFormProvider.notifier)
@@ -42,48 +73,25 @@ class FormActivities extends ConsumerWidget {
               height: 20,
             ),
             CustomTimeFormField(
+              controller: activityCreated.fechaController,
               label: 'Fecha de Entrega',
               isDateField: true, // Habilita el selector de fecha
               hint: 'Selecciona la fecha',
               errorMessage: activityForm.fechaLimite.errorMessage,
-              onChanged: (value) {
-                final dateTime = DateTime.tryParse(value);
-                if (dateTime != null) {
-                  ref
-                      .read(activityFormProvider.notifier)
-                      .onFechaLimiteChanged(dateTime);
-                } else {
-                  print("Formato de fecha inválido: $value");
-                }
-              },
+              onChanged: ref.read(activityFormProvider.notifier).onFechaLimiteChanged
             ),
             const SizedBox(
               height: 20,
             ),
             CustomTimeFormField(
+              controller: activityCreated.horaController,
               label: 'Hora de Entrega',
               isTimeField: true, // Activa el selector de hora
               hint: 'Selecciona la hora',
               errorMessage: activityForm.horaLimite.errorMessage,
-              onChanged: (value) {
-                final timeParts = value.split(':');
-                if (timeParts.length == 2) {
-                  final now = DateTime.now();
-                  final dateTime = DateTime(
-                    now.year,
-                    now.month,
-                    now.day,
-                    int.tryParse(timeParts[0]) ?? 0,
-                    int.tryParse(timeParts[1]) ?? 0,
-                  );
-                  ref
-                      .read(activityFormProvider.notifier)
-                      .onHoraLimiteChanged(dateTime);
-                } else {
-                  print("Formato de hora inválido: $value");
-                }
-              },
+              onChanged: ref.read(activityFormProvider.notifier).onHoraLimiteChanged
             ),
+
             const SizedBox(
               height: 30,
             ),
@@ -91,8 +99,15 @@ class FormActivities extends ConsumerWidget {
               height: 50,
               child: ButtonActivityForm(
                   buttonName: 'Crear actividad',
-                  onPressed: () {
-                    ref.read(activityFormProvider.notifier).onFormSubmit(subjectId);
+                  onPressed: () async {
+                    if (!ref.read(activityFormProvider).isPosting) {
+                      await activityCreated.onFormSubmit(
+                          widget.subjectId, widget.nombreMateria);
+                    }
+                      if(activityForm.isFormPosted) {
+                        return goRouterPop();
+                      }
+                    // goRouterPop();
                   }),
             ),
           ],

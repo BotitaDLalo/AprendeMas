@@ -1,5 +1,6 @@
 import 'package:aprende_mas/views/widgets/activities_body/custom_container_style.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ActivityBodyModel extends StatelessWidget {
   final String nombreActividad;
@@ -16,6 +17,14 @@ class ActivityBodyModel extends StatelessWidget {
     required this.descripcion, 
     required this.subjectId,
   });
+
+  String _formatDate(DateTime date) {
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
+
+  String _formatTime(DateTime date) {
+    return DateFormat('HH:mm').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,7 @@ class ActivityBodyModel extends StatelessWidget {
                           fontWeight: FontWeight.bold, fontSize: 12),
                     ),
                     Text(
-                      'Publicado: $fechaCreacion',
+                      'Publicado: ${_formatDate(fechaCreacion)} ${_formatTime(fechaCreacion)}',
                       style: const TextStyle(fontSize: 8),
                     ),
                   ],
@@ -61,7 +70,7 @@ class ActivityBodyModel extends StatelessWidget {
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           ),
           Text(
-            '$fechaLimite', // Fecha límite dinámica
+            '${_formatDate(fechaLimite)} ${_formatTime(fechaLimite)}',
             style: const TextStyle(fontSize: 8),
           )
         ],
