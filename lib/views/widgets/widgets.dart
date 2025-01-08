@@ -17,3 +17,4 @@ export 'structure/form_screen.dart';
 export 'structure/app_bar_screens.dart';
 export 'structure/home_screen.dart';
 export 'structure/catalog_button_navigation_bar_items.dart';
+export 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';

@@ -13,7 +13,7 @@ export 'package:aprende_mas/views/teacher/groups_subjects/group_options/students
 export 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/group_options/group_teacher_options.dart';
-export 'package:aprende_mas/views/teacher/activities/activities_teacher_screen.dart';
+export 'package:aprende_mas/views/teacher/activities/teacher_subject_options_screen.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/groups_subjects_container.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/subjects_without_groups_container.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/groups_subjects_void.dart';

@@ -3,3 +3,7 @@ export 'package:aprende_mas/views/student/groups_subjects/groups_subjects_studen
 export 'package:aprende_mas/views/student/notices/notices_student_screen.dart';
 export 'package:aprende_mas/views/student/groups_subjects/subjects_without_groups_container.dart';
 export 'package:aprende_mas/views/student/groups_subjects/groups_subjects_container.dart';
+export 'package:aprende_mas/views/student/activities/student_subject_options_screen.dart';
+export 'package:aprende_mas/views/student/activities/student_subject_options.dart';
+export 'package:aprende_mas/views/student/activities/notice_options_screen.dart';
+export 'package:aprende_mas/views/student/activities/activities_options_screen.dart';
