@@ -1,11 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/firebase_options.dart';
 
-import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/providers/providers.dart';
-import 'package:aprende_mas/repositories/Implement_repos/notices/db_local_notices_repository_impl.dart';
-
-class FirebaseConfiguration {
+class FirebaseCMConfiguration {
+  @pragma('vm:entry-point')
   static Future<void> initializeFCM() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -30,16 +27,4 @@ class FirebaseConfiguration {
     final fcmToken = await FirebaseMessaging.instance.getToken();
     return fcmToken;
   }
-
-  // static Notice onMessagesForeground() {
-  //   Notice notice = Notice.noticeVoid();
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     if (message.notification != null) {
-  //       notice = onNewMessage(message);
-  //       print("CAYO UNA NOTIFICACION");
-  //     }
-  //   });
-  //   return notice;
-  // }
-
 }
