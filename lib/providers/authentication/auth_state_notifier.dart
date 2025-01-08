@@ -53,12 +53,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> loginGoogleUser() async {
     try {
       final user = await authRepository.loginGoogle();
-      _setLoggedGoogleUser(user);
+      if (user.rol != "") {
+        _setLoggedGoogleUser(user);
+      } else {
+        _setMissingDataGoogleUserConfirmed();
+      }
     } on ConnectionTimeout {
       logout('Timeout');
     } catch (e) {
       logout('Error no controlado');
     }
+  }
+
+  Future<void> missingDataGoogleUser(
+      String names, String lastname, String secondLastname, String role) async {
+    final user = await authRepository.registerMissingDataGoogle(
+        names, lastname, secondLastname, role);
+    _setLoggedGoogleUser(user);
+  }
+
+  _setMissingDataGoogleUserConfirmed() {
+    state = state.copyWith(theresMissingData: true);
   }
 
   Future<void> siginUser(
@@ -159,6 +174,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
     state = state.copyWith(
       authUser: user,
+      authenticatedType: AuthenticatedType.auth,
       authStatus: AuthStatus.authenticated,
       errorMessage: '',
     );
@@ -180,6 +196,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         user.userName);
     state = state.copyWith(
         authUser: user,
+        authenticatedType: AuthenticatedType.authGoogle,
         authGoogleStatus: AuthGoogleStatus.authenticated,
         errorMessage: '');
   }

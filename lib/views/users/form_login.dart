@@ -22,9 +22,19 @@ class FormLoginState extends ConsumerState<FormLogin> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
     final loginForm = ref.watch(loginFormProvider);
     final loginFormNotifier = ref.read(loginFormProvider.notifier);
     final fcm = ref.watch(firebasecmProvider);
+
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.theresMissingData) {
+          context.go("/missing-data");
+        }
+      },
+    );
 
     return Container(
       width: 350,
@@ -86,7 +96,7 @@ class FormLoginState extends ConsumerState<FormLogin> {
 
                 if (fcm.status == AuthorizationStatus.authorized) {
                   loginFormNotifier.onFormSubmit();
-                }else{
+                } else {
                   ref.read(firebasecmProvider.notifier).onRequestPermissions();
                 }
               },
