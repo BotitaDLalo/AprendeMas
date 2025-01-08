@@ -25,10 +25,6 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const LoginUserScreen(),
       ),
       GoRoute(
-        path: '/missing-data',
-        builder: (context, state) => const MissingDataScreen(),
-      ),
-      GoRoute(
         path: '/sigin-user',
         builder: (context, state) => const SinginUserScreen(),
       ),
@@ -127,36 +123,97 @@ final goRouterProvider = Provider((ref) {
       final authStatus = routerNotifier.authStatus;
       final authGoogleStatus = routerNotifier.authGoogleStatus;
       final authState = ref.read(authProvider);
+      final authUser = authState.authUser;
       final user = authState.user;
-      final role = authState.authUser?.rol;
+      final role = authUser?.rol;
       final roleGoogle = user?.rol;
-      final authType = authState.authenticatedType;
       print(isGoingTo);
 
-      if (authType != AuthenticatedType.undefined) {
-        if (authType == AuthenticatedType.auth) {
-          switch (authStatus) {
-            case AuthStatus.authenticated:
-              return RouterRedirections.redirectsToRoute(role, isGoingTo);
-            case AuthStatus.notAuthenticated:
-              return RouterRedirections.redirectNotAuthenticated(isGoingTo);
+      if (isGoingTo == routeAux) {
+        routeAux = "";
+        return null;
+      }
+      /*
+      *1. Si es googe o normal
 
-            default:
-              return "/login-user";
-          }
-        } else if (authType == AuthenticatedType.authGoogle) {
-          switch (authGoogleStatus) {
-            case AuthGoogleStatus.authenticated:
-              return RouterRedirections.redirectsToRoute(role, isGoingTo);
-            case AuthGoogleStatus.notAuthenticated:
-              return RouterRedirections.redirectNotAuthenticated(isGoingTo);
+      *2. Si se esta autenticado o no
+       */
+      if (role != "") {
+        switch (authStatus) {
+          case AuthStatus.authenticated:
+            switch (role) {
+              case "Docente":
+                switch (isGoingTo) {
+                  case "/create-group":
+                    return "/create-group";
 
-            default:
-              return "/login-user";
-          }
+                  case "/create-subject":
+                    return "/create-subject";
+
+                  case "/teacher-subject-options":
+                    return "/teacher-subject-options";
+
+                  case "/create-activities":
+                    return "/create-activities";
+
+                  case "/group-teacher-settings":
+                    return "/group-teacher-settings";
+
+                  case "/activities-options":
+                    return "/activities-options";
+
+                  case "/notification-content":
+                    return "/notification-content";
+                }
+                return "/teacher-home";
+              case "Alumno":
+                switch (isGoingTo) {
+                  //TODO: COLOCAR LAS RUTAS PARA USUARIO ALUMNO
+                }
+                return "/student-home";
+            }
+            break;
+
+          case AuthStatus.notAuthenticated:
+            switch (isGoingTo) {
+              case "/sigin-user":
+                return "/sigin-user";
+
+              case "/forgot-password":
+                return "/forgot-password";
+
+              case "/missing-data":
+                return "/missing-data";
+            }
+            return "/login-user";
+          default:
+            return null;
         }
-      } else {
-        return RouterRedirections.redirectNotAuthenticated(isGoingTo);
+      } else if (roleGoogle != "") {
+        switch (authGoogleStatus) {
+          case AuthGoogleStatus.authenticated:
+            switch (roleGoogle) {
+              case "Docente":
+                switch (isGoingTo) {
+                  case "/create-group":
+                    return "/create-group";
+
+                  case "/create-subject":
+                    return "/create-subject";
+                }
+                return "/teacher-home";
+              case "Alumno":
+                switch (isGoingTo) {
+                  //TODO: COLOCAR LAS RUTAS PARA USUARIO ALUMNO
+                }
+                return "/student-home";
+            }
+            break;
+
+          case AuthGoogleStatus.notAuthenticated:
+            break;
+          default:
+        }
       }
       return null;
     },
