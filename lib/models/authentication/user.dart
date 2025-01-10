@@ -4,4 +4,6 @@ class User {
   final String rol;
 
   User({required this.nombre, required this.email, required this.rol});
+
+  static User userVoid() => User(nombre: '', email: '', rol: '');
 }
