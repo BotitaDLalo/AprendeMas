@@ -4,12 +4,12 @@ import 'button_create_general.dart';
 
 class ActivitiesOptionScreen extends ConsumerStatefulWidget {
   final int subjectId;
-  final String nombreMateria;
+  final String subjectName;
 
   const ActivitiesOptionScreen({
     super.key, 
     required this.subjectId,
-    required this.nombreMateria
+    required this.subjectName
   });
 
   @override
@@ -26,7 +26,7 @@ class _ActivityOptionState extends ConsumerState<ActivitiesOptionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ButtonCreateGeneral( subjectId: widget.subjectId, nombreMateria: widget.nombreMateria,),  
+          ButtonCreateGeneral( subjectId: widget.subjectId, nombreMateria: widget.subjectName,),  
           const SizedBox(height: 10),
           // Asegúrate de envolver ActivityList en un ListView
           Expanded(

@@ -4,13 +4,13 @@ import 'package:aprende_mas/views/widgets/activities_body/container_subject_name
 import 'package:aprende_mas/views/widgets/activities_body/options_activities.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
   final itemTappedProvider = StateProvider<int>((ref) => 0);
-class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
+class TeacherSubjectOptionsScreen extends ConsumerStatefulWidget {
   final int subjectId;
   final String subjectName;
   final String description;
   final String codeAccess;
 
-  const ActivitiesTeacherScreen(
+  const TeacherSubjectOptionsScreen(
       {super.key,
       required this.subjectId,
       required this.subjectName,
@@ -21,17 +21,7 @@ class ActivitiesTeacherScreen extends ConsumerStatefulWidget {
       _ActividadesScreenState();
 }
 
-class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
-  // int selectedOptionIndex = 0; // Estado para la opción seleccionada
-
-  // void onOptionSelected(int index) {
-  //   setState(() {
-  //     selectedOptionIndex = index; // Actualiza el índice seleccionado
-  //   });
-  // }
-
-
-
+class _ActividadesScreenState extends ConsumerState<TeacherSubjectOptionsScreen> {
   void onOptionSelected(int index) {
     ref.read(itemTappedProvider.notifier).state = index;
   }
@@ -46,15 +36,15 @@ class _ActividadesScreenState extends ConsumerState<ActivitiesTeacherScreen> {
     Widget getContent() {
       switch (ref.read(itemTappedProvider)) {
         case 0:
-          return const NoticeOptionsScreen(); // Tu pantalla de avisos
+          return const NoticeOptionsScreen();
         case 1:
-         return ActivitiesOptionScreen(subjectId: widget.subjectId, nombreMateria: widget.subjectName,);  // Tu pantalla de actividades
+         return ActivitiesOptionScreen(subjectId: widget.subjectId, subjectName: widget.subjectName,);
         case 2:
-          return const StudentsOptionsScreen(); // Tu pantalla de alumnos
+          return const StudentsOptionsScreen();
         case 3:
-          return const RatingsOptionsScreen(); // Tu pantalla de calificaciones
+          return const RatingsOptionsScreen();
         default:
-          return ActivitiesOptionScreen(subjectId: widget.subjectId, nombreMateria: widget.subjectName); // Por defecto, pantalla de actividades
+          return ActivitiesOptionScreen(subjectId: widget.subjectId, subjectName: widget.subjectName);
       }
     }
 

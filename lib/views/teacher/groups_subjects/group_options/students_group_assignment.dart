@@ -143,6 +143,7 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                                 ),
                                 title: Text(
                                   email.email,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(fontSize: 16.5),
                                 ),
                                 trailing: IconButton(

@@ -1,9 +1,9 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-class OptionsActivities extends StatelessWidget {
+
+class StudentSubjectOptions extends StatelessWidget {
   final ValueChanged<int> onOptionSelected;
   final int selectedOptionIndex;
-
-  const OptionsActivities({
+  const StudentSubjectOptions({
     super.key,
     required this.onOptionSelected,
     required this.selectedOptionIndex,
@@ -24,12 +24,6 @@ class OptionsActivities extends StatelessWidget {
               break;
             case 1:
               optionText = 'Actividades';
-              break;
-            case 2:
-              optionText = 'Alumnos';
-              break;
-            case 3:
-              optionText = 'Calificaciones';
               break;
             default:
               optionText = '';
@@ -71,5 +65,4 @@ class OptionsActivities extends StatelessWidget {
       ),
     );
   }
-
 }

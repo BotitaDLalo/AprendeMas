@@ -1,5 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'users.dart';
 
 class NoticesScreen extends ConsumerStatefulWidget {
   const NoticesScreen({super.key});
@@ -10,10 +12,16 @@ class NoticesScreen extends ConsumerStatefulWidget {
 
 class NoticesScreenState extends ConsumerState<NoticesScreen> {
   @override
+  void initState() {
+    super.initState();
+
+    ref.read(noticesProvider.notifier).getLsNotices();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final lsNotices = ref.watch(noticesProvider);
     final noticesNotifier = ref.read(noticesProvider.notifier);
-
     showModalBottom(String sentDate) {
       showModalBottomSheet(
         context: context,
@@ -60,11 +68,10 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
                   },
                   child: ListTile(
                     leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          8), // Radio de los bordes, controla lo redondeado
+                      borderRadius: BorderRadius.circular(8),
                       child: Container(
-                        width: 40, // Establece el ancho
-                        height: 40, // Establece la altura
+                        width: 40,
+                        height: 40,
                         color: Colors.grey[300],
                         child: const Icon(Icons.notifications,
                             color: Colors.black),
@@ -86,24 +93,12 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
                       ),
                     ),
                     onTap: () {
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return AlertDialog(
-                      //       title: const Text('Modal Centrado'),
-                      //       content: const Text(
-                      //           'Este es un modal centrado con opciones.'),
-                      //       actions: [
-                      //         TextButton(
-                      //           onPressed: () {
-                      //             Navigator.of(context).pop();
-                      //           },
-                      //           child: const Text('Cerrar'),
-                      //         ),
-                      //       ],
-                      //     );
-                      //   },
-                      // );
+                      Notice notice = Notice(
+                          messageId: notification.messageId,
+                          title: notification.title,
+                          body: notification.body,
+                          sentDate: notification.sentDate);
+                      context.push('/notification-content', extra: notice);
                     },
                   ),
                 );

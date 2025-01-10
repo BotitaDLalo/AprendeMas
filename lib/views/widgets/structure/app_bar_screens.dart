@@ -20,7 +20,7 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
 
     return AppBar(
       flexibleSpace: Container(
-        decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
+        // decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
       ),
       leading: IconButton(
           onPressed: () {

@@ -20,7 +20,7 @@ class _FormMissingDataState extends ConsumerState<FormMissingData> {
     final missingDataNotifier = ref.read(missingDataFormProvider.notifier);
 
     return Container(
-      width: 350,
+      width: MediaQuery.of(context).size.width * 1.90,
       height: MediaQuery.of(context).size.height * 0.60,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(

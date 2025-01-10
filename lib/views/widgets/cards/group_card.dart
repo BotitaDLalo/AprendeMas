@@ -35,13 +35,10 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
   @override
   void initState() {
     super.initState();
-    // Inicializa el controlador de animación
     _controller = AnimationController(
       vsync: this,
       duration: widget.animationDuration,
     );
-
-    // Configura la animación con Curves.easeInOut para suavizar la animación
   }
 
   void _toggleExpand() {
@@ -69,9 +66,10 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
       context.push('/group-teacher-settings', extra: data);
     }
 
-    void pushGroupStudentSettings(Group data) {
-      context.push('/group-student-settings', extra: data);
-    }
+    // void pushGroupStudentSettings(Group data) {
+    //   // context.push('/group-student-settings', extra: data);
+    //   context.push("/", extra:data);
+    // }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +119,7 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
                       if (role == cn.getRoleTeacherName) {
                         pushGroupTeacherSettings(data);
                       } else if (role == cn.getRoleStudentName) {
-                        pushGroupStudentSettings(data);
+                        // pushGroupStudentSettings(data);
                       }
                     },
                   ),

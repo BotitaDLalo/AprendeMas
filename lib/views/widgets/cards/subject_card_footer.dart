@@ -1,6 +1,7 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
+import 'package:aprende_mas/config/data/data.dart';
 
 class CustomFooterContainer extends StatelessWidget {
   final int subjectId;
@@ -14,6 +15,8 @@ class CustomFooterContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cn = CatalogNames();
+    final storageService = KeyValueStorageServiceImpl();
     return Container(
       width: double.infinity,
       height: 48,
@@ -28,7 +31,10 @@ class CustomFooterContainer extends StatelessWidget {
                     nombreMateria: subjectName,
                     descripcion: description);
 
-                context.push('/activities', extra: data);
+                    final futureRole = storageService.getRole().then((value) => value,);
+
+
+                context.push('/teacher-subject-options', extra: data);
               },
               icon: const Icon(Icons.assignment)),
           // const SizedBox(
