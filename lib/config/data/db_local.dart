@@ -6,6 +6,7 @@ class DbLocal {
     try {
       final databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'Movil.db');
+      // await deleteDatabase(path);
       bool exist = await File(path).exists();
 
       if (!exist) {
@@ -29,6 +30,18 @@ class DbLocal {
         return db;
       } else {
         Database db = await openDatabase(path, version: 1);
+        
+        // final result = await db
+        //     .rawQuery('SELECT name FROM sqlite_master WHERE type="table"');
+        // print("TABLAS CREADAS PERO LA BD EXISTE");
+        // print(result);
+        // final res = await db.rawQuery('SELECT * FROM tbNotificaciones');
+        // final res2 = await db.rawQuery('SELECT * FROM tbUsuarioActivo');
+        // print("NOTIFICACIONES activo EN DB init");
+        // print(res);
+        // print('');
+        // print('USUARIO ACTIVO EN DB init');
+        // print(res2);
         return db;
       }
     } catch (e) {

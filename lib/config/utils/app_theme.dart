@@ -99,11 +99,7 @@ static final List<Color> availableColors = [
       borderRadius: BorderRadius.circular(50), // border radius
     ),
   );
-
-  // final FilledButtonThemeData filledButtonThemeData = FilledButtonThemeData(
-  //     style: ButtonStyle(
-  //         backgroundColor: WidgetStatePropertyAll(_colorThemes[1])));
-
+  
   static Color stringToColor(String hexColor) {
     Color colorCode = Color(int.parse("0xFF$hexColor"));
     return colorCode;
