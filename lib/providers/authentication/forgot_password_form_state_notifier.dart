@@ -1,7 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/forgot_password_form_state.dart';
 import 'package:aprende_mas/views/widgets/inputs/email.dart';
-import 'package:formz/formz.dart';
 
 class ForgotPasswordFormStateNotifier
     extends StateNotifier<ForgotPasswordFormState> {

@@ -17,7 +17,7 @@ final authProvider = StateNotifierProvider<AuthStateNotifier,AuthState>((ref){
   return AuthStateNotifier(
     dbLocalUser: dbLocalUser,
     authRepository: authStateRepository, 
-    keyValueStorageService: keyValueStorageService,
+    kv: keyValueStorageService,
     googleSigninApi: googleSigninApi
     );
 });

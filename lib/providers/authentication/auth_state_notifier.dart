@@ -10,7 +10,7 @@ import 'package:aprende_mas/config/services/services.dart';
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final AuthRepository authRepository;
 
-  final KeyValueStorageService keyValueStorageService;
+  final KeyValueStorageService kv;
 
   final GoogleSigninApi googleSigninApi;
 
@@ -19,7 +19,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   AuthStateNotifier({
     required this.dbLocalUser,
     required this.authRepository,
-    required this.keyValueStorageService,
+    required this.kv,
     required this.googleSigninApi,
   }) : super(AuthState()) {
     checkInternet();
@@ -56,7 +56,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       if (user.rol != "") {
         _setLoggedGoogleUser(user);
       } else {
-        _setMissingDataGoogleUserConfirmed();
+        _setMissingDataGoogleUserConfirmed(user.token);
       }
     } on ConnectionTimeout {
       logout('Timeout');
@@ -72,19 +72,28 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     _setLoggedGoogleUser(user);
   }
 
-  _setMissingDataGoogleUserConfirmed() {
+  _setMissingDataGoogleUserConfirmed(String token) async {
+    await kv.setKeyValue(kv.keyTokenName(), token);
     state = state.copyWith(theresMissingData: true);
   }
 
-  Future<void> siginUser(
-      String name, String email, String password, String role) async {
+  Future<bool> siginUser(String names, String lastName, String secondLastName,
+      String email, String password, String role) async {
     try {
-      final user = await authRepository.signin(name, email, password, role);
-      _setRegisterUser(user);
+      final user = await authRepository.signin(
+          names, lastName, secondLastName, email, password, role);
+
+      if (user.email != "" && user.nombre != "" && user.rol != "") {
+        _setRegisterUser(user);
+        return true;
+      }
+      return false;
     } on ConnectionTimeout {
       logoutGoogle('Timeout');
+      return false;
     } catch (e) {
       logoutGoogle('Error no controlado');
+      return false;
     }
   }
 
@@ -104,7 +113,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthStatus() async {
     try {
       const caller = "checkAuthStatus";
-      final token = await keyValueStorageService.getToken();
+      final token = await kv.getToken();
       if (token == "") return logout();
       final user = await authRepository.checkAuthStatus(token);
       _setLoggedUser(caller, user);
@@ -116,7 +125,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthGoogleStatus() async {
     try {
       // final currentUser = await googleSigninApi.verifyExistingUser();
-      final token = await keyValueStorageService.getToken();
+      final token = await kv.getToken();
       if (token == "") return logoutGoogle();
       final user = await googleSigninApi.checkSignInStatus(token);
       _setLoggedGoogleUser(user);
@@ -153,15 +162,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
     //TODO:
     // await keyValueStorageService.setKeyValue( 'token', user.token, 'id', user.id, 'role', user.rol);
-    _setKeyValueStorage(
-        keyValueStorageService.keyTokenName(),
-        user.token,
-        keyValueStorageService.keyIdName(),
-        user.id,
-        keyValueStorageService.keyRoleName(),
-        user.rol,
-        keyValueStorageService.keyUserName(),
-        user.userName);
+    _setKeyValueStorage(kv.keyTokenName(), user.token, kv.keyIdName(), user.id,
+        kv.keyRoleName(), user.rol, kv.keyUserName(), user.userName);
     if (caller == "loginUser") {
       await dbLocalUser.insertUser(
           user.id, user.userName, user.email, date7Days.toString(), user.rol);
@@ -185,15 +187,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     // await keyValueStorageService.setKeyValue('idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
     // _setKeyValueStorage(
     //     'idTokenGoogle', user.token, 'id', user.id, 'role', user.rol);
-    _setKeyValueStorage(
-        keyValueStorageService.keyTokenName(),
-        user.token,
-        keyValueStorageService.keyIdName(),
-        user.id,
-        keyValueStorageService.keyRoleName(),
-        user.rol,
-        keyValueStorageService.keyUserName(),
-        user.userName);
+    _setKeyValueStorage(kv.keyTokenName(), user.token, kv.keyIdName(), user.id,
+        kv.keyRoleName(), user.rol, kv.keyUserName(), user.userName);
     state = state.copyWith(
         authUser: user,
         authenticatedType: AuthenticatedType.authGoogle,
@@ -217,11 +212,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout([String? errorMessage]) async {
-    await keyValueStorageService.removeKey(
-        keyValueStorageService.keyTokenName(),
-        keyValueStorageService.keyIdName(),
-        keyValueStorageService.keyRoleName(),
-        keyValueStorageService.keyUserName());
+    await kv.removeKey(
+        kv.keyTokenName(), kv.keyIdName(), kv.keyRoleName(), kv.keyUserName());
     await dbLocalUser.deleteUser();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
@@ -232,11 +224,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> logoutGoogle([String? errorMessage]) async {
     try {
       await googleSigninApi.handlerGoogleLogout();
-      await keyValueStorageService.removeKey(
-          keyValueStorageService.keyTokenName(),
-          keyValueStorageService.keyIdName(),
-          keyValueStorageService.keyRoleName(),
-          keyValueStorageService.keyUserName());
+      await kv.removeKey(kv.keyTokenName(), kv.keyIdName(), kv.keyRoleName(),
+          kv.keyUserName());
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           user: null,
@@ -261,9 +250,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       T valueRole,
       String keyUserName,
       T valueUserName) async {
-    await keyValueStorageService.setKeyValue(keyToken, valueToken);
-    await keyValueStorageService.setKeyValue(keyId, valueId);
-    await keyValueStorageService.setKeyValue(keyRole, valueRole);
-    await keyValueStorageService.setKeyValue(keyUserName, valueUserName);
+    await kv.setKeyValue(keyToken, valueToken);
+    await kv.setKeyValue(keyId, valueId);
+    await kv.setKeyValue(keyRole, valueRole);
+    await kv.setKeyValue(keyUserName, valueUserName);
   }
 }

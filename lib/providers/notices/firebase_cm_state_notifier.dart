@@ -11,7 +11,7 @@ class FirebasecmStateNotifier extends StateNotifier<FirebasecmState> {
 
   void onRequestPermissions() async {
     NotificationSettings settings =
-        await FirebaseConfiguration.requestPermission();
+        await FirebaseCMConfiguration.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
