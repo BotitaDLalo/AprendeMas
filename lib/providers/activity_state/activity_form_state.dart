@@ -1,36 +1,42 @@
+import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
-import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
+// import 'package:aprende_mas/views/widgets/inputs/hour_input.dart';
+// import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
 
 class ActivityFormState {
+  final List<Activity> activities;
   final bool isPosting; // Indica si se está enviando el formulario
   final bool isFormPosted;
   final bool isValid; // Indica si el formulario es válido
   final GenericInput nombre; // Validación del campo 'nombre'
   final GenericInput descripcion; // Validación del campo 'descripcion'
-  final TimeInput fechaLimite;
-  final TimeInput horaLimite;
+  final GenericInput fechaLimite;
+  final GenericInput horaLimite;
 
   ActivityFormState({
+    this.activities = const [],
     this.isPosting = false,
     this.isFormPosted = false,
     this.isValid = false,
     this.nombre = const GenericInput.pure(),
     this.descripcion = const GenericInput.pure(),
-    this.fechaLimite = const TimeInput.pure(),
-    this.horaLimite = const TimeInput.pure()
+    this.fechaLimite = const GenericInput.pure(),
+    this.horaLimite = const GenericInput.pure()
   });
 
   // Método para crear una nueva instancia con campos actualizados
   ActivityFormState copyWith({
+    List<Activity>? activities,
     bool? isPosting,
     bool? isFormPosted,
     bool? isValid,
     GenericInput? nombre,
     GenericInput? descripcion,
-    TimeInput? fechaLimite,
-    TimeInput? horaLimite,
+    GenericInput? fechaLimite,
+    GenericInput? horaLimite,
   }) =>
       ActivityFormState(
+          activities: activities ?? this.activities,
           isPosting: isPosting ?? this.isPosting,
           isFormPosted: isFormPosted ?? this.isFormPosted,
           isValid: isValid ?? this.isValid,

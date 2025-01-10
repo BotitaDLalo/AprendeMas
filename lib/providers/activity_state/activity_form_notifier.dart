@@ -1,11 +1,10 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/activity_state/activity_form_state.dart';
 import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
-import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
+// import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
 
 class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final Function(int, String, String, DateTime) activityCallback;
-  // late int? materiaId;
   final TextEditingController nombreController;
   final TextEditingController descripcionController;
   final TextEditingController fechaController;
@@ -18,11 +17,6 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         descripcionController = TextEditingController(),
         super(ActivityFormState());
 
-  // void setMateriaId(int materiaId) {
-  //   this.materiaId = materiaId;
-  // }
-
-  // Actualiza el campo 'nombre'
   onNombreChanged(String value) {
     final newNombre = GenericInput.dirty(value);
     state = state.copyWith(
@@ -51,106 +45,130 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   }
 
   // Actualiza el campo 'fechaEntrega'
-  onFechaLimiteChanged(DateTime value) {
-    final newHoraLimite = TimeInput.dirty(value);
-    state = state.copyWith(
-      horaLimite: newHoraLimite,
-      isValid: Formz.validate([
-        state.nombre,
-        state.descripcion,
-        newHoraLimite,
-        state.fechaLimite,
-      ]),
-    );
-  }
+onFechaLimiteChanged(String value) {
+  final newFechaLimite = GenericInput.dirty(value);
+  state = state.copyWith(
+    fechaLimite: newFechaLimite, // Corregido: Asigna a 'fechaLimite'
+    isValid: Formz.validate([
+      state.nombre,
+      state.descripcion,
+      state.horaLimite,
+      newFechaLimite, // Valida correctamente 'fechaLimite'
+    ]),
+  );
+}
 
-  // Actualiza el campo 'horaEntrega'
-  onHoraLimiteChanged(DateTime value) {
-    final newFechaLimite = TimeInput.dirty(value);
-    state = state.copyWith(
-      fechaLimite: newFechaLimite,
-      isValid: Formz.validate([
-        state.nombre,
-        state.descripcion,
-        state.horaLimite,
-        newFechaLimite,
-      ]),
-    );
-  }
+// Actualiza el campo 'horaEntrega'
+onHoraLimiteChanged(String value) {
+  final newHoraLimite = GenericInput.dirty(value);
+  state = state.copyWith(
+    horaLimite: newHoraLimite, // Corregido: Asigna a 'horaLimite'
+    isValid: Formz.validate([
+      state.nombre,
+      state.descripcion,
+      state.fechaLimite,
+      newHoraLimite, // Valida correctamente 'horaLimite'
+    ]),
+  );
+}
 
-  DateTime? _getFechaHoraConcatenada() {
-    try {
-      // Verificar que la fecha no sea nula.
-      final fecha = state.fechaLimite.value;
-      if (fecha == null) {
-        throw Exception("La fecha es nula");
-      }
 
-      // Verificar que la hora no sea nula.
-      final hora = state.horaLimite.value;
-      if (hora == null) {
-        throw Exception("La hora es nula");
-      }
-
-      // Combinar fecha y hora en un objeto DateTime.
-      return DateTime(
-        fecha.year,
-        fecha.month,
-        fecha.day,
-        hora.hour,
-        hora.minute,
-      );
-    } catch (e) {
-      print("Error al concatenar fecha y hora: $e");
-      return null; // Retorna null si hay un error.
+  DateTime? _getFechaHoraConcatenada() {  
+  try {
+    // Obtener y parsear la fecha
+    final fechaStr = state.fechaLimite.value;
+    if (fechaStr.isEmpty) {
+      throw Exception("La fecha es nula o está vacía");
     }
-  }
-
-  onFormSubmit(int subjectId) async {
-    _touchEveryField();
-
-    if (!state.isValid) return; // Detener si el formulario no es válido.
-
-    // Realizar la concatenación de fecha y hora.
-    final fechaHoraConcatenada = _getFechaHoraConcatenada();
-    if (fechaHoraConcatenada == null) {
-      // Manejar el caso en que la concatenación falle, si es necesario.
-      print("Error: Fecha u hora inválida.");
-      return;
+    final fecha = DateTime.tryParse(fechaStr);
+    if (fecha == null) {
+      throw Exception("Formato de fecha inválido: $fechaStr");
     }
 
-    state = state.copyWith(isPosting: true);
+    // Obtener y parsear la hora
+    final horaStr = state.horaLimite.value;
+    if (horaStr.isEmpty) {
+      throw Exception("La hora es nula o está vacía");
+    }
+    final horaParts = horaStr.split(':');
+    if (horaParts.length != 2) {
+      throw Exception("Formato de hora inválido: $horaStr");
+    }
+    final hora = int.tryParse(horaParts[0]) ?? 0;
+    final minuto = int.tryParse(horaParts[1]) ?? 0;
 
-    // Llamar el callback con los valores requeridos.
-    await activityCallback(
+    // Combinar fecha y hora en un objeto DateTime
+    return DateTime(
+      fecha.year,
+      fecha.month,
+      fecha.day,
+      hora,
+      minuto,
+    );
+  } catch (e) {
+    return null; // Retorna null si hay un error
+  }
+}
+
+  Future<void> onFormSubmit(int subjectId, String nombreMateria) async {
+  // Verificar que no haya una petición en curso
+  if (state.isPosting) return;
+
+  _touchEveryField();
+
+  // Concatenar fecha y hora
+  final fechaHoraConcatenada = _getFechaHoraConcatenada();
+  if (fechaHoraConcatenada == null) {
+     throw Exception("onFormSubmit Error: Fecha u hora inválida.");
+  }
+
+  // Validar el formulario
+  if (!state.isValid) return;
+ 
+
+  // Marcar el inicio de la petición
+  state = state.copyWith(isPosting: true);
+
+  try {
+    // Llamar al callback y obtener el resultado
+    bool res = await activityCallback(
       subjectId,
       state.nombre.value,
       state.descripcion.value,
       fechaHoraConcatenada,
     );
 
+    // Actualizar el estado según el resultado
+    state = state.copyWith(isFormPosted: res);
+  } catch (e) {
+    throw Exception("Error durante la petición: $e");
+  } finally {
+    // Marcar el fin de la petición y resetear el formulario si fue exitoso
     state = state.copyWith(isPosting: false);
-    resetStateForm();
-    print(" onFormSubmit : $state");
+    if (state.isFormPosted) {
+      resetStateForm();
+    }
   }
+}
+
 
   _touchEveryField() {
     final nombre = GenericInput.dirty(state.nombre.value);
     final descripcion = GenericInput.dirty(state.descripcion.value);
-    final horaLimite = TimeInput.dirty(state.horaLimite.value);
-    final fechaLimite = TimeInput.dirty(state.fechaLimite.value);
+    final fechaLimite = GenericInput.dirty(state.fechaLimite.value);
+    final horaLimite = GenericInput.dirty(state.horaLimite.value);
 
     state = state.copyWith(
         isFormPosted: true,
         nombre: nombre,
         descripcion: descripcion,
-        horaLimite: horaLimite,
         fechaLimite: fechaLimite,
+        horaLimite: horaLimite,
         isValid:
-            Formz.validate([nombre, descripcion, horaLimite, fechaLimite]));
+            Formz.validate([nombre, descripcion, fechaLimite, horaLimite]));
   }
 
-  resetStateForm() {
+  void resetStateForm() {
     nombreController.clear();
     descripcionController.clear();
     fechaController.clear();
@@ -158,4 +176,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     state = ActivityFormState();
     print("Formulario reseteado: $state");
   }
+
 }
+
+
