@@ -1,33 +1,16 @@
 import 'package:aprende_mas/config/data/key_value_storage_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class KeyValueStorageServiceImpl implements KeyValueStorageService {
+  final cn = CatalogNames();
+
   Future<SharedPreferences> getSharedPrefs() async {
     return await SharedPreferences.getInstance();
   }
 
   @override
-  String keyIdName() {
-    return 'id';
-  }
-
-  @override
-  String keyRoleName() {
-    return 'role';
-  }
-
-  @override
-  String keyTokenName() {
-    return 'token';
-  }
-
-  @override
-  String keyUserName() {
-    return 'username';
-  }
-
-  @override
-  Future<bool> removeKey(
+  Future<bool> removeKeyValue(
       String keyToken, String keyId, String keyRole, String keyUserName) async {
     final prefs = await getSharedPrefs();
     bool removeToken = await prefs.remove(keyToken);
@@ -47,89 +30,50 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
       prefs.setInt(key, value as int);
     } else if (value is String) {
       prefs.setString(key, value as String);
+    } else if (value is Enum) {
+      prefs.setString(key, value.toString());
     } else {
       throw UnimplementedError('Set not implemented for type ${T.runtimeType}');
     }
   }
 
   @override
-  Future<T?> getValueId<T>(String keyId) async {
+  Future<T?> getValue<T>(String key) async {
     final prefs = await getSharedPrefs();
     switch (T) {
       case const (int):
-        return prefs.getInt(keyId) as T?;
+        return prefs.getInt(key) as T?;
       case const (String):
-        return prefs.getString(keyId) as T?;
+        return prefs.getString(key) as T?;
 
       default:
         throw UnimplementedError(
             'Set not implemented for type ${T.runtimeType}');
     }
   }
-
-  @override
-  Future<T?> getValueRole<T>(String keyRole) async {
-    final prefs = await getSharedPrefs();
-    switch (T) {
-      case const (int):
-        return prefs.getInt(keyRole) as T?;
-      case const (String):
-        return prefs.getString(keyRole) as T?;
-
-      default:
-        throw UnimplementedError(
-            'Set not implemented for type ${T.runtimeType}');
-    }
-  }
-
-  @override
-  Future<T?> getValueToken<T>(String keyToken) async {
-    final prefs = await getSharedPrefs();
-    switch (T) {
-      case const (int):
-        return prefs.getInt(keyToken) as T?;
-      case const (String):
-        return prefs.getString(keyToken) as T?;
-
-      default:
-        throw UnimplementedError(
-            'Set not implemented for type ${T.runtimeType}');
-    }
-  }
-
-  @override
-  Future<T?> getValueUserName<T>(String keyUserName) async {
-    final prefs = await getSharedPrefs();
-    switch (T) {
-      case const (int):
-        return prefs.getInt(keyUserName) as T?;
-      case const (String):
-        return prefs.getString(keyUserName) as T?;
-
-      default:
-        throw UnimplementedError(
-            'Set not implemented for type ${T.runtimeType}');
-    }
-  }
-
 
   @override
   Future<int> getId() async {
-    return await getValueId<int>(keyIdName()) ?? -1;
+    return await getValue<int>(cn.getKeyIdName) ?? -1;
   }
 
   @override
   Future<String> getRole() async {
-    return await getValueRole<String>(keyRoleName()) ?? "";
+    return await getValue<String>(cn.getKeyRoleName) ?? "";
   }
 
   @override
   Future<String> getToken() async {
-    return await getValueToken<String>(keyTokenName()) ?? "";
+    return await getValue<String>(cn.getKeyTokenName) ?? "";
   }
 
   @override
   Future<String> getUserName() async {
-    return await getValueUserName<String>(keyUserName()) ?? "";
+    return await getValue<String>(cn.getKeyUserName) ?? "";
+  }
+
+  @override
+  Future<String> getAuthType() async {
+    return await getValue<String>(cn.getKeyAuthTypeName) ?? "";
   }
 }
