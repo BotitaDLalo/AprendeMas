@@ -5,10 +5,15 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   await Environment.initEnvironment();
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   await FirebaseCMConfiguration.initializeFCM();
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -22,7 +27,7 @@ class MainApp extends ConsumerWidget {
         final notices = ref.read(noticesProvider.notifier);
         Notice notice = FirebaseCM.onNewMessage(message);
         notices.onNewNotice(notice);
-        print("CAYO UNA NOTIFICACION");
+        debugPrint("CAYO UNA NOTIFICACION");
       }
     });
   }
