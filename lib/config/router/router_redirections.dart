@@ -6,19 +6,23 @@ class RouterRedirections {
     "/create-activities",
     "/group-teacher-settings",
     "/activities-options",
-    '/notification-content'
+    "/notification-content",
+    "/teacher-activity-settings"
   ];
 
-  static List<String> routesStudent = ["/"];
+  static List<String> routesStudent = [
+    "/student-subject-options",
+    "/student-activity-section-submissions"
+  ];
 
-  static List<String> routesNotNotAuthenticated = [
+  static List<String> routesNotAuthenticated = [
     "/sigin-user",
     "/forgot-password",
     "/missing-data",
   ];
 
   static String redirectNotAuthenticated(String isGoingTo) =>
-      routesNotNotAuthenticated.contains(isGoingTo) ? isGoingTo : "/login-user";
+      routesNotAuthenticated.contains(isGoingTo) ? isGoingTo : "/login-user";
 
   static String redirectsToRoute(String? role, String isGoingTo) {
     try {

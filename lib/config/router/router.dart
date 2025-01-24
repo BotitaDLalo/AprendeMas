@@ -7,19 +7,21 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 String routeAux = "";
+List<GoRoute> lsRouter = [];
 final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/loading',
+    // initialLocation: '/loading',
     refreshListenable: routerNotifier,
     routes: [
-      GoRoute(
-        path: '/loading',
-        builder: (context, state) => const LoadingScreen(),
-      ),
+      // GoRoute(
+      //   path: '/loading',
+      //   builder: (context, state) => const LoadingScreen(),
+      // ),
       GoRoute(
         path: '/login-user',
         builder: (context, state) => const LoginUserScreen(),
@@ -69,11 +71,13 @@ final goRouterProvider = Provider((ref) {
         path: '/teacher-subject-options',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
+          debugPrint(subjectData.groupId.toString());
           return TeacherSubjectOptionsScreen(
-            subjectId: subjectData.subjectId,
+            groupId: subjectData.groupId,
+            subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
-            codeAccess: subjectData.codeAccess ?? "",
+            codeAccess: subjectData.codigoAcceso ?? "",
           );
         },
       ),
@@ -82,7 +86,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final subjectData = state.extra as Subject;
           return ActivitiesOptionScreen(
-            subjectId: subjectData.subjectId,
+            subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
           );
         },
@@ -92,9 +96,9 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final subjectData = state.extra as Subject;
           debugPrint(
-              'Route /create-activity: subjectId: ${subjectData.subjectId}, nombreMateria: ${subjectData.nombreMateria}');
+              'Route /create-activity: subjectId: ${subjectData.materiaId}, nombreMateria: ${subjectData.nombreMateria}');
           return CreateActivitiesScreen(
-              subjectId: subjectData.subjectId,
+              subjectId: subjectData.materiaId,
               nombreMateria: subjectData.nombreMateria);
         },
       ),
@@ -103,7 +107,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final subjectData = state.extra as Subject;
           return StudentSubjectOptionsScreen(
-            subjectId: subjectData.subjectId,
+            subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
           );
@@ -120,6 +124,22 @@ final goRouterProvider = Provider((ref) {
             sentDate: notificationData.sentDate,
           );
         },
+      ),
+      GoRoute(
+        path: '/teacher-activity-settings',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+
+          return ActivitySettings(activity: activity);
+        },
+      ),
+      GoRoute(
+        path: '/student-activity-section-submissions',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+
+          return ActivitySectionSubmissions(activity: activity);
+        },
       )
     ],
     redirect: (context, state) {
@@ -131,7 +151,7 @@ final goRouterProvider = Provider((ref) {
       final role = authState.authUser?.rol;
       final roleGoogle = user?.rol;
       final authType = authState.authenticatedType;
-      print(isGoingTo);
+      debugPrint(isGoingTo);
 
       if (authType != AuthenticatedType.undefined) {
         if (authType == AuthenticatedType.auth) {
