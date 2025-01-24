@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
   const GroupsSubjectsContainer({super.key});
@@ -15,7 +16,10 @@ class _GroupsSubjectsContainerState
   @override
   void initState() {
     super.initState();
-    ref.read(groupsProvider.notifier).getGroupsSubjects();
+    final authConectionType = ref.read(authProvider).authConectionType;
+    if (authConectionType == AuthConectionType.online) {
+      ref.read(groupsProvider.notifier).getGroupsSubjects();
+    } else if (authConectionType == AuthConectionType.offline) {}
   }
 
   @override

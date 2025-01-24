@@ -31,7 +31,7 @@ class _StudentSubjectOptionsScreenState
       case 0:
         return const NoticeOptionsScreen();
       case 1:
-        return const ActivitiesOptionsScreen();
+        return ActivitiesOptionScreen(subjectId: widget.subjectId, subjectName: widget.subjectName);
       default:
         return const SizedBox();
     }
