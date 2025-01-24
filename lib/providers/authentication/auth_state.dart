@@ -1,12 +1,5 @@
 import 'package:aprende_mas/models/models.dart';
-
-enum AuthStatus { checking, authenticated, notAuthenticated }
-enum AuthenticatedType {auth, authGoogle, undefined}
-
-enum AuthGoogleStatus { checking, authenticated, notAuthenticated }
-
-enum RegisterStatus { registered, notRegistered }
-
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class AuthState {
   final AuthStatus? authStatus;
@@ -17,6 +10,7 @@ class AuthState {
   final String errorMessage;
   final AuthGoogleStatus? authGoogleStatus;
   final bool theresMissingData;
+  final AuthConectionType authConectionType;
 
   AuthState(
       {this.authStatus = AuthStatus.checking,
@@ -26,18 +20,19 @@ class AuthState {
       this.errorMessage = '',
       this.authGoogleStatus = AuthGoogleStatus.checking,
       this.authenticatedType = AuthenticatedType.undefined,
+      this.authConectionType = AuthConectionType.unverified,
       this.theresMissingData = false});
 
-  AuthState copyWith({
-    AuthStatus? authStatus,
-    RegisterStatus? registerStatus,
-    AuthUser? authUser,
-    User? user,
-    AuthenticatedType? authenticatedType,
-    String? errorMessage,
-    AuthGoogleStatus? authGoogleStatus,
-    bool? theresMissingData,
-  }) =>
+  AuthState copyWith(
+          {AuthStatus? authStatus,
+          RegisterStatus? registerStatus,
+          AuthUser? authUser,
+          User? user,
+          AuthenticatedType? authenticatedType,
+          String? errorMessage,
+          AuthGoogleStatus? authGoogleStatus,
+          bool? theresMissingData,
+          AuthConectionType? authConectionType}) =>
       AuthState(
           authStatus: authStatus ?? this.authStatus,
           registerStatus: registerStatus ?? this.registerStatus,
@@ -46,5 +41,6 @@ class AuthState {
           authenticatedType: authenticatedType ?? this.authenticatedType,
           errorMessage: errorMessage ?? this.errorMessage,
           authGoogleStatus: authGoogleStatus ?? this.authGoogleStatus,
-          theresMissingData: theresMissingData ?? this.theresMissingData);
+          theresMissingData: theresMissingData ?? this.theresMissingData,
+          authConectionType: authConectionType ?? this.authConectionType);
 }
