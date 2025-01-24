@@ -1,4 +1,4 @@
-abstract class DbLocalUserRepository {
+abstract class AuthUserOfflineRepository {
   Future<List<Map<String, Object?>>> getUser();
 
   Future<void> insertUser(int usuarioId, String nombreUsuario, String correo, String fechaLimiteActivo, String rol);

@@ -1,9 +1,9 @@
 import 'package:aprende_mas/config/data/querys.dart';
-import 'package:aprende_mas/repositories/Interface_repos/authentication/db_local_user_data_source.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_user_offline_data_source.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/data/db_local.dart';
 
-class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
+class AuthUserOfflineDataSourceImpl implements AuthUserOfflineDataSource {
   static const table = 'tbUsuarioActivo';
 
   @override
@@ -65,8 +65,14 @@ class DbLocalUserDataSourceImpl implements DbLocalUserDataSource {
           },
         );
       }
+      await db.close();
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
+    }finally{
+      
+      Database db = await DbLocal.initDatabase();
+      await db.close();
+
     }
   }
 }
