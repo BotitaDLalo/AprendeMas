@@ -30,11 +30,12 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     int materiaId, 
     String nombreActividad,
     String descripcion,
-    DateTime fechaLimite,) async {
+    DateTime fechaLimite,
+    int puntaje) async {
     
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
-      final activity = await activityRepository.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite);
+      final activity = await activityRepository.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
       _setCreatedActivity(activity);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());

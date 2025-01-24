@@ -2,6 +2,7 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 
@@ -89,6 +90,10 @@ final goRouterProvider = Provider((ref) {
             nombreMateria: subjectData.nombreMateria
           );
         },
+      ),
+      GoRoute(
+        path: '/events-options', 
+        builder: (context, state) => CreateEventScreen(),
       ), 
     ],
     redirect: (context, state) {
@@ -134,6 +139,9 @@ final goRouterProvider = Provider((ref) {
 
                   case "/activities-options":
                     return "/activities-options";
+                  
+                  case "/events-options":
+                    return "/events-options";
                 }
                 return "/teacher-home";
               case "Alumno":

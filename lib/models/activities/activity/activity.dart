@@ -6,6 +6,7 @@ class Activity {
   final DateTime fechaLimite;
   final int tipoActividadId;
   final int materiaId;
+  final int puntaje;
 
   Activity(
       {required this.activityId,
@@ -14,6 +15,7 @@ class Activity {
       required this.tipoActividadId,
       required this.fechaCreacion,
       required this.fechaLimite,
-      required this.materiaId
+      required this.materiaId,
+      required this.puntaje
       });
 }

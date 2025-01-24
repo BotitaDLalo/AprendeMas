@@ -8,11 +8,12 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   final storageService = KeyValueStorageServiceImpl();
   @override
   Future<List<Group>> getGroupsSubjects() async {
-    const uri = "/Grupos/ObtenerGruposMaterias";
+    const uri = "/Grupos/ObtenerGruposMateriasDocente";
     try {
       final id = await storageService.getId();
       final res = await dio.get(uri, queryParameters: {'docenteid': id});
       final resList = List<Map<String, dynamic>>.from(res.data);
+      debugPrint("Respuesta del backend: ${res.data}");
       final groups = GroupsMapper.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {

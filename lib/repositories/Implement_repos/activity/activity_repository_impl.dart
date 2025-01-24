@@ -22,7 +22,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
   }
   
   @override
-  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad, String descripcion, DateTime fechaLimite) {
-    return activityDataSource.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite);
+  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad, String descripcion, DateTime fechaLimite, int puntaje) {
+    return activityDataSource.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
   }
 }

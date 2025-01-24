@@ -1,5 +1,3 @@
-import 'package:aprende_mas/config/utils/packages.dart';
-
 import 'activity.dart';
 import 'package:intl/intl.dart';
 
@@ -16,6 +14,7 @@ class ActivityMapper {
         fechaCreacion: dateTimeFormat.parse(map['fechaCreacionActividad']),
         fechaLimite: dateTimeFormat.parse(map['fechaLimiteActividad']),
         materiaId: map['materiaId'] as int,
+        puntaje: map['puntaje'] as int,
       );
     }).toList();
   }
@@ -29,6 +28,7 @@ class ActivityMapper {
       'fechaCreacionActividad': dateTimeFormat.format(activity.fechaCreacion),
       'fechaLimiteActividad': dateTimeFormat.format(activity.fechaLimite),
       'materiaId': activity.materiaId,
+      'puntaje': activity.puntaje
     };
   }
 }
