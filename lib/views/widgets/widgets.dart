@@ -6,8 +6,9 @@ export 'buttons/button_create_general.dart';
 export 'buttons/buttons.dart';
 export 'cards/group_modify_subject_card.dart';
 export 'cards/group_card.dart';
+export 'cards/element_tile.dart';
 export 'package:aprende_mas/views/widgets/cards/subjects_scroll.dart';
-
+export 'package:aprende_mas/views/users/users.dart';
 export 'structure/header_tile.dart';
 export 'structure/app_bar_home.dart';
 export 'structure/header_background.dart';
@@ -18,3 +19,4 @@ export 'structure/app_bar_screens.dart';
 export 'structure/home_screen.dart';
 export 'structure/catalog_button_navigation_bar_items.dart';
 export 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
+export 'package:aprende_mas/views/student/activities/dialog_text_field.dart';
