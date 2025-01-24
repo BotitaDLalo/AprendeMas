@@ -8,7 +8,8 @@ final activityFormProvider =
   (ref) {
     // Cambiamos a activityProvider.notifier
   final createActivity = ref.read(activityProvider.notifier).createdActivity;
+  final sendActivity = ref.read(activityProvider.notifier).sendSubmission;
 
-    return ActivityFormNotifier(activityCallback: createActivity);
+    return ActivityFormNotifier(activityCallback: createActivity, sendSubmissionCallback: sendActivity);
   },
 );

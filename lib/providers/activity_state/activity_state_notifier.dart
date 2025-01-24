@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/providers/activity_state/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
@@ -17,7 +18,8 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
     } finally {
-      state = state.copyWith(isLoading: false); // Indicando que terminó la carga
+      state =
+          state.copyWith(isLoading: false); // Indicando que terminó la carga
     }
   }
 
@@ -27,24 +29,64 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   }
 
   Future<void> createdActivity(
-    int materiaId, 
+    int materiaId,
     String nombreActividad,
     String descripcion,
-    DateTime fechaLimite,) async {
-    
+    DateTime fechaLimite,
+  ) async {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
-      final activity = await activityRepository.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite);
+      final activity = await activityRepository.createdActivity(
+          materiaId, nombreActividad, descripcion, fechaLimite);
       _setCreatedActivity(activity);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
     } finally {
-      state = state.copyWith(isLoading: false); // Indicando que terminó la carga
+      state =
+          state.copyWith(isLoading: false); // Indicando que terminó la carga
     }
   }
 
   void _setCreatedActivity(List<Activity> activity) {
     state = state.copyWith(activities: activity);
   }
-  
+
+  Future<void> getSubmissions(int activityId) async {
+    try {
+      final lsSubmisions = await activityRepository.getSubmissions(activityId);
+      _setLsSubmissions(lsSubmisions);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<bool> sendSubmission(int activityId, String answer) async {
+    try {
+      //TODO: METODO DLE REPOSITORY
+      final submissionSent =
+          await activityRepository.sendSubmission(activityId, answer);
+      if (submissionSent.isNotEmpty) {
+        _setLsSubmissions(submissionSent);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<void> cancelSubmission(int studentActivityId, int activityId) async {
+    try {
+      final cancelSubmission = await activityRepository.cancelSubmission(
+          studentActivityId, activityId);
+
+      _setLsSubmissions(cancelSubmission);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  void _setLsSubmissions(List<Submission> lsSubmisions) {
+    state = state.copyWith(lsSubmissions: lsSubmisions);
+  }
 }
