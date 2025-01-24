@@ -4,7 +4,7 @@ class GroupsState {
   final List<Group> groups;
   final List<GroupsCreated> groupsCreated;
   final List<VerifyEmail> lsEmails;
-  final List<StudentGroup> lsStudentsGroup;
+  final List<StudentGroupSubject> lsStudentsGroup;
 
   GroupsState(
       {this.groups = const [],
@@ -16,7 +16,7 @@ class GroupsState {
     List<Group>? groups,
     List<GroupsCreated>? groupsCreated,
     List<VerifyEmail>? lsEmails,
-    List<StudentGroup>? lsStudentsGroup,
+    List<StudentGroupSubject>? lsStudentsGroup,
   }) =>
       GroupsState(
           lsStudentsGroup: lsStudentsGroup ?? this.lsStudentsGroup,

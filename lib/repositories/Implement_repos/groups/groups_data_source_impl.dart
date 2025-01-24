@@ -150,7 +150,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   }
 
   @override
-  Future<List<StudentGroup>> addStudentsGroup(
+  Future<List<StudentGroupSubject>> addStudentsGroup(
       int groupId, List<String> emails) async {
     try {
       const uri = "/Alumnos/RegistrarAlumnoGMDocente";
@@ -160,7 +160,8 @@ class GroupsDataSourceImpl implements GroupsDataSource {
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
-        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
         return lsStudents;
       }
       return [];
@@ -170,14 +171,15 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   }
 
   @override
-  Future<List<StudentGroup>> getStudentsGroup(int groupId) async {
+  Future<List<StudentGroupSubject>> getStudentsGroup(int subjectId) async {
     try {
       const uri = "/Alumnos/ObtenerListaAlumnosGrupo";
-      final res = await dio.post(uri, data: {"GrupoId": groupId});
+      final res = await dio.post(uri, data: {"GrupoId": subjectId});
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
-        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
         return lsStudents;
       }
       return [];
