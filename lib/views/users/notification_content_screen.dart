@@ -26,7 +26,7 @@ class NotificationContentScreen extends StatelessWidget {
           },
         ),
         title: const Text(
-          'Oferta',
+          '',
           style: TextStyle(color: Colors.black),
         ),
       ),
@@ -36,7 +36,6 @@ class NotificationContentScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Título
             Text(
               title,
               style: const TextStyle(

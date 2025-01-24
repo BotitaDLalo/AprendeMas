@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:aprende_mas/config/services/services.dart';
@@ -17,12 +18,10 @@ class FormLoginState extends ConsumerState<FormLogin> {
   void initState() {
     super.initState();
     ref.read(firebasecmProvider.notifier).onRequestPermissions();
-    // FirebaseConfiguration.onMessagesForeground();
   }
 
   @override
   Widget build(BuildContext context) {
-    final auth = ref.watch(authProvider);
     final loginForm = ref.watch(loginFormProvider);
     final loginFormNotifier = ref.read(loginFormProvider.notifier);
     final fcm = ref.watch(firebasecmProvider);
@@ -93,9 +92,9 @@ class FormLoginState extends ConsumerState<FormLogin> {
                 if (loginForm.isPosting) {
                   return;
                 }
-
                 if (fcm.status == AuthorizationStatus.authorized) {
                   loginFormNotifier.onFormSubmit();
+                  showLoadingScreen(context);
                 } else {
                   ref.read(firebasecmProvider.notifier).onRequestPermissions();
                 }

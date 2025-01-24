@@ -1,7 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
-import 'users.dart';
+import 'package:aprende_mas/views/widgets/widgets.dart';
 
 class NoticesScreen extends ConsumerStatefulWidget {
   const NoticesScreen({super.key});
@@ -63,45 +63,23 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
                 final notification = lsNotices[index];
                 print(notification);
                 return GestureDetector(
-                  onLongPress: () {
-                    showModalBottom(notification.sentDate);
-                  },
-                  child: ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.notifications,
-                            color: Colors.black),
-                      ),
-                    ),
-                    title: Text(
-                      notification.title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    subtitle: Text(
-                      notification.sentDate,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    onTap: () {
-                      Notice notice = Notice(
-                          messageId: notification.messageId,
-                          title: notification.title,
-                          body: notification.body,
-                          sentDate: notification.sentDate);
-                      context.push('/notification-content', extra: notice);
+                    onLongPress: () {
+                      showModalBottom(notification.sentDate);
                     },
-                  ),
-                );
+                    child: ElementTile(
+                      icon: const Icon(Icons.notifications, color: Colors.black),
+                      title: notification.title,
+                      subtitle: notification.sentDate,
+                      trailing: '',
+                      onTapFunction: () {
+                        Notice notice = Notice(
+                            messageId: notification.messageId,
+                            title: notification.title,
+                            body: notification.body,
+                            sentDate: notification.sentDate);
+                        context.push('/notification-content', extra: notice);
+                      },
+                    ));
               },
             ),
           ),
