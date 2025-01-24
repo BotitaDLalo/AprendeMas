@@ -1,4 +1,3 @@
-export 'activities/activities_provider.dart';
 
 export 'authentication/auth_provider.dart';
 export 'authentication/auth_state.dart';
@@ -19,3 +18,6 @@ export 'chat_gemini/chat_provider.dart';
 
 export 'notices/firebase_cm_provider.dart';
 export 'notices/notices_provider.dart';
+
+export 'package:aprende_mas/providers/activity_state/activity_provider.dart';
+export 'package:aprende_mas/providers/activity_state/activty_form_provider.dart';
