@@ -1,6 +1,4 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/config/utils/app_theme.dart';
-import 'package:aprende_mas/providers/groups/groups_provider.dart';
 
 class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
   final VoidCallback? onPopCallback;
@@ -8,23 +6,21 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final groups = ref.read(groupsProvider.notifier);
-    void clearGroupTeacherOption() {
+    void actionsAppBar() {
       FocusScope.of(context).unfocus();
       context.pop();
       if (onPopCallback != null) {
         onPopCallback!();
       }
-      groups.clearGroupTeacherOptionsLs();
     }
 
     return AppBar(
       flexibleSpace: Container(
-        // decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
-      ),
+          // decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
+          ),
       leading: IconButton(
           onPressed: () {
-            clearGroupTeacherOption();
+            actionsAppBar();
           },
           icon: const Icon(
             Icons.arrow_back,

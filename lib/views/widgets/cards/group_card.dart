@@ -65,14 +65,9 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
     void pushGroupTeacherSettings(Group data) {
       context.push('/group-teacher-settings', extra: data);
     }
-
-    // void pushGroupStudentSettings(Group data) {
-    //   // context.push('/group-student-settings', extra: data);
-    //   context.push("/", extra:data);
-    // }
-
+    
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,

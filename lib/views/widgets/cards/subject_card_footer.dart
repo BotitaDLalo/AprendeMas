@@ -4,11 +4,13 @@ import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/data/data.dart';
 
 class CustomFooterContainer extends StatelessWidget {
+  final int? groupId;
   final int subjectId;
   final String subjectName;
   final String description;
   const CustomFooterContainer(
       {super.key,
+      this.groupId,
       required this.subjectId,
       required this.subjectName,
       required this.description});
@@ -17,6 +19,15 @@ class CustomFooterContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final cn = CatalogNames();
     final storageService = KeyValueStorageServiceImpl();
+
+    void teacherSubjectOptions(Subject data) {
+      context.push('/teacher-subject-options', extra: data);
+    }
+
+    void studentSubjectOptions(Subject data) {
+      context.push('/student-subject-options', extra: data);
+    }
+
     return Container(
       width: double.infinity,
       height: 48,
@@ -25,16 +36,18 @@ class CustomFooterContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
                 final data = Subject(
-                    subjectId: subjectId,
+                    groupId: groupId,
+                    materiaId: subjectId,
                     nombreMateria: subjectName,
                     descripcion: description);
-
-                    final futureRole = storageService.getRole().then((value) => value,);
-
-
-                context.push('/teacher-subject-options', extra: data);
+                final role = await storageService.getRole();
+                if (role == cn.getRoleTeacherName) {
+                  teacherSubjectOptions(data);
+                } else if (role == cn.getRoleStudentName) {
+                  studentSubjectOptions(data);
+                }
               },
               icon: const Icon(Icons.assignment)),
           // const SizedBox(
