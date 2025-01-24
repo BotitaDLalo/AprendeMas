@@ -4,14 +4,14 @@ import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 
 class GroupTeacherOptions extends ConsumerStatefulWidget {
-  final int groupId;
+  final int id;
   final String groupName;
   final String description;
   final String? accessCode;
   final String colorCode;
   const GroupTeacherOptions(
       {super.key,
-      required this.groupId,
+      required this.id,
       required this.groupName,
       required this.description,
       this.accessCode,
@@ -23,6 +23,12 @@ class GroupTeacherOptions extends ConsumerStatefulWidget {
 }
 
 class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
+  @override
+  void initState() {
+    super.initState();
+    ref.read(groupsProvider.notifier).getStudentsGroup(widget.id);
+  }
+
   final itemTappedProvider = StateProvider<int>((ref) => 0);
 
   void onOptionSelected(int index) {
@@ -34,12 +40,12 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
       case 0:
         return const NoticesGroupOptionsScreen();
       case 1:
-        return StudentsGroup(id: widget.groupId);
+        return StudentsGroup(id: widget.id);
       case 2:
-        return StudentsGroupAssigment(id: widget.groupId);
+        return StudentsGroupAssigment(id: widget.id);
       case 3:
         return FormUpdateGroup(
-          id: widget.groupId,
+          id: widget.id,
           groupName: widget.groupName,
           description: widget.description,
           accesCode: widget.accessCode,
@@ -50,10 +56,9 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    ref.read(groupsProvider.notifier).getStudentsGroup(widget.groupId);
+  void clearScreen() {
+    ref.read(addStudentMessageProvider.notifier).state = false;
+    ref.read(groupsProvider.notifier).clearGroupTeacherOptionsLs();
   }
 
   @override
@@ -61,7 +66,7 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
     return Scaffold(
       appBar: AppBarScreens(
         onPopCallback: () {
-          ref.read(addStudentMessageProvider.notifier).state = false;
+          clearScreen();
         },
       ),
       body: Column(

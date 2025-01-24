@@ -2,6 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/models/models.dart';
+import 'package:aprende_mas/providers/providers.dart';
 
 class TeacherHomeScreen extends ConsumerStatefulWidget {
   const TeacherHomeScreen({super.key});
@@ -14,6 +15,7 @@ class TeacherHomeScreen extends ConsumerStatefulWidget {
 class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
   static List<BottomNavigationBarItem> lsBarItems =
       CatalogButtonNavigationBarItems.lsBarItems;
+
 
   List<WidgetOptions> lsWidgetsOptions = [
     WidgetOptions(
@@ -36,6 +38,8 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authProvider, (previous, next) {
+    },);
     return HomeScreen(lsWidgetsOptions: lsWidgetsOptions);
   }
 }

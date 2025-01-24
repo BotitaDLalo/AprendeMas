@@ -4,8 +4,8 @@ import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 
-final addStudentMessageProvider = StateProvider<bool>((ref) => false);
-final contentProvider = StateProvider<String>((ref) => '');
+final addStudentGroupMessageProvider = StateProvider<bool>((ref) => false);
+final contentGroupProvider = StateProvider<String>((ref) => '');
 
 class StudentsGroupAssigment extends ConsumerStatefulWidget {
   final int id;
@@ -23,10 +23,10 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
     super.initState();
     controller.addListener(() {
       if (controller.text.isNotEmpty) {
-        ref.read(contentProvider.notifier).state = controller.text;
-        ref.read(addStudentMessageProvider.notifier).state = true;
+        ref.read(contentGroupProvider.notifier).state = controller.text;
+        ref.read(addStudentGroupMessageProvider.notifier).state = true;
       } else {
-        ref.read(addStudentMessageProvider.notifier).state = false;
+        ref.read(addStudentGroupMessageProvider.notifier).state = false;
       }
     });
   }
@@ -35,7 +35,7 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
   Widget build(BuildContext context) {
     void clear() {
       controller.clear();
-      ref.read(addStudentMessageProvider.notifier).state = false;
+      ref.read(addStudentGroupMessageProvider.notifier).state = false;
       FocusScope.of(context).unfocus();
     }
 
@@ -49,8 +49,8 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
       },
     );
 
-    final isNotEmpty = ref.watch(addStudentMessageProvider);
-    final content = ref.watch(contentProvider);
+    final isNotEmpty = ref.watch(addStudentGroupMessageProvider);
+    final content = ref.watch(contentGroupProvider);
 
     final formGroups = ref.watch(formGroupsProvider);
     final formGroupsNotifier = ref.read(formGroupsProvider.notifier);
@@ -181,5 +181,6 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
         ],
       ),
     );
+  
   }
 }

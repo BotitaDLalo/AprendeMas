@@ -1,5 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
+import 'package:aprende_mas/config/utils/app_theme.dart';
+
 class GroupsSubjectsTeacherScreen extends ConsumerStatefulWidget {
   const GroupsSubjectsTeacherScreen({super.key});
 
@@ -67,9 +69,7 @@ class _GroupsSubjectsTeacherScreenState
             );
           },
           backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
+          shape: AppTheme.shapeFloatingActionButton(),
           child: Icon(
             Icons.add,
             color: Colors.grey.withOpacity(0.8),

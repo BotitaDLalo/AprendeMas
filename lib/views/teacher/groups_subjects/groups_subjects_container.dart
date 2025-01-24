@@ -37,6 +37,7 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SubjectScroll(
+                groupId: grupo.grupoId,
                 materias: grupo.materias,
               ),
             )

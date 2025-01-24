@@ -1,10 +1,10 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 
-class GroupOptions extends StatelessWidget {
+class TeacherSubjectOptions extends StatelessWidget {
   final ValueChanged<int> onOptionSelected;
   final int selectedOptionIndex;
 
-  const GroupOptions({
+  const TeacherSubjectOptions({
     super.key,
     required this.onOptionSelected,
     required this.selectedOptionIndex,
@@ -18,20 +18,24 @@ class GroupOptions extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(4, (index) {
+          children: List.generate(5, (index) {
             String optionText;
+      
             switch (index) {
               case 0:
                 optionText = 'Avisos';
                 break;
               case 1:
-                optionText = 'Alumnos asignados';
+                optionText = 'Actividades';
                 break;
               case 2:
-                optionText = 'Agregar alumnos';
+                optionText = 'Alumnos asignados';
                 break;
               case 3:
-                optionText = 'Configuración';
+                optionText = 'Asignar alumnos';
+                break;
+              case 4:
+                optionText = 'Calificaciones';
                 break;
               default:
                 optionText = '';
@@ -50,7 +54,7 @@ class GroupOptions extends StatelessWidget {
                         Text(
                           optionText,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: selectedOptionIndex == index
                                 ? Colors.blue
@@ -59,13 +63,13 @@ class GroupOptions extends StatelessWidget {
                         ),
                         AnimatedContainer(
                           duration: const Duration(
-                              milliseconds: 500), 
+                              milliseconds: 500), // Duración de la animación
                           height: 2,
                           width: selectedOptionIndex == index
                               ? 90
-                              : 0, 
+                              : 0, // Cambia el ancho basado en la selección
                           color: Colors.blue,
-                          curve: Curves.easeInOut, 
+                          curve: Curves.easeInOut, // Curva de la animación
                         ),
                       ],
                     ),
