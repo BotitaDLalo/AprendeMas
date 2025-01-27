@@ -158,12 +158,6 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     state = state.copyWith(isPosting: true);
 
     try {
-      print("Datos enviados al activityCallback:");
-      print("ID Materia: $subjectId");
-      print("Nombre: ${state.nombre.value}");
-      print("Descripción: ${state.descripcion.value}");
-      print("Fecha-Hora: $fechaHoraConcatenada");
-      print("Puntaje: $puntajeInt");
       bool res = await activityCallback(
         subjectId,
         state.nombre.value,

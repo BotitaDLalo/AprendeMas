@@ -39,29 +39,25 @@ Future<List<Event>> createEvent(
   String description,
   Color color,
   DateTime startDate,
-  DateTime endDate,
-  int teacherId, {
+  DateTime endDate,{
   List<int>? groupIds,
   List<int>? subjectIds,
 }) async {
   try {
     const uri = "/EventosAgenda/CrearEventos";
     final String hexColor = color.value.toRadixString(16).substring(2).toUpperCase();
+     final teacherId = await storageService.getId();
 
-    // Construir el cuerpo de la solicitud
-    final Map<String, dynamic> requestBody = {
-      "DocenteId": teacherId,
-      "FechaInicio": startDate.toIso8601String(),
-      "FechaFinal": endDate.toIso8601String(),
-      "Titulo": title,
-      "Descripcion": description,
-      "Color": hexColor,
-      "EventosGrupos": groupIds?.map((id) => {"GrupoId": id}).toList(),
-      "EventosMaterias": subjectIds?.map((id) => {"MateriaId": id}).toList(),
-    };
-
-    // Realizar la solicitud POST
-    final response = await dio.post(uri, data: requestBody);
+    final response = await dio.post(uri, data: {
+        "DocenteId": teacherId, // Incluimos el ID del docente automáticamente
+        "FechaInicio": startDate.toIso8601String(),
+        "FechaFinal": endDate.toIso8601String(),
+        "Titulo": title,
+        "Descripcion": description,
+        "Color": hexColor,
+        "EventosGrupos": groupIds?.map((id) => {"GrupoId": id}).toList(),
+        "EventosMaterias": subjectIds?.map((id) => {"MateriaId": id}).toList(),
+      });
 
     // Convertir la respuesta en una lista de eventos
     final resList = List<Map<String, dynamic>>.from(response.data);

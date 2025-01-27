@@ -22,8 +22,7 @@ class EventRepositoyImpl implements EventRepository{
     String description,
     Color color,
     DateTime startDate,
-    DateTime endDate,
-    int teacherId, {
+    DateTime endDate,{
     List<int>? groupIds,
     List<int>? subjectIds,
   }) {
@@ -34,7 +33,6 @@ class EventRepositoyImpl implements EventRepository{
       color,
       startDate,
       endDate,
-      teacherId,
       groupIds: groupIds,
       subjectIds: subjectIds,
     );

@@ -10,7 +10,6 @@ abstract class EventDataSource {
     Color color,
     DateTime startDate,
     DateTime endDate,
-    int teacherId,
     {List<int>? groupIds,
     List<int>? subjectIds,}
   );  
