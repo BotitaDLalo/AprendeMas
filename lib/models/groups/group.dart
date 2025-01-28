@@ -17,7 +17,63 @@ class Group {
     this.materias,
   });
 
-  static Group queryToEntity(Map<String, Object?> queryGroup) {
+  static Group empty() => Group(
+      grupoId: -1,
+      descripcion: '',
+      nombreGrupo: '',
+      codigoAcceso: '',
+      codigoColor: '');
+
+  static List<Group> groupsJsonToEntityList(
+      List<Map<String, dynamic>> groupsAndSubject) {
+    List<Group> groups = [];
+
+    for (var group in groupsAndSubject) {
+      List<Subject> materias =
+          (group['materias'] as List? ?? []).map((materia) {
+        List<Activity> actividades =
+            (materia['actividades'] as List).map((actividad) {
+          return Activity(
+              actividadId: actividad['actividadId'],
+              nombreActividad: actividad['nombreActividad'],
+              descripcion: actividad['descripcion'],
+              tipoActividadId: actividad['tipoActividadId'],
+              fechaCreacion: DateTime.parse(actividad['fechaCreacion']),
+              fechaLimite: DateTime.parse(actividad['fechaLimite']),
+              puntaje: actividad['puntaje'].toString(),
+              materiaId: actividad['materiaId']);
+        }).toList();
+
+        return Subject(
+          materiaId: materia['materiaId'],
+          nombreMateria: materia['nombreMateria'],
+          descripcion: materia['descripcion'] ?? "",
+          codigoColor: materia['codigoColor'] ?? "",
+          codigoAcceso: materia['codigoAcceso'] ?? "",
+          actividades: actividades, // Asignar las actividades a la materia
+        );
+      }).toList();
+
+      groups.add(Group(
+        grupoId: group['grupoId'],
+        nombreGrupo: group['nombreGrupo'],
+        descripcion: group['descripcion'] ?? "",
+        codigoAcceso: group['codigoAcceso'] ?? "",
+        codigoColor: group['codigoColor'],
+        materias: materias,
+      ));
+    }
+    return groups;
+  }
+
+  static Group groupToEntity(Map<String, dynamic> group) => Group(
+      grupoId: group['grupoId'],
+      nombreGrupo: group['nombreGrupo'],
+      descripcion: group['descripcion'],
+      codigoAcceso: group['codigoAcceso'],
+      codigoColor: group['codigoColor']);
+
+  static Group queryToEntityGroup(Map<String, Object?> queryGroup) {
     final group = queryGroup as Group;
     return Group(
         nombreGrupo: group.nombreGrupo,
