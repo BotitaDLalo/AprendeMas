@@ -18,16 +18,26 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final KeyValueStorageService kv;
   final GoogleSigninApi googleSigninApi;
   final AuthUserOfflineRepositoryImpl authUserOffline;
-  final GroupsRepositoryImpl groupsRepositoryImpl;
-  final GroupsOfflineRepositoryImpl groupsOfflineRepositoryImpl;
+  final Function() getGroupsSubjectsCallback;
+  final Function() getGroupsSubjectsOfflineCallback;
+  final Function(int) getAllActivitiesCallback;
+  final Function(int) setAllActivitiesOfflineState;
+  final Function(List<Group>) setGroupsSubjectsState;
+  final GroupsRepositoryImpl groups;
+  final GroupsOfflineRepositoryImpl groupsOffline;
 
   AuthStateNotifier({
     required this.authUserOffline,
     required this.authRepository,
     required this.kv,
     required this.googleSigninApi,
-    required this.groupsRepositoryImpl,
-    required this.groupsOfflineRepositoryImpl,
+    required this.setGroupsSubjectsState,
+    required this.getAllActivitiesCallback,
+    required this.setAllActivitiesOfflineState,
+    required this.getGroupsSubjectsCallback,
+    required this.getGroupsSubjectsOfflineCallback,
+    required this.groups,
+    required this.groupsOffline,
   }) : super(AuthState()) {
     checkInternet();
   }
@@ -117,10 +127,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final dbUser = await authUserOffline.getUser();
       if (dbUser.isNotEmpty) {
         final userOffline = AuthOfflineUser.userOffilineJsonToEntity(dbUser);
-        final userDateLimit = DateTime.parse(userOffline.fechaLimiteActivo);
+        final userDateLimit = DateTime.parse(userOffline.activeDueDate);
 
         if (dateNow.isBefore(userDateLimit)) {
-          _setLoggedOfflineUser(userOffline);
+          List<Group> lsGroups = await groupsOffline.getGroupsSubjects();
+          _setLoggedOfflineUser(userOffline, lsGroups);
         } else {
           return;
         }
@@ -149,29 +160,32 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     DateTime dateNow = DateTime.now();
     DateTime date7Days = dateNow.add(const Duration(days: limit));
 
-    _setUserDataKeyValueStorage(
+    await _setUserDataKeyValueStorage(
         cn.getKeyTokenName,
         user.token,
         cn.getKeyIdName,
-        user.id,
+        user.userId,
         cn.getKeyRoleName,
-        user.rol,
+        user.role,
         cn.getKeyUserName,
         user.userName,
         cn.getKeyAuthTypeName,
         authType);
     if (caller == "loginUser") {
       ActiveUser activeUser = ActiveUser(
-          userId: user.id,
+          userId: user.userId,
           userName: user.userName,
           email: user.email,
           activeDueDate: date7Days.toString(),
-          role: user.rol);
+          role: user.role);
 
-      List<Group> lsGroups = await groupsRepositoryImpl.getGroupsSubjects();
+      List<Group> lsGroups = await groups.getGroupsSubjects();
+      await _saveUserData(activeUser, lsGroups);
 
-      _saveUserData(activeUser, lsGroups);
+      //& actualizamos los state del usuario (grupos, materias, actividades)
+      _setUserDataState(lsGroups);
 
+      //& TOKEN FIREBASE
       final tokenFCM = await FirebaseCM.getFcmToken();
       debugPrint("TOKEN FIREBASE");
       debugPrint(tokenFCM);
@@ -188,13 +202,27 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  void _setLoggedOfflineUser(AuthOfflineUser userOffline) async {
+  void _setLoggedOfflineUser(
+      AuthOfflineUser userOffline, List<Group> lsGroups) async {
+    debugPrint("EL USUARIO NO TIENE INTERNET");
+
     final user = AuthUser(
-        id: userOffline.usuarioId,
-        userName: userOffline.nombreUsuario,
-        email: userOffline.correo,
-        rol: 'Alumno',
+        userId: userOffline.userId,
+        userName: userOffline.userName,
+        email: userOffline.email,
+        role: userOffline.role,
         token: "");
+
+    //& set para groups y subject
+    setGroupsSubjectsState(lsGroups);
+
+    for (var group in lsGroups) {
+      for (var sub in group.materias ?? []) {
+        final subject = sub as Subject;
+        final subjectId = subject.materiaId;
+        setAllActivitiesOfflineState(subjectId);
+      }
+    }
 
     state = state.copyWith(
       authUser: user,
@@ -202,6 +230,20 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       authenticatedType: AuthenticatedType.auth,
       errorMessage: '',
     );
+  }
+
+  void _setUserDataState(List<Group> lsGroups) async {
+    //& set para groups y subjects
+    setGroupsSubjectsState(lsGroups);
+
+    //& set para activity state
+    for (var group in lsGroups) {
+      for (var subj in group.materias ?? []) {
+        final subject = subj as Subject;
+        final subjectId = subject.materiaId;
+        await getAllActivitiesCallback(subjectId);
+      }
+    }
   }
 
   void _setRegisterUser(User user) {
@@ -212,7 +254,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> loginGoogleUser() async {
     try {
       final user = await authRepository.loginGoogle();
-      if (user.rol != "") {
+      if (user.role != "") {
         _setLoggedGoogleUser(user);
       } else {
         _setMissingDataGoogleUserConfirmed(user.token);
@@ -249,9 +291,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         cn.getKeyTokenName,
         user.token,
         cn.getKeyIdName,
-        user.id,
+        user.userId,
         cn.getKeyRoleName,
-        user.rol,
+        user.role,
         cn.getKeyUserName,
         user.userName,
         cn.getKeyAuthTypeName,
@@ -279,17 +321,18 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           user: null,
           errorMessage: errorMessage);
     } catch (e) {
-      // throw Exception(e);
       return;
     }
   }
 
-  void _saveUserData(ActiveUser user, List<Group> lsGroups) async {
+  _saveUserData(ActiveUser user, List<Group> lsGroups) async {
     await authUserOffline.insertUser(
         user.userId, user.userName, user.email, user.activeDueDate, user.role);
+
+    await groupsOffline.saveGroupSubjects(lsGroups);
   }
 
-  void _setUserDataKeyValueStorage<T>(
+  _setUserDataKeyValueStorage<T>(
       String keyToken,
       T valueToken,
       String keyId,

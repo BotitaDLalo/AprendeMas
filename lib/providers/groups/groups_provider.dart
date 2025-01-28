@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'groups_state.dart';
 
 final groupsProvider =
-    StateNotifierProvider.autoDispose<GroupsNotifier, GroupsState>((ref) {
+    StateNotifierProvider<GroupsNotifier, GroupsState>((ref) {
   final groupsRepository = GroupsRepositoryImpl();
   final groupsOfflineRepository = GroupsOfflineRepositoryImpl();
   return GroupsNotifier(
