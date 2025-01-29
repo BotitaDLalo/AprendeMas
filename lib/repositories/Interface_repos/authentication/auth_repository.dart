@@ -9,4 +9,6 @@ abstract class AuthRepository {
   Future<bool> resetPasswordRequest(String email);
 
   Future<AuthUser> loginGoogle();
+
+  registerMissingDataGoogle(String names, String lastname, String secondLastname, String role) {}
 }

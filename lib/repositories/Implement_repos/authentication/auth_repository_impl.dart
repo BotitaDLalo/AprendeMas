@@ -16,11 +16,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<User> signin(String name, String email, String password, String role) {
-    return dataSource.signin(name, email, password, role);
-  }
-
-  @override
   Future<AuthUser> checkAuthStatus(String token) {
     return dataSource.checkAuthStatus(token);
   }
@@ -33,5 +28,17 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthUser> loginGoogle() {
     return dataSource.loginGoogle();
+  }
+  
+  @override
+  registerMissingDataGoogle(String names, String lastname, String secondLastname, String role) {
+    // TODO: implement registerMissingDataGoogle
+    throw UnimplementedError();
+  }
+  
+  @override
+  Future<User> signin(String name, String email, String password, String role) {
+    // TODO: implement signin
+    throw UnimplementedError();
   }
 }

@@ -1,19 +1,30 @@
 import 'package:aprende_mas/config/network/dio_client.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/config/data/data.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_source.dart';
 
+
 class GroupsDataSourceImpl implements GroupsDataSource {
   final storageService = KeyValueStorageServiceImpl();
+  final cn = CatalogNames();
   @override
   Future<List<Group>> getGroupsSubjects() async {
-    const uri = "/Grupos/ObtenerGruposMateriasDocente";
     try {
       final id = await storageService.getId();
-      final res = await dio.get(uri, queryParameters: {'docenteid': id});
-      final resList = List<Map<String, dynamic>>.from(res.data);
-      debugPrint("Respuesta del backend: ${res.data}");
+      final role = await storageService.getRole();
+      List<Map<String, dynamic>> resList = [];
+
+      if (role == cn.getRoleTeacherName) {
+        const uri = "/Grupos/ObtenerGruposMateriasDocente";
+        final res = await dio.get(uri, queryParameters: {'docenteid': id});
+        resList = List<Map<String, dynamic>>.from(res.data);
+      } else if (role == cn.getRoleStudentName) {
+        const uri = "/Grupos/ObtenerGruposMateriasAlumno";
+        final res = await dio.get(uri, queryParameters: {'alumnoid': id});
+        resList = List<Map<String, dynamic>>.from(res.data);
+      }
       final groups = GroupsMapper.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {
@@ -140,7 +151,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   }
 
   @override
-  Future<List<StudentGroup>> addStudentsGroup(
+  Future<List<StudentGroupSubject>> addStudentsGroup(
       int groupId, List<String> emails) async {
     try {
       const uri = "/Alumnos/RegistrarAlumnoGMDocente";
@@ -150,7 +161,8 @@ class GroupsDataSourceImpl implements GroupsDataSource {
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
-        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
         return lsStudents;
       }
       return [];
@@ -160,14 +172,15 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   }
 
   @override
-  Future<List<StudentGroup>> getStudentsGroup(int groupId) async {
+  Future<List<StudentGroupSubject>> getStudentsGroup(int subjectId) async {
     try {
       const uri = "/Alumnos/ObtenerListaAlumnosGrupo";
-      final res = await dio.post(uri, data: {"GrupoId": groupId});
+      final res = await dio.post(uri, data: {"GrupoId": subjectId});
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
-        final lsStudents = StudentGroup.studentGroupJsonToEntity(resList);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
         return lsStudents;
       }
       return [];

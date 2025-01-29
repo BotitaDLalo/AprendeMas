@@ -2,7 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/providers/notices/notices_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -73,6 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       appBar: AppBarHome(
         title: element.title,
+        
       ),
       body: Center(
         child: element.widget,

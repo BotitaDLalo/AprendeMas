@@ -5,13 +5,13 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_data_source.dart';
 
 class SubjectsDataSourceImpl implements SubjectsDataSource {
+  final storageService = KeyValueStorageServiceImpl();
   @override
   Future<List<Subject>> getSubjects() async {
     try {
       const uri = "/Materias/ObtenerMaterias";
 
-      final storageService = KeyValueStorageServiceImpl();
-      final id = await storageService.getValueToken<int>('id');
+      final id = await storageService.getId();
       final res = await dio.get(uri, queryParameters: {'docenteid': id});
 
       final resList = List<Map<String, dynamic>>.from(res.data);
@@ -27,8 +27,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
       String description, Color colorCode, List<int> groupsId) async {
     try {
       const uri = "/Materias/CrearMateriaGrupos";
-      final storageService = KeyValueStorageServiceImpl();
-      final id = await storageService.getValueToken<int>('id');
+      final id = await storageService.getValue<int>('id');
       final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,
@@ -51,8 +50,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
     try {
       const uri = "/Materias/CrearMateriaSinGrupo";
 
-      final storageService = KeyValueStorageServiceImpl();
-      final id = await storageService.getValueToken<int>('id');
+      final id = await storageService.getId();
       final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,
@@ -77,5 +75,60 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   Future<void> updateSubject() {
     // TODO: implement updateSubject
     throw UnimplementedError();
+  }
+
+  @override
+  Future<List<StudentGroupSubject>> addStudentsSubject(
+      int? groupId, int subjectId, List<String> emails) async {
+    try {
+      const uri = "/Alumnos/RegistrarAlumnoGMDocente";
+
+      final res = await dio.post(uri,
+          data: {"Emails": emails, "GrupoId": groupId, "MateriaId": subjectId});
+
+      if (res.statusCode == 200) {
+        final resList = List<Map<String, dynamic>>.from(res.data);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
+        return lsStudents;
+      }
+      return [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<StudentGroupSubject>> getStudentsSubject(int subjectId) async {
+    try {
+      const uri = "/Alumnos/ObtenerListaAlumnosMateria";
+      final res = await dio.post(uri, data: {"MateriaId": subjectId});
+
+      if (res.statusCode == 200) {
+        final resList = List<Map<String, dynamic>>.from(res.data);
+        final lsStudents =
+            StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
+        return lsStudents;
+      }
+      return [];
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<VerifyEmail> verifyEmail(String email) async {
+    try {
+      const uri = "/Alumnos/VerificarAlumnoEmail";
+      final res = await dio.post(uri, data: {"Email": email});
+
+      if (res.statusCode == 200) {
+        final verifyEmail = VerifyEmail.verifyEmailToEntity(res.data, true);
+        return verifyEmail;
+      }
+      return VerifyEmail.verifyEmailToEntity({}, false);
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

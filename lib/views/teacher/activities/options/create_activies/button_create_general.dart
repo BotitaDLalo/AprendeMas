@@ -23,7 +23,7 @@ class ButtonCreateGeneral extends StatelessWidget {
               title: const Text("Actividad"),
               onTap: () {
                 final data = Subject(
-                  subjectId: subjectId, 
+                  materiaId: subjectId, 
                   nombreMateria: nombreMateria);
 
                 context.push('/create-activities', extra: data);

@@ -24,7 +24,7 @@ class CustomFooterContainer extends StatelessWidget {
           IconButton(
               onPressed: () {
                 final data = Subject(
-                    subjectId: subjectId,
+                    materiaId: subjectId,
                     nombreMateria: subjectName,
                     descripcion: description);
 

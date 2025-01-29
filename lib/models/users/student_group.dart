@@ -1,21 +1,21 @@
-class StudentGroup {
+class StudentGroupSubject {
   final String username;
   final String name;
   final String email;
   final String lastName;
   final String lastName2;
 
-  StudentGroup(
+  StudentGroupSubject(
       {required this.username,
       required this.name,
       required this.email,
       required this.lastName,
       required this.lastName2});
 
-  static List<StudentGroup> studentGroupJsonToEntity(
+  static List<StudentGroupSubject> studentGroupSubjectJsonToEntity(
       List<Map<String, dynamic>> studentGroupJson) {
     return studentGroupJson.map((json) {
-      return StudentGroup(
+      return StudentGroupSubject(
         email: json['email'] as String,
         username: json['userName'] as String,
         name: json['nombre'] as String,

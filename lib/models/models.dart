@@ -1,4 +1,5 @@
 export 'activities/activities.dart';
+export 'activities/activity/activity.dart';
 
 export 'authentication/auth_errors.dart';
 export 'authentication/auth_user_mapper.dart';

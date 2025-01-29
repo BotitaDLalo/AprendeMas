@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
@@ -64,10 +65,10 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final subjectData = state.extra as Subject;
           return ActivitiesTeacherScreen(
-            subjectId: subjectData.subjectId,
+            subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
-            codeAccess: subjectData.codeAccess ?? "",
+            codeAccess: subjectData.codigoAcceso ?? "",
           );
         },
       ),
@@ -76,7 +77,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state)  {
           final subjectData = state.extra as Subject;
           return ActivitiesOptionScreen(
-            subjectId: subjectData.subjectId,
+            subjectId: subjectData.materiaId,
             nombreMateria: subjectData.nombreMateria,);
         },
       ),
@@ -84,9 +85,9 @@ final goRouterProvider = Provider((ref) {
         path: '/create-activities',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-           debugPrint('Route /create-activity: subjectId: ${subjectData.subjectId}, nombreMateria: ${subjectData.nombreMateria}');
+           debugPrint('Route /create-activity: subjectId: ${subjectData.materiaId}, nombreMateria: ${subjectData.nombreMateria}');
           return CreateActivitiesScreen(
-            subjectId: subjectData.subjectId,
+            subjectId: subjectData.materiaId,
             nombreMateria: subjectData.nombreMateria
           );
         },

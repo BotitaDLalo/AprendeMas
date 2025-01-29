@@ -23,10 +23,6 @@ void initState() {
     ref.read(groupsProvider.notifier).getGroupsSubjects();
   }
 
-  final subjectsState = ref.read(subjectsProvider);
-  if (subjectsState.isEmpty) {
-    ref.read(subjectsProvider.notifier).getSubjects();
-  }
 }
 
 void _updateOptions(String selectedType) {
@@ -42,15 +38,7 @@ void _updateOptions(String selectedType) {
       _options = groupsState.groups.map((group) {
         return {'id': group.grupoId.toString(), 'name': group.nombreGrupo};
       }).toList();
-    } else {
-      final subjectsState = ref.read(subjectsProvider);
-
-      print('Materias cargadas: $subjectsState'); // Depuración
-
-      _options = subjectsState.map((subject) {
-        return {'id': subject.subjectId.toString(), 'name': subject.nombreMateria};
-      }).toList();
-    }
+    } 
 
     print('Opciones actualizadas: $_options'); // Verifica las opciones cargadas
   });
