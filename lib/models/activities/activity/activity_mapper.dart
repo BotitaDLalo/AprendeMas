@@ -1,4 +1,3 @@
-import 'package:aprende_mas/config/utils/packages.dart';
 import 'activity.dart';
 import 'package:intl/intl.dart';
 

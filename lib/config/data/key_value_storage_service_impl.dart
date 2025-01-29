@@ -27,11 +27,11 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   Future<void> setKeyValue<T>(String key, T value) async {
     final prefs = await getSharedPrefs();
     if (value is int) {
-      prefs.setInt(key, value as int);
+      await prefs.setInt(key, value as int);
     } else if (value is String) {
-      prefs.setString(key, value as String);
+      await prefs.setString(key, value as String);
     } else if (value is Enum) {
-      prefs.setString(key, value.toString());
+      await prefs.setString(key, value.toString());
     } else {
       throw UnimplementedError('Set not implemented for type ${T.runtimeType}');
     }

@@ -26,6 +26,7 @@ class Querys {
         CREATE TABLE tbActividades(ActividadId INTEGER PRIMARY KEY, 
                         NombreActividad TEXT, 
                         Descripcion TEXT, 
+                        TipoActividadId INTEGER,
                         FechaCreacion TEXT, 
                         FechaLimite TEXT,
                         MateriaId INTEGER);
