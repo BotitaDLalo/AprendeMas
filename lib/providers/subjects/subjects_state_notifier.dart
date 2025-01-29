@@ -13,6 +13,7 @@ class SubjectsStateNotifier extends StateNotifier<List<Subject>> {
   Future<void> getSubjects() async {
     try {
       final subjects = await subjectsRepository.getSubjects();
+      print("SubjectsStateNotifier: $subjects");
       _setSubjects(subjects);
     } catch (e) {
       throw Exception(e);

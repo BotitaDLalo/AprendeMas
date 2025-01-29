@@ -4,7 +4,7 @@ import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
 
 class FormEventNotifier extends StateNotifier<FormEventState>{
-  final Function() eventCallback;
+  final Function(String, String, Color, DateTime, DateTime, {List<int>? groupIds, List<int>? subjectIds}) eventCallback;
   final TextEditingController titleController; 
   final TextEditingController descriptionController;
   final TextEditingController startTimeController; 
@@ -135,8 +135,41 @@ class FormEventNotifier extends StateNotifier<FormEventState>{
         ]));
   }
 
-  onFormSubmit() {
+  void onGroupIdsChanged(List<int> ids) {
+  state = state.copyWith(
+    groupIds: ids,
+    isValid: Formz.validate([
+      state.title,
+      state.description,
+      state.startDate,
+      state.startTime,
+      state.endDate,
+      state.endTime,
+      state.colorCode,
+      // Validación específica si los IDs son necesarios
+    ]),
+  );
+}
 
+void onSubjectIdsChanged(List<int> ids) {
+  state = state.copyWith(
+    subjectIds: ids,
+    isValid: Formz.validate([
+      state.title,
+      state.description,
+      state.startDate,
+      state.startTime,
+      state.endDate,
+      state.endTime,
+      state.colorCode,
+      // Validación específica si los IDs son necesarios
+    ]),
+  );
+}
+
+
+  onFormSubmit() {
+    _touchEveryField();
   }  
 
   _touchEveryField() {

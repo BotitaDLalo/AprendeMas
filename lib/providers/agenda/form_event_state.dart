@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:aprende_mas/models/agenda/event_model.dart';
-import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
 
@@ -17,8 +16,8 @@ class FormEventState {
   final GenericInput endTime;
   final Color pickerColor; 
   final ColorInput colorCode;
-  final List<Group> groupIds;
-  final List<Subject> subjectIds; 
+  final List<int>? groupIds;
+  final List<int>? subjectIds; 
 
   FormEventState({
     this.events = const [],
@@ -50,8 +49,8 @@ class FormEventState {
     GenericInput? endTime,
     Color? pickerColor,
     ColorInput? colorCode,
-    List<Group>? groupIds,
-    List<Subject>? subjectIds,
+    List<int>? groupIds,
+    List<int>? subjectIds,
   }) => FormEventState(
     events: events ?? this.events,
     isFormPosted: isFormPosted ?? this.isFormPosted,

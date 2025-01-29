@@ -1,15 +1,13 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/agenda/event_state.dart';
-import 'package:aprende_mas/providers/agenda/event_state_notifier.dart';
-import 'package:aprende_mas/repositories/Implement_repos/agenda/event_repositoy_impl.dart';
+import 'package:aprende_mas/providers/agenda/event_provider.dart';
+import 'package:aprende_mas/providers/agenda/form_event_notifier.dart';
+import 'package:aprende_mas/providers/agenda/form_event_state.dart';
 
+final formEventProvider = 
+  StateNotifierProvider.autoDispose<FormEventNotifier, FormEventState>(
+    (ref) {
+      final createEvent = ref.read(eventProvider.notifier).createEvents;
 
-final eventRepositoryProvider = Provider<EventRepositoyImpl>((ref) {
-  return EventRepositoyImpl();
-});
-
-final eventProvider = StateNotifierProvider<EventNotifier, EventState>((ref) {
-  final repository = ref.watch(eventRepositoryProvider);
-
-  return EventNotifier(eventRepository: repository);
-});
+      return FormEventNotifier(eventCallback: createEvent);
+    }
+  );
