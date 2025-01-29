@@ -14,6 +14,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
   Future<void> getSubjects() async {
     try {
       final subjects = await subjectsRepository.getSubjects();
+      print("subjects: $subjects");
       _setSubjects(subjects);
     } catch (e) {
       throw Exception(e);
