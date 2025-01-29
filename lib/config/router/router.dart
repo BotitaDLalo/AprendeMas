@@ -148,7 +148,7 @@ final goRouterProvider = Provider((ref) {
       final authGoogleStatus = routerNotifier.authGoogleStatus;
       final authState = ref.read(authProvider);
       final user = authState.user;
-      final role = authState.authUser?.rol;
+      final role = authState.authUser?.role;
       final roleGoogle = user?.rol;
       final authType = authState.authenticatedType;
       debugPrint(isGoingTo);

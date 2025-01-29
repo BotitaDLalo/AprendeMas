@@ -26,7 +26,7 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final getAllActivitiesCallback =
       ref.read(activityProvider.notifier).getAllActivities;
 
-  final setAllActivitiesOfflineState = ref.read(activityProvider.notifier).getAllActivitiesOffline; 
+  final setAllActivitiesOfflineState = ref.read(activityProvider.notifier).getAllActivities; 
 
   final getGroupsSubjectsCallback =
       ref.read(groupsProvider.notifier).getGroupsSubjects;

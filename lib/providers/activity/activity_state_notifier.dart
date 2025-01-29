@@ -2,15 +2,16 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/activity/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
-import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
+// import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
 
 class ActivityNotifier extends StateNotifier<ActivityState> {
   final ActivityRepository activityRepository;
-  final ActivityOfflineRepository activityOfflineRepository;
+  // final ActivityOfflineRepository activityOfflineRepository;
 
   ActivityNotifier(
       {required this.activityRepository,
-      required this.activityOfflineRepository})
+      // required this.activityOfflineRepository
+      })
       : super(ActivityState());
 
   // Método para cargar todas las actividades desde el repositorio
@@ -28,9 +29,9 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> getAllActivitiesOffline(int materiaId) async {
     try {
-      final activities =
-          await activityOfflineRepository.getAllActivitiesOffline(materiaId);
-      _setActivities(activities);
+      // final activities =
+          // await activityOfflineRepository.getAllActivitiesOffline(materiaId);
+      // _setActivities(activities);
     } catch (e) {
       print(e);
     }
