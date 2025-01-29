@@ -102,15 +102,15 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
             const SizedBox(
               height: 20,
             ),
-            CustomTextFormField(
-                isNumericKeyboard: true,
-                textEditingController: activityCreated.puntajeController,
-                label: 'Puntaje',
-                onChanged:
-                    ref.read(activityFormProvider.notifier).onPuntajeChanged,
-                errorMessage: activityForm.isFormPosted
-                    ? activityForm.puntaje.errorMessage
-                    : null),
+            // CustomTextFormField(
+            //     isNumericKeyboard: true,
+            //     textEditingController: activityCreated.puntajeController,
+            //     label: 'Puntaje',
+            //     onChanged:
+            //         ref.read(activityFormProvider.notifier).onPuntajeChanged,
+            //     errorMessage: activityForm.isFormPosted
+            //         ? activityForm.puntaje.errorMessage
+            //         : null),
             const SizedBox(
               height: 30,
             ),

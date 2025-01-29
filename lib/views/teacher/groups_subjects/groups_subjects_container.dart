@@ -1,8 +1,6 @@
-import 'package:aprende_mas/providers/groups/groups_provider.dart';
-import 'package:aprende_mas/views/widgets/cards/subjects_scroll.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../widgets/cards/group_card.dart';
+import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
   const GroupsSubjectsContainer({
@@ -33,12 +31,13 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
           id: grupo.grupoId ?? -1,
           title: grupo.nombreGrupo,
           description: grupo.descripcion ?? "",
-          accessCode: grupo.codigoAcceso ?? "",
+          accessCode: grupo.codigoAcceso,
           color: grupo.codigoColor,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SubjectScroll(
+                groupId: grupo.grupoId,
                 materias: grupo.materias,
               ),
             )

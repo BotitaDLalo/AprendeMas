@@ -63,7 +63,7 @@ class SubjectCard extends ConsumerWidget {
               height: 0.5,
             ),
             CustomFooterContainer(
-              // groupId: groupId,
+              groupId: groupId,
               subjectId: subjectId,
               subjectName: nombreMateria,
               description: description,

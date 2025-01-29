@@ -1,8 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/providers/notices/notices_provider.dart';
-
 class AppBarHome extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   const AppBarHome({super.key, required this.title});

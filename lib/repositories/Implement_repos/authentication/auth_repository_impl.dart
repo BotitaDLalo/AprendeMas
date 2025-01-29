@@ -9,10 +9,14 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({AuthDataSource? dataSource})
       : dataSource = dataSource ?? AuthDataSourceImpl();
 
-
   @override
   Future<AuthUser> login(String email, String password) {
     return dataSource.login(email, password);
+  }
+
+  @override
+  Future<User> signin(String name,String lastname, String secondLastname, String email, String password, String role) {
+    return dataSource.signin(name, lastname, secondLastname, email, password, role);
   }
 
   @override
@@ -24,21 +28,16 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> resetPasswordRequest(String email) {
     return dataSource.resetPasswordRequest(email);
   }
-  
+
   @override
   Future<AuthUser> loginGoogle() {
     return dataSource.loginGoogle();
   }
-  
+
   @override
-  registerMissingDataGoogle(String names, String lastname, String secondLastname, String role) {
-    // TODO: implement registerMissingDataGoogle
-    throw UnimplementedError();
-  }
-  
-  @override
-  Future<User> signin(String name, String email, String password, String role) {
-    // TODO: implement signin
-    throw UnimplementedError();
+  Future<AuthUser> registerMissingDataGoogle(
+      String names, String lastname, String secondLastname, String role) {
+    return dataSource.registerMissingDataGoogle(
+        names, lastname, secondLastname, role);
   }
 }

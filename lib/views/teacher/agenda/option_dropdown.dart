@@ -36,7 +36,7 @@ void _updateOptions(String selectedType) {
       print('Grupos cargados: $groupsState'); // Depuración
 
       _options = groupsState.groups.map((group) {
-        return {'id': group.grupoId.toString(), 'name': group.nombreGrupo};
+        return {'id': group.grupoId, 'name': group.nombreGrupo};
       }).toList();
     } 
 

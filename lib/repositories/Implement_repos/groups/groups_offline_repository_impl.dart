@@ -1,8 +1,7 @@
 import 'package:aprende_mas/models/groups/group.dart';
-import 'package:aprende_mas/repositories/Implement_repos/groups/groups_offline_data_source.dart';
-import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline.dart';
+import 'package:aprende_mas/repositories/Implement_repos/groups/groups_offline_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_data_source.dart';
-
+import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_repository.dart';
 
 class GroupsOfflineRepositoryImpl implements GroupsOfflineRepository {
   final GroupsOfflineDataSource groupsOfflineDataSource;

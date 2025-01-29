@@ -24,6 +24,7 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
           inserted = true;
         }
       });
+      await db.close();
       return inserted;
     } catch (e) {
       print(e);
@@ -31,23 +32,7 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
     }
   }
 
-  @override
-  Future<List<Notice>> getLastNotification() async {
-    try {
-      Database db = await DbLocal.initDatabase();
 
-      // final query = Querys.querytbNotificacionesSelect();
-
-      final ls = await db.query('tbNotificaciones',
-          orderBy: 'FechaEnvio DESC', limit: 1);
-
-      final lsNotice = Notice.noticeJsonToEntity(ls);
-
-      return lsNotice;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
 
   @override
   Future<List<Notice>> getLsNotifications() async {
@@ -57,9 +42,11 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
 
       final lsNotice = Notice.noticeJsonToEntity(ls);
 
+      print('AVISO EN DATA SOURCE');
       for (var n in lsNotice) {
         print("Aviso: " + n.toString());
       }
+      await db.close();
       return lsNotice;
     } catch (e) {
       throw Exception(e);
@@ -73,6 +60,7 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
       final query = Querys.querytbNotificacionesDeleteWhere();
       int count = await db.rawDelete(query, [sentDate]);
 
+      await db.close();
       if (count == 1) {
         return true;
       }

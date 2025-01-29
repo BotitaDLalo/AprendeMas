@@ -12,7 +12,6 @@ class ActivityFormState {
   final GenericInput descripcion; // Validación del campo 'descripcion'
   final GenericInput fechaLimite;
   final GenericInput horaLimite;
-  final GenericInput puntaje;
 
   ActivityFormState({
     this.activities = const [],
@@ -22,8 +21,7 @@ class ActivityFormState {
     this.nombre = const GenericInput.pure(),
     this.descripcion = const GenericInput.pure(),
     this.fechaLimite = const GenericInput.pure(),
-    this.horaLimite = const GenericInput.pure(),
-    this.puntaje = const GenericInput.pure()
+    this.horaLimite = const GenericInput.pure()
   });
 
   // Método para crear una nueva instancia con campos actualizados
@@ -36,7 +34,6 @@ class ActivityFormState {
     GenericInput? descripcion,
     GenericInput? fechaLimite,
     GenericInput? horaLimite,
-    GenericInput? puntaje
   }) =>
       ActivityFormState(
           activities: activities ?? this.activities,
@@ -46,8 +43,7 @@ class ActivityFormState {
           nombre: nombre ?? this.nombre,
           descripcion: descripcion ?? this.descripcion,
           fechaLimite: fechaLimite ?? this.fechaLimite,
-          horaLimite:  horaLimite ?? this.horaLimite,
-          puntaje: puntaje ?? this.puntaje
+          horaLimite:  horaLimite ?? this.horaLimite
       );
 
   @override
@@ -61,7 +57,6 @@ class ActivityFormState {
     descripcion: $descripcion
     fechaLimite: $fechaLimite
     horaLimite: $horaLimite
-    puntaje: $puntaje
     ''';
   }
 }

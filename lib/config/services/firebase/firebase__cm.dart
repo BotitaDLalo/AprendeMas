@@ -8,17 +8,6 @@ class FirebaseCM{
     return fcmToken;
   }
 
-  void onMessagesForeground(WidgetRef ref) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        final dbLocalNotices = DbLocalNoticesRepositoryImpl();
-        final notice = onNewMessage(message);
-        dbLocalNotices.storeNotification(notice);
-        print("CAYO UNA NOTIFICACION");
-      }
-    });
-  }
-
   static Notice onNewMessage(RemoteMessage message) {
     final notification = Notice(
         messageId:

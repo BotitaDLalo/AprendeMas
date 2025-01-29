@@ -1,5 +1,6 @@
 export 'activities/activities.dart';
 export 'activities/activity/activity.dart';
+export 'activities/submission.dart';
 
 export 'authentication/auth_errors.dart';
 export 'authentication/auth_user_mapper.dart';
@@ -25,5 +26,6 @@ export 'notice_list/notice.dart';
 
 export 'various/widget_options.dart';
 export 'various/verify_email.dart';
+export 'various/active_user.dart';
 
-export 'users/student_group.dart';
+export 'users/student_group_subject.dart';

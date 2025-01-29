@@ -19,22 +19,21 @@ class AppTheme {
   static final Color pickedColor = _colorThemes[0];
   static final BorderRadius borderRadius = BorderRadius.circular(10);
 
-
 //#Color picker availableColors
-static final List<Color> availableColors = [
-  const Color(0xFF00BCD4),
-  const Color(0xFF3F51B5),
-  const Color(0xFF673AB7),
-  const Color(0xFF9C27B0),
-  const Color(0xFF009688),
-  const Color(0xFF4CAF50),
-  const Color(0xFF8BC34A),
-  const Color(0xFFE91E63),
-  const Color(0xFFF44336),
-  const Color(0xFFFF5722),
-  const Color(0xFFFF9800),
-  const Color(0xFFFFC107),
-];
+  static final List<Color> availableColors = [
+    const Color(0xFF00BCD4),
+    const Color(0xFF3F51B5),
+    const Color(0xFF673AB7),
+    const Color(0xFF9C27B0),
+    const Color(0xFF009688),
+    const Color(0xFF4CAF50),
+    const Color(0xFF8BC34A),
+    const Color(0xFFE91E63),
+    const Color(0xFFF44336),
+    const Color(0xFFFF5722),
+    const Color(0xFFFF9800),
+    const Color(0xFFFFC107),
+  ];
 
 //#Text theme style
   final TextTheme textThemes = const TextTheme(
@@ -48,8 +47,6 @@ static final List<Color> availableColors = [
     bodySmall: TextStyle(fontSize: 14, color: Colors.black),
     // labelLarge: TextStyle(fontSize: 20, color: Colors.black)
   );
-
-
 
 //#Degradated general
   static const LinearGradient degradedBlue = LinearGradient(
@@ -100,14 +97,16 @@ static final List<Color> availableColors = [
     ),
   );
 
-  // final FilledButtonThemeData filledButtonThemeData = FilledButtonThemeData(
-  //     style: ButtonStyle(
-  //         backgroundColor: WidgetStatePropertyAll(_colorThemes[1])));
-
   static Color stringToColor(String hexColor) {
     Color colorCode = Color(int.parse("0xFF$hexColor"));
     return colorCode;
   }
+
+  static RoundedRectangleBorder shapeFloatingActionButton() =>
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      );
+
   ThemeData theme() {
     return ThemeData(
         textTheme: textThemes, scaffoldBackgroundColor: _colorThemes[0]);

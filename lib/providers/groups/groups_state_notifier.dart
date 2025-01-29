@@ -1,8 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/groups/groups_state.dart';
-import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
+import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_repository.dart';
 
 class GroupsNotifier extends StateNotifier<GroupsState> {
   final GroupsRepository groupsRepository;

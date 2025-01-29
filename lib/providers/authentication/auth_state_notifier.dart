@@ -1,8 +1,6 @@
-import 'package:aprende_mas/config/utils/catalog_names.dart';
-import 'package:aprende_mas/models/various/active_user.dart';
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
-import 'package:aprende_mas/repositories/Implement_repos/authentication/auth__user_offline_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_user_offline_repository_impl.dart';
 import 'package:aprende_mas/config/services/google/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
@@ -12,6 +10,7 @@ import 'package:aprende_mas/repositories/Implement_repos/groups/groups_repositor
 import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
 import 'package:aprende_mas/config/data/key_value_storage_service.dart';
 import 'package:aprende_mas/config/services/services.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final cn = CatalogNames();
@@ -71,7 +70,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       String email, String password, String role) async {
     try {
       final user = await authRepository.signin(
-          names, lastName, secondLastName, email,);
+          names, lastName, secondLastName, email, password, role);
 
       if (user.email != "" && user.nombre != "" && user.rol != "") {
         _setRegisterUser(user);

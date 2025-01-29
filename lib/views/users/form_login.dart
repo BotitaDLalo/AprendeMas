@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:aprende_mas/config/services/services.dart';
@@ -17,7 +18,6 @@ class FormLoginState extends ConsumerState<FormLogin> {
   void initState() {
     super.initState();
     ref.read(firebasecmProvider.notifier).onRequestPermissions();
-    // FirebaseConfiguration.onMessagesForeground();
   }
 
   @override
@@ -26,8 +26,17 @@ class FormLoginState extends ConsumerState<FormLogin> {
     final loginFormNotifier = ref.read(loginFormProvider.notifier);
     final fcm = ref.watch(firebasecmProvider);
 
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.theresMissingData) {
+          context.go("/missing-data");
+        }
+      },
+    );
+
     return Container(
-      width: 350,
+      width: MediaQuery.of(context).size.width * 1.90,
       height: MediaQuery.of(context).size.height * 0.60,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -83,10 +92,10 @@ class FormLoginState extends ConsumerState<FormLogin> {
                 if (loginForm.isPosting) {
                   return;
                 }
-
                 if (fcm.status == AuthorizationStatus.authorized) {
                   loginFormNotifier.onFormSubmit();
-                }else{
+                  showLoadingScreen(context);
+                } else {
                   ref.read(firebasecmProvider.notifier).onRequestPermissions();
                 }
               },

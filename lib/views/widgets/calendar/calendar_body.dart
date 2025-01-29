@@ -134,7 +134,8 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.push('/events-options');
+          context.push('/create-event');
+          print('context: $context ');
         },
         backgroundColor: Colors.white,
         elevation: 8,

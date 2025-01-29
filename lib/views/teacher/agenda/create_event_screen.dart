@@ -3,8 +3,6 @@ import 'package:aprende_mas/views/views.dart';
 import 'package:flutter/material.dart';
 
 class CreateEventScreen extends StatelessWidget {
-
-
   const CreateEventScreen({super.key,});
 
   @override

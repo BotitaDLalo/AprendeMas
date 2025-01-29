@@ -2,7 +2,6 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:go_router/go_router.dart';
 import 'package:aprende_mas/providers/providers.dart';
 class FormForgotPassword extends ConsumerWidget {
   const FormForgotPassword({super.key});
@@ -18,7 +17,7 @@ class FormForgotPassword extends ConsumerWidget {
     }
 
     return Container(
-      width: 350,
+      width: MediaQuery.of(context).size.width * 1.90,
       height: MediaQuery.of(context).size.height * 0.35,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
