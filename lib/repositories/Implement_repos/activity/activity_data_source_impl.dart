@@ -1,7 +1,6 @@
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/config/network/dio_client.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/models/activities/activity/activity.dart';
 import 'package:aprende_mas/models/activities/activity/activity_mapper.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activty_datasource.dart';
 import 'package:aprende_mas/config/data/data.dart';
@@ -71,23 +70,23 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       final id = await storageService.getId();
 
       final res = await dio.post(uri, data: {
+        "ActividadId": activityId,
         "AlumnoId": id,
         "Respuesta": answer,
-        "ActividadId": activityId,
         "FechaEntrega": dateNow.toString()
       });
 
       if (res.statusCode == 200) {
         final resList = Map<String, dynamic>.from(res.data);
 
-        final list = Submission.submissionJsonToEntity(resList);
+        final list = Submission.submissionJsonToEntity(resList, activityId);
 
         return list;
       }
 
       return [];
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return [];
     }
   }
@@ -103,14 +102,14 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       if (res.statusCode == 200) {
         final resList = Map<String, dynamic>.from(res.data);
 
-        final list = Submission.submissionJsonToEntity(resList);
+        final list = Submission.submissionJsonToEntity(resList, activityId);
 
         return list;
       }
 
       return [];
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return [];
     }
   }
@@ -131,13 +130,14 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       if (res.statusCode == 200) {
         final resList = Map<String, dynamic>.from(res.data);
 
-        final list = Submission.submissionJsonToEntity(resList);
+        final list = Submission.submissionJsonToEntity(resList, activityId);
 
         return list;
       }
 
       return [];
     } catch (e) {
+      print(e);
       return [];
     }
   }

@@ -13,7 +13,18 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
       required this.activityOfflineRepository})
       : super(ActivityState());
 
-  // Método para cargar todas las actividades desde el repositorio
+  List<Activity> getActivitiesBySubject(int subjectId) {
+    try {
+      List<Activity> lsActivities = List.from(state.activities);
+      final lsActivitiesBySubject =
+          Activity.activitiesBySubject(lsActivities, subjectId);
+      return lsActivitiesBySubject;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<void> getAllActivities(int materiaId) async {
     try {
       state = state.copyWith(isLoading: true);
@@ -32,12 +43,15 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
           await activityOfflineRepository.getAllActivitiesOffline(materiaId);
       _setActivities(activities);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
   void _setActivities(List<Activity> activities) {
-    state = state.copyWith(activities: activities);
+    if (activities.isNotEmpty) {
+      List<Activity> lsActivities = List.from(state.activities);
+      state = state.copyWith(activities: [...activities, ...lsActivities]);
+    }
   }
 
   Future<void> createdActivity(
@@ -63,12 +77,27 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     state = state.copyWith(activities: activity);
   }
 
-  Future<void> getSubmissions(int activityId) async {
+  Future<List<Submission>> getSubmissions(int activityId) async {
     try {
       final lsSubmisions = await activityRepository.getSubmissions(activityId);
       _setLsSubmissions(lsSubmisions);
+      return lsSubmisions;
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
+  List<Submission> getSubmissionsByActivity(int activityId) {
+    try {
+      List<Submission> lsSubmissions = List.from(state.lsSubmissions);
+
+      List<Submission> lsSubmissionsByActivity =
+          Submission.activitiesBySubject(lsSubmissions, activityId);
+      return lsSubmissionsByActivity;
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
     }
   }
 
@@ -89,16 +118,54 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> cancelSubmission(int studentActivityId, int activityId) async {
     try {
+      // final cancelSubmission = await activityRepository.cancelSubmission(
       final cancelSubmission = await activityRepository.cancelSubmission(
           studentActivityId, activityId);
+      // _setLsSubmissions(cancelSubmission);
+      // List<Submission> lsSubmissionsState = List.from(state.lsSubmissions);
 
+      // List<Submission> lsSubmission = lsSubmissionsState
+      //     .where((element) => element.studentActivityId != studentActivityId)
+      //     .toList();
       _setLsSubmissions(cancelSubmission);
     } catch (e) {
       throw Exception(e);
     }
   }
 
+  Future<bool> sendSubmissionOffline(int activityId, String answer) async {
+    try {
+      final submissionSent = await activityOfflineRepository
+          .sendSubmissionOffline(activityId, answer);
+      if (submissionSent.isNotEmpty) {
+        _setLsSubmissions(submissionSent);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<List<Submission>> getSubmissionsOffline(int activityId) async {
+    try {
+      final lsSubmissions =
+          await activityOfflineRepository.getSubmissionsOffline(activityId);
+      _setLsSubmissions(lsSubmissions);
+      return lsSubmissions;
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
   void _setLsSubmissions(List<Submission> lsSubmisions) {
-    state = state.copyWith(lsSubmissions: lsSubmisions);
+    List<Submission> lsSubmisionsState = List.from(state.lsSubmissions);
+    state =
+        state.copyWith(lsSubmissions: [...lsSubmisionsState, ...lsSubmisions]);
+  }
+
+  void clearActivityState() {
+    state = ActivityState();
   }
 }

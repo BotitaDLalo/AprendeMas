@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/views.dart';
@@ -19,18 +20,6 @@ class ActivitySectionSubmissions extends ConsumerStatefulWidget {
 
 class _ActivitySectionSubmissionState
     extends ConsumerState<ActivitySectionSubmissions> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-      () {
-        ref
-            .read(activityProvider.notifier)
-            .getSubmissions(widget.activity.actividadId);
-      },
-    );
-  }
-
   void showDialogAnswer(BuildContext context, String content) {
     showDialog(
       context: context,
@@ -94,10 +83,13 @@ class _ActivitySectionSubmissionState
 
   @override
   Widget build(BuildContext context) {
-    // final activityForm = ref.read(activityFormProvider.notifier);
-    final dialogHeight = ref.watch(dialogHeightProvider);
+    final authConectionType = ref.read(authProvider).authConectionType;
+    final activityId = widget.activity.actividadId;
     final activitiesForm = ref.watch(activityFormProvider);
-    final lsSubmissions = ref.watch(activityProvider).lsSubmissions;
+    // final lsSubmissions = ref.watch(activityProvider).lsSubmissions;
+    final lsSubmissions = ref
+        .read(activityProvider.notifier)
+        .getSubmissionsByActivity(activityId);
 
     void showSendConfirmation() {
       showDialog(
@@ -112,8 +104,16 @@ class _ActivitySectionSubmissionState
           actions: [
             TextButton(
                 onPressed: () {
-                  //TODO: Enviar la actividad al data source
-                  ref.read(activityFormProvider.notifier).onSendSubmission(widget.activity.actividadId);
+                  if (authConectionType == AuthConectionType.online) {
+                    ref
+                        .read(activityFormProvider.notifier)
+                        .onSendSubmission(activityId);
+                  } else if (authConectionType == AuthConectionType.offline) {
+                    //TODO: REGISTRAR SUBMISSION EN BD LOCAL
+                    ref
+                        .read(activityFormProvider.notifier)
+                        .onSendSubmissionOffline(activityId);
+                  }
                   Navigator.pop(context);
                 },
                 child: const Text('Enviar'))
@@ -161,8 +161,13 @@ class _ActivitySectionSubmissionState
                   leading: const Icon(Icons.delete),
                   title: const Text('Cancelar Entregable'),
                   onTap: () {
-                    ref.read(activityProvider.notifier).cancelSubmission(
-                        studentActivityId, widget.activity.actividadId);
+                    if (authConectionType == AuthConectionType.online) {
+                       ref
+                          .read(activityProvider.notifier)
+                          .cancelSubmission(
+                              studentActivityId, widget.activity.actividadId);
+                    } else if (authConectionType ==
+                        AuthConectionType.offline) {}
 
                     Navigator.pop(context);
                   },
@@ -277,8 +282,10 @@ class _ActivitySectionSubmissionState
 
                                     return GestureDetector(
                                       onLongPress: () {
-                                        showModalBottomCancelSubmit(
-                                            submission.studentActivityId);
+                                        if (submission.status) {
+                                          showModalBottomCancelSubmit(
+                                              submission.studentActivityId);
+                                        }
                                       },
                                       child: ElementTile(
                                           icon: const Icon(Icons.edit_note),
@@ -295,8 +302,8 @@ class _ActivitySectionSubmissionState
                                                       fontWeight:
                                                           FontWeight.w500),
                                                 ),
-                                                content:
-                                                    Text(submission.answer),
+                                                content: Text(
+                                                    submission.answer ?? ""),
                                                 contentPadding:
                                                     const EdgeInsets.all(10),
                                                 actions: [
@@ -309,12 +316,10 @@ class _ActivitySectionSubmissionState
                                                 ],
                                               ),
                                             );
-                                         
-                                         
                                           },
                                           trailing: submission.status
                                               ? "Enviado"
-                                              : ""),
+                                              : "Pendiente a envió"),
                                     );
                                   },
                                 ),

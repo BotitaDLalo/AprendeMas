@@ -6,6 +6,7 @@ import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
 class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final Function(int, String, String, DateTime) activityCallback;
   final Function(int, String) sendSubmissionCallback;
+  final Function(int, String) sendSubmissionOfflineCallback;
   final TextEditingController nombreController;
   final TextEditingController descripcionController;
   final TextEditingController fechaController;
@@ -15,6 +16,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   ActivityFormNotifier({
     required this.activityCallback,
     required this.sendSubmissionCallback,
+    required this.sendSubmissionOfflineCallback,
   })  : fechaController = TextEditingController(),
         horaController = TextEditingController(),
         nombreController = TextEditingController(),
@@ -192,6 +194,14 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   onSendSubmission(int activityId) async {
     bool submissionSent =
         await sendSubmissionCallback(activityId, state.answer);
+    if (submissionSent) {
+      dropAnswer();
+    }
+  }
+
+  onSendSubmissionOffline(int activityId) async {
+    bool submissionSent =
+        await sendSubmissionOfflineCallback(activityId, state.answer);
     if (submissionSent) {
       dropAnswer();
     }

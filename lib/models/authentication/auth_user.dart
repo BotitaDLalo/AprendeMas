@@ -11,4 +11,7 @@ class AuthUser {
       required this.email,
       required this.role,
       required this.token});
+
+  static AuthUser authUserVoid() =>
+      AuthUser(userId: -1, userName: '', email: '', role: '', token: '');
 }

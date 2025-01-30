@@ -116,7 +116,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
           await subjectsRepository.getStudentsSubject(subjectId);
       _setStudentsSubject(lsStudentsSubject);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 

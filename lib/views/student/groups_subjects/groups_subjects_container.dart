@@ -14,15 +14,6 @@ class GroupsSubjectsContainer extends ConsumerStatefulWidget {
 class _GroupsSubjectsContainerState
     extends ConsumerState<GroupsSubjectsContainer> {
   @override
-  void initState() {
-    super.initState();
-    final authConectionType = ref.read(authProvider).authConectionType;
-    if (authConectionType == AuthConectionType.online) {
-      ref.read(groupsProvider.notifier).getGroupsSubjects();
-    } else if (authConectionType == AuthConectionType.offline) {}
-  }
-
-  @override
   Widget build(BuildContext context) {
     final groups = ref.watch(groupsProvider).groups;
     return ListView.builder(

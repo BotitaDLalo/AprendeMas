@@ -19,7 +19,9 @@ class Activity {
       required this.fechaCreacion,
       required this.fechaLimite,
       required this.materiaId});
+
   static final DateFormat dateTimeFormat = DateFormat('yyyy-MM-ddTHH:mm:ss');
+
   static List<Activity> queryToEntityActivity(
       List<Map<String, Object?>> querylsActivities) {
     final lsActivities = querylsActivities
@@ -37,4 +39,10 @@ class Activity {
 
     return lsActivities;
   }
+
+
+  static List<Activity> activitiesBySubject(List<Activity> lsActivities, int subjectId){
+    return lsActivities.where((element) => element.materiaId == subjectId,).toList();
+  }
+
 }

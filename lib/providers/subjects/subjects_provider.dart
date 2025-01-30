@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../repositories/Implement_repos/subjects/subjects_respository_impl.dart';
 
 final subjectsProvider =
-    StateNotifierProvider.autoDispose<SubjectsStateNotifier, SubjectsState>((ref) {
+    StateNotifierProvider<SubjectsStateNotifier, SubjectsState>((ref) {
   final subjectsRepository = SubjectsRespositoryImpl();
   return SubjectsStateNotifier(ref,subjectsRepository: subjectsRepository);
 });

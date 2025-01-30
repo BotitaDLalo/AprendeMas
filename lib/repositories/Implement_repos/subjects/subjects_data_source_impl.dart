@@ -37,7 +37,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
       });
 
       final resList = List<Map<String, dynamic>>.from(res.data);
-      final groups = GroupsMapper.groupsJsonToEntityList(resList);
+      final groups = Group.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {
       throw Exception(e);

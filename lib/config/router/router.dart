@@ -1,6 +1,5 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'router_redirections.dart';
-import 'package:aprende_mas/views/users/users.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
@@ -148,7 +147,7 @@ final goRouterProvider = Provider((ref) {
       final authGoogleStatus = routerNotifier.authGoogleStatus;
       final authState = ref.read(authProvider);
       final user = authState.user;
-      final role = authState.authUser?.rol;
+      final role = authState.authUser?.role;
       final roleGoogle = user?.rol;
       final authType = authState.authenticatedType;
       debugPrint(isGoingTo);

@@ -7,9 +7,14 @@ final activityFormProvider =
     StateNotifierProvider.autoDispose<ActivityFormNotifier, ActivityFormState>(
   (ref) {
     // Cambiamos a activityProvider.notifier
-  final createActivity = ref.read(activityProvider.notifier).createdActivity;
-  final sendActivity = ref.read(activityProvider.notifier).sendSubmission;
+    final createActivity = ref.read(activityProvider.notifier).createdActivity;
+    final sendActivity = ref.read(activityProvider.notifier).sendSubmission;
+    final sendActivityOffline =
+        ref.read(activityProvider.notifier).sendSubmissionOffline;
 
-    return ActivityFormNotifier(activityCallback: createActivity, sendSubmissionCallback: sendActivity);
+    return ActivityFormNotifier(
+        activityCallback: createActivity,
+        sendSubmissionCallback: sendActivity,
+        sendSubmissionOfflineCallback: sendActivityOffline);
   },
 );
