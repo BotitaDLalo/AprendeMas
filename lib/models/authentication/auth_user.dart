@@ -1,14 +1,14 @@
 class AuthUser {
-  final int id;
+  final int userId;
   final String userName;
   final String email;
-  final String rol;
+  final String role;
   final String token;
 
   AuthUser(
-      {required this.id,
+      {required this.userId,
       required this.userName,
       required this.email,
-      required this.rol,
+      required this.role,
       required this.token});
 }

@@ -13,31 +13,35 @@ class ActivityFormState {
   final GenericInput fechaLimite;
   final GenericInput horaLimite;
   final GenericInput puntaje;
+  final String answer;
+  final bool existsAnswer;
 
-  ActivityFormState({
-    this.activities = const [],
-    this.isPosting = false,
-    this.isFormPosted = false,
-    this.isValid = false,
-    this.nombre = const GenericInput.pure(),
-    this.descripcion = const GenericInput.pure(),
-    this.fechaLimite = const GenericInput.pure(),
-    this.horaLimite = const GenericInput.pure(),
-    this.puntaje = const GenericInput.pure()
-  });
+  ActivityFormState(
+      {this.activities = const [],
+      this.isPosting = false,
+      this.isFormPosted = false,
+      this.isValid = false,
+      this.nombre = const GenericInput.pure(),
+      this.descripcion = const GenericInput.pure(),
+      this.fechaLimite = const GenericInput.pure(),
+      this.horaLimite = const GenericInput.pure(),
+      this.puntaje = const GenericInput.pure(),
+      this.answer = "",
+      this.existsAnswer = false});
 
   // Método para crear una nueva instancia con campos actualizados
-  ActivityFormState copyWith({
-    List<Activity>? activities,
-    bool? isPosting,
-    bool? isFormPosted,
-    bool? isValid,
-    GenericInput? nombre,
-    GenericInput? descripcion,
-    GenericInput? fechaLimite,
-    GenericInput? horaLimite,
-    GenericInput? puntaje
-  }) =>
+  ActivityFormState copyWith(
+          {List<Activity>? activities,
+          bool? isPosting,
+          bool? isFormPosted,
+          bool? isValid,
+          GenericInput? nombre,
+          GenericInput? descripcion,
+          GenericInput? fechaLimite,
+          GenericInput? horaLimite,
+          GenericInput? puntaje,
+          String? answer,
+          bool? existsAnswer}) =>
       ActivityFormState(
           activities: activities ?? this.activities,
           isPosting: isPosting ?? this.isPosting,
@@ -46,9 +50,10 @@ class ActivityFormState {
           nombre: nombre ?? this.nombre,
           descripcion: descripcion ?? this.descripcion,
           fechaLimite: fechaLimite ?? this.fechaLimite,
-          horaLimite:  horaLimite ?? this.horaLimite,
-          puntaje: puntaje ?? this.puntaje
-      );
+          horaLimite: horaLimite ?? this.horaLimite,
+          puntaje: puntaje ?? this.puntaje,
+          answer: answer ?? this.answer,
+          existsAnswer: existsAnswer ?? this.existsAnswer);
 
   @override
   String toString() {

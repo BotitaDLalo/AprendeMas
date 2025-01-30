@@ -9,12 +9,13 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   @override
   Future<List<Subject>> getSubjects() async {
     try {
-      const uri = "/Materias/ObtenerMaterias";
+      const uri = "/Materias/ObtenerMateriasPorDocente";
 
       final id = await storageService.getId();
       final res = await dio.get(uri, queryParameters: {'docenteid': id});
 
       final resList = List<Map<String, dynamic>>.from(res.data);
+      debugPrint("SubjectsDataSourceImpl: ${res.data}");
       final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {
@@ -37,7 +38,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
       });
 
       final resList = List<Map<String, dynamic>>.from(res.data);
-      final groups = GroupsMapper.groupsJsonToEntityList(resList);
+      final groups = Group.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {
       throw Exception(e);

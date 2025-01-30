@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/agenda/event_provider.dart';
+import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
 import 'package:aprende_mas/views/widgets/calendar/event_calendar_data_source.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -20,7 +21,7 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
     super.initState();
     // Llamar al método getEvents del notifier
     Future.microtask(() => ref.read(eventProvider.notifier).getEvents());
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {

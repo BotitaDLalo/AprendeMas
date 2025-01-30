@@ -22,6 +22,23 @@ class _FormEventsState extends ConsumerState<FormEvents> {
     final formCreateEvent = ref.watch(formEventProvider);
     final formCreatedEventNotifier = ref.read(formEventProvider.notifier);
 
+    @override
+    void initState() {
+      super.initState();
+      final refreshKey = StateProvider<bool>((ref) => false);
+      // Escuchar el estado del formulario para actualizar la lista y navegar
+      ref.listen(formEventProvider, (previous, next) {
+        if (next.isFormPosted) {
+          ref.read(refreshKey.notifier).state = true; // Actualiza el estado
+        }
+      });
+    }
+    
+
+    void goRouterPop() {
+      context.pop();
+    }
+
     Future<void> showColorDialog() async {
       showDialog(
         barrierDismissible: false,
@@ -163,7 +180,32 @@ class _FormEventsState extends ConsumerState<FormEvents> {
             ],
           ),
           const SizedBox(height: 30,),
-          ButtonEventForm(buttonName: 'Crear evento', onPressed: () {})
+          ButtonEventForm(
+  buttonName: 'Crear evento',
+  onPressed: () async {
+    // Verifica si no está enviando ya el formulario
+    if (!ref.read(formEventProvider).isPosting) {
+      try {
+        print("Formulario enviado");
+        await formCreatedEventNotifier.onFormSubmit();
+
+        if (formCreateEvent.isFormPosted) {
+          print("Formulario posteado exitosamente");
+          goRouterPop(); // Regresar después de éxito
+        } else {
+          print("El formulario no fue posteado");
+        }
+      } catch (e) {
+        // Captura cualquier error en la creación del evento
+        print("Error al crear el evento: $e");
+      }
+    } else {
+      print("Ya se está enviando el formulario, por favor espere.");
+    }
+    goRouterPop();
+  },
+)
+
           ]
         ),
       ),

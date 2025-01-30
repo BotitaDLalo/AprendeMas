@@ -11,14 +11,21 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
   SubjectsStateNotifier(this.ref, {required this.subjectsRepository})
       : super(SubjectsState());
 
-  Future<void> getSubjects() async {
-    try {
-      final subjects = await subjectsRepository.getSubjects();
+Future<void> getSubjects() async {
+  try {
+    final subjects = await subjectsRepository.getSubjects();
+    debugPrint("SubjectsStateNotifier: $subjects");
+    if (mounted) {
       _setSubjects(subjects);
-    } catch (e) {
-      throw Exception(e);
     }
+  } catch (e, stacktrace) {
+    debugPrint("Error en getSubjects: $e");
+    debugPrint("Stacktrace: $stacktrace");
+    throw Exception(e);
   }
+}
+
+
 
   _setSubjects(List<Subject> subjects) {
     state = state.copyWith(subjects: subjects);

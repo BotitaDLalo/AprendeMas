@@ -1,6 +1,6 @@
 import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_user_offline_data_source_impl.dart';
-import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_user';
 import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_user_offline_data_source.dart';
+import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_user_offline_repository.dart';
 
 
 class AuthUserOfflineRepositoryImpl implements AuthUserOfflineRepository {

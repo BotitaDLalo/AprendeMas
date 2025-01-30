@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/groups/group.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/models/subjects/subjects.dart';
@@ -40,6 +41,7 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
 
   @override
   Future<List<Subject>> getSubjects() {
+    debugPrint("SubjectsRespositoryImpl: ${subjectsDataSource}");
     return subjectsDataSource.getSubjects();
   }
 

@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
 
 class OptionDropdownForm extends ConsumerStatefulWidget {
@@ -9,106 +10,108 @@ class OptionDropdownForm extends ConsumerStatefulWidget {
 }
 
 class _OptionDropdownFormState extends ConsumerState<OptionDropdownForm> {
-  String? _selectedType; // Almacena "Grupo" o "Materia"
-  int? _selectedItemId; // Almacena el ID seleccionado
-  List<Map<String, dynamic>> _options = []; // Lista dinámica para el segundo dropdown
-  
+  String? _selectedType;
+  int? _selectedItemId;
+  List<Map<String, dynamic>> _options = [];
 
   @override
-void initState() {
-  super.initState();
-  // Cargar grupos si aún no se han cargado
-  final groupsState = ref.read(groupsProvider);
-  if (groupsState.groups.isEmpty) {
+  void initState() {
+    super.initState();
     ref.read(groupsProvider.notifier).getGroupsSubjects();
+    ref.read(subjectsProvider.notifier).getSubjects();
   }
 
-}
+  void _updateOptions(String selectedType) {
+    if (!mounted) return;
 
-void _updateOptions(String selectedType) {
-  setState(() {
-    _selectedType = selectedType;
-    _selectedItemId = null; // Reinicia la selección del segundo dropdown
+    setState(() {
+      _selectedType = selectedType;
+      _selectedItemId = null;
 
-    if (selectedType == 'Grupo') {
-      final groupsState = ref.read(groupsProvider);
+      if (_selectedType == 'Grupo') {
+        final groupsState = ref.watch(groupsProvider);
+        _options = groupsState.groups.map((group) => {
+              'id': group.grupoId.toString(),
+              'name': group.nombreGrupo,
+            }).toList();
+      } else if (_selectedType == 'Materia') {
+        final subjectsState = ref.watch(subjectsProvider);
+        _options = subjectsState.subjects.map((subject) => {
+              'id': subject.materiaId.toString(),
+              'name': subject.nombreMateria,
+            }).toList();
+      }
+    });
+  }
 
-      print('Grupos cargados: $groupsState'); // Depuración
+  void _onItemSelected(int? value) {
+    if (value == null) return;
+    
+    setState(() {
+      _selectedItemId = value;
+    });
 
-      _options = groupsState.groups.map((group) {
-        return {'id': group.grupoId, 'name': group.nombreGrupo};
-      }).toList();
-    } 
-
-    print('Opciones actualizadas: $_options'); // Verifica las opciones cargadas
-  });
-}
-
+    if (_selectedType == 'Grupo') {
+      ref.read(formEventProvider.notifier).onGroupIdsChanged;
+    } else if (_selectedType == 'Materia') {
+      ref.read(formEventProvider.notifier).onSubjectIdsChanged;
+    }
+  }
 
   @override
-Widget build(BuildContext context) {
-  return Row(
-    children: [
-      // Primer Dropdown: Selección de tipo
-      Flexible(
-        flex: 2,
-        child: DropdownButtonFormField<String>(
-          decoration: InputDecoration(
-            labelText: 'Tipo',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              labelText: 'Tipo',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              isDense: true,
             ),
-            isDense: true,
+            items: ['Grupo', 'Materia']
+                .map((type) => DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    ))
+                .toList(),
+            value: _selectedType,
+            onChanged: (value) {
+              if (value != null) {
+                _updateOptions(value);
+              }
+            },
           ),
-          items: ['Grupo', 'Materia']
-              .map((type) => DropdownMenuItem(
-                    value: type,
-                    child: Text(type),
-                  ))
-              .toList(),
-          value: _selectedType,
-          onChanged: (value) {
-            if (value != null) {
-              _updateOptions(value); // Llama al método de actualización
-            }
-          },
         ),
-      ),
-      const SizedBox(width: 8), // Espaciado entre dropdowns
-
-      Flexible(
-  flex: 2,
-  child: DropdownButtonFormField<int>(
-    decoration: InputDecoration(
-      labelText: _selectedType == null
-          ? 'Seleccione un tipo primero'
-          : 'Seleccione ${_selectedType!.toLowerCase()}',
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      isDense: true,
-    ),
-    items: _options.isEmpty
-        ? [] // Si no hay opciones, muestra vacío
-        : _options.map((option) {
-            return DropdownMenuItem(
-              value: int.parse(option['id']), // Convierte a entero
-              child: Text(option['name']),
-            );
-          }).toList(),
-    value: _selectedItemId,
-    onChanged: _options.isNotEmpty
-        ? (value) {
-            setState(() {
-              _selectedItemId = value;
-            });
-          }
-        : null, // Deshabilita si no hay opciones
-  ),
-),
-
-    ],
-  );
-}
-
+        const SizedBox(width: 8),
+        Flexible(
+          flex: 2,
+          child: DropdownButtonFormField<int>(
+            decoration: InputDecoration(
+              labelText: _selectedType == null
+                  ? 'Seleccione un tipo primero'
+                  : 'Seleccione ${_selectedType!.toLowerCase()}',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              isDense: true,
+            ),
+            items: _options.isEmpty
+                ? []
+                : _options.map((option) {
+                    return DropdownMenuItem(
+                      value: int.parse(option['id']),
+                      child: Text(option['name']),
+                    );
+                  }).toList(),
+            value: _selectedItemId,
+            onChanged: _options.isNotEmpty ? _onItemSelected : null,
+          ),
+        ),
+      ],
+    );
+  }
 }

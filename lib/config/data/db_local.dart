@@ -6,7 +6,7 @@ class DbLocal {
     try {
       final databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'Movil.db');
-      // await deleteDatabase(path);
+      await deleteDatabase(path);
       bool exist = await File(path).exists();
 
       if (!exist) {

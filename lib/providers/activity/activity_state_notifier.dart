@@ -1,29 +1,42 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/models/activities/activity/activity.dart';
-import 'package:aprende_mas/providers/activity_state/activity_state.dart';
+import 'package:aprende_mas/providers/activity/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
+// import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
 
 class ActivityNotifier extends StateNotifier<ActivityState> {
   final ActivityRepository activityRepository;
+  // final ActivityOfflineRepository activityOfflineRepository;
 
-  ActivityNotifier({required this.activityRepository}) : super(ActivityState());
+  ActivityNotifier(
+      {required this.activityRepository,
+      // required this.activityOfflineRepository
+      })
+      : super(ActivityState());
 
   // Método para cargar todas las actividades desde el repositorio
   Future<void> getAllActivities(int materiaId) async {
     try {
-      state = state.copyWith(isLoading: true); // Indicando que está cargando
+      state = state.copyWith(isLoading: true);
       final activities = await activityRepository.getAllActivities(materiaId);
-      _setActivities(activities); // Aquí actualizamos el estado
+      _setActivities(activities);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
     } finally {
-      state =
-          state.copyWith(isLoading: false); // Indicando que terminó la carga
+      state = state.copyWith(isLoading: false);
     }
   }
 
-  // Método privado para actualizar el estado con nuevas actividades
+  Future<void> getAllActivitiesOffline(int materiaId) async {
+    try {
+      // final activities =
+          // await activityOfflineRepository.getAllActivitiesOffline(materiaId);
+      // _setActivities(activities);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void _setActivities(List<Activity> activities) {
     state = state.copyWith(activities: activities);
   }

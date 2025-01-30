@@ -234,13 +234,13 @@ class _ActivitySectionSubmissionState
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    widget.activity.puntaje ?? 'Sin puntaje',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
+                  // Text(
+                  //   widget.activity.puntaje,
+                  //   style: const TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 18,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
                   const Divider(
                     color: Colors.black,

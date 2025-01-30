@@ -33,6 +33,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
     String nombreActividad,
     String descripcion,
     DateTime fechaLimite,
+    int puntaje
   ) async {
     try {
       const uri = "/Actividades/CrearActividad";
@@ -40,7 +41,8 @@ class ActivityDataSourceImpl implements ActivityDataSource {
         "nombreActividad": nombreActividad,
         "descripcion": descripcion,
         "fechaLimite": fechaLimite.toIso8601String(),
-        "materiaId": materiaId
+        "materiaId": materiaId, 
+        "puntaje": puntaje,
       });
       debugPrint("Response: ${response.data}");
 

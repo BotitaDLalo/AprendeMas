@@ -26,7 +26,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
         final res = await dio.get(uri, queryParameters: {'alumnoid': id});
         resList = List<Map<String, dynamic>>.from(res.data);
       }
-      final groups = GroupsMapper.groupsJsonToEntityList(resList);
+      final groups = Group.groupsJsonToEntityList(resList);
       return groups;
     } catch (e) {
       throw Exception(e);
@@ -40,7 +40,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
       final id = await storageService.getId();
       final res = await dio.get(uri, queryParameters: {'docenteid': id});
       final resList = List<Map<String, dynamic>>.from(res.data);
-      final lsGroups = GroupsCreatedMapper.groupsCreatedToEntityList(resList);
+      final lsGroups = GroupsCreated.groupsCreatedToEntityList(resList);
       return lsGroups;
     } catch (e) {
       throw Exception(e);
@@ -68,7 +68,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
 
       if (res.statusCode == 200) {
         final resLista = List<Map<String, dynamic>>.from(res.data);
-        final groups = GroupsMapper.groupsJsonToEntityList(resLista);
+        final groups = Group.groupsJsonToEntityList(resLista);
         return groups;
       }
       return [];
@@ -92,7 +92,7 @@ class GroupsDataSourceImpl implements GroupsDataSource {
         "DocenteId": id
       });
       if (res.statusCode == 200) {
-        final groups = GroupsMapper.groupsJsonToEntityList(res.data);
+        final groups = Group.groupsJsonToEntityList(res.data);
         return groups;
       } else {
         return [];
@@ -124,14 +124,14 @@ class GroupsDataSourceImpl implements GroupsDataSource {
         "DocenteId": id
       });
 
-      final group = GroupMapper.groupToEntity(res.data);
+      final group = Group.groupToEntity(res.data);
       if (res.statusCode == 200) {
         return group;
       }
-      return GroupMapper.empty();
+      return Group.empty();
     } catch (e) {
       print(e);
-      return GroupMapper.empty();
+      return Group.empty();
     }
   }
 

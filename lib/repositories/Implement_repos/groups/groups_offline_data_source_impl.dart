@@ -68,7 +68,10 @@ class GroupsOfflineDataSourceImpl implements GroupsOfflineDataSource {
                                   fechaLimite: queryActivitie[0]['FechaLimite']
                                       as DateTime,
                                   materiaId:
-                                      queryActivitie[0]['MateriaId'] as int);
+                                      queryActivitie[0]['MateriaId'] as int,
+                                  puntaje:  
+                                      queryActivitie[0]['Puntaje'] as int     
+                                  );
                             },
                           ).toList()));
                     },
