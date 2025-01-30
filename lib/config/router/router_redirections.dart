@@ -4,6 +4,7 @@ class RouterRedirections {
     "/create-subject",
     "/teacher-subject-options",
     "/create-activities",
+    "/create-event",
     "/group-teacher-settings",
     "/activities-options",
     "/notification-content",

@@ -40,7 +40,7 @@ class Group {
               tipoActividadId: actividad['tipoActividadId'],
               fechaCreacion: DateTime.parse(actividad['fechaCreacion']),
               fechaLimite: DateTime.parse(actividad['fechaLimite']),
-              puntaje: actividad['puntaje'].toString(),
+              puntaje: actividad['puntaje'],
               materiaId: actividad['materiaId']);
         }).toList();
 

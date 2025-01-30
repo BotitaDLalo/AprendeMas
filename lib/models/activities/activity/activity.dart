@@ -7,12 +7,12 @@ class Activity {
   final DateTime fechaCreacion;
   final DateTime fechaLimite;
   final int tipoActividadId;
-  final String? puntaje;
+  final int puntaje;
   final int materiaId;
 
   Activity(
       {required this.actividadId,
-      this.puntaje,
+      required this.puntaje,
       required this.nombreActividad,
       required this.descripcion,
       required this.tipoActividadId,
@@ -33,7 +33,9 @@ class Activity {
               tipoActividadId: e['TipoActividadId'] as int,
               fechaCreacion: DateTime.parse(e['FechaCreacion'] as String),
               fechaLimite: DateTime.parse(e['FechaLimite'] as String),
-              materiaId: e['MateriaId'] as int),
+              materiaId: e['MateriaId'] as int,
+              puntaje: e['Puntaje'] as int
+              ), 
         )
         .toList();
 

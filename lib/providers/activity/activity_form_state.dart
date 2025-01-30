@@ -12,6 +12,7 @@ class ActivityFormState {
   final GenericInput descripcion; // Validación del campo 'descripcion'
   final GenericInput fechaLimite;
   final GenericInput horaLimite;
+  final GenericInput puntaje;
   final String answer;
   final bool existsAnswer;
 
@@ -24,6 +25,7 @@ class ActivityFormState {
       this.descripcion = const GenericInput.pure(),
       this.fechaLimite = const GenericInput.pure(),
       this.horaLimite = const GenericInput.pure(),
+      this.puntaje = const GenericInput.pure(),
       this.answer = "",
       this.existsAnswer = false});
 
@@ -37,6 +39,7 @@ class ActivityFormState {
           GenericInput? descripcion,
           GenericInput? fechaLimite,
           GenericInput? horaLimite,
+          GenericInput? puntaje,
           String? answer,
           bool? existsAnswer}) =>
       ActivityFormState(
@@ -48,6 +51,7 @@ class ActivityFormState {
           descripcion: descripcion ?? this.descripcion,
           fechaLimite: fechaLimite ?? this.fechaLimite,
           horaLimite: horaLimite ?? this.horaLimite,
+          puntaje: puntaje ?? this.puntaje,
           answer: answer ?? this.answer,
           existsAnswer: existsAnswer ?? this.existsAnswer);
 
@@ -62,6 +66,7 @@ class ActivityFormState {
     descripcion: $descripcion
     fechaLimite: $fechaLimite
     horaLimite: $horaLimite
+    puntaje: $puntaje
     ''';
   }
 }

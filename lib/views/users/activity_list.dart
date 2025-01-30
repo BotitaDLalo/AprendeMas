@@ -70,7 +70,8 @@ class _ActivityListState extends ConsumerState<ActivityList> {
                   tipoActividadId: activity.tipoActividadId,
                   fechaCreacion: activity.fechaCreacion,
                   fechaLimite: activity.fechaLimite,
-                  materiaId: activity.materiaId);
+                  materiaId: activity.materiaId,
+                  puntaje: activity.puntaje);
               if (role == cn.getRoleTeacherName) {
                 teacherActivitySettings(activityData);
               } else if (role == cn.getRoleStudentName) {

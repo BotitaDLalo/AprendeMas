@@ -58,40 +58,59 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
               height: 20,
             ),
             CustomTextFormField(
-                enableLineBreak: true,
-                capitalizeFirstLetter: true,
-                customHeight: 60,
-                textEditingController: activityCreated.descripcionController,
-                label: 'Descripción',
-                onChanged: ref
-                    .read(activityFormProvider.notifier)
-                    .onDescripcionChanged,
+              enableLineBreak: true,
+              capitalizeFirstLetter: true,
+              customHeight: 60,
+              textEditingController: activityCreated.descripcionController,
+              label: 'Descripción',
+              onChanged:
+                  ref.read(activityFormProvider.notifier).onDescripcionChanged,
+              errorMessage: activityForm.isFormPosted
+                  ? activityForm.descripcion.errorMessage
+                  : null,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                CustomTimeFormField(
+                    width: 150,
+                    controller: activityCreated.fechaController,
+                    label: 'Fecha de Entrega',
+                    isDateField: true, // Habilita el selector de fecha
+                    hint: 'Fecha',
+                    errorMessage: activityForm.fechaLimite.errorMessage,
+                    onChanged: ref
+                        .read(activityFormProvider.notifier)
+                        .onFechaLimiteChanged),
+                const SizedBox(
+                  width: 15,
+                ),
+                CustomTimeFormField(
+                    width: 150,
+                    controller: activityCreated.horaController,
+                    label: 'Hora de Entrega',
+                    isTimeField: true, // Activa el selector de hora
+                    hint: 'Hora',
+                    errorMessage: activityForm.horaLimite.errorMessage,
+                    onChanged: ref
+                        .read(activityFormProvider.notifier)
+                        .onHoraLimiteChanged),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            CustomTextFormField(
+                isNumericKeyboard: true,
+                textEditingController: activityCreated.puntajeController,
+                label: 'Puntaje',
+                onChanged:
+                    ref.read(activityFormProvider.notifier).onPuntajeChanged,
                 errorMessage: activityForm.isFormPosted
-                    ? activityForm.descripcion.errorMessage
+                    ? activityForm.puntaje.errorMessage
                     : null),
-            const SizedBox(
-              height: 20,
-            ),
-            CustomTimeFormField(
-              controller: activityCreated.fechaController,
-              label: 'Fecha de Entrega',
-              isDateField: true, // Habilita el selector de fecha
-              hint: 'Selecciona la fecha',
-              errorMessage: activityForm.fechaLimite.errorMessage,
-              onChanged: ref.read(activityFormProvider.notifier).onFechaLimiteChanged
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            CustomTimeFormField(
-              controller: activityCreated.horaController,
-              label: 'Hora de Entrega',
-              isTimeField: true, // Activa el selector de hora
-              hint: 'Selecciona la hora',
-              errorMessage: activityForm.horaLimite.errorMessage,
-              onChanged: ref.read(activityFormProvider.notifier).onHoraLimiteChanged
-            ),
-
             const SizedBox(
               height: 30,
             ),
@@ -104,9 +123,9 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
                       await activityCreated.onFormSubmit(
                           widget.subjectId, widget.nombreMateria);
                     }
-                      if(activityForm.isFormPosted) {
-                        return goRouterPop();
-                      }
+                    if (activityForm.isFormPosted) {
+                      return goRouterPop();
+                    }
                     // goRouterPop();
                   }),
             ),

@@ -2,15 +2,16 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/activity/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
-import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
+// import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
 
 class ActivityNotifier extends StateNotifier<ActivityState> {
   final ActivityRepository activityRepository;
-  final ActivityOfflineRepository activityOfflineRepository;
+  // final ActivityOfflineRepository activityOfflineRepository;
 
   ActivityNotifier(
       {required this.activityRepository,
-      required this.activityOfflineRepository})
+      // required this.activityOfflineRepository
+      })
       : super(ActivityState());
 
   List<Activity> getActivitiesBySubject(int subjectId) {
@@ -39,9 +40,9 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> getAllActivitiesOffline(int materiaId) async {
     try {
-      final activities =
-          await activityOfflineRepository.getAllActivitiesOffline(materiaId);
-      _setActivities(activities);
+      // final activities =
+          // await activityOfflineRepository.getAllActivitiesOffline(materiaId);
+      // _setActivities(activities);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -59,11 +60,12 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     String nombreActividad,
     String descripcion,
     DateTime fechaLimite,
+    int puntaje
   ) async {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
       final activity = await activityRepository.createdActivity(
-          materiaId, nombreActividad, descripcion, fechaLimite);
+          materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
       _setCreatedActivity(activity);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());

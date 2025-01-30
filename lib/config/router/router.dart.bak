@@ -45,6 +45,10 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const CreateGroupScreen(),
       ),
       GoRoute(
+        path: '/create-event',
+        builder: (context, state) => const CreateEventScreen(),
+        ),
+      GoRoute(
         path: '/group-teacher-settings',
         builder: (context, state) {
           final groupData = state.extra as Group;
@@ -146,6 +150,9 @@ final goRouterProvider = Provider((ref) {
                 switch (isGoingTo) {
                   case "/create-group":
                     return "/create-group";
+
+                  case "/create-subject":
+                    return "/create-subject";
 
                   case "/create-subject":
                     return "/create-subject";

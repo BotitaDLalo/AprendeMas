@@ -1,0 +1,117 @@
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
+import 'package:aprende_mas/providers/providers.dart';
+
+class OptionDropdownForm extends ConsumerStatefulWidget {
+  const OptionDropdownForm({super.key});
+
+  @override
+  ConsumerState<OptionDropdownForm> createState() => _OptionDropdownFormState();
+}
+
+class _OptionDropdownFormState extends ConsumerState<OptionDropdownForm> {
+  String? _selectedType;
+  int? _selectedItemId;
+  List<Map<String, dynamic>> _options = [];
+
+  @override
+  void initState() {
+    super.initState();
+    ref.read(groupsProvider.notifier).getGroupsSubjects();
+    ref.read(subjectsProvider.notifier).getSubjects();
+  }
+
+  void _updateOptions(String selectedType) {
+    if (!mounted) return;
+
+    setState(() {
+      _selectedType = selectedType;
+      _selectedItemId = null;
+
+      if (_selectedType == 'Grupo') {
+        final groupsState = ref.watch(groupsProvider);
+        _options = groupsState.groups.map((group) => {
+              'id': group.grupoId.toString(),
+              'name': group.nombreGrupo,
+            }).toList();
+      } else if (_selectedType == 'Materia') {
+        final subjectsState = ref.watch(subjectsProvider);
+        _options = subjectsState.subjects.map((subject) => {
+              'id': subject.materiaId.toString(),
+              'name': subject.nombreMateria,
+            }).toList();
+      }
+    });
+  }
+
+  void _onItemSelected(int? value) {
+    if (value == null) return;
+    
+    setState(() {
+      _selectedItemId = value;
+    });
+
+    if (_selectedType == 'Grupo') {
+      ref.read(formEventProvider.notifier).onGroupIdsChanged;
+    } else if (_selectedType == 'Materia') {
+      ref.read(formEventProvider.notifier).onSubjectIdsChanged;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: DropdownButtonFormField<String>(
+            decoration: InputDecoration(
+              labelText: 'Tipo',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              isDense: true,
+            ),
+            items: ['Grupo', 'Materia']
+                .map((type) => DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    ))
+                .toList(),
+            value: _selectedType,
+            onChanged: (value) {
+              if (value != null) {
+                _updateOptions(value);
+              }
+            },
+          ),
+        ),
+        const SizedBox(width: 8),
+        Flexible(
+          flex: 2,
+          child: DropdownButtonFormField<int>(
+            decoration: InputDecoration(
+              labelText: _selectedType == null
+                  ? 'Seleccione un tipo primero'
+                  : 'Seleccione ${_selectedType!.toLowerCase()}',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              isDense: true,
+            ),
+            items: _options.isEmpty
+                ? []
+                : _options.map((option) {
+                    return DropdownMenuItem(
+                      value: int.parse(option['id']),
+                      child: Text(option['name']),
+                    );
+                  }).toList(),
+            value: _selectedItemId,
+            onChanged: _options.isNotEmpty ? _onItemSelected : null,
+          ),
+        ),
+      ],
+    );
+  }
+}

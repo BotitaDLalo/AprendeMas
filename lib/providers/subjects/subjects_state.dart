@@ -19,3 +19,5 @@ class SubjectsState {
           lsEmails: lsEmails ?? this.lsEmails,
           lsStudentsSubject: lsStudentsSubject ?? this.lsStudentsSubject);
 }
+
+

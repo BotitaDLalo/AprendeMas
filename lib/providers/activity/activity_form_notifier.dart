@@ -4,7 +4,7 @@ import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
 // import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
 
 class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
-  final Function(int, String, String, DateTime) activityCallback;
+  final Function(int, String, String, DateTime, int) activityCallback;
   final Function(int, String) sendSubmissionCallback;
   final Function(int, String) sendSubmissionOfflineCallback;
   final TextEditingController nombreController;
@@ -12,6 +12,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final TextEditingController fechaController;
   final TextEditingController horaController;
   final TextEditingController answerController;
+  final TextEditingController puntajeController;
 
   ActivityFormNotifier({
     required this.activityCallback,
@@ -22,6 +23,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         nombreController = TextEditingController(),
         descripcionController = TextEditingController(),
         answerController = TextEditingController(),
+        puntajeController = TextEditingController(),
         super(ActivityFormState());
 
   onNombreChanged(String value) {
@@ -33,6 +35,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         state.descripcion,
         state.horaLimite,
         state.fechaLimite,
+        state.puntaje
       ]),
     );
   }
@@ -47,6 +50,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         newDescripcion,
         state.horaLimite,
         state.fechaLimite,
+        state.puntaje
       ]),
     );
   }
@@ -61,6 +65,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         state.descripcion,
         state.horaLimite,
         newFechaLimite, // Valida correctamente 'fechaLimite'
+        state.puntaje
       ]),
     );
   }
@@ -75,6 +80,24 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         state.descripcion,
         state.fechaLimite,
         newHoraLimite, // Valida correctamente 'horaLimite'
+        state.puntaje
+      ]),
+    );
+  }
+
+  onPuntajeChanged(String value) {
+    int? parsedValue = int.tryParse(value);
+    final newPuntaje = GenericInput.dirty(
+      parsedValue != null ? parsedValue.toString() : '',
+    );
+    state = state.copyWith(
+      puntaje: newPuntaje,
+      isValid: Formz.validate([
+        state.nombre,
+        state.descripcion,
+        state.fechaLimite,
+        state.horaLimite,
+        newPuntaje,
       ]),
     );
   }
@@ -128,6 +151,11 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
       throw Exception("onFormSubmit Error: Fecha u hora inválida.");
     }
 
+    final puntajeInt = int.tryParse(state.puntaje.value);
+    if (puntajeInt == null) {
+      throw Exception("onFormSubmit Error: Puntaje inválido.");
+    }
+
     // Validar el formulario
     if (!state.isValid) return;
 
@@ -141,6 +169,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         state.nombre.value,
         state.descripcion.value,
         fechaHoraConcatenada,
+        puntajeInt
       );
 
       // Actualizar el estado según el resultado
@@ -161,6 +190,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     final descripcion = GenericInput.dirty(state.descripcion.value);
     final fechaLimite = GenericInput.dirty(state.fechaLimite.value);
     final horaLimite = GenericInput.dirty(state.horaLimite.value);
+    final puntaje = GenericInput.dirty(state.puntaje.value);
 
     state = state.copyWith(
         isFormPosted: true,
@@ -168,8 +198,9 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         descripcion: descripcion,
         fechaLimite: fechaLimite,
         horaLimite: horaLimite,
+        puntaje: puntaje,
         isValid:
-            Formz.validate([nombre, descripcion, fechaLimite, horaLimite]));
+            Formz.validate([nombre, descripcion, fechaLimite, horaLimite, puntaje]));
   }
 
   void resetStateForm() {
@@ -177,6 +208,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     descripcionController.clear();
     fechaController.clear();
     horaController.clear();
+    puntajeController.clear();
     state = ActivityFormState();
     debugPrint("Formulario reseteado: $state");
   }

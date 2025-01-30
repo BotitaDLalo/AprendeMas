@@ -15,6 +15,8 @@ class ActivityDataSourceImpl implements ActivityDataSource {
 
       final List<Map<String, dynamic>> data =
           List<Map<String, dynamic>>.from(response.data);
+      
+      debugPrint("Respuesta del backend: ${response.data}");
 
       final activities = ActivityMapper.fromMapList(data);
       return activities;
@@ -30,6 +32,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
     String nombreActividad,
     String descripcion,
     DateTime fechaLimite,
+    int puntaje
   ) async {
     try {
       const uri = "/Actividades/CrearActividad";
@@ -37,7 +40,8 @@ class ActivityDataSourceImpl implements ActivityDataSource {
         "nombreActividad": nombreActividad,
         "descripcion": descripcion,
         "fechaLimite": fechaLimite.toIso8601String(),
-        "materiaId": materiaId
+        "materiaId": materiaId, 
+        "puntaje": puntaje,
       });
       debugPrint("Response: ${response.data}");
 

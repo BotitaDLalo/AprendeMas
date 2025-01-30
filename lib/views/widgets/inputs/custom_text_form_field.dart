@@ -12,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final bool enableLineBreak; // Habilitación del salto de línea
   final bool capitalizeFirstLetter; // Capitalizar primera letra
   final double? customHeight; // Altura personalizada opcional
+  final bool isNumericKeyboard; // Propiedad para habilitar teclado numérico
 
   const CustomTextFormField({
     super.key,
@@ -23,9 +24,10 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.textEditingController,
-    this.enableLineBreak = false,  // Opcional
-    this.capitalizeFirstLetter = false,  // Opcional
+    this.enableLineBreak = false, // Opcional
+    this.capitalizeFirstLetter = false, // Opcional
     this.customHeight, // Altura personalizada opcional
+    this.isNumericKeyboard = false, // Teclado numérico desactivado por defecto
   });
 
   @override
@@ -37,7 +39,7 @@ class CustomTextFormField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
-      keyboardType: keyboardType,
+      keyboardType: isNumericKeyboard ? TextInputType.number : keyboardType,
       maxLines: enableLineBreak ? null : 1, // Permite o no el salto de línea
       textCapitalization: capitalizeFirstLetter
           ? TextCapitalization.sentences
@@ -68,9 +70,8 @@ class CustomTextFormField extends StatelessWidget {
         errorText: errorMessage,
         focusColor: colors.primaryColor,
         contentPadding: EdgeInsets.symmetric(
-            horizontal: 8, vertical: customHeight ?? 15), 
+            horizontal: 8, vertical: customHeight ?? 15),
       ),
     );
   }
 }
-

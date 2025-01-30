@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
+import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -14,7 +15,7 @@ final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    // initialLocation: '/loading',
+    // initialLocation: '/create-event',
     refreshListenable: routerNotifier,
     routes: [
       // GoRoute(
@@ -49,6 +50,10 @@ final goRouterProvider = Provider((ref) {
         path: '/create-group',
         builder: (context, state) => const CreateGroupScreen(),
       ),
+      GoRoute(
+        path: '/create-event',
+        builder: (context, state) => const CreateEventScreen(),
+        ),
       GoRoute(
         path: '/group-teacher-settings',
         builder: (context, state) {

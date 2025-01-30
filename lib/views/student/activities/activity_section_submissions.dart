@@ -136,7 +136,7 @@ class _ActivitySectionSubmissionState
                   leading: const Icon(Icons.delete),
                   title: const Text('Eliminar respuesta'),
                   onTap: () {
-                    ref.read(activityFormProvider.notifier).dropAnswer();
+                    // ref.read(activityFormProvider.notifier).dropAnswer();
                     Navigator.pop(context);
                   },
                 ),
@@ -182,21 +182,22 @@ class _ActivitySectionSubmissionState
     return Scaffold(
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              activitiesForm.existsAnswer
-                  ? showSendConfirmation()
-                  : showModalActivityType(context);
+              // activitiesForm.existsAnswer
+              //     ? showSendConfirmation()
+              //     : showModalActivityType(context);
             },
             shape: AppTheme.shapeFloatingActionButton(),
             backgroundColor: Colors.white,
-            child: activitiesForm.existsAnswer
-                ? Icon(
-                    Icons.send,
-                    color: Colors.grey.withOpacity(0.8),
-                  )
-                : Icon(
-                    Icons.add,
-                    color: Colors.grey.withOpacity(0.8),
-                  )),
+            // child: activitiesForm.existsAnswer
+            //     ? Icon(
+            //         Icons.send,
+            //         color: Colors.grey.withOpacity(0.8),
+            //       )
+            //     : Icon(
+            //         Icons.add,
+            //         color: Colors.grey.withOpacity(0.8),
+            //       )
+            ),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -238,13 +239,13 @@ class _ActivitySectionSubmissionState
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    widget.activity.puntaje ?? 'Sin puntaje',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
+                  // Text(
+                  //   widget.activity.puntaje,
+                  //   style: const TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 18,
+                  //   ),
+                  // ),
                   const SizedBox(height: 16),
                   const Divider(
                     color: Colors.black,
@@ -328,33 +329,33 @@ class _ActivitySectionSubmissionState
                           ),
                         )
                       : const SizedBox(),
-                  activitiesForm.existsAnswer
-                      ? const Text(
-                          'Entregables',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      : const SizedBox(),
+                  // activitiesForm.existsAnswer
+                  //     ? const Text(
+                  //         'Entregables',
+                  //         style: TextStyle(
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       )
+                  //     : const SizedBox(),
                   Column(
                     children: [
-                      activitiesForm.existsAnswer
-                          ? GestureDetector(
-                              onLongPress: () {
-                                showModalBottomDropAnswer(context);
-                              },
-                              child: ElementTile(
-                                icon: const Icon(Icons.edit_note),
-                                title: 'Respuesta',
-                                subtitle: '',
-                                trailing: 'Sin enviar',
-                                onTapFunction: () {
-                                  showDialogAnswer(
-                                      context, activitiesForm.answer);
-                                },
-                              ),
-                            )
-                          : const SizedBox(),
+                      // activitiesForm.existsAnswer
+                      //     ? GestureDetector(
+                      //         onLongPress: () {
+                      //           showModalBottomDropAnswer(context);
+                      //         },
+                      //         child: ElementTile(
+                      //           icon: const Icon(Icons.edit_note),
+                      //           title: 'Respuesta',
+                      //           subtitle: '',
+                      //           trailing: 'Sin enviar',
+                      //           onTapFunction: () {
+                      //             showDialogAnswer(
+                      //                 context, activitiesForm.answer);
+                      //           },
+                      //         ),
+                      //       )
+                      //     : const SizedBox(),
                     ],
                   ),
                 ],
