@@ -2,15 +2,15 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/activity/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
-// import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
+import 'package:aprende_mas/repositories/Interface_repos/activity/activity_offline_repository.dart';
 
 class ActivityNotifier extends StateNotifier<ActivityState> {
   final ActivityRepository activityRepository;
-  // final ActivityOfflineRepository activityOfflineRepository;
+  final ActivityOfflineRepository activityOfflineRepository;
 
   ActivityNotifier(
       {required this.activityRepository,
-      // required this.activityOfflineRepository
+      required this.activityOfflineRepository,
       })
       : super(ActivityState());
 
@@ -65,7 +65,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
       final activity = await activityRepository.createdActivity(
-          materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
+          materiaId, nombreActividad, descripcion, fechaLimite, puntaje );
       _setCreatedActivity(activity);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());

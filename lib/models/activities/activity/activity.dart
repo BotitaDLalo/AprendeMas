@@ -7,12 +7,12 @@ class Activity {
   final DateTime fechaCreacion;
   final DateTime fechaLimite;
   final int tipoActividadId;
-  final int puntaje;
+  final int? puntaje;
   final int materiaId;
 
   Activity(
       {required this.actividadId,
-      required this.puntaje,
+      this.puntaje,
       required this.nombreActividad,
       required this.descripcion,
       required this.tipoActividadId,
