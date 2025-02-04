@@ -19,7 +19,7 @@ abstract class GroupsDataSource {
   
   Future<VerifyEmail> verifyEmail(String email);
 
-  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails);
+  Future<List<StudentGroupSubject>> addStudentsGroup(int groupId, List<String> emails);
 
-  Future<List<StudentGroup>> getStudentsGroup(int groupId);
+  Future<List<StudentGroupSubject>> getStudentsGroup(int groupId);
 }

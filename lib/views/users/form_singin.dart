@@ -3,8 +3,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
-import 'package:aprende_mas/views/widgets/inputs/role_dropdown.dart';
-import 'package:go_router/go_router.dart';
+import 'package:aprende_mas/views/widgets/inputs/role_dropdown_sigin.dart';
 
 class FormSingin extends ConsumerWidget {
   const FormSingin({super.key});
@@ -14,12 +13,17 @@ class FormSingin extends ConsumerWidget {
     final siginForm = ref.watch(siginFormProvider);
     final siginFormNotifier = ref.read(siginFormProvider.notifier);
 
-    void returnToLogin() {
-      context.go('/login-user');
-    }
+    ref.listen(
+      siginFormProvider,
+      (previous, next) {
+        if (next.isFormPosted) {
+          context.go('/login-user');
+        }
+      },
+    );
 
     return Container(
-      width: 350,
+      width: MediaQuery.of(context).size.width * 1.90,
       height: MediaQuery.of(context).size.height * 0.60,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -37,10 +41,32 @@ class FormSingin extends ConsumerWidget {
             height: 10,
           ),
           CustomTextFormField(
-            label: "Nombre",
+            label: "Nombres",
             onChanged: siginFormNotifier.onNameChanged,
             errorMessage:
                 siginForm.isFormPosted ? siginForm.name.errorMessage : null,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Apellido Paterno",
+                  onChanged: siginFormNotifier.onLastNameChanged,
+                ),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: CustomTextFormField(
+                  label: "Apellido Materno",
+                  onChanged: siginFormNotifier.onSecondLastNameChanged,
+                ),
+              ),
+            ],
           ),
           const SizedBox(
             height: 10,
@@ -65,25 +91,20 @@ class FormSingin extends ConsumerWidget {
           const SizedBox(
             height: 10,
           ),
-          const RoleDropdown(),
+          const RoleDropdownSigin(),
           const SizedBox(
             height: 10,
           ),
           Container(
               alignment: const Alignment(0.9, 2),
               child: ButtonForm(
-                style: AppTheme.buttonPrimary,
+                  style: AppTheme.buttonPrimary,
                   buttonName: "Registrate",
-                  onPressed: () async {
-                    await siginFormNotifier.onFormSubmit();
-                    returnToLogin();
-
-                    // final result = await siginFormNotifier.onFormSubmit();
-                    // if (result != null) {
-                    //   returnToLogin();
-                    // } else {
-                    //   return;
-                    // }
+                  onPressed: () {
+                    if (siginForm.isPosting) {
+                      return;
+                    }
+                    siginFormNotifier.onFormSubmit();
                   })),
           const SizedBox(
             height: 15,

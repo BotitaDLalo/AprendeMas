@@ -1,19 +1,23 @@
+import 'package:aprende_mas/views/teacher/activities/options/create_activies/form_activities.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'form_activities.dart';
 
 class CreateActivitiesScreen extends StatelessWidget {
-  const CreateActivitiesScreen({super.key});
+  final int subjectId;
+  final String nombreMateria;
+
+  const CreateActivitiesScreen({super.key, required this.subjectId, required this.nombreMateria});
 
   @override
   Widget build(BuildContext context) {
+      //  debugPrint('CreateActivitiesScreen: subjectId: $subjectId, nombreMateria: $nombreMateria');
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: const Scaffold(
+      child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
+              const Stack(
                 children: [
                   HeaderTile(
                     svg: 'assets/icons/agregar-tarea.svg', 
@@ -29,8 +33,8 @@ class CreateActivitiesScreen extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: FormActivities(),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: FormActivities(subjectId: subjectId, nombreMateria: nombreMateria,)
               ),
             ],
           ),

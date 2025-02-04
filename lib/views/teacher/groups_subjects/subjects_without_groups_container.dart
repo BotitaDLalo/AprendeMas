@@ -25,7 +25,7 @@ class _SubjectsWithoutGroupsState
 
   @override
   Widget build(BuildContext context) {
-    final subjects = ref.watch(subjectsProvider);
+    final subjects = ref.watch(subjectsProvider).subjects;
     return ListView.builder(
       itemCount: subjects.length,
       itemBuilder: (context, index) {
@@ -33,7 +33,7 @@ class _SubjectsWithoutGroupsState
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SubjectCard(
-              subjectId: subject.subjectId,
+              subjectId: subject.materiaId,
               nombreMateria: subject.nombreMateria,
               description: subject.descripcion ?? "",
               actividades: subject.actividades),

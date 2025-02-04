@@ -8,7 +8,8 @@ class Notice {
   final String? imageUrl;
 
   Notice(
-      {required this.messageId,
+      {
+      required this.messageId,
       required this.title,
       required this.body,
       required this.sentDate,
@@ -29,6 +30,17 @@ class Notice {
     ).toList();
 
     return ls;
+  }
+
+  static Notice noticeVoid(){
+    return Notice(
+      messageId: "",
+      title: "",
+      body: "",
+      sentDate: "",
+      data: "",
+      imageUrl: ""
+    );
   }
 
   @override

@@ -2,23 +2,36 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/groups/groups_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
+import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_repository.dart';
 
 class GroupsNotifier extends StateNotifier<GroupsState> {
   final GroupsRepository groupsRepository;
+  final GroupsOfflineRepository groupsOfflineRepository;
 
-  GroupsNotifier({required this.groupsRepository}) : super(GroupsState());
+  GroupsNotifier(
+      {required this.groupsRepository, required this.groupsOfflineRepository})
+      : super(GroupsState());
 
   Future<void> getGroupsSubjects() async {
     try {
       final groups = await groupsRepository.getGroupsSubjects();
-      _setGroups(groups);
+      setGroupsSubjects(groups);
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
     }
   }
 
-  _setGroups(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+  Future<void> getGroupsSubjectsOffile() async {
+    try {
+      final groups = await groupsOfflineRepository.getGroupsSubjects();
+      setGroupsSubjects(groups);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void setGroupsSubjects(List<Group> lsGroups) {
+    state = state.copyWith(groups: lsGroups);
   }
 
   Future<void> getCreatedGroups() async {
@@ -143,7 +156,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     }
   }
 
-  _setAddStudentsGroup(List<StudentGroup> lsStudentsGroup) {
+  _setAddStudentsGroup(List<StudentGroupSubject> lsStudentsGroup) {
     state = state.copyWith(lsStudentsGroup: lsStudentsGroup);
   }
 
@@ -160,13 +173,17 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     }
   }
 
-  _setStudentsGroup(List<StudentGroup> lsStudentsGroup) {
-    List<StudentGroup> lsStudents = List.from(state.lsStudentsGroup);
+  _setStudentsGroup(List<StudentGroupSubject> lsStudentsGroup) {
+    List<StudentGroupSubject> lsStudents = List.from(state.lsStudentsGroup);
     state =
         state.copyWith(lsStudentsGroup: [...lsStudentsGroup, ...lsStudents]);
   }
 
   void clearGroupTeacherOptionsLs() {
     state = state.copyWith(lsEmails: [], lsStudentsGroup: []);
+  }
+
+  void clearGroupsState() {
+    state = GroupsState();
   }
 }

@@ -1,14 +1,14 @@
-import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/groups/group.dart';
-import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
+import 'package:aprende_mas/config/data/data.dart';
 
 class CustomExpansionTile extends ConsumerStatefulWidget {
   final int id;
   final String title;
   final String color;
   final String description;
-  final String accessCode;
+  final String? accessCode;
   final List<Widget> children;
   final Duration animationDuration;
 
@@ -19,7 +19,7 @@ class CustomExpansionTile extends ConsumerStatefulWidget {
       required this.color,
       required this.description,
       required this.children,
-      required this.accessCode,
+      this.accessCode,
       this.animationDuration = const Duration(milliseconds: 600)});
 
   @override
@@ -30,17 +30,15 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _isExpanded = false;
+  final cn = CatalogNames();
 
   @override
   void initState() {
     super.initState();
-    // Inicializa el controlador de animación
     _controller = AnimationController(
       vsync: this,
       duration: widget.animationDuration,
     );
-
-    // Configura la animación con Curves.easeInOut para suavizar la animación
   }
 
   void _toggleExpand() {
@@ -67,13 +65,9 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
     void pushGroupTeacherSettings(Group data) {
       context.push('/group-teacher-settings', extra: data);
     }
-
-    void pushGroupStudentSettings(Group data) {
-      context.push('/group-student-settings', extra: data);
-    }
-
+    
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           width: MediaQuery.of(context).size.width,
@@ -112,15 +106,15 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
                           grupoId: widget.id,
                           nombreGrupo: widget.title,
                           descripcion: widget.description,
-                          codigoAcceso: widget.accessCode,
+                          codigoAcceso: widget.accessCode ?? "",
                           codigoColor: widget.color);
 
                       final role = await keyValueStorageService.getRole();
 
-                      if (role == "Docente") {
+                      if (role == cn.getRoleTeacherName) {
                         pushGroupTeacherSettings(data);
-                      } else {
-                        pushGroupStudentSettings(data);
+                      } else if (role == cn.getRoleStudentName) {
+                        // pushGroupStudentSettings(data);
                       }
                     },
                   ),

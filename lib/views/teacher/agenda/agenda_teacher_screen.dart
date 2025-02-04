@@ -1,5 +1,5 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:flutter/material.dart';
 
 class AgendaTeacherScreen extends StatelessWidget {
   const AgendaTeacherScreen({super.key});

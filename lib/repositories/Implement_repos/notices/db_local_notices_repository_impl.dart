@@ -10,21 +10,17 @@ class DbLocalNoticesRepositoryImpl implements DbLocalNoticesRepository {
       : noticesDataSource = dataSource ?? DbLocalNoticesDataSourceImpl();
 
   @override
-  Future<void> storeNotification(Notice notice) {
+  Future<bool> storeNotification(Notice notice) {
     return noticesDataSource.storeNotification(notice);
   }
-  
-  @override
-  Future<List<Notice>> getLastNotification() {
-    return noticesDataSource.getLastNotification();
-  }
-  
+
   @override
   Future<List<Notice>> getLsNotifications() {
     return noticesDataSource.getLsNotifications();
   }
-  
 
-
-
+  @override
+  Future<bool> deleteNotification(String sentDate) {
+    return noticesDataSource.deleteNotification(sentDate);
+  }
 }

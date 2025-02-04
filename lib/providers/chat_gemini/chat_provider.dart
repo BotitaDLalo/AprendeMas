@@ -30,7 +30,7 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
       moveScrollToBottom();
     } catch (e) {
-      print('Error al llamar a Gemini: $e');
+      debugPrint('Error al llamar a Gemini: $e');
     }
   }
 
@@ -59,7 +59,7 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
       moveScrollToBottom();
     } catch (e) {
-      print('Error al llamar a Gemini: $e');
+      debugPrint('Error al llamar a Gemini: $e');
     }
   }
 

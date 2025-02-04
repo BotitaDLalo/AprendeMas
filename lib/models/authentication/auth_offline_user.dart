@@ -1,21 +1,24 @@
 class AuthOfflineUser {
-  final int usuarioId;
-  final String nombreUsuario;
-  final String correo;
-  final String fechaLimiteActivo;
+  final int userId;
+  final String userName;
+  final String email;
+  final String role;
+  final String activeDueDate;
   AuthOfflineUser(
-      {required this.usuarioId,
-      required this.nombreUsuario,
-      required this.correo,
-      required this.fechaLimiteActivo});
+      {required this.userId,
+      required this.userName,
+      required this.email,
+      required this.role,
+      required this.activeDueDate});
   static AuthOfflineUser userOffilineJsonToEntity(
       List<Map<String, Object?>> lsUser) {
     Map<String, Object?> user = lsUser[0];
 
     return AuthOfflineUser(
-        usuarioId: user['UsuarioId'] as int,
-        nombreUsuario: user['NombreUsuario'] as String,
-        correo: user['Correo'] as String,
-        fechaLimiteActivo: user['FechaLimiteActivo'] as String);
+        userId: user['UsuarioId'] as int,
+        userName: user['NombreUsuario'] as String,
+        email: user['Correo'] as String,
+        role: user['Rol'] as String,
+        activeDueDate: user['FechaLimiteActivo'] as String);
   }
 }

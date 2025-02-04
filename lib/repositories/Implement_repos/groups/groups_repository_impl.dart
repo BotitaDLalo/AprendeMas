@@ -51,14 +51,12 @@ class GroupsRepositoryImpl implements GroupsRepository {
   }
   
   @override
-  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails) {
-    return groupsDataSource.addStudentsGroup(groupId, emails);
+  Future<List<StudentGroupSubject>> addStudentsGroup(int subjectId, List<String> emails) {
+    return groupsDataSource.addStudentsGroup(subjectId, emails);
   }
   
   @override
-  Future<List<StudentGroup>> getStudentsGroup(int groupId) {
-    return groupsDataSource.getStudentsGroup(groupId);
+  Future<List<StudentGroupSubject>> getStudentsGroup(int subjectId) {
+    return groupsDataSource.getStudentsGroup(subjectId);
   }
-
-  
 }
