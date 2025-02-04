@@ -7,6 +7,12 @@ class EventCalendarDataSource extends CalendarDataSource {
     appointments = events;
   }
 
+  void updateEvents(List<Event> newEvents) {
+    appointments = newEvents;
+    notifyListeners(CalendarDataSourceAction.reset, newEvents); // 🔔 Notificar al calendario
+  }
+
+
   // Método para convertir un String hexadecimal en un Color.
   Color stringToColor(String hexColor) {
     try {

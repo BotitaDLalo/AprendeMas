@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/providers/agenda/event_provider.dart';
 import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
 import 'package:aprende_mas/views/widgets/calendar/event_calendar_data_source.dart';
@@ -15,10 +16,12 @@ class CalendarBody extends ConsumerStatefulWidget {
 class _CalendarBodyState extends ConsumerState<CalendarBody> {
   CalendarView _calendarView = CalendarView.month; // Vista predeterminada
   CalendarController calendarController = CalendarController();
+   late EventCalendarDataSource calendarDataSource;
 
   @override
   void initState() {
     super.initState();
+    calendarDataSource = EventCalendarDataSource([]);
     // Llamar al método getEvents del notifier
     Future.microtask(() => ref.read(eventProvider.notifier).getEvents());
   } 
@@ -30,7 +33,8 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
     final eventState = ref.watch(eventProvider);
 
     // Crear la fuente de datos para Syncfusion desde el estado actual
-    final calendarDataSource = EventCalendarDataSource(eventState.events);
+    // final calendarDataSource = EventCalendarDataSource(eventState.events);
+    calendarDataSource.updateEvents(eventState.events);
     debugPrint("CalendarBody Eventos cargados: ${eventState.events}");
 
 
@@ -129,14 +133,22 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
                 ),
               view: _calendarView,
               showDatePickerButton: true,
+              onTap: (CalendarTapDetails details) {
+                if (details.appointments != null && details.appointments!.isNotEmpty) {
+                  final event = details.appointments!.first as Event;
+                  context.push('/event-detail', extra: event);
+                  }
+              }
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.push('/create-event');
-          print('context: $context ');
+        onPressed: () async {
+          await context.push('/create-event'); // Espera hasta que el usuario regrese
+          ref.read(eventProvider.notifier).getEvents(); // Refresca eventos al regresar
+           calendarDataSource.updateEvents(ref.read(eventProvider).events);
+          setState(() {}); // Forzar actualización del widget
         },
         backgroundColor: Colors.white,
         elevation: 8,
@@ -155,3 +167,4 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
 
 
 
+  
