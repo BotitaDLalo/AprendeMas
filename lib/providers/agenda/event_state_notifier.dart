@@ -15,7 +15,7 @@ class EventNotifier extends StateNotifier<EventState>{
       _setEvents(events);
       debugPrint("Estado actualizado con eventos: ${state.events}");
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
     }
   }
 

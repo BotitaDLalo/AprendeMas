@@ -1,4 +1,5 @@
 import 'package:aprende_mas/models/models.dart';
+
 abstract class ActivityDataSource {
   Future<List<Activity>> getAllActivities(int materiaId);
 
@@ -12,5 +13,7 @@ abstract class ActivityDataSource {
 
   Future<List<Submission>> getSubmissions(int activityId);
 
-  Future<List<Submission>> cancelSubmission(int studentActivityId, int activityId);
+  Future<List<Submission>> cancelSubmission(
+      int studentActivityId, int activityId);
+
 }

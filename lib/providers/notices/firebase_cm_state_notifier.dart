@@ -16,7 +16,7 @@ class FirebasecmStateNotifier extends StateNotifier<FirebasecmState> {
     if (settings.authorizationStatus == AuthorizationStatus.authorized ||
         settings.authorizationStatus == AuthorizationStatus.provisional) {
       _setPermissionsChanged(settings.authorizationStatus);
-      print('User granted permission: ${settings.authorizationStatus}');
+      debugPrint('User granted permission: ${settings.authorizationStatus}');
     }
   }
 

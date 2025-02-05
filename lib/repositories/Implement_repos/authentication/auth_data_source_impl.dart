@@ -13,18 +13,25 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final res =
           await dio.post(uri, data: {'correo': email, 'clave': password});
+      if (res.statusCode == 200) {
+        final user = AuthUserMapper.userJsonToEntity(res.data);
 
-      final user = AuthUserMapper.userJsonToEntity(res.data);
-
-      return user;
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) throw WrongCredentials();
-      if (e.type == DioExceptionType.connectionTimeout)
-        throw ConnectionTimeout();
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+        return user;
+      }
+      return AuthUser.authUserVoid();
     } catch (e) {
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      print(e);
+      throw Exception(e);
     }
+
+    // on DioException catch (e) {
+    //   if (e.response?.statusCode == 401) throw WrongCredentials();
+    //   if (e.type == DioExceptionType.connectionTimeout)
+    //     throw ConnectionTimeout();
+    //   throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+    // } catch (e) {
+    //   throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+    // }
   }
 
   @override
@@ -45,7 +52,8 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       return user;
     } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionTimeout) throw ConnectionTimeout();
+      if (e.type == DioExceptionType.connectionTimeout)
+        throw ConnectionTimeout();
       throw CustomError(message: 'Ocurrio un error', errorCode: 1);
     } catch (e) {
       return User.userVoid();

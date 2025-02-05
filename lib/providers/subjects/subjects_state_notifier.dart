@@ -123,7 +123,7 @@ Future<void> getSubjects() async {
           await subjectsRepository.getStudentsSubject(subjectId);
       _setStudentsSubject(lsStudentsSubject);
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 

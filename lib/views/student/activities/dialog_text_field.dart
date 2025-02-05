@@ -27,10 +27,6 @@ class _DialogTextFieldState extends ConsumerState<DialogTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final dialogHeight = ref.watch(dialogHeightProvider);
-    final activitiesForm = ref.watch(activityFormProvider);
-    // final activitiesFormNotifier = ref.read(activityFormProvider.notifier);
-
     return Dialog(
       insetPadding: const EdgeInsets.all(20),
       child: Column(

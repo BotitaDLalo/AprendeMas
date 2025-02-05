@@ -3,150 +3,149 @@ import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_d
 import 'package:aprende_mas/config/data/db_local.dart';
 
 class GroupsOfflineDataSourceImpl implements GroupsOfflineDataSource {
-  @override
-  Future<List<Group>> getGroupsSubjects() async {
-    try {
-      int countGroups;
-      final db = await DbLocal.initDatabase();
+@override
+Future<List<Group>> getGroupsSubjects() async {
+  try {
+    final db = await DbLocal.initDatabase();
 
-      if (db.isOpen) {
-        final querylsGroups = await db.rawQuery('SELECT * FROM tbGrupos');
-        countGroups = querylsGroups.length;
-        if (countGroups != 0) {
-          Future<List<Group>> lsGroups = Future.wait(querylsGroups.map(
-            (e) async {
-              int groupId = e['GrupoId'] as int;
+    if (db.isOpen) {
+      final querylsGroups = await db.rawQuery('SELECT * FROM tbGrupos');
 
-              final querylsGroupsSubjectsId = await db.rawQuery(
-                  "SELECT MateriaId FROM tbGruposMaterias WHERE GrupoId = ?",
-                  [groupId]);
+      if (querylsGroups.isNotEmpty) {
+        List<Group> lsGroups = [];
 
-              return Group(
-                  grupoId: e['GrupoId'] as int,
-                  nombreGrupo: e['NombreGrupo'] as String,
-                  descripcion: e['Descripcion'] as String,
-                  codigoAcceso: e['CodigoAcceso'] as String,
-                  codigoColor: e['CodigoColor'] as String,
-                  materias: await Future.wait(querylsGroupsSubjectsId.map(
-                    (e) async {
-                      int subjectId = e['MateriaId'] as int;
-                      final querySubject = await db.rawQuery(
-                          "SELECT * FROM tbMaterias WHERE MateriaId = ?",
-                          [subjectId]);
+        for (var groupRow in querylsGroups) {
+          int groupId = groupRow['GrupoId'] as int;
 
-                      final querylsActivitiesId = await db.rawQuery(
-                          "SELECT ActividadId FROM tbMateriasActividades WHERE MateriaId = ?",
-                          [subjectId]);
+          final querylsGroupsSubjectsId = await db.rawQuery(
+              "SELECT MateriaId FROM tbGruposMaterias WHERE GrupoId = ?",
+              [groupId]);
 
-                      return Subject(
-                          materiaId: subjectId,
-                          nombreMateria:
-                              querySubject[0]['NombreMateria'] as String,
-                          descripcion: querySubject[0]['Descripcion'] as String,
-                          codigoAcceso:
-                              querySubject[0]['CodigoAcceso'] as String,
-                          codigoColor: querySubject[0]['CodigoColor'] as String,
-                          actividades:
-                              await Future.wait(querylsActivitiesId.map(
-                            (e) async {
-                              int activitieId = e['ActividadId'] as int;
-                              final queryActivitie = await db.rawQuery(
-                                  "SELECT * FROM tbActividades WHERE ActividadId = ?",
-                                  [activitieId]);
+          List<Subject> materias = [];
 
-                              return Activity(
-                                  actividadId:
-                                      queryActivitie[0]['ActividadId'] as int,
-                                  nombreActividad: queryActivitie[0]
-                                      ['NombreActividad'] as String,
-                                  descripcion: queryActivitie[0]['Descripcion']
-                                      as String,
-                                  tipoActividadId: queryActivitie[0]
-                                      ['TipoActividadId'] as int,
-                                  fechaCreacion: queryActivitie[0]
-                                      ['FechaCreacion'] as DateTime,
-                                  fechaLimite: queryActivitie[0]['FechaLimite']
-                                      as DateTime,
-                                  materiaId:
-                                      queryActivitie[0]['MateriaId'] as int,
-                                  puntaje:  
-                                      queryActivitie[0]['Puntaje'] as int     
-                                  );
-                            },
-                          ).toList()));
-                    },
-                  ).toList()));
-            },
-          ).toList());
+          for (var subjectRow in querylsGroupsSubjectsId) {
+            int subjectId = subjectRow['MateriaId'] as int;
 
-          return await lsGroups;
+            final querySubject = await db.rawQuery(
+                "SELECT * FROM tbMaterias WHERE MateriaId = ?", [subjectId]);
+
+            final querylsActivitiesId = await db.rawQuery(
+                "SELECT ActividadId FROM tbMateriasActividades WHERE MateriaId = ?",
+                [subjectId]);
+
+            List<Activity> actividades = [];
+
+            for (var activityRow in querylsActivitiesId) {
+              int activityId = activityRow['ActividadId'] as int;
+
+              final queryActivitie = await db.rawQuery(
+                  "SELECT * FROM tbActividades WHERE ActividadId = ?",
+                  [activityId]);
+
+              actividades.add(Activity(
+                actividadId: queryActivitie[0]['ActividadId'] as int,
+                nombreActividad:
+                    queryActivitie[0]['NombreActividad'] as String,
+                descripcion: queryActivitie[0]['Descripcion'] as String,
+                tipoActividadId: queryActivitie[0]['TipoActividadId'] as int,
+                fechaCreacion: DateTime.parse(
+                    queryActivitie[0]['FechaCreacion'] as String),
+                fechaLimite: DateTime.parse(
+                    queryActivitie[0]['FechaLimite'] as String),
+                materiaId: queryActivitie[0]['MateriaId'] as int,
+              ));
+            }
+
+            materias.add(Subject(
+              materiaId: subjectId,
+              nombreMateria: querySubject[0]['NombreMateria'] as String,
+              descripcion: querySubject[0]['Descripcion'] as String,
+              codigoAcceso: querySubject[0]['CodigoAcceso'] as String,
+              codigoColor: querySubject[0]['CodigoColor'] as String,
+              actividades: actividades,
+            ));
+          }
+
+          lsGroups.add(Group(
+            grupoId: groupRow['GrupoId'] as int,
+            nombreGrupo: groupRow['NombreGrupo'] as String,
+            descripcion: groupRow['Descripcion'] as String,
+            codigoAcceso: groupRow['CodigoAcceso']  as String,
+            codigoColor: groupRow['CodigoColor'] as String,
+            materias: materias,
+          ));
         }
+
+        await db.close();
+        return lsGroups;
       }
-
-      await db.close();
-
-      return [];
-    } catch (e) {
-      print(e);
-      return [];
     }
+
+    await db.close();
+    return [];
+  } catch (e) {
+    print(e);
+    return [];
   }
+}
+
 
   @override
   Future<void> saveGroupSubjects(List<Group> lsGroups) async {
     try {
       final db = await DbLocal.initDatabase();
       if (db.isOpen) {
-        lsGroups.map(
-          (e) async {
-            await db.transaction(
-              (txn) async {
-                await txn.insert('tbGrupos', {
-                  'GrupoId': e.grupoId,
-                  'NombreGrupo': e.nombreGrupo,
-                  'Descripcion': e.descripcion,
-                  'CodigoAcceso': e.codigoAcceso,
-                  'CodigoColor': e.codigoColor
-                });
-              },
-            );
+        for (var group in lsGroups) {
+          await db.transaction(
+            (txn) async {
+              await txn.insert('tbGrupos', {
+                'GrupoId': group.grupoId,
+                'NombreGrupo': group.nombreGrupo,
+                'Descripcion': group.descripcion,
+                'CodigoAcceso': group.codigoAcceso,
+                'CodigoColor': group.codigoColor
+              });
+            },
+          );
 
-            int groupId = e.grupoId ?? 0;
+          int groupId = group.grupoId ?? 0;
 
-            e.materias?.map(
-              (e) async {
-                await db.insert('tbMaterias', {
-                  'MateriaId': e.materiaId,
-                  'NombreMateria': e.nombreMateria,
-                  'Descripcion': e.descripcion,
-                  'CodigoColor': e.codigoColor,
-                  'CodigoAcceso': e.codigoAcceso
-                });
+          if (group.materias != null) {
+            for (var subject in group.materias!) {
+              await db.insert('tbMaterias', {
+                'MateriaId': subject.materiaId,
+                'NombreMateria': subject.nombreMateria,
+                'Descripcion': subject.descripcion,
+                'CodigoColor': subject.codigoColor,
+                'CodigoAcceso': subject.codigoAcceso
+              });
 
-                await db.insert('tbGruposMaterias',
-                    {'GrupoId': groupId, 'MateriaId': e.materiaId});
+              await db.insert('tbGruposMaterias',
+                  {'GrupoId': groupId, 'MateriaId': subject.materiaId});
 
-                int subjectId = e.materiaId;
+              int subjectId = subject.materiaId;
 
-                e.actividades?.map(
-                  (e) async {
-                    await db.insert('tbActividades', {
-                      'ActividadId': e.actividadId,
-                      'NombreActividad': e.nombreActividad,
-                      'Descripcion': e.descripcion,
-                      'FechaCreacion': e.fechaCreacion,
-                      'FechaLimite': e.fechaLimite,
-                      'MateriaId': subjectId
-                    });
+              if (subject.actividades != null) {
+                for (var activity in subject.actividades!) {
+                  await db.insert('tbActividades', {
+                    'ActividadId': activity.actividadId,
+                    'NombreActividad': activity.nombreActividad,
+                    'TipoActividadId': activity.tipoActividadId,
+                    'Descripcion': activity.descripcion,
+                    'FechaCreacion': activity.fechaCreacion.toString(),
+                    'FechaLimite': activity.fechaLimite.toString(),
+                    'MateriaId': subjectId
+                  });
 
-                    await db.insert('tbMateriasActividades',
-                        {'MateriaId': subjectId, 'ActividadId': e.actividadId});
-                  },
-                );
-              },
-            );
-          },
-        );
+                  await db.insert('tbMateriasActividades', {
+                    'MateriaId': subjectId,
+                    'ActividadId': activity.actividadId
+                  });
+                }
+              }
+            }
+          }
+        }
       }
       await db.close();
     } catch (e) {

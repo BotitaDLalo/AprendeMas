@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
+import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/providers/notices/notices_provider.dart';
@@ -65,6 +66,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ref.watch(authProvider.notifier).logout();
                   }
                   ref.read(noticesProvider.notifier).clearNotifications();
+                  ref.read(activityProvider.notifier).clearActivityState();
+                  ref.read(groupsProvider.notifier).clearGroupsState();
                 },
               ),
             ],
@@ -73,7 +76,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       appBar: AppBarHome(
         title: element.title,
-        
       ),
       body: Center(
         child: element.widget,

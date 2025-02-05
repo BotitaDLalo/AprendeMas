@@ -1,6 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
-import 'package:aprende_mas/providers/activity_state/activity_provider.dart';
+import 'package:aprende_mas/providers/activity/activity_provider.dart';
 import 'package:aprende_mas/views/widgets/cards/activity_body_model.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
@@ -16,31 +16,33 @@ class ActivityList extends ConsumerStatefulWidget {
 }
 
 class _ActivityListState extends ConsumerState<ActivityList> {
-  @override
-  void initState() {
-    super.initState();
-    // Cargar actividades al inicializar el widget
-    Future.microtask(() {
-      ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.microtask(() {
+  //     ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final activityState = ref.watch(activityProvider);
     final cn = CatalogNames();
     final kvs = KeyValueStorageServiceImpl();
-    if (activityState.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    final activityState = ref
+        .watch(activityProvider.notifier)
+        .getActivitiesBySubject(widget.subjectId);
+    // final activityState = ref.watch(activityProvider);
+    // if (activityState.isLoading) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
 
-    if (activityState.errorMessage != null) {
-      return _ErrorMessage(message: activityState.errorMessage!);
-    }
+    // if (activityState.errorMessage != null) {
+    //   return _ErrorMessage(message: activityState.errorMessage!);
+    // }
 
-    if (activityState.activities.isEmpty) {
-      return const _EmptyMessage(message: 'No hay actividades disponibles.');
-    }
+    // if (activityState.activities.isEmpty) {
+    //   return const _EmptyMessage(message: 'No hay actividades disponibles.');
+    // }
 
     void teacherActivitySettings(Activity activity) {
       context.push('/teacher-activity-settings', extra: activity);
@@ -51,17 +53,9 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     }
 
     return ListView.builder(
-      itemCount: activityState.activities.length,
+      itemCount: activityState.length,
       itemBuilder: (context, index) {
-        final activity = activityState.activities[index];
-        // return ActivityBodyModel(
-        //   nombreActividad: activity.nombreActividad,
-        //   fechaCreacion: activity.fechaCreacion,
-        //   fechaLimite: activity.fechaLimite,
-        //   descripcion: activity.descripcion,
-        //   subjectId: activity.materiaId,
-        // );
-
+        final activity = activityState[index];
         return ElementTile(
             icon: const Icon(Icons.assignment, color: Colors.black),
             title: activity.nombreActividad,

@@ -16,7 +16,7 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupsProvider.notifier).getGroupsSubjects();
+    // ref.read(groupsProvider.notifier).getGroupsSubjects();
   }
 
   @override

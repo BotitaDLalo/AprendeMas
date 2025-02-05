@@ -7,19 +7,21 @@ class Activity {
   final DateTime fechaCreacion;
   final DateTime fechaLimite;
   final int tipoActividadId;
-  final int puntaje;
+  final int? puntaje;
   final int materiaId;
 
   Activity(
       {required this.actividadId,
-      required this.puntaje,
+      this.puntaje,
       required this.nombreActividad,
       required this.descripcion,
       required this.tipoActividadId,
       required this.fechaCreacion,
       required this.fechaLimite,
       required this.materiaId});
+
   static final DateFormat dateTimeFormat = DateFormat('yyyy-MM-ddTHH:mm:ss');
+
   static List<Activity> queryToEntityActivity(
       List<Map<String, Object?>> querylsActivities) {
     final lsActivities = querylsActivities
@@ -39,4 +41,10 @@ class Activity {
 
     return lsActivities;
   }
+
+
+  static List<Activity> activitiesBySubject(List<Activity> lsActivities, int subjectId){
+    return lsActivities.where((element) => element.materiaId == subjectId,).toList();
+  }
+
 }

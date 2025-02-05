@@ -1,7 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/models/activities/activity/activity.dart';
-import 'package:aprende_mas/providers/activity_state/activity_state.dart';
+import 'package:aprende_mas/providers/activity/activity_state.dart';
 import 'package:aprende_mas/repositories/Interface_repos/activity/activity_repository.dart';
 
 class ActivityNotifier extends StateNotifier<ActivityState> {
@@ -91,3 +90,4 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     state = state.copyWith(lsSubmissions: lsSubmisions);
   }
 }
+

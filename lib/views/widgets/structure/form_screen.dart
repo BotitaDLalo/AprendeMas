@@ -13,9 +13,10 @@ class FormScreen extends ConsumerWidget {
         appBar: AppBar(
           // toolbarHeight: 60,
           // backgroundColor: Colors.transparent,
-          flexibleSpace: Container(
-            decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
-          ),
+          // flexibleSpace: Container(
+          //   decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
+          // ),
+          backgroundColor: Colors.white,
           leading: IconButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();

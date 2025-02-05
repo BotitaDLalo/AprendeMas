@@ -15,8 +15,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   Future<void> getGroupsSubjects() async {
     try {
       final groups = await groupsRepository.getGroupsSubjects();
-      setGroups(groups);
-      debugPrint("GroupsNotifier: $groups");
+      setGroupsSubjects(groups);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -25,13 +24,13 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   Future<void> getGroupsSubjectsOffile() async {
     try {
       final groups = await groupsOfflineRepository.getGroupsSubjects();
-      setGroups(groups);
+      setGroupsSubjects(groups);
     } catch (e) {
       debugPrint(e.toString());
     }
   }
 
-  void setGroups(List<Group> lsGroups) {
+  void setGroupsSubjects(List<Group> lsGroups) {
     state = state.copyWith(groups: lsGroups);
   }
 
@@ -182,5 +181,9 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   void clearGroupTeacherOptionsLs() {
     state = state.copyWith(lsEmails: [], lsStudentsGroup: []);
+  }
+
+  void clearGroupsState() {
+    state = GroupsState();
   }
 }

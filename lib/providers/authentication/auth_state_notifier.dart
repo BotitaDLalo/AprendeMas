@@ -1,5 +1,6 @@
-import 'package:aprende_mas/providers/groups/groups_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_user_offline_repository_impl.dart';
 import 'package:aprende_mas/config/services/google/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
@@ -22,9 +23,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final Function() getGroupsSubjectsOfflineCallback;
   final Function(int) getAllActivitiesCallback;
   final Function(int) setAllActivitiesOfflineState;
+  final Function(int) getSubmissionsCallback;
+  final Function(int) getSubmissionsOfflineState;
   final Function(List<Group>) setGroupsSubjectsState;
   final GroupsRepositoryImpl groups;
+  final ActivityRepositoryImpl activity;
+  final ActivityOfflineRepositoryImpl activityOffline;
   final GroupsOfflineRepositoryImpl groupsOffline;
+  final Function(int) setSubmissionsOfflineState;
 
   AuthStateNotifier({
     required this.authUserOffline,
@@ -32,12 +38,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     required this.kv,
     required this.googleSigninApi,
     required this.setGroupsSubjectsState,
+    required this.getSubmissionsCallback,
+    required this.getSubmissionsOfflineState,
     required this.getAllActivitiesCallback,
     required this.setAllActivitiesOfflineState,
+    required this.setSubmissionsOfflineState,
     required this.getGroupsSubjectsCallback,
     required this.getGroupsSubjectsOfflineCallback,
+    required this.activityOffline,
     required this.groups,
     required this.groupsOffline,
+    required this.activity,
   }) : super(AuthState()) {
     checkInternet();
   }
@@ -180,10 +191,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           role: user.role);
 
       List<Group> lsGroups = await groups.getGroupsSubjects();
-      await _saveUserData(activeUser, lsGroups);
 
-      //& actualizamos los state del usuario (grupos, materias, actividades)
-      _setUserDataState(lsGroups);
+      //& actualizamos los state del usuario (grupos, materias, actividades, entregables)
+      _setUserDataAuthState(activeUser, lsGroups);
 
       //& TOKEN FIREBASE
       final tokenFCM = await FirebaseCM.getFcmToken();
@@ -191,6 +201,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       debugPrint(tokenFCM);
     } else if (caller == "checkAuthStatus") {
       authUserOffline.updateUser(date7Days.toString());
+      List<Group> lsGroups = await groups.getGroupsSubjects();
+      await _submissionsPending(lsGroups);
     }
 
     state = state.copyWith(
@@ -212,36 +224,100 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         email: userOffline.email,
         role: userOffline.role,
         token: "");
-
-    //& set para groups y subject
-    setGroupsSubjectsState(lsGroups);
-
-    for (var group in lsGroups) {
-      for (var sub in group.materias ?? []) {
-        final subject = sub as Subject;
-        final subjectId = subject.materiaId;
-        setAllActivitiesOfflineState(subjectId);
-      }
-    }
+    _setUserDataState(lsGroups);
+    // //& set para groups y subject
+    // setGroupsSubjectsState(lsGroups);
 
     state = state.copyWith(
       authUser: user,
       authStatus: AuthStatus.authenticated,
       authenticatedType: AuthenticatedType.auth,
+      authConectionType: AuthConectionType.offline,
       errorMessage: '',
     );
   }
 
-  void _setUserDataState(List<Group> lsGroups) async {
-    //& set para groups y subjects
-    setGroupsSubjectsState(lsGroups);
+  _submissionsPending(List<Group> lsGroups) async {
+    List<Submission> lsSubmissionsPending = [];
+
+    //& set para activity state
+    for (var group in lsGroups) {
+      for (var subj in group.materias ?? []) {
+        for (var act in subj.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+
+          //& Guardar entregables para submissions state
+          List<Submission> lsSubmissions =
+              await activityOffline.getSubmissionsPending(activityId);
+          lsSubmissionsPending.addAll(lsSubmissions);
+        }
+      }
+    }
+
+    _sendSubmissionsPending(lsSubmissionsPending, lsGroups);
+  }
+
+  void _sendSubmissionsPending(
+      List<Submission> lsSubmissions, List<Group> lsGroups) async {
+    for (var sub in lsSubmissions) {
+      int activityId = sub.activityId ?? -1;
+      if (activityId != -1) {
+        String answer = sub.answer ?? "";
+        await activity.sendSubmission(activityId, answer);
+      }
+    }
+    _setUserDataState(lsGroups);
+  }
+
+  void _setUserDataAuthState(ActiveUser user, List<Group> lsGroups) async {
+    //& Guardar el usuario offline
+    await authUserOffline.insertUser(
+        user.userId, user.userName, user.email, user.activeDueDate, user.role);
+
+    //& Guardar los grupos, materias y actividades offline
+    await groupsOffline.saveGroupSubjects(lsGroups);
+
+    //& set para groups y subjects y activities state
+    await setGroupsSubjectsState(lsGroups);
 
     //& set para activity state
     for (var group in lsGroups) {
       for (var subj in group.materias ?? []) {
         final subject = subj as Subject;
         final subjectId = subject.materiaId;
+
+        //& Actualizamos el state de actividades
         await getAllActivitiesCallback(subjectId);
+        for (var act in subj.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+          //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
+
+          //& Guardar entregables offline set para submissions state
+          List<Submission> lsSubmissions =
+              await getSubmissionsCallback(activityId);
+          await activityOffline.saveSubmissions(lsSubmissions, activityId);
+        }
+      }
+    }
+  }
+
+  void _setUserDataState(List<Group> lsGroups) async {
+    //& set para groups y subject
+    await setGroupsSubjectsState(lsGroups);
+
+    for (var group in lsGroups) {
+      for (var sub in group.materias ?? []) {
+        final subject = sub as Subject;
+        final subjectId = subject.materiaId;
+        await setAllActivitiesOfflineState(subjectId);
+
+        for (var act in sub.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+          await setSubmissionsOfflineState(activityId);
+        }
       }
     }
   }
@@ -287,7 +363,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   void _setLoggedGoogleUser(AuthUser user) async {
     const authType = AuthenticatedType.authGoogle;
-    _setUserDataKeyValueStorage(
+    await _setUserDataKeyValueStorage(
         cn.getKeyTokenName,
         user.token,
         cn.getKeyIdName,
@@ -298,12 +374,42 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         user.userName,
         cn.getKeyAuthTypeName,
         authType);
+
+    List<Group> lsGroups = await groups.getGroupsSubjects();
+
+    _setUserDataGoogleState(lsGroups);
+
     state = state.copyWith(
         authUser: user,
         authenticatedType: authType,
         authGoogleStatus: AuthGoogleStatus.authenticated,
         authConectionType: AuthConectionType.offline,
         errorMessage: '');
+  }
+
+  void _setUserDataGoogleState(List<Group> lsGroups) async {
+    //& set para groups y subjects y activities state
+    await setGroupsSubjectsState(lsGroups);
+
+    //& set para activity state
+    for (var group in lsGroups) {
+      for (var subj in group.materias ?? []) {
+        final subject = subj as Subject;
+        final subjectId = subject.materiaId;
+
+        //& Actualizamos el state de actividades
+        await getAllActivitiesCallback(subjectId);
+        for (var act in subj.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+          //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
+
+          //& Guardar entregables offline set para submissions state
+          await getSubmissionsCallback(activityId);
+          // await activityOffline.saveSubmissions(lsSubmissions, activityId);
+        }
+      }
+    }
   }
 
   void _setMissingDataGoogleUserConfirmed(String token) async {
@@ -323,13 +429,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       return;
     }
-  }
-
-  _saveUserData(ActiveUser user, List<Group> lsGroups) async {
-    await authUserOffline.insertUser(
-        user.userId, user.userName, user.email, user.activeDueDate, user.role);
-
-    await groupsOffline.saveGroupSubjects(lsGroups);
   }
 
   _setUserDataKeyValueStorage<T>(
