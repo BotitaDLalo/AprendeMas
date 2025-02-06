@@ -8,7 +8,8 @@ class RouterRedirections {
     "/group-teacher-settings",
     "/activities-options",
     "/notification-content",
-    "/teacher-activity-settings"
+    "/teacher-activity-settings",
+    "/event-detail"
   ];
 
   static List<String> routesStudent = [

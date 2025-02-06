@@ -134,11 +134,11 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
               view: _calendarView,
               showDatePickerButton: true,
               onTap: (CalendarTapDetails details) {
-                if (details.appointments != null && details.appointments!.isNotEmpty) {
-                  final event = details.appointments!.first as Event;
-                  context.push('/event-detail', extra: event);
-                  }
-              }
+                if (details.targetElement == CalendarElement.appointment && details.appointments != null) {
+                  final Event selectedEvent = details.appointments!.first as Event;
+                  context.push('/event-detail', extra: selectedEvent);
+                }
+              },
             ),
           ),
         ],
@@ -157,7 +157,7 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
         ),
         child: Icon(
           Icons.add,
-          color: Colors.grey.withOpacity(0.6),
+          color: Colors.grey.withValues(alpha: 0.6),
         ),
       ),
     );

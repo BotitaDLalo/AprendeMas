@@ -21,7 +21,7 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
 
       // Llamada a la API de Gemini
-      final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: dotenv.env['GOOGLE_API_KEY']!);
+      final model = GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: dotenv.env['GOOGLE_API_KEY']!);
       final content = [Content.text(prompt)];
       final response = await model.generateContent(content);
 
@@ -50,7 +50,7 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
 
       // Llamar al modelo de Gemini
-      final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: dotenv.env['GOOGLE_API_KEY']!);
+      final model = GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: dotenv.env['GOOGLE_API_KEY']!);
       final content = [Content.text(jsonString)]; // Enviamos el JSON como texto
       final response = await model.generateContent(content);
 
