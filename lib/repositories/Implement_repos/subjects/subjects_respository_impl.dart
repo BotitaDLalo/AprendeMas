@@ -40,14 +40,14 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
   }
 
   @override
-  Future<List<Subject>> getSubjects() {
+  Future<List<Subject>> getSubjectsWithoutGroup() {
     debugPrint("SubjectsRespositoryImpl: ${subjectsDataSource}");
-    return subjectsDataSource.getSubjects();
+    return subjectsDataSource.getSubjectsWithoutGroup();
   }
 
   @override
-  Future<List<StudentGroupSubject>> getStudentsSubject(int groupId) {
-    return subjectsDataSource.getStudentsSubject(groupId);
+  Future<List<StudentGroupSubject>> getStudentsSubject(int? groupId, int subjectId) {
+    return subjectsDataSource.getStudentsSubject(groupId, subjectId);
   }
 
   @override
@@ -56,8 +56,9 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
   }
 
   @override
+  // Future<List<StudentGroupSubject>> addStudentsSubject(int? groupId, int subjectId, List<String> emails) {
   Future<List<StudentGroupSubject>> addStudentsSubject(
-      int? groupId, int subjectId, List<String> emails) {
-    return subjectsDataSource.addStudentsSubject(groupId, subjectId, emails);
+      int subjectId, List<String> emails) {
+    return subjectsDataSource.addStudentsSubject(subjectId, emails);
   }
 }
