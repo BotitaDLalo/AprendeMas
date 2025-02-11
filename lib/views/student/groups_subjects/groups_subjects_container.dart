@@ -1,7 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
   const GroupsSubjectsContainer({super.key});

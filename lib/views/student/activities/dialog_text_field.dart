@@ -46,8 +46,8 @@ class _DialogTextFieldState extends ConsumerState<DialogTextField> {
               maxLines: null,
               keyboardType: TextInputType.multiline,
               onChanged: (text) {
-                // ref.read(activityFormProvider.notifier).onAnswerChanged(text);
-                // ref.read(dialogHeightProvider.notifier).state = 150.0 + (controller.text.length / 2);
+                ref.read(activityFormProvider.notifier).onAnswerChanged(text);
+                ref.read(dialogHeightProvider.notifier).state = 150.0 + (controller.text.length / 2);
                 // setState(() {
                 //   dialogHeight = 150.0 + (controller.text.length / 2);
                 // });
@@ -65,7 +65,7 @@ class _DialogTextFieldState extends ConsumerState<DialogTextField> {
               style: AppTheme.buttonSecondary,
               onPressed: () {
                 Navigator.of(context).pop();
-                // ref.read(activityFormProvider.notifier).onHasSubmission();
+                ref.read(activityFormProvider.notifier).onHasSubmission();
               },
               child: Text(widget.buttonName),
             ),

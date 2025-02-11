@@ -86,10 +86,12 @@ class _ActivitySectionSubmissionState
     final authConectionType = ref.read(authProvider).authConectionType;
     final activityId = widget.activity.actividadId;
     final activitiesForm = ref.watch(activityFormProvider);
-    // final lsSubmissions = ref.watch(activityProvider).lsSubmissions;
-    final lsSubmissions = ref
-        .read(activityProvider.notifier)
-        .getSubmissionsByActivity(activityId);
+    final lsSubmissions = Submission.activitiesBySubject(
+        ref.watch(activityProvider).lsSubmissions, activityId);
+
+    // final lsSubmissions = ref
+    //     .read(activityProvider.notifier)
+    //     .getSubmissionsByActivity(activityId);
 
     void showSendConfirmation() {
       showDialog(
@@ -162,10 +164,8 @@ class _ActivitySectionSubmissionState
                   title: const Text('Cancelar Entregable'),
                   onTap: () {
                     if (authConectionType == AuthConectionType.online) {
-                       ref
-                          .read(activityProvider.notifier)
-                          .cancelSubmission(
-                              studentActivityId, widget.activity.actividadId);
+                      ref.read(activityProvider.notifier).cancelSubmission(
+                          studentActivityId, widget.activity.actividadId);
                     } else if (authConectionType ==
                         AuthConectionType.offline) {}
 
@@ -196,8 +196,7 @@ class _ActivitySectionSubmissionState
                 : Icon(
                     Icons.add,
                     color: Colors.grey.withOpacity(0.8),
-                  )
-            ),
+                  )),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
