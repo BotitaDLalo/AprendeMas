@@ -20,3 +20,5 @@ export 'structure/home_screen.dart';
 export 'structure/catalog_button_navigation_bar_items.dart';
 export 'package:aprende_mas/views/widgets/activities_body/container_subject_name.dart';
 export 'package:aprende_mas/views/student/activities/dialog_text_field.dart';
+export 'snack_bars/success_snackbar.dart';
+export 'snack_bars/error_snackbar.dart';
