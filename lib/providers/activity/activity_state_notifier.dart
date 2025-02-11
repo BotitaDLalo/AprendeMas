@@ -8,11 +8,10 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   final ActivityRepository activityRepository;
   final ActivityOfflineRepository activityOfflineRepository;
 
-  ActivityNotifier(
-      {required this.activityRepository,
-      required this.activityOfflineRepository,
-      })
-      : super(ActivityState());
+  ActivityNotifier({
+    required this.activityRepository,
+    required this.activityOfflineRepository,
+  }) : super(ActivityState());
 
   List<Activity> getActivitiesBySubject(int subjectId) {
     try {
@@ -40,9 +39,6 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> getAllActivitiesOffline(int materiaId) async {
     try {
-      // final activities =
-          // await activityOfflineRepository.getAllActivitiesOffline(materiaId);
-      // _setActivities(activities);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -55,17 +51,12 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  Future<void> createdActivity(
-    int materiaId,
-    String nombreActividad,
-    String descripcion,
-    DateTime fechaLimite,
-    int puntaje
-  ) async {
+  Future<void> createdActivity(int materiaId, String nombreActividad,
+      String descripcion, DateTime fechaLimite, int puntaje) async {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
       final activity = await activityRepository.createdActivity(
-          materiaId, nombreActividad, descripcion, fechaLimite, puntaje );
+          materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
       _setCreatedActivity(activity);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
@@ -90,22 +81,8 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  List<Submission> getSubmissionsByActivity(int activityId) {
-    try {
-      List<Submission> lsSubmissions = List.from(state.lsSubmissions);
-
-      List<Submission> lsSubmissionsByActivity =
-          Submission.activitiesBySubject(lsSubmissions, activityId);
-      return lsSubmissionsByActivity;
-    } catch (e) {
-      debugPrint(e.toString());
-      return [];
-    }
-  }
-
   Future<bool> sendSubmission(int activityId, String answer) async {
     try {
-      //TODO: METODO DLE REPOSITORY
       final submissionSent =
           await activityRepository.sendSubmission(activityId, answer);
       if (submissionSent.isNotEmpty) {
@@ -120,16 +97,15 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> cancelSubmission(int studentActivityId, int activityId) async {
     try {
-      // final cancelSubmission = await activityRepository.cancelSubmission(
-      final cancelSubmission = await activityRepository.cancelSubmission(
+      List<Submission> lsSubmissionsState = List.from(state.lsSubmissions);
+      
+      await activityRepository.cancelSubmission(
           studentActivityId, activityId);
-      // _setLsSubmissions(cancelSubmission);
-      // List<Submission> lsSubmissionsState = List.from(state.lsSubmissions);
-
-      // List<Submission> lsSubmission = lsSubmissionsState
-      //     .where((element) => element.studentActivityId != studentActivityId)
-      //     .toList();
-      _setLsSubmissions(cancelSubmission);
+      
+      List<Submission> lsSubmissions = lsSubmissionsState
+          .where((element) => element.studentActivityId != studentActivityId)
+          .toList();
+      _updateLsSubmissions(lsSubmissions);
     } catch (e) {
       throw Exception(e);
     }
@@ -159,6 +135,10 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
       debugPrint(e.toString());
       return [];
     }
+  }
+
+  void _updateLsSubmissions(List<Submission> lsSubmisions){
+    state = state.copyWith(lsSubmissions: lsSubmisions);
   }
 
   void _setLsSubmissions(List<Submission> lsSubmisions) {
