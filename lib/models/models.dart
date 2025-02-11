@@ -24,5 +24,6 @@ export 'notice_list/notice.dart';
 export 'various/widget_options.dart';
 export 'various/verify_email.dart';
 export 'various/active_user.dart';
+export 'various/group_subject_widget_option.dart';
 
 export 'users/student_group_subject.dart';
