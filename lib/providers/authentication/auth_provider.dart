@@ -7,6 +7,7 @@ import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_use
 import 'package:aprende_mas/config/data/key_value_storage_service_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_respository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../repositories/Implement_repos/authentication/auth_repository_impl.dart';
 
@@ -20,11 +21,17 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
 
   final groups = GroupsRepositoryImpl();
   final groupsOffline = GroupsOfflineRepositoryImpl();
+
+  final subjects = SubjectsRespositoryImpl();
+
   final activity = ActivityRepositoryImpl();
   final activityOffline = ActivityOfflineRepositoryImpl();
 
   final setGroupsSubjectsState =
       ref.read(groupsProvider.notifier).setGroupsSubjects;
+
+  final setSubjectsWithoutGroup =
+      ref.read(subjectsProvider.notifier).setSubjects;
 
   final getAllActivitiesCallback =
       ref.read(activityProvider.notifier).getAllActivities;
@@ -48,6 +55,7 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
       ref.read(groupsProvider.notifier).getGroupsSubjectsOffile;
 
   return AuthStateNotifier(
+      setSubjectsWithoutGroupState: setSubjectsWithoutGroup,
       authUserOffline: authUserOffline,
       authRepository: authStateRepository,
       kv: keyValueStorageService,
@@ -56,12 +64,13 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
       setGroupsSubjectsState: setGroupsSubjectsState,
       getAllActivitiesCallback: getAllActivitiesCallback,
       getSubmissionsOfflineState: getSubmissionOfflineState,
-      setAllActivitiesOfflineState: setAllActivitiesOfflineState,
+      // setAllActivitiesOfflineState: setAllActivitiesOfflineState,
       setSubmissionsOfflineState: setSubmissionsOfflineState,
       getGroupsSubjectsCallback: getGroupsSubjectsCallback,
       getGroupsSubjectsOfflineCallback: getGroupsSubjectsOfflineCallback,
       activityOffline: activityOffline,
       groups: groups,
+      subjects: subjects,
       groupsOffline: groupsOffline,
       activity: activity);
 });
