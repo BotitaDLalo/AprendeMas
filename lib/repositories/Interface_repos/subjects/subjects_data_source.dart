@@ -2,7 +2,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 
 abstract class SubjectsDataSource {
-  Future<List<Subject>> getSubjects();
+  Future<List<Subject>> getSubjectsWithoutGroup();
 
   Future<List<Group>> createSubjectWithGroup(String subjectName,
       String description, Color colorCode, List<int> groupsId);
@@ -17,7 +17,7 @@ abstract class SubjectsDataSource {
   Future<VerifyEmail> verifyEmail(String email);
 
   Future<List<StudentGroupSubject>> addStudentsSubject(
-      int? groupId, int subjectId, List<String> emails);
+      int subjectId, List<String> emails);
 
-  Future<List<StudentGroupSubject>> getStudentsSubject(int subjectId);
+  Future<List<StudentGroupSubject>> getStudentsSubject(int? groupId,int subjectId);
 }
