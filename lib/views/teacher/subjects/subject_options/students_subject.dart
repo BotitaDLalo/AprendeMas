@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/providers/subjects/students_subject_provider.dart';
 
 class StudentsSubject extends ConsumerStatefulWidget {
   final int id;
@@ -13,7 +14,7 @@ class StudentsSubject extends ConsumerStatefulWidget {
 class _StudentsSubjectState extends ConsumerState<StudentsSubject> {
   @override
   Widget build(BuildContext context) {
-    final lsStudents = ref.watch(subjectsProvider).lsStudentsSubject;
+    final lsStudents = ref.watch(studentsSubjectProvider).lsStudentsSubject;
 
     void showStudentOptions(
         String username, String name, String lastName, String lastName2) {

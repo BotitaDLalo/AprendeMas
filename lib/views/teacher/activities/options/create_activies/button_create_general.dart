@@ -4,12 +4,12 @@ import 'package:aprende_mas/models/models.dart';
 
 class ButtonCreateGeneral extends StatelessWidget {
   final int subjectId;
-  final String nombreMateria;
+  final String subjectName;
 
   const ButtonCreateGeneral({
     super.key, 
     required this.subjectId, 
-    required this.nombreMateria,});
+    required this.subjectName,});
 
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
@@ -24,7 +24,7 @@ class ButtonCreateGeneral extends StatelessWidget {
               onTap: () {
                 final data = Subject(
                   materiaId: subjectId, 
-                  nombreMateria: nombreMateria);
+                  nombreMateria: subjectName);
 
                 context.push('/create-activities', extra: data);
                 context.pop();

@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/providers/subjects/students_subject_provider.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
@@ -43,7 +44,7 @@ class _StudentsSubjectAssignmentState
 
     // final subjects = ref.watch(subjectsProvider);
 
-    final lsEmails = ref.watch(subjectsProvider).lsEmails;
+    final lsEmails = ref.watch(studentsSubjectProvider).lsEmails;
 
     void clear() {
       controller.clear();
@@ -64,7 +65,7 @@ class _StudentsSubjectAssignmentState
     ref.listen(formSubjectsProvider, (previous, next) {
       final isFormPosted = next.isFormPosted;
       if (isFormPosted) {
-        ref.read(subjectsProvider.notifier).clearLsEmails();
+        ref.read(studentsSubjectProvider.notifier).clearLsEmails();
       }
     });
     return SingleChildScrollView(
@@ -153,7 +154,7 @@ class _StudentsSubjectAssignmentState
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {
                                     ref
-                                        .read(subjectsProvider.notifier)
+                                        .read(studentsSubjectProvider.notifier)
                                         .onDeleteVeryfyEmail(index);
                                   },
                                 ),
@@ -175,8 +176,8 @@ class _StudentsSubjectAssignmentState
                               }
                               ref
                                   .read(formSubjectsProvider.notifier)
-                                  .onAddStudentsSubject(
-                                      widget.groupId, widget.subjectId);
+                                  .onAddStudentsSubjectWithoutGroup(
+                                      widget.subjectId);
                             })),
                   ],
                 )

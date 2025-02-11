@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
+import 'package:aprende_mas/providers/groups/students_group_provider.dart';
 
 class StudentsGroup extends ConsumerStatefulWidget {
   final int id;
@@ -12,7 +13,7 @@ class StudentsGroup extends ConsumerStatefulWidget {
 class _StudentsGroupState extends ConsumerState<StudentsGroup> {
   @override
   Widget build(BuildContext context) {
-    final lsStudents = ref.watch(groupsProvider).lsStudentsGroup;
+    final lsStudents = ref.watch(studentsGroupProvider).lsStudentsGroup;
 
     void showStudentOptions() {
       showModalBottomSheet(

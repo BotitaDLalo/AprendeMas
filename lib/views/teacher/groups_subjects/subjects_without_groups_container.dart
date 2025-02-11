@@ -15,7 +15,8 @@ class _SubjectsWithoutGroupsState
   @override
   void initState() {
     super.initState();
-    ref.read(subjectsProvider.notifier).getSubjects();
+    // ref.read(subjectsProvider.notifier).getSubjects();
+    
   }
 
   Color stringToColor(String hexColor) {
