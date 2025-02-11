@@ -10,10 +10,8 @@ import 'package:flutter/services.dart';
 void main() async {
   await Environment.initEnvironment();
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await FirebaseCMConfiguration.initializeFCM();
   runApp(const ProviderScope(child: MainApp()));
 }

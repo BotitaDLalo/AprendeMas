@@ -8,7 +8,6 @@ import 'package:aprende_mas/config/data/data.dart';
 
 class ActivityList extends ConsumerStatefulWidget {
   final int subjectId;
-
   const ActivityList({super.key, required this.subjectId});
 
   @override
@@ -16,18 +15,25 @@ class ActivityList extends ConsumerStatefulWidget {
 }
 
 class _ActivityListState extends ConsumerState<ActivityList> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.microtask(() {
-  //     ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
-  //   });
-  // }
+  final cn = CatalogNames();
+  final kvs = KeyValueStorageServiceImpl();
+  late String role = "";
+
+  @override
+  void initState() {
+    getRole();
+    super.initState();
+    // Future.microtask(() {
+    //   ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
+    // });
+  }
+
+  void getRole() async {
+    role = await kvs.getRole();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final cn = CatalogNames();
-    final kvs = KeyValueStorageServiceImpl();
     final activityState = ref
         .watch(activityProvider.notifier)
         .getActivitiesBySubject(widget.subjectId);
@@ -44,40 +50,83 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     //   return const _EmptyMessage(message: 'No hay actividades disponibles.');
     // }
 
-    void teacherActivitySettings(Activity activity) {
-      context.push('/teacher-activity-settings', extra: activity);
+    void teacherActivityStudentsSubmissions(Activity activity) {
+      context.push('/', extra: activity);
     }
 
-    void studentActivitySectionSubmissions(Activity activity) {
+    void studentActivitySubmissions(Activity activity) {
       context.push('/student-activity-section-submissions', extra: activity);
+    }
+
+    void showModalBottomActivityOptions() {
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16),
+          ),
+        ),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.edit),
+                  title: const Text('Editar'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delete_forever),
+                  title: const Text('Eliminar'),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
 
     return ListView.builder(
       itemCount: activityState.length,
       itemBuilder: (context, index) {
         final activity = activityState[index];
-        return ElementTile(
-            icon: const Icon(Icons.assignment, color: Colors.black),
-            title: activity.nombreActividad,
-            subtitle: activity.fechaLimite.toString(),
-            trailing: '',
-            onTapFunction: () async {
-              final role = await kvs.getRole();
-              final activityData = Activity(
-                  actividadId: activity.actividadId,
-                  nombreActividad: activity.nombreActividad,
-                  descripcion: activity.descripcion,
-                  tipoActividadId: activity.tipoActividadId,
-                  fechaCreacion: activity.fechaCreacion,
-                  fechaLimite: activity.fechaLimite,
-                  materiaId: activity.materiaId,
-                  puntaje: activity.puntaje);
-              if (role == cn.getRoleTeacherName) {
-                teacherActivitySettings(activityData);
-              } else if (role == cn.getRoleStudentName) {
-                studentActivitySectionSubmissions(activityData);
-              }
-            });
+        return GestureDetector(
+          onLongPress: () async {
+            // final role = await kvs.getRole();
+            if (role == cn.getRoleTeacherName) {
+              showModalBottomActivityOptions();
+            }
+          },
+          child: ElementTile(
+              icon: const Icon(Icons.assignment, color: Colors.black),
+              title: activity.nombreActividad,
+              subtitle: activity.fechaLimite.toString(),
+              trailing: '',
+              onTapFunction: () async {
+                final activityData = Activity(
+                    actividadId: activity.actividadId,
+                    nombreActividad: activity.nombreActividad,
+                    descripcion: activity.descripcion,
+                    tipoActividadId: activity.tipoActividadId,
+                    fechaCreacion: activity.fechaCreacion,
+                    fechaLimite: activity.fechaLimite,
+                    materiaId: activity.materiaId,
+                    puntaje: activity.puntaje);
+                if (role == cn.getRoleTeacherName) {
+                  teacherActivityStudentsSubmissions(activityData);
+                } else if (role == cn.getRoleStudentName) {
+                  studentActivitySubmissions(activityData);
+                }
+              }),
+        );
       },
     );
   }

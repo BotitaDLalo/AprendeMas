@@ -3,8 +3,6 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
-import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
-import 'package:aprende_mas/config/services/services.dart';
 
 class FormLogin extends ConsumerStatefulWidget {
   const FormLogin({super.key});
@@ -26,6 +24,18 @@ class FormLoginState extends ConsumerState<FormLogin> {
     final loginFormNotifier = ref.read(loginFormProvider.notifier);
     final fcm = ref.watch(firebasecmProvider);
 
+    void pop() {
+      Navigator.pop(context);
+    }
+
+    void showErrorMessage(String message) {
+      errorMessage(context, message);
+    }
+
+    hideSnackBar() {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    }
+
     ref.listen(
       authProvider,
       (previous, next) {
@@ -34,6 +44,19 @@ class FormLoginState extends ConsumerState<FormLogin> {
         }
       },
     );
+
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.errorMessage != "") {
+          hideSnackBar();
+          pop();
+          showErrorMessage(next.errorMessage);
+        }
+      },
+    );
+
+    // FocusScope.of(context).unfocus();
 
     return Container(
       width: MediaQuery.of(context).size.width * 1.90,
@@ -65,7 +88,7 @@ class FormLoginState extends ConsumerState<FormLogin> {
           CustomTextFormField(
             label: 'Contraseña',
             textEditingController: loginFormNotifier.passwordController,
-            obscureText: true,
+            // obscureText: true,
             onChanged: loginFormNotifier.onPasswordChanged,
             errorMessage:
                 loginForm.isFormPosted ? loginForm.password.errorMessage : null,
@@ -88,13 +111,16 @@ class FormLoginState extends ConsumerState<FormLogin> {
             child: ButtonForm(
               style: AppTheme.buttonPrimary,
               buttonName: "Entra",
-              onPressed: () {
+              onPressed: () async {
                 if (loginForm.isPosting) {
                   return;
                 }
                 if (fcm.status == AuthorizationStatus.authorized) {
                   loginFormNotifier.onFormSubmit();
-                  showLoadingScreen(context);
+                  if (loginForm.isValid) {
+                    hideSnackBar();
+                    showLoadingScreen(context);
+                  }
                 } else {
                   ref.read(firebasecmProvider.notifier).onRequestPermissions();
                 }
