@@ -59,7 +59,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final groupData = state.extra as Group;
           return GroupTeacherOptions(
-            id: groupData.grupoId ?? -1,
+            groupId: groupData.grupoId ?? -1,
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",
             accessCode: groupData.codigoAcceso,

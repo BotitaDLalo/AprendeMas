@@ -6,12 +6,11 @@ class DbLocal {
     try {
       final databasesPath = await getDatabasesPath();
       String path = join(databasesPath, 'Movil.db');
-      await deleteDatabase(path);
+      // await deleteDatabase(path);
       bool exist = await File(path).exists();
 
       if (!exist) {
         List<String> lsQuerys = Querys.querysCreateTables();
-
         Database db =
             await openDatabase(path, version: 1, onCreate: (db, version) async {
           for (var q in lsQuerys) {
