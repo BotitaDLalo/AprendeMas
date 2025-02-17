@@ -43,6 +43,16 @@ class ActivityRepositoryImpl implements ActivityRepository {
     return activityDataSource.cancelSubmission(studentActivityId,activityId);
   }
   
+  @override
+  Future<ActivityStudentSubmissionsData> getStudentSubmissions(int activityId) {
+    return activityDataSource.getStudentSubmissions(activityId);
+  }
+  
+  @override
+  Future<bool> submissionGrading(int submissionId, int grade) {
+    return activityDataSource.submissionGrading(submissionId, grade);
+  }
+  
 
 
 

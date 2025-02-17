@@ -15,7 +15,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
 
       final List<Map<String, dynamic>> data =
           List<Map<String, dynamic>>.from(response.data);
-      
+
       debugPrint("Respuesta del backend: ${response.data}");
 
       final activities = ActivityMapper.fromMapList(data);
@@ -27,20 +27,15 @@ class ActivityDataSourceImpl implements ActivityDataSource {
   }
 
   @override
-  Future<List<Activity>> createdActivity(
-    int materiaId,
-    String nombreActividad,
-    String descripcion,
-    DateTime fechaLimite,
-    int puntaje
-  ) async {
+  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
+      String descripcion, DateTime fechaLimite, int puntaje) async {
     try {
       const uri = "/Actividades/CrearActividad";
       final response = await dio.post(uri, data: {
         "nombreActividad": nombreActividad,
         "descripcion": descripcion,
         "fechaLimite": fechaLimite.toIso8601String(),
-        "materiaId": materiaId, 
+        "materiaId": materiaId,
         "puntaje": puntaje,
       });
       debugPrint("Response: ${response.data}");
@@ -50,8 +45,9 @@ class ActivityDataSourceImpl implements ActivityDataSource {
 
       return activities;
     } catch (e) {
-      throw Exception(
-          "ActivityDataSourceImpl post Error al crear una actividad: $e");
+      return [];
+      // throw Exception(
+      //     "ActivityDataSourceImpl post Error al crear una actividad: $e");
     }
   }
 
@@ -143,6 +139,45 @@ class ActivityDataSourceImpl implements ActivityDataSource {
     } catch (e) {
       print(e);
       return [];
+    }
+  }
+
+  @override
+  Future<ActivityStudentSubmissionsData> getStudentSubmissions(
+      int activityId) async {
+    try {
+      const uri = "/Actividades/ObtenerAlumnosEntregables";
+
+      final res =
+          await dio.get(uri, queryParameters: {"actividadId": activityId});
+      if (res.statusCode == 200) {
+        final response = Map<String, dynamic>.from(res.data);
+        final entity =
+            ActivityStudentSubmissionsData.responseToEntity(response);
+        return entity;
+      }
+      return ActivityStudentSubmissionsData.init();
+    } catch (e) {
+      print(e);
+      return ActivityStudentSubmissionsData.init();
+    }
+  }
+
+  @override
+  Future<bool> submissionGrading(int submissionId, int grade) async {
+    try {
+      const uri = "/Actividades/AsignarCalificacion";
+
+      final res = await dio
+          .post(uri, data: {"EntregaId": submissionId, "Calificacion": grade});
+
+      if (res.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 }
