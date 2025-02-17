@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
@@ -8,6 +9,7 @@ import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_student_submission_grading.dart';
 
 String routeAux = "";
 List<GoRoute> lsRouter = [];
@@ -53,7 +55,7 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/create-event',
         builder: (context, state) => const CreateEventScreen(),
-        ),
+      ),
       GoRoute(
         path: '/group-teacher-settings',
         builder: (context, state) {
@@ -89,7 +91,7 @@ final goRouterProvider = Provider((ref) {
         path: '/activities-options',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-          return ActivitiesOptionScreen(
+          return ActivityOptionScreen(
             subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
           );
@@ -129,20 +131,32 @@ final goRouterProvider = Provider((ref) {
           );
         },
       ),
-      GoRoute(
-        path: '/teacher-activity-settings',
-        builder: (context, state) {
-          final activity = state.extra as Activity;
 
-          return ActivitySettings(activity: activity);
-        },
-      ),
       GoRoute(
         path: '/student-activity-section-submissions',
         builder: (context, state) {
           final activity = state.extra as Activity;
 
           return ActivitySectionSubmissions(activity: activity);
+        },
+      ),
+
+      GoRoute(
+        path: '/teacher-activities-students-options',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+          return TeacherActivityStudentsSubmissions(
+            activity: activity,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/teacher-student-submission-grading',
+        builder: (context, state) {
+          final dataExtra = state.extra as TeacherStudentSubmissionGradingModel;
+          return TeacherStudentSubmissionGrading(
+            data: dataExtra,
+          );
         },
       )
     ],
