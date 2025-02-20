@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
+import 'package:aprende_mas/views/teacher/notices/teacher_create_notice.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -65,7 +66,7 @@ final goRouterProvider = Provider((ref) {
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",
             accessCode: groupData.codigoAcceso,
-            colorCode: groupData.codigoColor,
+            // colorCode: groupData.codigoColor,
           );
         },
       ),
@@ -122,7 +123,7 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/notification-content',
         builder: (context, state) {
-          final notificationData = state.extra as Notice;
+          final notificationData = state.extra as NotificationModel;
           return NotificationContentScreen(
             messageId: notificationData.messageId,
             title: notificationData.title,
@@ -156,6 +157,16 @@ final goRouterProvider = Provider((ref) {
           final dataExtra = state.extra as TeacherStudentSubmissionGradingModel;
           return TeacherStudentSubmissionGrading(
             data: dataExtra,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/teacher-create-notice',
+        builder: (context, state) {
+          final notice = state.extra as NoticeModel;
+          return TeacherCreateNotice(
+            notice: notice,
           );
         },
       )
