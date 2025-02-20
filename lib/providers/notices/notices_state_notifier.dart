@@ -1,48 +1,44 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/repositories/Interface_repos/notices/db_local_notices_repository.dart';
+import 'package:aprende_mas/providers/notices/notices_state.dart';
+import 'package:aprende_mas/repositories/Interface_repos/notices/notices_repository.dart';
 
-class NoticesStateNotifier extends StateNotifier<List<Notice>> {
-  final DbLocalNoticesRepository dbLocalNoticesRepository;
-  NoticesStateNotifier({required this.dbLocalNoticesRepository}) : super([]);
+class NoticesStateNotifier extends StateNotifier<NoticesState> {
+  final NoticesRepository noticesRepository;
 
-  onNewNotice(Notice notice) async {
-    final noticeInserted =
-        await dbLocalNoticesRepository.storeNotification(notice);
-    if (noticeInserted) {
-      _setNewNotice(notice);
+  NoticesStateNotifier({required this.noticesRepository})
+      : super(NoticesState());
+
+  Future<bool> createNotice(NoticeModel notice) async {
+    try {
+      List<NoticeModel> lsNotices =
+          await noticesRepository.createNotice(notice);
+
+      if (lsNotices.isNotEmpty) {
+        _setNewNotice(notice);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
     }
   }
 
-  _setNewNotice(Notice notice) {
-    List<Notice> lsNotices = List.from(state);
-    state = [notice, ...lsNotices];
-  }
+  // Future<List<NoticeModel>> getlsNotices(NoticeModel notice) async {
+  //   try {
+  //     List<NoticeModel> lsNotices =
+  //         await noticesRepository.getlsNotices(notice);
 
-  getLsNotices() async {
-    final lsNotices = await dbLocalNoticesRepository.getLsNotifications();
-    _setLsNotices(lsNotices);
-  }
+  //     _setlsNotices(lsNotices);
+  //     return lsNotices;
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     return [];
+  //   }
+  // }
+  // _setlsNotices(List<NoticeModel> lsNotices) {}
 
-  _setLsNotices(List<Notice> lsNotices) {
-    state = lsNotices;
-  }
+  _setNewNotice(NoticeModel notice) {}
 
-  clearNotifications() async {
-    state = [];
-  }
-
-  deleteNotification(String sentDate) async {
-    final deletedNotice =
-        await dbLocalNoticesRepository.deleteNotification(sentDate);
-    if (deletedNotice) {
-      _setDeleteNotification(sentDate);
-    }
-  }
-
-  _setDeleteNotification(String sentDate) {
-    List<Notice> lsNotices = List.from(state);
-    lsNotices.removeWhere((element) => element.sentDate == sentDate);
-    state = [...lsNotices];
-  }
 }
