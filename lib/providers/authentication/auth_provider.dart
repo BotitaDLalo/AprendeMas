@@ -7,6 +7,7 @@ import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_use
 import 'package:aprende_mas/config/data/key_value_storage_service_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_respository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../repositories/Implement_repos/authentication/auth_repository_impl.dart';
@@ -23,6 +24,7 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final groupsOffline = GroupsOfflineRepositoryImpl();
 
   final subjects = SubjectsRespositoryImpl();
+  final subjectsOffline = SubjectsOfflineRepositoryImpl();
 
   final activity = ActivityRepositoryImpl();
   final activityOffline = ActivityOfflineRepositoryImpl();
@@ -36,16 +38,13 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final getAllActivitiesCallback =
       ref.read(activityProvider.notifier).getAllActivities;
 
-  final setAllActivitiesOfflineState =
+  final getAllActivitiesOfflineCallback =
       ref.read(activityProvider.notifier).getAllActivitiesOffline;
-
-  final setSubmissionsOfflineState =
-      ref.read(activityProvider.notifier).getSubmissionsOffline;
 
   final getSubmissionsCallback =
       ref.read(activityProvider.notifier).getSubmissions;
 
-  final getSubmissionOfflineState =
+  final getSubmissionOfflineCallback =
       ref.read(activityProvider.notifier).getSubmissionsOffline;
 
   final getGroupsSubjectsCallback =
@@ -54,23 +53,29 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final getGroupsSubjectsOfflineCallback =
       ref.read(groupsProvider.notifier).getGroupsSubjectsOffile;
 
+  final sendSubmissionsCallback =
+      ref.read(activityProvider.notifier).sendSubmission;
+
   return AuthStateNotifier(
-      setSubjectsWithoutGroupState: setSubjectsWithoutGroup,
-      authUserOffline: authUserOffline,
-      authRepository: authStateRepository,
-      kv: keyValueStorageService,
-      googleSigninApi: googleSigninApi,
-      getSubmissionsCallback: getSubmissionsCallback,
-      setGroupsSubjectsState: setGroupsSubjectsState,
-      getAllActivitiesCallback: getAllActivitiesCallback,
-      getSubmissionsOfflineState: getSubmissionOfflineState,
-      // setAllActivitiesOfflineState: setAllActivitiesOfflineState,
-      setSubmissionsOfflineState: setSubmissionsOfflineState,
-      getGroupsSubjectsCallback: getGroupsSubjectsCallback,
-      getGroupsSubjectsOfflineCallback: getGroupsSubjectsOfflineCallback,
-      activityOffline: activityOffline,
-      groups: groups,
-      subjects: subjects,
-      groupsOffline: groupsOffline,
-      activity: activity);
+    setSubjectsWithoutGroupState: setSubjectsWithoutGroup,
+    authUserOffline: authUserOffline,
+    authRepository: authStateRepository,
+    kv: keyValueStorageService,
+    googleSigninApi: googleSigninApi,
+    getSubmissionsCallback: getSubmissionsCallback,
+    setGroupsSubjectsState: setGroupsSubjectsState,
+    getAllActivitiesCallback: getAllActivitiesCallback,
+    getSubmissionsOfflineCallback: getSubmissionOfflineCallback,
+    getAllActivitiesOfflineCallback: getAllActivitiesOfflineCallback,
+    getGroupsSubjectsCallback: getGroupsSubjectsCallback,
+    getGroupsSubjectsOfflineCallback: getGroupsSubjectsOfflineCallback,
+    activityOffline: activityOffline,
+    groups: groups,
+    subjects: subjects,
+    groupsOffline: groupsOffline,
+    subjectsOffline: subjectsOffline,
+    sendSubmission: sendSubmissionsCallback
+    // activity: activity
+
+  );
 });

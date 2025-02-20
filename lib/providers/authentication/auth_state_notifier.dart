@@ -8,6 +8,7 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/groups/groups_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_respository_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/authentication/auth_repository.dart';
 import 'package:aprende_mas/config/data/key_value_storage_service.dart';
@@ -25,36 +26,40 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   final Function(int) getAllActivitiesCallback;
   // final Function(int) setAllActivitiesOfflineState;
   final Function(int) getSubmissionsCallback;
-  final Function(int) getSubmissionsOfflineState;
+  final Function(int) getSubmissionsOfflineCallback;
   final Function(List<Group>) setGroupsSubjectsState;
   final Function(List<Subject>) setSubjectsWithoutGroupState;
   final GroupsRepositoryImpl groups;
   final SubjectsRespositoryImpl subjects;
-  final ActivityRepositoryImpl activity;
+  // final ActivityRepositoryImpl activity;
   final ActivityOfflineRepositoryImpl activityOffline;
   final GroupsOfflineRepositoryImpl groupsOffline;
-  final Function(int) setSubmissionsOfflineState;
+  final SubjectsOfflineRepositoryImpl subjectsOffline;
+  final Function(int) getAllActivitiesOfflineCallback;
+  final Function(int, String) sendSubmission;
 
-  AuthStateNotifier({
-    required this.authUserOffline,
-    required this.authRepository,
-    required this.kv,
-    required this.googleSigninApi,
-    required this.setGroupsSubjectsState,
-    required this.setSubjectsWithoutGroupState,
-    required this.getSubmissionsCallback,
-    required this.getSubmissionsOfflineState,
-    required this.getAllActivitiesCallback,
-    // required this.setAllActivitiesOfflineState,
-    required this.setSubmissionsOfflineState,
-    required this.getGroupsSubjectsCallback,
-    required this.getGroupsSubjectsOfflineCallback,
-    required this.activityOffline,
-    required this.groups,
-    required this.subjects,
-    required this.groupsOffline,
-    required this.activity,
-  }) : super(AuthState()) {
+  AuthStateNotifier(
+      {required this.authUserOffline,
+      required this.authRepository,
+      required this.kv,
+      required this.googleSigninApi,
+      required this.setGroupsSubjectsState,
+      required this.setSubjectsWithoutGroupState,
+      required this.getSubmissionsCallback,
+      required this.getSubmissionsOfflineCallback,
+      required this.getAllActivitiesCallback,
+      required this.getAllActivitiesOfflineCallback,
+      required this.getGroupsSubjectsCallback,
+      required this.getGroupsSubjectsOfflineCallback,
+      required this.activityOffline,
+      required this.groups,
+      required this.subjects,
+      required this.groupsOffline,
+      required this.subjectsOffline,
+      required this.sendSubmission
+      // required this.activity,
+      })
+      : super(AuthState()) {
     checkInternet();
   }
 
@@ -147,7 +152,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
         if (dateNow.isBefore(userDateLimit)) {
           List<Group> lsGroups = await groupsOffline.getGroupsSubjects();
-          List<Subject> lsSubjectsWithoutGroup = [];
+          List<Subject> lsSubjectsWithoutGroup =
+              await subjectsOffline.getSujectsWithoutGroup();
           //TODO: MANDAR A TRAER Materias sin grupo
           _setLoggedOfflineUser(userOffline, lsGroups, lsSubjectsWithoutGroup);
         } else {
@@ -218,7 +224,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       List<Subject> lsSubjectsWithoutGroup =
           await subjects.getSubjectsWithoutGroup();
 
-      await _submissionsPending(lsGroups);
+      await _submissionsPending(lsGroups, lsSubjectsWithoutGroup);
 
       await _updateUserState(lsGroups, lsSubjectsWithoutGroup);
     }
@@ -242,7 +248,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         email: userOffline.email,
         role: userOffline.role,
         token: "");
-    _updateUserState(lsGroups, lsSubjectsWithoutGroup);
+    // _updateUserState(lsGroups, lsSubjectsWithoutGroup);
+    _updateUserStateOffline(lsGroups, lsSubjectsWithoutGroup);
 
     state = state.copyWith(
       authUser: user,
@@ -262,11 +269,13 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     //& Guardar los grupos, materias y actividades offline
     await groupsOffline.saveGroupSubjects(lsGroups);
 
+    await subjectsOffline.saveSubjectsWithoutGroup(lsSubjectsWithoutGroup);
+
     //& set para groups y subjects y activities state
     await setGroupsSubjectsState(lsGroups);
     await setSubjectsWithoutGroupState(lsSubjectsWithoutGroup);
 
-    //& set para activity state
+    //& set para activity state grupos y materias
     for (var group in lsGroups) {
       for (var subj in group.materias ?? []) {
         final subject = subj as Subject;
@@ -286,15 +295,47 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         }
       }
     }
+
+    //& set para activity state materias sin grupo
+    for (var subject in lsSubjectsWithoutGroup) {
+      final subjectId = subject.materiaId;
+
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subject.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.actividadId;
+
+        List<Submission> lsSubmissions =
+            await getSubmissionsCallback(activityId);
+        await activityOffline.saveSubmissions(lsSubmissions, activityId);
+      }
+    }
   }
 
-  Future<void> _submissionsPending(List<Group> lsGroups) async {
+  Future<void> _submissionsPending(
+      List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
     List<Submission> lsSubmissionsPending = [];
 
     //& set para activity state
-    for (var group in lsGroups) {
-      for (var subj in group.materias ?? []) {
-        for (var act in subj.actividades ?? []) {
+    if (lsGroups.isNotEmpty) {
+      for (var group in lsGroups) {
+        for (var subj in group.materias ?? []) {
+          for (var act in subj.actividades ?? []) {
+            final activity = act as Activity;
+            final activityId = activity.actividadId;
+
+            //& Guardar entregables para submissions state
+            List<Submission> lsSubmissions =
+                await activityOffline.getSubmissionsPending(activityId);
+            lsSubmissionsPending.addAll(lsSubmissions);
+          }
+        }
+      }
+    }
+
+    if (lsSubjectsWithoutGroup.isNotEmpty) {
+      for (var subject in lsSubjectsWithoutGroup) {
+        for (var act in subject.actividades ?? []) {
           final activity = act as Activity;
           final activityId = activity.actividadId;
 
@@ -307,12 +348,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
 
     if (lsSubmissionsPending.isNotEmpty) {
-      // _sendSubmissionsPending(lsSubmissionsPending);
-      for (var sub in lsSubmissionsPending) {
-        int activityId = sub.activityId ?? -1;
+      for (var submission in lsSubmissionsPending) {
+        int activityId = submission.activityId ?? -1;
         if (activityId != -1) {
-          String answer = sub.answer ?? "";
-          await activity.sendSubmission(activityId, answer);
+          String answer = submission.answer ?? "";
+          bool submissionSentSuccess =
+              await sendSubmission(activityId, answer);
+
+          if (submissionSentSuccess) {
+            int submissionId = submission.submissionId;
+            await activityOffline.deleteSubmissionOfflineSent(submissionId);
+          }
         }
       }
     }
@@ -334,6 +380,51 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           final activityId = activity.actividadId;
           await getSubmissionsCallback(activityId);
         }
+      }
+    }
+
+    for (var subject in lsSubjectsWithoutGroup) {
+      final subjectId = subject.materiaId;
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subject.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.actividadId;
+        await getSubmissionsCallback(activityId);
+      }
+    }
+  }
+
+  Future<void> _updateUserStateOffline(
+      List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
+    //& set para groups y subject
+    await setGroupsSubjectsState(lsGroups);
+    await setSubjectsWithoutGroupState(lsSubjectsWithoutGroup);
+
+    for (var group in lsGroups) {
+      for (var sub in group.materias ?? []) {
+        final subject = sub as Subject;
+        final subjectId = subject.materiaId;
+        // await getAllActivitiesCallback(subjectId);
+        await getAllActivitiesOfflineCallback(subjectId);
+        for (var act in sub.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+          // await getSubmissionsCallback(activityId);
+          await getSubmissionsOfflineCallback(activityId);
+        }
+      }
+    }
+
+    for (var subject in lsSubjectsWithoutGroup) {
+      final subjectId = subject.materiaId;
+      // await getAllActivitiesCallback(subjectId);
+      await getAllActivitiesOfflineCallback(subjectId);
+      for (var act in subject.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.actividadId;
+        // await getSubmissionsCallback(activityId);
+
+        await getSubmissionsOfflineCallback(activityId);
       }
     }
   }
