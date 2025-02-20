@@ -51,7 +51,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
       Color colorCode, List<SubjectsRow> subjectsList) async {
     try {
       final group = await groupsRepository.createGroupSubjects(
-          groupName, description, colorCode, subjectsList);
+          groupName, description, subjectsList);
 
       if (group.isNotEmpty) {
         _setCreateGroupSubjects(group);
@@ -69,11 +69,11 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   Future<void> deleteGroup() async {}
 
-  Future<bool> updateGroup(int groupId, String groupName,
-      String descriptionGroup, Color colorGroup) async {
+  Future<bool> updateGroup(
+      int groupId, String groupName, String descriptionGroup) async {
     try {
       Group updateGroup = await groupsRepository.updateGroup(
-          groupId, groupName, descriptionGroup, colorGroup);
+          groupId, groupName, descriptionGroup);
 
       if (updateGroup.grupoId != -1) {
         _setUpdateGroup(updateGroup);
@@ -92,14 +92,13 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     final groupId = updateGroup.grupoId;
     final newGroupName = updateGroup.nombreGrupo;
     final newDescriptionGroup = updateGroup.descripcion;
-    final newColorGroup = updateGroup.codigoColor;
 
     if (index != -1) {
       lsGroups[index] = Group(
-          grupoId: groupId,
-          nombreGrupo: newGroupName,
-          descripcion: newDescriptionGroup,
-          codigoColor: newColorGroup);
+        grupoId: groupId,
+        nombreGrupo: newGroupName,
+        descripcion: newDescriptionGroup,
+      );
 
       state = state.copyWith(groups: lsGroups);
     }
@@ -108,7 +107,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   onNewSubject(List<Group> groups) {
     state = state.copyWith(groups: groups);
   }
-  
+
   void clearGroupsState() {
     state = GroupsState();
   }

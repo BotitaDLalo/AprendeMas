@@ -67,8 +67,12 @@ class StudentsGroupStateNotifier extends StateNotifier<StudentsGroupState> {
   }
 
   _setAddStudentsGroup(List<StudentGroupSubject> lsStudentsGroup) {
-    state = state.copyWith(lsStudentsGroup: lsStudentsGroup);
+    final lsStudentsState = List.from(state.lsStudentsGroup);
+    state = state
+        .copyWith(lsStudentsGroup: [...lsStudentsState, ...lsStudentsGroup]);
   }
+
+  Future<void> removeStudentsGroup() async {}
 
   Future<void> getStudentsGroup(int groupId) async {
     try {
