@@ -24,7 +24,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
         final res = await dio.get(uri, queryParameters: {'alumnoid': id});
         resList = List<Map<String, dynamic>>.from(res.data);
       }
-      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      final lsSubjects = Subject.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {
       throw Exception(e);
@@ -67,7 +67,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
         "DocenteId": id
       });
       final resList = List<Map<String, dynamic>>.from(res.data);
-      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      final lsSubjects = Subject.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {
       throw Exception(e);
