@@ -1,3 +1,6 @@
+import 'dart:ui';
+import 'package:aprende_mas/config/utils/general_utils.dart';
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/models/models.dart';
 
 class Group {
@@ -5,7 +8,7 @@ class Group {
   final String nombreGrupo;
   final String? descripcion;
   final String? codigoAcceso;
-  final String codigoColor;
+  // final String codigoColor;
   final List<Subject>? materias;
 
   Group({
@@ -13,7 +16,7 @@ class Group {
     required this.nombreGrupo,
     this.descripcion,
     this.codigoAcceso,
-    required this.codigoColor,
+    // required this.codigoColor,
     this.materias,
   });
 
@@ -22,7 +25,8 @@ class Group {
       descripcion: '',
       nombreGrupo: '',
       codigoAcceso: '',
-      codigoColor: '');
+      // codigoColor: ''
+      );
 
   static List<Group> groupsJsonToEntityList(
       List<Map<String, dynamic>> groupsAndSubject) {
@@ -38,8 +42,8 @@ class Group {
               nombreActividad: actividad['nombreActividad'],
               descripcion: actividad['descripcion'],
               tipoActividadId: actividad['tipoActividadId'],
-              fechaCreacion: DateTime.parse(actividad['fechaCreacion']),
-              fechaLimite: DateTime.parse(actividad['fechaLimite']),
+              fechaCreacion: formatDate(actividad['fechaCreacion']),
+              fechaLimite: formatDate(actividad['fechaLimite']),
               puntaje: actividad['puntaje'],
               materiaId: actividad['materiaId']);
         }).toList();
@@ -59,7 +63,7 @@ class Group {
         nombreGrupo: group['nombreGrupo'],
         descripcion: group['descripcion'] ?? "",
         codigoAcceso: group['codigoAcceso'] ?? "",
-        codigoColor: group['codigoColor'],
+        // codigoColor: mainColorToHex,
         materias: materias,
       ));
     }
@@ -71,7 +75,9 @@ class Group {
       nombreGrupo: group['nombreGrupo'],
       descripcion: group['descripcion'],
       codigoAcceso: group['codigoAcceso'],
-      codigoColor: group['codigoColor']);
+      // codigoColor: group['codigoColor']
+      
+      );
 
   static Group queryToEntityGroup(Map<String, Object?> queryGroup) {
     final group = queryGroup as Group;
@@ -79,6 +85,8 @@ class Group {
         nombreGrupo: group.nombreGrupo,
         descripcion: group.descripcion,
         codigoAcceso: group.codigoAcceso,
-        codigoColor: group.codigoColor);
+        // codigoColor: group.codigoColor
+        
+        );
   }
 }
