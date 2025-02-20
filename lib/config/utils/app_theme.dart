@@ -7,11 +7,15 @@ const List<Color> _colorThemes = [
   Color.fromARGB(100, 0, 0, 0), //$Negro palido 3
   Color.fromARGB(150, 0, 0, 0), //$Negro palido 4
   Color.fromARGB(140, 141, 141, 141), //$ Gris 5
-  Colors.grey, //$ 6
+  Color.fromARGB(255, 33, 150, 243) //# Principal blue
 ];
 
 class AppTheme {
   // final Color buttonColor = _colorThemes[1];
+
+  static Color mainColor =_colorThemes[6];
+  // static Color secondMainColor =Colors.yellow[700]!;
+
   static final Color isSelectedGroup = _colorThemes[1];
   static final Color notSelectedGroup = _colorThemes[6];
   static final Color cardHeader = _colorThemes[5];
@@ -66,7 +70,7 @@ class AppTheme {
 
 //#Buttons styles
   static final ButtonStyle buttonPrimary = ElevatedButton.styleFrom(
-    backgroundColor: _colorThemes[1],
+    backgroundColor: Colors.blue,
     // textStyle: const TextStyle(fontSize: 16),
     fixedSize: const Size.fromHeight(45),
     shape: RoundedRectangleBorder(
