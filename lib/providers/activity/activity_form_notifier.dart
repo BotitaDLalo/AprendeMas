@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/activity/activity_form_state.dart';
 import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
 // import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
@@ -7,6 +8,8 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final Function(int, String, String, DateTime, int) activityCallback;
   final Function(int, String) sendSubmissionCallback;
   final Function(int, String) sendSubmissionOfflineCallback;
+  final Function({required int submissionId, required int grade})
+      submissionGradingCallback;
   final TextEditingController nombreController;
   final TextEditingController descripcionController;
   final TextEditingController fechaController;
@@ -14,11 +17,12 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final TextEditingController answerController;
   final TextEditingController puntajeController;
 
-  ActivityFormNotifier({
-    required this.activityCallback,
-    required this.sendSubmissionCallback,
-    required this.sendSubmissionOfflineCallback,
-  })  : fechaController = TextEditingController(),
+  ActivityFormNotifier(
+      {required this.activityCallback,
+      required this.sendSubmissionCallback,
+      required this.sendSubmissionOfflineCallback,
+      required this.submissionGradingCallback})
+      : fechaController = TextEditingController(),
         horaController = TextEditingController(),
         nombreController = TextEditingController(),
         descripcionController = TextEditingController(),
@@ -139,6 +143,7 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     }
   }
 
+//& No recibe la descripcion,
   Future<void> onFormSubmit(int subjectId, String nombreMateria) async {
     // Verificar que no haya una petición en curso
     if (state.isPosting) return;
@@ -164,13 +169,8 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
 
     try {
       // Llamar al callback y obtener el resultado
-      bool res = await activityCallback(
-        subjectId,
-        state.nombre.value,
-        state.descripcion.value,
-        fechaHoraConcatenada,
-        puntajeInt
-      );
+      bool res = await activityCallback(subjectId, state.nombre.value,
+          state.descripcion.value, fechaHoraConcatenada, puntajeInt);
 
       // Actualizar el estado según el resultado
       state = state.copyWith(isFormPosted: res);
@@ -199,8 +199,8 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
         fechaLimite: fechaLimite,
         horaLimite: horaLimite,
         puntaje: puntaje,
-        isValid:
-            Formz.validate([nombre, descripcion, fechaLimite, horaLimite, puntaje]));
+        isValid: Formz.validate(
+            [nombre, descripcion, fechaLimite, horaLimite, puntaje]));
   }
 
   void resetStateForm() {
@@ -241,5 +241,39 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
 
   dropAnswer() {
     state = state.copyWith(existsAnswer: false, answer: "");
+  }
+
+  onSubmissionGradeChanged(String grade) {
+    final newGrade = GenericInput.dirty(grade);
+    state =
+        state.copyWith(newGrade: newGrade, isValid: Formz.validate([newGrade]));
+  }
+
+ Future<FormSubmitedResponseStatus> onSubmitGrade(int submissionId) async {
+    FormSubmitedResponseStatus response = FormSubmitedResponseStatus();
+    _touchFieldGrade();
+    if (!state.isValid){
+      response.isValid = false;
+      return response;
+    }
+    state = state.copyWith(isPosting: true);
+
+    response.isValid = true;
+    final grade = state.newGrade.value;
+    bool submitedGrade = await submissionGradingCallback(
+        grade: int.parse(grade), submissionId: submissionId);
+    response.success = submitedGrade;
+
+    state = state.copyWith(isPosting: false);
+
+    return response;
+  }
+
+  _touchFieldGrade() {
+    final grade =
+        GenericInput.dirty(state.newGrade.value);
+
+    state = state.copyWith(
+        isFormPosted: true, newGrade: grade, isValid: Formz.validate([grade]));
   }
 }

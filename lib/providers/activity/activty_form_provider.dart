@@ -11,8 +11,11 @@ final activityFormProvider =
     final sendActivity = ref.read(activityProvider.notifier).sendSubmission;
     final sendActivityOffline =
         ref.read(activityProvider.notifier).sendSubmissionOffline;
+    final submissionGrading =
+        ref.read(activityProvider.notifier).submissionGrading;
 
     return ActivityFormNotifier(
+        submissionGradingCallback: submissionGrading,
         activityCallback: createActivity,
         sendSubmissionCallback: sendActivity,
         sendSubmissionOfflineCallback: sendActivityOffline);

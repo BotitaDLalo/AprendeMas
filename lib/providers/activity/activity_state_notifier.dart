@@ -25,10 +25,10 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  Future<void> getAllActivities(int materiaId) async {
+  Future<void> getAllActivities(int subjectId) async {
     try {
       state = state.copyWith(isLoading: true);
-      final activities = await activityRepository.getAllActivities(materiaId);
+      final activities = await activityRepository.getAllActivities(subjectId);
       _setActivities(activities);
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
@@ -37,10 +37,15 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  Future<void> getAllActivitiesOffline(int materiaId) async {
+  Future<void> getAllActivitiesOffline(int subjectId) async {
     try {
+      state = state.copyWith(isLoading: true);
+      final lsActivities = await activityOfflineRepository.getAllActivitiesOffline(subjectId);
+      _setActivities(lsActivities);
     } catch (e) {
       debugPrint(e.toString());
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -51,15 +56,21 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  Future<void> createdActivity(int materiaId, String nombreActividad,
+  Future<bool> createdActivity(int materiaId, String nombreActividad,
       String descripcion, DateTime fechaLimite, int puntaje) async {
     try {
       state = state.copyWith(isLoading: true); // Indicando que está cargando
       final activity = await activityRepository.createdActivity(
           materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
-      _setCreatedActivity(activity);
+
+      if (activity.isNotEmpty) {
+        _setCreatedActivity(activity);
+        return true;
+      }
+      return false;
     } catch (e) {
       state = state.copyWith(errorMessage: e.toString());
+      return false;
     } finally {
       state =
           state.copyWith(isLoading: false); // Indicando que terminó la carga
@@ -86,7 +97,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
       final submissionSent =
           await activityRepository.sendSubmission(activityId, answer);
       if (submissionSent.isNotEmpty) {
-        _setLsSubmissions(submissionSent);
+        // _setLsSubmissions(submissionSent);
         return true;
       }
       return false;
@@ -98,10 +109,9 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   Future<void> cancelSubmission(int studentActivityId, int activityId) async {
     try {
       List<Submission> lsSubmissionsState = List.from(state.lsSubmissions);
-      
-      await activityRepository.cancelSubmission(
-          studentActivityId, activityId);
-      
+
+      await activityRepository.cancelSubmission(studentActivityId, activityId);
+
       List<Submission> lsSubmissions = lsSubmissionsState
           .where((element) => element.studentActivityId != studentActivityId)
           .toList();
@@ -137,7 +147,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  void _updateLsSubmissions(List<Submission> lsSubmisions){
+  void _updateLsSubmissions(List<Submission> lsSubmisions) {
     state = state.copyWith(lsSubmissions: lsSubmisions);
   }
 
@@ -147,7 +157,26 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
         state.copyWith(lsSubmissions: [...lsSubmisionsState, ...lsSubmisions]);
   }
 
+  void setSubmissionGrade(int grade) {
+    state = state.copyWith(grade: grade);
+  }
+
+  Future<bool> submissionGrading(
+      {required int submissionId, required int grade}) async {
+    try {
+      final res =
+          await activityRepository.submissionGrading(submissionId, grade);
+      return res;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void clearActivityState() {
     state = ActivityState();
+  }
+
+  void clearSubmissionData() {
+    state = state.copyWith(grade: 0);
   }
 }
