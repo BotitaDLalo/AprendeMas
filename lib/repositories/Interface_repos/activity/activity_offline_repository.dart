@@ -8,4 +8,5 @@ abstract class ActivityOfflineRepository {
   Future<List<Submission>> getSubmissionsOffline(int activityId);
   Future<List<Submission>> sendSubmissionOffline(int activityId, String answer);
   Future<List<Submission>> getSubmissionsPending(int activityId);
+  Future<void> deleteSubmissionOfflineSent(int submissionId);
 }
