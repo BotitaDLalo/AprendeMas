@@ -4,7 +4,7 @@ successMessage(BuildContext context, String message) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Container(
       padding: const EdgeInsets.all(8),
-      height: 80,
+      height: 70,
       decoration: const BoxDecoration(
           color: Colors.green,
           borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -22,22 +22,22 @@ successMessage(BuildContext context, String message) {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Error',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-              ),
-              const Spacer(),
-              Text(message)
+              
+                  const Text(
+                    'Exito',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                  Text(
+                    message,
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                  ),
             ],
           ))
         ],
       ),
     ),
-    behavior: SnackBarBehavior.floating,
+    // behavior: SnackBarBehavior.floating,
     backgroundColor: Colors.transparent,
-    elevation: 3,
+    elevation: 0,
   ));
 }

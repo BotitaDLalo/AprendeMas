@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
 
 class NoticeDescription extends StatelessWidget {
-  const NoticeDescription({super.key});
+  final String title;
+  final String content;
+  const NoticeDescription(
+      {super.key, required this.content, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Text('Proident culpa officia velit elit commodo laboris velit voluptate mollit excepteur. Consectetur amet nisi velit non voluptate sit consectetur Lorem Lorem irure ea excepteur consequat labore. Quis et proident reprehenderit ad velit ad cupidatat reprehenderit non elit anim ut duis. Ullamco consectetur commodo sunt laboris nostrud amet aute elit cillum minim ullamco Lorem sint. Do culpa velit esse amet elit deserunt mollit occaecat dolor mollit enim ad veniam ut. Aliqua eiusmod quis consectetur minim consectetur nulla cillum ea excepteur elit sunt irure in.',
-      style: TextStyle(fontSize: 10),
-      ),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 15,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                content,
+                style: const TextStyle(fontSize: 18),
+              ),
+            )
+          ],
+        ));
   }
 }

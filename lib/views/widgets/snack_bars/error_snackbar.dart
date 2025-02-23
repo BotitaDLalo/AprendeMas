@@ -27,7 +27,7 @@ errorMessage(BuildContext context, String message) {
                   ),
                   Text(
                     message,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: const TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ],
               ),

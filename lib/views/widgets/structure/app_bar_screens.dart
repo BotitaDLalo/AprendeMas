@@ -15,6 +15,7 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+      forceMaterialTransparency: true,
       backgroundColor: Colors.white,
       flexibleSpace: Container(
           // decoration: const BoxDecoration(gradient: AppTheme.degradedBlue),
