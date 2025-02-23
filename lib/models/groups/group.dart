@@ -89,4 +89,21 @@ class Group {
         
         );
   }
+
+
+  Group copyWith({
+    int? grupoId,
+    String? nombreGrupo,
+    String? descripcion,
+    String? codigoAcceso,
+    List<Subject>? materias,
+  }) {
+    return Group(
+      grupoId: grupoId ?? this.grupoId,
+      nombreGrupo: nombreGrupo ?? this.nombreGrupo,
+      descripcion: descripcion ?? this.descripcion,
+      codigoAcceso: codigoAcceso ?? this.codigoAcceso,
+      materias: materias ?? this.materias,
+    );
+  }
 }
