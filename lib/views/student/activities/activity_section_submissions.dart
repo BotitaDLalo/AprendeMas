@@ -213,8 +213,7 @@ class _ActivitySectionSubmissionState
         ),
         backgroundColor: Colors.white,
         body: SizedBox(
-          height: MediaQuery.of(context).size.height *
-              0.8, // Define un tamaño máximo para evitar conflictos
+          height: MediaQuery.of(context).size.height * 0.8,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -271,6 +270,7 @@ class _ActivitySectionSubmissionState
                               const Text(
                                 'Entregables enviados',
                                 style: TextStyle(
+                                  fontSize: 25.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -288,7 +288,9 @@ class _ActivitySectionSubmissionState
                                         }
                                       },
                                       child: ElementTile(
-                                          icon: const Icon(Icons.edit_note),
+                                          icon: Icons.edit_note,
+                                          iconSize: 28,
+                                          iconColor: Colors.white,
                                           title: "Respuesta",
                                           subtitle: "",
                                           onTapFunction: () {
@@ -317,7 +319,7 @@ class _ActivitySectionSubmissionState
                                               ),
                                             );
                                           },
-                                          trailing: submission.status
+                                          trailingString: submission.status
                                               ? "Enviado"
                                               : "Pendiente a envió"),
                                     );
@@ -344,10 +346,12 @@ class _ActivitySectionSubmissionState
                                 showModalBottomDropAnswer(context);
                               },
                               child: ElementTile(
-                                icon: const Icon(Icons.edit_note),
+                                icon: Icons.edit_note,
+                                iconSize: 28,
+                                iconColor: Colors.white,
                                 title: 'Respuesta',
                                 subtitle: '',
-                                trailing: 'Sin enviar',
+                                trailingString: 'Sin enviar',
                                 onTapFunction: () {
                                   showDialogAnswer(
                                       context, activitiesForm.answer);
