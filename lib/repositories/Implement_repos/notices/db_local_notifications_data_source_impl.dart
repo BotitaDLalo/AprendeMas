@@ -1,11 +1,11 @@
 import 'package:aprende_mas/config/data/data.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/repositories/Interface_repos/notices/db_local_notices_data_source.dart';
+import 'package:aprende_mas/repositories/Interface_repos/notices/db_local_notifications_data_source.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 
-class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
+class DbLocalNotificationsDataSourceImpl implements DbLocalNotificationsDataSource {
   @override
-  Future<bool> storeNotification(Notice notice) async {
+  Future<bool> storeNotification(NotificationModel notice) async {
     try {
       bool inserted = false;
       Database db = await DbLocal.initDatabase();
@@ -35,12 +35,12 @@ class DbLocalNoticesDataSourceImpl implements DbLocalNoticesDataSource {
 
 
   @override
-  Future<List<Notice>> getLsNotifications() async {
+  Future<List<NotificationModel>> getLsNotifications() async {
     try {
       Database db = await DbLocal.initDatabase();
       final ls = await db.query('tbNotificaciones', orderBy: 'FechaEnvio DESC');
 
-      final lsNotice = Notice.noticeJsonToEntity(ls);
+      final lsNotice = NotificationModel.noticeJsonToEntity(ls);
 
       print('AVISO EN DATA SOURCE');
       for (var n in lsNotice) {
