@@ -148,7 +148,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final token = await kv.getToken();
       if (token == "") return logout();
       final user = await authRepository.checkAuthStatus(token);
+
+      int id = user.userId;
+      String role = user.role;
+      await verifyExistingFcmToken(id, role);
+
       _setLoggedUser(caller, user);
+    } on FcmTokenVerificatioFailed catch (e) {
+      logout(e.message);
     } catch (e) {
       logout();
     }
@@ -159,6 +166,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         authStatus: AuthStatus.notAuthenticated,
         user: null,
         errorMessage: errorMessage);
+  }
+
+  Future<void> badResponseCheckAuthStatus([String? errorMessage]) async {
+    await logout();
   }
 
   Future<bool> verifyExistingFcmToken(int id, String role) async {
@@ -367,11 +378,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout([String? errorMessage]) async {
     await kv.removeKeyValue(cn.getKeyTokenName, cn.getKeyIdName,
         cn.getKeyRoleName, cn.getKeyUserName);
     await authUserOffline.deleteUser();
-    state = state.copyWith(authStatus: AuthStatus.notAuthenticated, user: null);
+    state = state.copyWith(
+        authStatus: AuthStatus.notAuthenticated,
+        user: null,
+        errorMessage: errorMessage);
   }
 
   //# LOGIN USER OFFLINE
