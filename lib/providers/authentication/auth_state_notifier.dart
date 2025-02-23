@@ -1,6 +1,5 @@
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
-import 'package:aprende_mas/repositories/Implement_repos/activity/activity_repository_impl.dart';
 import 'package:aprende_mas/repositories/Implement_repos/authentication/auth_user_offline_repository_impl.dart';
 import 'package:aprende_mas/config/services/google/google_signin_api.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
@@ -62,6 +61,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       : super(AuthState()) {
     checkInternet();
   }
+  //# LOGIN USER
 
   void checkInternet() async {
     final checkInternet = await ConnectivityCheck.checkInternetConnectivity();
@@ -87,11 +87,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       const caller = "loginUser";
       final user = await authRepository.login(email, password);
+
+      int id = user.userId;
+      String role = user.role;
+      await verifyExistingFcmToken(id, role);
       _setLoggedUser(caller, user);
     } on WrongCredentials catch (e) {
       badResponseLogin(e.message);
+    } on FcmTokenVerificatioFailed catch (e) {
+      badResponseLogin(e.message);
     } on ConnectionTimeout {
-      badResponseLogin('Timeout');
+      badResponseLogin('Se agotó el tiempo.');
     } catch (e) {
       badResponseLogin('Error no controlado');
     }
@@ -100,13 +106,19 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<bool> signinUser(String names, String lastName, String secondLastName,
       String email, String password, String role) async {
     try {
-      final user = await authRepository.signin(
-          names, lastName, secondLastName, email, password, role);
+      final fcmToken = await FirebaseCM.getFcmToken();
 
-      if (user.email != "" && user.nombre != "" && user.rol != "") {
-        _setRegisterUser(user);
-        return true;
+      if (fcmToken != null) {
+        final user = await authRepository.signin(
+            names, lastName, secondLastName, email, password, role, fcmToken);
+
+        if (user.email != "" && user.nombre != "" && user.rol != "") {
+          _setRegisterUser(user);
+          return true;
+        }
+        return false;
       }
+
       return false;
     } on ConnectionTimeout {
       logoutGoogle('Timeout');
@@ -142,38 +154,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void checkAuthStatusOffline() async {
-    try {
-      DateTime dateNow = DateTime.now();
-      final dbUser = await authUserOffline.getUser();
-      if (dbUser.isNotEmpty) {
-        final userOffline = AuthOfflineUser.userOffilineJsonToEntity(dbUser);
-        final userDateLimit = DateTime.parse(userOffline.activeDueDate);
-
-        if (dateNow.isBefore(userDateLimit)) {
-          List<Group> lsGroups = await groupsOffline.getGroupsSubjects();
-          List<Subject> lsSubjectsWithoutGroup =
-              await subjectsOffline.getSujectsWithoutGroup();
-          //TODO: MANDAR A TRAER Materias sin grupo
-          _setLoggedOfflineUser(userOffline, lsGroups, lsSubjectsWithoutGroup);
-        } else {
-          return;
-        }
-      } else {
-        return;
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<void> logout() async {
-    await kv.removeKeyValue(cn.getKeyTokenName, cn.getKeyIdName,
-        cn.getKeyRoleName, cn.getKeyUserName);
-    await authUserOffline.deleteUser();
-    state = state.copyWith(authStatus: AuthStatus.notAuthenticated, user: null);
-  }
-
   Future<void> badResponseLogin([String? errorMessage]) async {
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
@@ -181,13 +161,25 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         errorMessage: errorMessage);
   }
 
+  Future<bool> verifyExistingFcmToken(int id, String role) async {
+    final fcmToken = await FirebaseCM.getFcmToken();
+    if (fcmToken != null) {
+      bool tokenIsRegistered =
+          await authRepository.verifyExistingFcmToken(id, fcmToken, role);
+      return tokenIsRegistered;
+    }
+    return false;
+  }
+
+  // bool verified = await verifyExistingFcmToken();
+
   void _setLoggedUser(String caller, AuthUser user) async {
     const limit = 7;
     const authType = AuthenticatedType.auth;
     DateTime dateNow = DateTime.now();
     DateTime date7Days = dateNow.add(const Duration(days: limit));
 
-    final tokenFCM = await FirebaseCM.getFcmToken();
+    // final tokenFCM = await FirebaseCM.getFcmToken();
 
     await _saveUserDataKeyValue(
         cn.getKeyTokenName,
@@ -200,6 +192,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         user.userName,
         cn.getKeyAuthTypeName,
         authType);
+
     if (caller == "loginUser") {
       ActiveUser activeUser = ActiveUser(
           userId: user.userId,
@@ -216,8 +209,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       _saveUserAndUpdateState(activeUser, lsGroups, lsSubjectsWithoutGroup);
 
       //& TOKEN FIREBASE
-      debugPrint("TOKEN FIREBASE");
-      debugPrint(tokenFCM);
     } else if (caller == "checkAuthStatus") {
       authUserOffline.updateUser(date7Days.toString());
       List<Group> lsGroups = await groups.getGroupsSubjects();
@@ -238,26 +229,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     );
   }
 
-  void _setLoggedOfflineUser(AuthOfflineUser userOffline, List<Group> lsGroups,
-      List<Subject> lsSubjectsWithoutGroup) async {
-    debugPrint("EL USUARIO NO TIENE INTERNET");
-
-    final user = AuthUser(
-        userId: userOffline.userId,
-        userName: userOffline.userName,
-        email: userOffline.email,
-        role: userOffline.role,
-        token: "");
-    // _updateUserState(lsGroups, lsSubjectsWithoutGroup);
-    _updateUserStateOffline(lsGroups, lsSubjectsWithoutGroup);
-
-    state = state.copyWith(
-      authUser: user,
-      authStatus: AuthStatus.authenticated,
-      authenticatedType: AuthenticatedType.auth,
-      authConectionType: AuthConectionType.offline,
-      errorMessage: '',
-    );
+  void _setRegisterUser(User user) {
+    state =
+        state.copyWith(user: user, registerStatus: RegisterStatus.registered);
   }
 
   void _saveUserAndUpdateState(ActiveUser user, List<Group> lsGroups,
@@ -312,6 +286,36 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<void> _updateUserState(
+      List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
+    //& set para groups y subject
+    await setGroupsSubjectsState(lsGroups);
+    await setSubjectsWithoutGroupState(lsSubjectsWithoutGroup);
+
+    for (var group in lsGroups) {
+      for (var sub in group.materias ?? []) {
+        final subject = sub as Subject;
+        final subjectId = subject.materiaId;
+        await getAllActivitiesCallback(subjectId);
+        for (var act in sub.actividades ?? []) {
+          final activity = act as Activity;
+          final activityId = activity.actividadId;
+          await getSubmissionsCallback(activityId);
+        }
+      }
+    }
+
+    for (var subject in lsSubjectsWithoutGroup) {
+      final subjectId = subject.materiaId;
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subject.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.actividadId;
+        await getSubmissionsCallback(activityId);
+      }
+    }
+  }
+
   Future<void> _submissionsPending(
       List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
     List<Submission> lsSubmissionsPending = [];
@@ -352,8 +356,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         int activityId = submission.activityId ?? -1;
         if (activityId != -1) {
           String answer = submission.answer ?? "";
-          bool submissionSentSuccess =
-              await sendSubmission(activityId, answer);
+          bool submissionSentSuccess = await sendSubmission(activityId, answer);
 
           if (submissionSentSuccess) {
             int submissionId = submission.submissionId;
@@ -364,34 +367,60 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> _updateUserState(
-      List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
-    //& set para groups y subject
-    await setGroupsSubjectsState(lsGroups);
-    await setSubjectsWithoutGroupState(lsSubjectsWithoutGroup);
+  Future<void> logout() async {
+    await kv.removeKeyValue(cn.getKeyTokenName, cn.getKeyIdName,
+        cn.getKeyRoleName, cn.getKeyUserName);
+    await authUserOffline.deleteUser();
+    state = state.copyWith(authStatus: AuthStatus.notAuthenticated, user: null);
+  }
 
-    for (var group in lsGroups) {
-      for (var sub in group.materias ?? []) {
-        final subject = sub as Subject;
-        final subjectId = subject.materiaId;
-        await getAllActivitiesCallback(subjectId);
-        for (var act in sub.actividades ?? []) {
-          final activity = act as Activity;
-          final activityId = activity.actividadId;
-          await getSubmissionsCallback(activityId);
+  //# LOGIN USER OFFLINE
+
+  void checkAuthStatusOffline() async {
+    try {
+      DateTime dateNow = DateTime.now();
+      final dbUser = await authUserOffline.getUser();
+      if (dbUser.isNotEmpty) {
+        final userOffline = AuthOfflineUser.userOffilineJsonToEntity(dbUser);
+        final userDateLimit = DateTime.parse(userOffline.activeDueDate);
+
+        if (dateNow.isBefore(userDateLimit)) {
+          List<Group> lsGroups = await groupsOffline.getGroupsSubjects();
+          List<Subject> lsSubjectsWithoutGroup =
+              await subjectsOffline.getSujectsWithoutGroup();
+          //TODO: MANDAR A TRAER Materias sin grupo
+          _setLoggedOfflineUser(userOffline, lsGroups, lsSubjectsWithoutGroup);
+        } else {
+          return;
         }
+      } else {
+        return;
       }
+    } catch (e) {
+      throw Exception(e);
     }
+  }
 
-    for (var subject in lsSubjectsWithoutGroup) {
-      final subjectId = subject.materiaId;
-      await getAllActivitiesCallback(subjectId);
-      for (var act in subject.actividades ?? []) {
-        final activity = act as Activity;
-        final activityId = activity.actividadId;
-        await getSubmissionsCallback(activityId);
-      }
-    }
+  void _setLoggedOfflineUser(AuthOfflineUser userOffline, List<Group> lsGroups,
+      List<Subject> lsSubjectsWithoutGroup) async {
+    debugPrint("EL USUARIO NO TIENE INTERNET");
+
+    final user = AuthUser(
+        userId: userOffline.userId,
+        userName: userOffline.userName,
+        email: userOffline.email,
+        role: userOffline.role,
+        token: "");
+    // _updateUserState(lsGroups, lsSubjectsWithoutGroup);
+    _updateUserStateOffline(lsGroups, lsSubjectsWithoutGroup);
+
+    state = state.copyWith(
+      authUser: user,
+      authStatus: AuthStatus.authenticated,
+      authenticatedType: AuthenticatedType.auth,
+      authConectionType: AuthConectionType.offline,
+      errorMessage: '',
+    );
   }
 
   Future<void> _updateUserStateOffline(
@@ -429,10 +458,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void _setRegisterUser(User user) {
-    state =
-        state.copyWith(user: user, registerStatus: RegisterStatus.registered);
-  }
+  //# LOGIN GOOGLE USER
 
   Future<void> loginGoogleUser() async {
     try {
@@ -538,6 +564,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
+//# KEY VALUE STORAGE
   _saveUserDataKeyValue<T>(
       String keyToken,
       T valueToken,
