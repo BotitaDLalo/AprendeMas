@@ -7,6 +7,14 @@ class WrongCredentials implements Exception {
 
 class InvalidToken implements Exception {}
 
+class FcmTokenVerificatioFailed implements Exception {
+  final String message;
+
+  FcmTokenVerificatioFailed({required this.message});
+  @override
+  String toString() => message;
+}
+
 class ConnectionTimeout implements Exception {}
 
 class CustomError implements Exception {
