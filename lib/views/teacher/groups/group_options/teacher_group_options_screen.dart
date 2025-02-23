@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
@@ -10,14 +11,15 @@ class GroupTeacherOptions extends ConsumerStatefulWidget {
   final String groupName;
   final String description;
   final String? accessCode;
-  final String colorCode;
-  const GroupTeacherOptions(
-      {super.key,
-      required this.groupId,
-      required this.groupName,
-      required this.description,
-      this.accessCode,
-      required this.colorCode});
+  // final String colorCode;
+  const GroupTeacherOptions({
+    super.key,
+    required this.groupId,
+    required this.groupName,
+    required this.description,
+    this.accessCode,
+    // required this.colorCode
+  });
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -51,7 +53,9 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
           optionId: 1,
           isVisible: true,
           optionText: 'Avisos',
-          widgetOption: const NoticesGroupOptionsScreen()),
+          widgetOption: TeacherNoticeOptionsScreen(
+            groupId: widget.groupId,
+          )),
       GroupSubjectWidgetOption(
           optionId: 2,
           isVisible: true,
@@ -65,13 +69,13 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
       GroupSubjectWidgetOption(
           optionId: 4,
           isVisible: true,
-          optionText: 'Calificaciones',
+          optionText: 'Editar',
           widgetOption: FormUpdateGroup(
             id: widget.groupId,
             groupName: widget.groupName,
             description: widget.description,
             accesCode: widget.accessCode,
-            colorCode: widget.colorCode,
+            // colorCode: widget.colorCode,
           ))
     ];
 
@@ -99,7 +103,7 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
             ContainerNameGroupSubjects(
               name: widget.groupName,
               accessCode: widget.accessCode,
-              colorCode: widget.colorCode,
+              color: AppTheme.mainColor,
             ),
             TeacherGroupOptions(
                 lsGroupOptions: lsGroupOptions,

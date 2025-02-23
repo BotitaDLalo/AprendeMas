@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -44,8 +45,9 @@ class _ActividadesScreenState
 
   @override
   Widget build(BuildContext context) {
+
     final itemTapped = ref.watch(itemTappedProvider);
-    
+
     void clearScreen() {
       ref.read(addStudentMessageProvider.notifier).state = false;
       ref.read(studentsSubjectProvider.notifier).clearSubjectTeacherOptionsLs();
@@ -54,14 +56,14 @@ class _ActividadesScreenState
     List<GroupSubjectWidgetOption> lsSubjectWidgetOptions = [
       GroupSubjectWidgetOption(
           optionId: 1,
-          isVisible: true,
+          isVisible: widget.groupId == null ? true : false,
           optionText: 'Avisos',
-          widgetOption: NoticeOptionsScreen()),
+          widgetOption: TeacherNoticeOptionsScreen(subjectId: widget.subjectId,)),
       GroupSubjectWidgetOption(
           optionId: 2,
           isVisible: true,
           optionText: 'Actividades',
-          widgetOption: ActivitiesOptionScreen(
+          widgetOption: ActivityOptionScreen(
             subjectId: widget.subjectId,
             subjectName: widget.subjectName,
           )),
@@ -75,15 +77,9 @@ class _ActividadesScreenState
           isVisible: widget.groupId == null ? true : false,
           optionText: 'Asignar alumnos',
           widgetOption: StudentsSubjectAssignment(
-              groupId: widget.groupId, subjectId: widget.subjectId)),
-      // GroupSubjectWidgetOption(
-      //     optionId: 5,
-      //     isVisible: true,
-      //     optionText: 'Calificaciones',
-      //     widgetOption: RatingsOptionsScreen()
-      //     )
+              groupId: widget.groupId, subjectId: widget.subjectId))
     ];
-    
+
     List<GroupSubjectWidgetOption> lsSubjectOptions =
         GroupSubjectWidgetOption.getlsGroupSubjectOptions(
             lsSubjectWidgetOptions);
@@ -109,6 +105,7 @@ class _ActividadesScreenState
             ContainerNameGroupSubjects(
               name: widget.subjectName,
               accessCode: widget.codeAccess,
+              color: AppTheme.mainColor,
             ),
             TeacherSubjectOptions(
               lsSubjectOptions: lsSubjectOptions,
