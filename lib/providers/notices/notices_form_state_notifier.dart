@@ -5,12 +5,14 @@ import 'package:aprende_mas/models/models.dart';
 
 class NoticesFormStateNotifier extends StateNotifier<NoticesFormState> {
   final Future<bool> Function(NoticeModel) createNoticeCallback;
+  final Future<bool> Function(int) deleteNoticeCallback;
   // final Function(NoticeModel) getNoticesCallback;
 
-  NoticesFormStateNotifier({
-    required this.createNoticeCallback,
-    // required this.getNoticesCallback
-  }) : super(NoticesFormState());
+  NoticesFormStateNotifier(
+      {required this.createNoticeCallback, required this.deleteNoticeCallback
+      // required this.getNoticesCallback
+      })
+      : super(NoticesFormState());
 
   onTitleChanged(String value) {
     final newTitle = GenericInput.dirty(value);
@@ -37,6 +39,7 @@ class NoticesFormStateNotifier extends StateNotifier<NoticesFormState> {
       state = state.copyWith(isFormPosted: createdNotice);
     }
     state = state.copyWith(isPosting: false);
+    resetStates();
   }
 
   _touchEveryField() {
@@ -47,5 +50,21 @@ class NoticesFormStateNotifier extends StateNotifier<NoticesFormState> {
         title: title,
         description: description,
         isValid: Formz.validate([title, description]));
+  }
+
+  onDeleteSubmit(int noticeId) async {
+    state = state.copyWith(isPosting: true);
+    bool noticeDeleted = await deleteNoticeCallback(noticeId);
+    if (noticeDeleted) {
+      state = state.copyWith(isDeleted: noticeDeleted);
+    }
+    state = state.copyWith(isPosting: false);
+    resetStates();
+  }
+
+  resetStates() {
+    //$ restablece estados
+    state = state.copyWith(isFormPosted: false);
+    state = state.copyWith(isDeleted: false);
   }
 }

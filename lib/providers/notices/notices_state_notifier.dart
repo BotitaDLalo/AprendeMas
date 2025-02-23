@@ -25,6 +25,15 @@ class NoticesStateNotifier extends StateNotifier<NoticesState> {
     }
   }
 
+  Future<bool> deleteNotice(int notice) async {
+    try {
+      bool noticeDeleted = await noticesRepository.deleteNotice(notice);
+      return noticeDeleted;
+    } catch (e) {
+      return false;
+    }
+  }
+
   // Future<List<NoticeModel>> getlsNotices(NoticeModel notice) async {
   //   try {
   //     List<NoticeModel> lsNotices =
@@ -40,5 +49,4 @@ class NoticesStateNotifier extends StateNotifier<NoticesState> {
   // _setlsNotices(List<NoticeModel> lsNotices) {}
 
   _setNewNotice(NoticeModel notice) {}
-
 }
