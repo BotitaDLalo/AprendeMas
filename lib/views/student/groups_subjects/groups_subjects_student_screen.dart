@@ -28,27 +28,28 @@ class _GroupsSubjectsTeacherScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold( body: Column(
-          children: [
-            TabBar(
-              controller: _tabController,
-              indicatorColor: Colors.blue,
-              labelColor: Colors.blue,
-              tabs: const [
-                Tab(text: 'Grupos y Materias'),
-                Tab(text: 'Materias Sin Grupo'),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: const [
-                  GroupsSubjectsContainer(),
-                  SubjectsWithoutGroupsContainer(),
-                ],
-              ),
-            ),
+    return Scaffold(
+        body: Column(
+      children: [
+        TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.blue,
+          labelColor: Colors.blue,
+          tabs: const [
+            Tab(text: 'Grupos y Materias'),
+            Tab(text: 'Materias Sin Grupo'),
           ],
-        ));
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: const [
+              GroupsSubjectsContainer(),
+              SubjectsWithoutGroupsContainer(),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }

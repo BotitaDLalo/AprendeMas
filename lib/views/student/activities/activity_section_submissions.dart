@@ -86,10 +86,12 @@ class _ActivitySectionSubmissionState
     final authConectionType = ref.read(authProvider).authConectionType;
     final activityId = widget.activity.actividadId;
     final activitiesForm = ref.watch(activityFormProvider);
-    // final lsSubmissions = ref.watch(activityProvider).lsSubmissions;
-    final lsSubmissions = ref
-        .read(activityProvider.notifier)
-        .getSubmissionsByActivity(activityId);
+    final lsSubmissions = Submission.activitiesBySubject(
+        ref.watch(activityProvider).lsSubmissions, activityId);
+
+    // final lsSubmissions = ref
+    //     .read(activityProvider.notifier)
+    //     .getSubmissionsByActivity(activityId);
 
     void showSendConfirmation() {
       showDialog(
@@ -162,10 +164,8 @@ class _ActivitySectionSubmissionState
                   title: const Text('Cancelar Entregable'),
                   onTap: () {
                     if (authConectionType == AuthConectionType.online) {
-                       ref
-                          .read(activityProvider.notifier)
-                          .cancelSubmission(
-                              studentActivityId, widget.activity.actividadId);
+                      ref.read(activityProvider.notifier).cancelSubmission(
+                          studentActivityId, widget.activity.actividadId);
                     } else if (authConectionType ==
                         AuthConectionType.offline) {}
 
@@ -196,8 +196,7 @@ class _ActivitySectionSubmissionState
                 : Icon(
                     Icons.add,
                     color: Colors.grey.withOpacity(0.8),
-                  )
-            ),
+                  )),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -214,8 +213,7 @@ class _ActivitySectionSubmissionState
         ),
         backgroundColor: Colors.white,
         body: SizedBox(
-          height: MediaQuery.of(context).size.height *
-              0.8, // Define un tamaño máximo para evitar conflictos
+          height: MediaQuery.of(context).size.height * 0.8,
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -272,6 +270,7 @@ class _ActivitySectionSubmissionState
                               const Text(
                                 'Entregables enviados',
                                 style: TextStyle(
+                                  fontSize: 25.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -289,7 +288,9 @@ class _ActivitySectionSubmissionState
                                         }
                                       },
                                       child: ElementTile(
-                                          icon: const Icon(Icons.edit_note),
+                                          icon: Icons.edit_note,
+                                          iconSize: 28,
+                                          iconColor: Colors.white,
                                           title: "Respuesta",
                                           subtitle: "",
                                           onTapFunction: () {
@@ -318,7 +319,7 @@ class _ActivitySectionSubmissionState
                                               ),
                                             );
                                           },
-                                          trailing: submission.status
+                                          trailingString: submission.status
                                               ? "Enviado"
                                               : "Pendiente a envió"),
                                     );
@@ -345,10 +346,12 @@ class _ActivitySectionSubmissionState
                                 showModalBottomDropAnswer(context);
                               },
                               child: ElementTile(
-                                icon: const Icon(Icons.edit_note),
+                                icon: Icons.edit_note,
+                                iconSize: 28,
+                                iconColor: Colors.white,
                                 title: 'Respuesta',
                                 subtitle: '',
-                                trailing: 'Sin enviar',
+                                trailingString: 'Sin enviar',
                                 onTapFunction: () {
                                   showDialogAnswer(
                                       context, activitiesForm.answer);

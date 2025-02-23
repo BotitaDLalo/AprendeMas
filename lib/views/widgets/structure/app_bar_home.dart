@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
+
 class AppBarHome extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   const AppBarHome({super.key, required this.title});
@@ -13,6 +14,7 @@ class AppBarHome extends ConsumerWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+        forceMaterialTransparency: true,
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         elevation: 0,
         title: Column(

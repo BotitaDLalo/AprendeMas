@@ -1,11 +1,14 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 
 class TeacherGroupOptions extends StatelessWidget {
+  final List<GroupSubjectWidgetOption> lsGroupOptions;
   final ValueChanged<int> onOptionSelected;
   final int selectedOptionIndex;
 
   const TeacherGroupOptions({
     super.key,
+    required this.lsGroupOptions,
     required this.onOptionSelected,
     required this.selectedOptionIndex,
   });
@@ -18,41 +21,22 @@ class TeacherGroupOptions extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(4, (index) {
-            String optionText;
-            switch (index) {
-              case 0:
-                optionText = 'Avisos';
-                break;
-              case 1:
-                optionText = 'Alumnos asignados';
-                break;
-              case 2:
-                optionText = 'Asignar alumnos';
-                break;
-              case 3:
-                optionText = 'Configuración';
-                break;
-              default:
-                optionText = '';
-            }
-      
-            return Row(
+          children: lsGroupOptions.map((e) => Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: GestureDetector(
                     onTap: () {
-                      onOptionSelected(index); // Llama al callback
+                      onOptionSelected(e.optionId); // Llama al callback
                     },
                     child: Column(
                       children: [
                         Text(
-                          optionText,
+                          e.optionText,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: selectedOptionIndex == index
+                            color: selectedOptionIndex == e.optionId
                                 ? Colors.blue
                                 : Colors.black,
                           ),
@@ -61,7 +45,7 @@ class TeacherGroupOptions extends StatelessWidget {
                           duration: const Duration(
                               milliseconds: 500), 
                           height: 2,
-                          width: selectedOptionIndex == index
+                          width: selectedOptionIndex == e.optionId
                               ? 90
                               : 0, 
                           color: Colors.blue,
@@ -72,10 +56,11 @@ class TeacherGroupOptions extends StatelessWidget {
                   ),
                 ),
               ],
-            );
-          }),
+            ),).toList()
         ),
       ),
     );
   }
+
+
 }

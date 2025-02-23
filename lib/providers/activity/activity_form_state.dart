@@ -13,35 +13,43 @@ class ActivityFormState {
   final GenericInput fechaLimite;
   final GenericInput horaLimite;
   final GenericInput puntaje;
+  final GenericInput newGrade;
   final String answer;
+  final int grade;
   final bool existsAnswer;
 
-  ActivityFormState(
-      {this.activities = const [],
-      this.isPosting = false,
-      this.isFormPosted = false,
-      this.isValid = false,
-      this.nombre = const GenericInput.pure(),
-      this.descripcion = const GenericInput.pure(),
-      this.fechaLimite = const GenericInput.pure(),
-      this.horaLimite = const GenericInput.pure(),
-      this.puntaje = const GenericInput.pure(),
-      this.answer = "",
-      this.existsAnswer = false});
+  ActivityFormState({
+    this.activities = const [],
+    this.isPosting = false,
+    this.isFormPosted = false,
+    this.isValid = false,
+    this.nombre = const GenericInput.pure(),
+    this.descripcion = const GenericInput.pure(),
+    this.fechaLimite = const GenericInput.pure(),
+    this.horaLimite = const GenericInput.pure(),
+    this.puntaje = const GenericInput.pure(),
+    this.newGrade = const GenericInput.pure(),
+    this.answer = "",
+    this.existsAnswer = false,
+    this.grade = 0,
+  });
 
   // Método para crear una nueva instancia con campos actualizados
-  ActivityFormState copyWith(
-          {List<Activity>? activities,
-          bool? isPosting,
-          bool? isFormPosted,
-          bool? isValid,
-          GenericInput? nombre,
-          GenericInput? descripcion,
-          GenericInput? fechaLimite,
-          GenericInput? horaLimite,
-          GenericInput? puntaje,
-          String? answer,
-          bool? existsAnswer}) =>
+  ActivityFormState copyWith({
+    List<Activity>? activities,
+    bool? isPosting,
+    bool? isFormPosted,
+    bool? isValid,
+    GenericInput? nombre,
+    GenericInput? descripcion,
+    GenericInput? fechaLimite,
+    GenericInput? horaLimite,
+    GenericInput? puntaje,
+    GenericInput? newGrade,
+    String? answer,
+    bool? existsAnswer,
+    int? grade,
+  }) =>
       ActivityFormState(
           activities: activities ?? this.activities,
           isPosting: isPosting ?? this.isPosting,
@@ -53,6 +61,8 @@ class ActivityFormState {
           horaLimite: horaLimite ?? this.horaLimite,
           puntaje: puntaje ?? this.puntaje,
           answer: answer ?? this.answer,
+          grade: grade ?? this.grade,
+          newGrade: newGrade ?? this.newGrade,
           existsAnswer: existsAnswer ?? this.existsAnswer);
 
   @override
@@ -67,6 +77,7 @@ class ActivityFormState {
     fechaLimite: $fechaLimite
     horaLimite: $horaLimite
     puntaje: $puntaje
+    grade: $grade
     ''';
   }
 }

@@ -10,13 +10,13 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
 
   final Function(String, String, Color) createSubjectWithoutGroup;
   final Function(String) verifyEmailCallback;
-  final Function(int? ,int) addStudentsGroupCallback;
+  final Function(int) addStudentsSubjectCallback;
 
   FormSubjectsStateNotifier(
       {required this.createSubjectWithGroupsCallback,
       required this.createSubjectWithoutGroup,
       required this.verifyEmailCallback,
-      required this.addStudentsGroupCallback})
+      required this.addStudentsSubjectCallback})
       : super(FormSubjectsState());
 
   onSubjectNameChanged(String value) {
@@ -117,9 +117,11 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
     state = state.copyWith(verifyEmail: verifyEmail);
   }
 
-  onAddStudentsSubject(int? groupId, int subjectId) async {
+  // onAddStudentsSubjectWithoutGroup(int? groupId, int subjectId) async {
+  onAddStudentsSubjectWithoutGroup(int subjectId) async {
     state = state.copyWith(isPosting: true);
-    bool res = await addStudentsGroupCallback(groupId, subjectId);
+    // bool res = await addStudentsGroupCallback(groupId, subjectId);
+    bool res = await addStudentsSubjectCallback(subjectId);
     if (res) {
       state = state.copyWith(isFormPosted: res);
     }

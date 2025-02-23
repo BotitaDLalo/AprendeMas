@@ -5,9 +5,21 @@ import '../../custom_divider.dart';
 import 'container_input.dart';
 import 'data_body.dart';
 import 'notice_description.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
 
 class NoticeBody extends StatelessWidget {
-  const NoticeBody({super.key});
+  final int noticeId;
+  final String teacherName;
+  final String createdDate;
+  final String title;
+  final String content;
+  const NoticeBody(
+      {super.key,
+      required this.noticeId,
+      required this.teacherName,
+      required this.createdDate,
+      required this.title,
+      required this.content});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +29,18 @@ class NoticeBody extends StatelessWidget {
         height: 280,
         width: double.infinity,
         color: Colors.white,
-        borderColor: Colors.blue,
+        // borderColor: Colors.blue,
         child: Column(
-          children: const [
-            DataBody(),
-            NoticeDescription(),
-            CustomDivider(),
-            ContainerInput(),
+          children: [
+            DataBody(
+              noticeId: noticeId,
+              createdDate: createdDate,
+              teacherName: teacherName,
+            ),
+            NoticeDescription(
+              title: title,
+              content: content,
+            ),
           ],
         ),
       ),

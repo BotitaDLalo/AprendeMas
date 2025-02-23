@@ -10,10 +10,8 @@ import 'package:flutter/services.dart';
 void main() async {
   await Environment.initEnvironment();
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   await FirebaseCMConfiguration.initializeFCM();
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -24,8 +22,8 @@ class MainApp extends ConsumerWidget {
   void onNewNotice(WidgetRef ref) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
-        final notices = ref.read(noticesProvider.notifier);
-        Notice notice = FirebaseCM.onNewMessage(message);
+        final notices = ref.read(notificationsProvider.notifier);
+        NotificationModel notice = FirebaseCM.onNewMessage(message);
         notices.onNewNotice(notice);
         debugPrint("CAYO UNA NOTIFICACION");
       }

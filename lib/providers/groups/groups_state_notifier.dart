@@ -51,7 +51,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
       Color colorCode, List<SubjectsRow> subjectsList) async {
     try {
       final group = await groupsRepository.createGroupSubjects(
-          groupName, description, colorCode, subjectsList);
+          groupName, description, subjectsList);
 
       if (group.isNotEmpty) {
         _setCreateGroupSubjects(group);
@@ -69,11 +69,11 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   Future<void> deleteGroup() async {}
 
-  Future<bool> updateGroup(int groupId, String groupName,
-      String descriptionGroup, Color colorGroup) async {
+  Future<bool> updateGroup(
+      int groupId, String groupName, String descriptionGroup) async {
     try {
       Group updateGroup = await groupsRepository.updateGroup(
-          groupId, groupName, descriptionGroup, colorGroup);
+          groupId, groupName, descriptionGroup);
 
       if (updateGroup.grupoId != -1) {
         _setUpdateGroup(updateGroup);
@@ -89,17 +89,11 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     List<Group> lsGroups = List.from(state.groups);
     final index =
         lsGroups.indexWhere((group) => group.grupoId == updateGroup.grupoId);
-    final groupId = updateGroup.grupoId;
     final newGroupName = updateGroup.nombreGrupo;
     final newDescriptionGroup = updateGroup.descripcion;
-    final newColorGroup = updateGroup.codigoColor;
 
     if (index != -1) {
-      lsGroups[index] = Group(
-          grupoId: groupId,
-          nombreGrupo: newGroupName,
-          descripcion: newDescriptionGroup,
-          codigoColor: newColorGroup);
+      lsGroups[index] = lsGroups[index].copyWith(nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
 
       state = state.copyWith(groups: lsGroups);
     }
@@ -107,80 +101,6 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   onNewSubject(List<Group> groups) {
     state = state.copyWith(groups: groups);
-  }
-
-  Future<VerifyEmail> verifyEmail(String email) async {
-    try {
-      List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-      bool emailExist = lsEmails.any((element) => element.email == email);
-      if (!emailExist) {
-        final res = await groupsRepository.verifyEmail(email);
-        _setVerifyEmail(res);
-        return res;
-      }
-      return VerifyEmail(email: '', isEmailValid: false);
-    } catch (e) {
-      return VerifyEmail(email: '', isEmailValid: false);
-    }
-  }
-
-  _setVerifyEmail(VerifyEmail verifyEmail) {
-    final lsEmails = List.from(state.lsEmails);
-    state = state.copyWith(lsEmails: [verifyEmail, ...lsEmails]);
-  }
-
-  onDeleteVeryfyEmail(int index) {
-    List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-    lsEmails.removeAt(index);
-    state = state.copyWith(lsEmails: lsEmails);
-  }
-
-  Future<bool> addStudentsGroup(int groupId) async {
-    try {
-      List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-      List<String> lsVerifiedEmails = lsEmails
-          .where((element) => element.isEmailValid)
-          .map((e) => e.email)
-          .toList();
-
-      final res =
-          await groupsRepository.addStudentsGroup(groupId, lsVerifiedEmails);
-
-      if (res.isNotEmpty) {
-        _setAddStudentsGroup(res);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  _setAddStudentsGroup(List<StudentGroupSubject> lsStudentsGroup) {
-    state = state.copyWith(lsStudentsGroup: lsStudentsGroup);
-  }
-
-  clearLsEmails() {
-    state = state.copyWith(lsEmails: []);
-  }
-
-  Future<void> getStudentsGroup(int groupId) async {
-    try {
-      final lsStudentsGroup = await groupsRepository.getStudentsGroup(groupId);
-      _setStudentsGroup(lsStudentsGroup);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  _setStudentsGroup(List<StudentGroupSubject> lsStudentsGroup) {
-    List<StudentGroupSubject> lsStudents = List.from(state.lsStudentsGroup);
-    state =
-        state.copyWith(lsStudentsGroup: [...lsStudentsGroup, ...lsStudents]);
-  }
-
-  void clearGroupTeacherOptionsLs() {
-    state = state.copyWith(lsEmails: [], lsStudentsGroup: []);
   }
 
   void clearGroupsState() {

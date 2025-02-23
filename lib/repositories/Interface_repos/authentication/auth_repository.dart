@@ -3,7 +3,8 @@ import 'package:aprende_mas/models/models.dart';
 abstract class AuthRepository {
   Future<AuthUser> login(String email, String password);
 
-  Future<User> signin(String name, String lastname, String secondLastname,String email, String password, String role);
+  Future<User> signin(String name, String lastname, String secondLastname,
+      String email, String password, String role, String fcmToken);
 
   Future<AuthUser> checkAuthStatus(String token);
 
@@ -13,4 +14,6 @@ abstract class AuthRepository {
 
   Future<AuthUser> registerMissingDataGoogle(
       String names, String lastname, String secondLastname, String role);
+
+  Future<bool> verifyExistingFcmToken(int id,String fcmToken, String role);
 }

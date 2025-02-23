@@ -8,7 +8,6 @@ final activityRepositoryProvider = Provider<ActivityRepositoryImpl>((ref) {
   return ActivityRepositoryImpl();
 });
 
-// Proveedor del StateNotifier para el estado de actividades
 final activityProvider =
     StateNotifierProvider<ActivityNotifier, ActivityState>((ref) {
   final activityRepository = ref.watch(activityRepositoryProvider);

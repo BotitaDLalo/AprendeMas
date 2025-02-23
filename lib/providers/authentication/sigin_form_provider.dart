@@ -6,6 +6,6 @@ import 'package:aprende_mas/providers/authentication/sigin_form_state_notifier.d
 final siginFormProvider =
     StateNotifierProvider.autoDispose<SiginFormStateNotifier, SiginFormState>(
         (ref) {
-  final siginUserCallback = ref.read(authProvider.notifier).siginUser;
+  final siginUserCallback = ref.read(authProvider.notifier).signinUser;
   return SiginFormStateNotifier(siginUserCallback: siginUserCallback);
 });

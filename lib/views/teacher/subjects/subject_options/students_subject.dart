@@ -1,5 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/providers/subjects/students_subject_provider.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/students_groups_subjects.dart';
 
 class StudentsSubject extends ConsumerStatefulWidget {
   final int id;
@@ -13,10 +15,13 @@ class StudentsSubject extends ConsumerStatefulWidget {
 class _StudentsSubjectState extends ConsumerState<StudentsSubject> {
   @override
   Widget build(BuildContext context) {
-    final lsStudents = ref.watch(subjectsProvider).lsStudentsSubject;
+    final lsStudents = ref.watch(studentsSubjectProvider).lsStudentsSubject;
 
     void showStudentOptions(
-        String username, String name, String lastName, String lastName2) {
+        {required String username,
+        required String name,
+        required String lastName,
+        required lastName2}) {
       showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -62,7 +67,8 @@ class _StudentsSubjectState extends ConsumerState<StudentsSubject> {
                           TextButton(
                               onPressed: () {
                                 //TODO: Eliminar el alumno de la materia
-                              }, child: const Text('Eliminar'))
+                              },
+                              child: const Text('Eliminar'))
                         ],
                       ),
                     );
@@ -75,53 +81,9 @@ class _StudentsSubjectState extends ConsumerState<StudentsSubject> {
       );
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            width: 350,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: 360,
-                  child: ListView.builder(
-                    itemCount: lsStudents.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onLongPress: () {
-                          showStudentOptions(
-                              lsStudents[index].username,
-                              lsStudents[index].name,
-                              lsStudents[index].lastName,
-                              lsStudents[index].lastName2);
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey.shade200,
-                          ),
-                          child: ListTile(
-                            leading: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.person),
-                              iconSize: 30,
-                            ),
-                            title: Text(lsStudents[index].username),
-                            subtitle: Text(
-                                "${lsStudents[index].name} ${lsStudents[index].lastName} ${lsStudents[index].lastName2}"),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+    return StudentsGroupsSubjects(
+      lsStudents: lsStudents,
+      studentOptionsFunction: showStudentOptions,
     );
   }
 }

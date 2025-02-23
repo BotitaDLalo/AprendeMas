@@ -13,30 +13,28 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       final res =
           await dio.post(uri, data: {'correo': email, 'clave': password});
-      if (res.statusCode == 200) {
-        final user = AuthUserMapper.userJsonToEntity(res.data);
 
-        return user;
+      final user = AuthUserMapper.userJsonToEntity(res.data);
+
+      return user;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400 &&
+          e.response?.data['errorCode'] == 1001) {
+        final message = e.response?.data['errorMessage'];
+        throw WrongCredentials(message: message);
       }
-      return AuthUser.authUserVoid();
+      if (e.type == DioExceptionType.connectionTimeout)
+        throw ConnectionTimeout();
+      throw CustomError(message: 'Ocurrio un error desconocido.', errorCode: 1);
     } catch (e) {
-      print(e);
-      throw Exception(e);
+      debugPrint(e.toString());
+      throw CustomError(message: 'Ocurrio un error desconocido.', errorCode: 1);
     }
-
-    // on DioException catch (e) {
-    //   if (e.response?.statusCode == 401) throw WrongCredentials();
-    //   if (e.type == DioExceptionType.connectionTimeout)
-    //     throw ConnectionTimeout();
-    //   throw CustomError(message: 'Ocurrio un error', errorCode: 1);
-    // } catch (e) {
-    //   throw CustomError(message: 'Ocurrio un error', errorCode: 1);
-    // }
   }
 
   @override
   Future<User> signin(String name, String lastname, String secondLastname,
-      String email, String password, String role) async {
+      String email, String password, String role, String fcmToken) async {
     const uri = "/Login/RegistroUsuario";
     try {
       final res = await dio.post(uri, data: {
@@ -46,7 +44,8 @@ class AuthDataSourceImpl implements AuthDataSource {
         'Nombre': name,
         'Correo': email,
         'Clave': password,
-        'TipoUsuario': role
+        'TipoUsuario': role,
+        'FcmToken': fcmToken
       });
       final user = UserMapper.userSiginJsonToEntity(res.data);
 
@@ -143,4 +142,26 @@ class AuthDataSourceImpl implements AuthDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<bool> verifyExistingFcmToken(
+      int id, String fcmToken, String role) async {
+    try {
+      const uri = "/Login/VerificarTokenFcm";
+      // final id = await storageService.getId();
+      // final role = await storageService.getRole();
+
+      final res = await dio.post(uri,
+          queryParameters: {"id": id, "fcmToken": fcmToken, "role": role});
+
+      if (res.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      throw FcmTokenVerificatioFailed(
+          message: "No se pudo verificar el token.");
+    }
+  }
+
 }

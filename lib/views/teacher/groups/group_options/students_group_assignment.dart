@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/providers/groups/students_group_provider.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
@@ -55,14 +56,15 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
     final formGroups = ref.watch(formGroupsProvider);
     final formGroupsNotifier = ref.read(formGroupsProvider.notifier);
 
-    final lsEmails = ref.watch(groupsProvider).lsEmails;
+    final lsEmails = ref.watch(studentsGroupProvider).lsEmails;
     final groupsNotifier = ref.read(groupsProvider.notifier);
+    final studentsGroupNotifier = ref.read(studentsGroupProvider.notifier);
 
     ref.listen(formGroupsProvider, (previous, next) {
       final isFormPosted = next.isFormPosted;
       if (isFormPosted) {
         // clear();
-        groupsNotifier.clearLsEmails();
+        studentsGroupNotifier.clearLsEmails();
       }
     });
     return SingleChildScrollView(
@@ -149,7 +151,8 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                                 trailing: IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {
-                                    groupsNotifier.onDeleteVeryfyEmail(index);
+                                    studentsGroupNotifier
+                                        .onDeleteVeryfyEmail(index);
                                   },
                                 ),
                               ),
@@ -170,7 +173,7 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                               }
                               formGroupsNotifier.onAddStudentsGroup(widget.id);
                               if (formGroups.isFormPosted) {
-                                ref.read(groupsProvider.notifier).clearLsEmails();
+                                studentsGroupNotifier.clearLsEmails();
                               }
                             })),
                   ],
@@ -181,6 +184,5 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
         ],
       ),
     );
-  
   }
 }

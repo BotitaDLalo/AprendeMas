@@ -29,6 +29,10 @@ android {
     }
 
     kotlinOptions {
+<<<<<<< HEAD
+=======
+        // jvmTarget = JavaVersion.VERSION_1_8
+>>>>>>> 8f932c3f548d02c917a3a853c8a590cff55c26d6
         jvmTarget = JavaVersion.VERSION_17
     }
 

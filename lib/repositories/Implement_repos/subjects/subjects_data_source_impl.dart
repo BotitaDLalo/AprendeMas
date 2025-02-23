@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/network/dio_client.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/data/data.dart';
 import 'package:aprende_mas/models/models.dart';
@@ -6,17 +7,24 @@ import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_data_
 
 class SubjectsDataSourceImpl implements SubjectsDataSource {
   final storageService = KeyValueStorageServiceImpl();
+  final cn = CatalogNames();
   @override
-  Future<List<Subject>> getSubjects() async {
+  Future<List<Subject>> getSubjectsWithoutGroup() async {
     try {
-      const uri = "/Materias/ObtenerMateriasPorDocente";
-
       final id = await storageService.getId();
-      final res = await dio.get(uri, queryParameters: {'docenteid': id});
+      final role = await storageService.getRole();
+      List<Map<String, dynamic>> resList = [];
 
-      final resList = List<Map<String, dynamic>>.from(res.data);
-      debugPrint("SubjectsDataSourceImpl: ${res.data}");
-      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      if (role == cn.getRoleTeacherName) {
+        const uri = "/Materias/ObtenerMateriasDocente";
+        final res = await dio.get(uri, queryParameters: {'docenteid': id});
+        resList = List<Map<String, dynamic>>.from(res.data);
+      } else if (role == cn.getRoleStudentName) {
+        const uri = "/Materias/ObtenerMateriasAlumno";
+        final res = await dio.get(uri, queryParameters: {'alumnoid': id});
+        resList = List<Map<String, dynamic>>.from(res.data);
+      }
+      final lsSubjects = Subject.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {
       throw Exception(e);
@@ -59,7 +67,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
         "DocenteId": id
       });
       final resList = List<Map<String, dynamic>>.from(res.data);
-      final lsSubjects = SubjectsMapper.subjectsJsonToEntityList(resList);
+      final lsSubjects = Subject.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {
       throw Exception(e);
@@ -79,13 +87,14 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   }
 
   @override
+  // Future<List<StudentGroupSubject>> addStudentsSubject(int? groupId, int subjectId, List<String> emails) async {
   Future<List<StudentGroupSubject>> addStudentsSubject(
-      int? groupId, int subjectId, List<String> emails) async {
+      int subjectId, List<String> emails) async {
     try {
       const uri = "/Alumnos/RegistrarAlumnoGMDocente";
 
-      final res = await dio.post(uri,
-          data: {"Emails": emails, "GrupoId": groupId, "MateriaId": subjectId});
+      final res =
+          await dio.post(uri, data: {"Emails": emails, "MateriaId": subjectId});
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
@@ -100,10 +109,11 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
   }
 
   @override
-  Future<List<StudentGroupSubject>> getStudentsSubject(int subjectId) async {
+  Future<List<StudentGroupSubject>> getStudentsSubject(int? groupId,int subjectId) async {
     try {
       const uri = "/Alumnos/ObtenerListaAlumnosMateria";
-      final res = await dio.post(uri, data: {"MateriaId": subjectId});
+      final res = await dio.post(uri, data: {"GrupoId": groupId ?? 0
+      , "MateriaId": subjectId});
 
       if (res.statusCode == 200) {
         final resList = List<Map<String, dynamic>>.from(res.data);
@@ -111,6 +121,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
             StudentGroupSubject.studentGroupSubjectJsonToEntity(resList);
         return lsStudents;
       }
+      
       return [];
     } catch (e) {
       throw Exception(e);
