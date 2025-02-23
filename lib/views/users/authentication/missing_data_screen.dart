@@ -1,10 +1,8 @@
-import 'package:aprende_mas/config/router/router.dart';
-import 'package:aprende_mas/views/users/form_singin.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/views/users/authentication/form_missing_data.dart';
 
-class SinginUserScreen extends StatelessWidget {
-  const SinginUserScreen({super.key});
+class MissingDataScreen extends StatelessWidget {
+  const MissingDataScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,23 +11,18 @@ class SinginUserScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          leading: IconButton(
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-                context.pop();
-              },
-              icon: const Icon(Icons.arrow_back)),
         ),
         body: Center(
           child: SingleChildScrollView(
             physics: const ClampingScrollPhysics(),
             child: Column(
+              //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset('assets/logo.png', width: 150),
                 const SizedBox(
-                  height: 30,
+                  height: 40,
                 ),
-                const FormSingin(),
+                const FormMissingData()
               ],
             ),
           ),

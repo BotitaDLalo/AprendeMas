@@ -22,10 +22,12 @@ class _ActivityListState extends ConsumerState<ActivityList> {
   @override
   void initState() {
     getRole();
+    Future.microtask(
+      () {
+        ref.read(activityProvider.notifier).clearSubmissionData();
+      },
+    );
     super.initState();
-    // Future.microtask(() {
-    //   ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
-    // });
   }
 
   void getRole() async {
@@ -51,7 +53,7 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     // }
 
     void teacherActivityStudentsSubmissions(Activity activity) {
-      context.push('/', extra: activity);
+      context.push('/teacher-activities-students-options', extra: activity);
     }
 
     void studentActivitySubmissions(Activity activity) {
@@ -100,16 +102,16 @@ class _ActivityListState extends ConsumerState<ActivityList> {
         final activity = activityState[index];
         return GestureDetector(
           onLongPress: () async {
-            // final role = await kvs.getRole();
             if (role == cn.getRoleTeacherName) {
               showModalBottomActivityOptions();
             }
           },
           child: ElementTile(
-              icon: const Icon(Icons.assignment, color: Colors.black),
+              icon: Icons.assignment,
+              iconSize: 28,
+              iconColor: Colors.white,
               title: activity.nombreActividad,
               subtitle: activity.fechaLimite.toString(),
-              trailing: '',
               onTapFunction: () async {
                 final activityData = Activity(
                     actividadId: activity.actividadId,
