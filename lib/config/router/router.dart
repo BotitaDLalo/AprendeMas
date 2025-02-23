@@ -1,6 +1,8 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
+import 'package:aprende_mas/views/teacher/agenda/update_event_screen.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -55,9 +57,85 @@ final goRouterProvider = Provider((ref) {
         path: '/create-event',
         builder: (context, state) => const CreateEventScreen(),
         ),
+
+      GoRoute(
+        path: '/update-event',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+
+          final groupProvider = ref.watch(groupsProvider);
+          final subjectProvider = ref.watch(subjectsProvider);
+
+          // Obtener los nombres de los grupos
+          List<String> groupNames = (eventData.groupIds ?? []).map((id) {
+            final group = groupProvider.groups.firstWhere(
+              (group) => group.grupoId == id,
+              orElse: () => Group(grupoId: id, nombreGrupo: "Desconocido", codigoColor: ''),
+            );
+            return group.nombreGrupo;
+          }).toList();
+
+          // Obtener los nombres de las materias
+          List<String> subjectNames = (eventData.subjectIds ?? []).map((id) {
+            final subject = subjectProvider.subjects.firstWhere(
+              (subject) => subject.materiaId == id,
+              orElse: () => Subject(materiaId: id, nombreMateria: "Desconocido"),
+            );
+            return subject.nombreMateria;
+          }).toList();
+
+          return UpdateEventScreen(
+            eventId: eventData.eventId!,
+            teacherId: eventData.teacherId,
+            title: eventData.title,
+            description: eventData.description,
+            color: eventData.color,
+            startDate: eventData.startDate,
+            endDate: eventData.endDate,
+            groupIds: groupNames,  // List<int>
+            subjectIds: subjectNames, // List<int>
+          );
+        },
+      ),
+
       GoRoute(
         path: '/event-detail',
-        builder: (context, state) => const EventDetailsScreen(),
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          final groupProvider = ref.watch(groupsProvider);
+          final subjectProvider = ref.watch(subjectsProvider);
+
+          List<String> groupNames = (eventData.groupIds ?? []).map((id) {
+          final group = groupProvider.groups.firstWhere(
+            (group) => group.grupoId.toString() == id.toString(),
+            orElse: () {
+              return Group(grupoId: id, nombreGrupo: "Desconocido", codigoColor: '');
+            },
+          );
+          return group.nombreGrupo;
+        }).toList();
+
+        List<String> subjectNames = (eventData.subjectIds ?? [])
+        .map((id) => subjectProvider.subjects
+            .firstWhere(
+              (subject) => subject.materiaId == id,
+              orElse: () => Subject( materiaId: id, nombreMateria: "Desconocido"),
+            )
+            .nombreMateria)
+        .toList();
+
+          return EventDetailsScreen(
+            eventId: eventData.eventId!,
+            teacherId: eventData.teacherId,
+            title: eventData.title,
+            description: eventData.description,
+            color: eventData.color,
+            startDate: eventData.startDate,
+            endDate: eventData.endDate,
+            groupIds: groupNames,
+            subjectIds: subjectNames,
+          );
+        },
       ),
       GoRoute(
         path: '/group-teacher-settings',
@@ -160,7 +238,6 @@ final goRouterProvider = Provider((ref) {
       final role = authState.authUser?.role;
       final roleGoogle = user?.rol;
       final authType = authState.authenticatedType;
-      debugPrint(isGoingTo);
 
       if (authType != AuthenticatedType.undefined) {
         if (authType == AuthenticatedType.auth) {

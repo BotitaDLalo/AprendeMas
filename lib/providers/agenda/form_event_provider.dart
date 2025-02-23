@@ -8,6 +8,6 @@ final formEventProvider =
     (ref) {
       final createEvent = ref.read(eventProvider.notifier).createEvents;
 
-      return FormEventNotifier(eventCallback: createEvent);
+      return FormEventNotifier(eventCallback: createEvent, updateEventCallback: createEvent);
     }
   );

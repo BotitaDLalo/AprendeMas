@@ -37,5 +37,31 @@ class EventRepositoyImpl implements EventRepository{
       subjectIds: subjectIds,
     );
   }
+
+  @override
+  Future<List<Event>> updateEvent (
+    String title, 
+    String description, 
+    Color color,
+    DateTime startDate, 
+    DateTime endDate, 
+    {List<int>? groupIds, 
+    List<int>? subjectIds}) {
+      return eventDataSource.updateEvent(
+        title,
+        description,
+        color,
+        startDate,
+        endDate,
+        groupIds: groupIds,
+        subjectIds: subjectIds,
+      );
+  }
+  
+  @override
+  Future<List<Event>> deleteEvent(int teacherId, int eventId) {
+    return eventDataSource.deleteEvent(teacherId, eventId);
+  }
+  
   
 }

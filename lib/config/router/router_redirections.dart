@@ -1,16 +1,21 @@
+import 'package:aprende_mas/config/utils/packages.dart';
+
 class RouterRedirections {
   static final List<String> routesTeacher = [
-    "/create-group",
-    "/create-subject",
-    "/teacher-subject-options",
-    "/create-activities",
-    "/create-event",
-    "/group-teacher-settings",
-    "/activities-options",
-    "/notification-content",
-    "/teacher-activity-settings",
-    "/event-detail"
-  ];
+  "/create-group",
+  "/create-subject",
+  "/teacher-subject-options",
+  "/create-activities",
+  "/create-event",
+  "/update-event", // Asegúrate de que esté aquí
+  "/create-event",
+  "/group-teacher-settings",
+  "/activities-options",
+  "/notification-content",
+  "/teacher-activity-settings",
+  "/event-detail"
+];
+
 
   static List<String> routesStudent = [
     "/student-subject-options",
@@ -27,6 +32,7 @@ class RouterRedirections {
       routesNotAuthenticated.contains(isGoingTo) ? isGoingTo : "/login-user";
 
   static String redirectsToRoute(String? role, String isGoingTo) {
+    debugPrint('Evaluando redirección: Rol: $role, Ruta solicitada: $isGoingTo');
     try {
       switch (role) {
         case "Docente":

@@ -55,7 +55,7 @@ class ElementTile extends ConsumerWidget {
         //       title: notification.title,
         //       body: notification.body,
         //       sentDate: notification.sentDate);
-        //   context.push('/notification-content', extra: notice);
+        //   context.push('/notification-content', : notice);
         // },
         );
   }

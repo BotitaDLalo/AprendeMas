@@ -5,6 +5,7 @@ import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
 
 class FormEventNotifier extends StateNotifier<FormEventState>{
   final Function(String, String, Color, DateTime, DateTime, {List<int>? groupIds, List<int>? subjectIds}) eventCallback;
+  final Function(String, String, Color, DateTime, DateTime, {List<int>? groupIds, List<int>? subjectIds}) updateEventCallback;
   final TextEditingController titleController; 
   final TextEditingController descriptionController;
   final TextEditingController startTimeController; 
@@ -13,7 +14,10 @@ class FormEventNotifier extends StateNotifier<FormEventState>{
   final TextEditingController endDateController; 
   final TextEditingController colorController;  
 
-  FormEventNotifier({required this.eventCallback})
+  FormEventNotifier({
+    required this.eventCallback,
+    required this.updateEventCallback
+    })
     : titleController = TextEditingController(),
       descriptionController = TextEditingController(),
       startDateController = TextEditingController(),
@@ -201,6 +205,10 @@ Future<void> onFormSubmit() async {
   _touchEveryField();
   if (!state.isValid) return;
 
+  if (state.groupIds!.isEmpty && state.subjectIds!.isEmpty) {
+    throw Exception("Debes seleccionar un grupo o una materia.");
+  }
+
   // Obtener la fecha y hora concatenadas
   final fechaInicio = concatenarFechaHora(state.startDate.value, state.startTime.value);
   final fechaFinal = concatenarFechaHora(state.endDate.value, state.endTime.value);
@@ -249,25 +257,25 @@ void _touchEveryField() {
   final List<int> groups = List<int>.from(state.groupIds ?? []);
   final List<int> subjects = List<int>.from(state.subjectIds ?? []);
 
-  // final bool isValidGroup = groups.isNotEmpty;
-  // final bool isValidSubject = subjects.isNotEmpty;
+  final bool isValidGroup = groups.isNotEmpty;
+  final bool isValidSubject = subjects.isNotEmpty;
 
-  // if (!isValidGroup && !isValidSubject) {
-  //   // Si ambos están vacíos, no es válido
-  //   state = state.copyWith(
-  //     title: title,
-  //     description: description,
-  //     startDate: startDate,
-  //     startTime: startTime,
-  //     endDate: endDate,
-  //     endTime: endTime,
-  //     colorCode: colorCode,
-  //     groupIds: groups,
-  //     subjectIds: subjects,
-  //     isValid: false, // Indica que el formulario no es válido
-  //   );
-  //   return;
-  // }
+  if (!isValidGroup && !isValidSubject) {
+    // Si ambos están vacíos, no es válido
+    state = state.copyWith(
+      title: title,
+      description: description,
+      startDate: startDate,
+      startTime: startTime,
+      endDate: endDate,
+      endTime: endTime,
+      colorCode: colorCode,
+      groupIds: groups,
+      subjectIds: subjects,
+      isValid: false, // Indica que el formulario no es válido
+    );
+    return;
+  }
 
   state = state.copyWith(
     title: title,
@@ -291,9 +299,6 @@ void _touchEveryField() {
   );
 }
 
-
-
-
   void resetStateForm() {
     titleController.clear();
     descriptionController.clear();
@@ -303,5 +308,174 @@ void _touchEveryField() {
     endTimeController.clear();
     colorController.clear();
   }
+
+  onUpdateTitleChanged(String value) {
+    final newTitle = GenericInput.dirty(value);
+    state = state.copyWith(
+      title: newTitle,
+      isValid: Formz.validate([state.title]) 
+    );
+  }
+
+  onUpdateDescriptionChanged(String value) {
+    final newDescription = GenericInput.dirty(value);
+    state = state.copyWith(
+      description: newDescription,
+      isValid: Formz.validate([state.description])
+    );
+  }
+
+  onUpdateStartDateChanged(String value) {
+    final newStartDate = GenericInput.dirty(value);
+    state = state.copyWith(
+      startDate: newStartDate,
+      isValid: Formz.validate([state.startDate])
+    );
+  } 
+
+  onUpdateStartTimeChanged(String value) {
+    final newStartTime = GenericInput.dirty(value);
+    state = state.copyWith(
+      startTime: newStartTime,
+      isValid: Formz.validate([state.startTime])
+    );
+  } 
+  
+  onUpdateEndDateChanged(String value) {
+    final newEndDate = GenericInput.dirty(value);
+    state = state.copyWith(
+      endDate: newEndDate,
+      isValid: Formz.validate([state.endDate])
+    );
+  }
+
+  onUpdateEndTimeChanged(String value) {
+    final newEndtTime = GenericInput.dirty(value);
+    state = state.copyWith(
+      endTime: newEndtTime,
+      isValid: Formz.validate([state.startTime])
+    );
+  } 
+
+  onUpdateGroupColorChanged(Color color) {
+    final newColor = ColorInput.dirty(color);
+    state = state.copyWith(
+      pickerColor: color,
+      colorCode: newColor,
+      isValid: Formz.validate([state.colorCode])
+    );
+  }
+
+  void onUpdateGroupIdsChanged(List<int> ids) {
+  state = state.copyWith(
+    groupIds: ids, // Manteniendo el nombre original
+    isValid: Formz.validate([]),
+  );
+}
+
+void onUpdateSubjectIdsChanged(List<int> ids) {
+  state = state.copyWith(
+    subjectIds: ids, // Manteniendo el nombre original
+    isValid: Formz.validate([]),
+  );
+}
+
+Future<void> onUpdateFormSubmit() async {
+  _updatetouchEveryField();
+  if (!state.isValid) return;
+
+  if (state.groupIds!.isEmpty && state.subjectIds!.isEmpty) {
+    throw Exception("Debes seleccionar un grupo o una materia.");
+  }
+
+  // Obtener la fecha y hora concatenadas
+  final fechaInicio = concatenarFechaHora(state.startDate.value, state.startTime.value);
+  final fechaFinal = concatenarFechaHora(state.endDate.value, state.endTime.value);
+
+  if (fechaInicio == null || fechaFinal == null) {
+    throw Exception("Las fechas y horas no pueden ser nulas");
+  }
+
+  state = state.copyWith(isPosting: true);
+
+  try {
+    bool res = await updateEventCallback(
+      state.title.value,
+      state.description.value,
+      state.colorCode.value,
+      fechaInicio,
+      fechaFinal,
+      groupIds: state.groupIds!.isNotEmpty ? List<int>.from(state.groupIds!) : null,
+      subjectIds: state.subjectIds!.isNotEmpty ? List<int>.from(state.subjectIds!) : null,
+    );
+
+    print("res: $res");
+
+    state = state.copyWith(isFormPosted: res);
+  } catch (e) {
+    throw Exception("Error durante la petición: $e");
+  } finally {
+    // Marcar el fin de la petición y resetear el formulario si fue exitoso
+    state = state.copyWith(isPosting: false);
+    if (state.isFormPosted) {
+      resetStateForm();
+    }
+  }
+}
+  
+void _updatetouchEveryField() {
+  final title = GenericInput.dirty(state.title.value);
+  final description = GenericInput.dirty(state.description.value);
+  final startDate = GenericInput.dirty(state.startDate.value);
+  final startTime = GenericInput.dirty(state.startTime.value);
+  final endDate = GenericInput.dirty(state.endDate.value);
+  final endTime = GenericInput.dirty(state.endTime.value);
+  final colorCode = ColorInput.dirty(state.colorCode.value);
+
+  final List<int> groups = List<int>.from(state.groupIds ?? []);
+  final List<int> subjects = List<int>.from(state.subjectIds ?? []);
+
+  final bool isValidGroup = groups.isNotEmpty;
+  final bool isValidSubject = subjects.isNotEmpty;
+
+  if (!isValidGroup && !isValidSubject) {
+    // Si ambos están vacíos, no es válido
+    state = state.copyWith(
+      title: title,
+      description: description,
+      startDate: startDate,
+      startTime: startTime,
+      endDate: endDate,
+      endTime: endTime,
+      colorCode: colorCode,
+      groupIds: groups,
+      subjectIds: subjects,
+      isValid: false, // Indica que el formulario no es válido
+    );
+    return;
+  }
+
+  state = state.copyWith(
+    title: title,
+    description: description,
+    startDate: startDate,
+    startTime: startTime,
+    endDate: endDate,
+    endTime: endTime,
+    colorCode: colorCode,
+    groupIds: groups,
+    subjectIds: subjects,
+    isValid: Formz.validate([
+      title,
+      description,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      colorCode,
+    ]), 
+  );
+}
+
 
 }

@@ -14,12 +14,8 @@ class EventMapper {
         title: map['titulo'] as String,
         description: map['descripcion'] as String,
         color: map['color'] as String,
-        groupIds: map['eventosGrupos'] != null
-            ? List<int>.from(map['eventosGrupos'].map((g) => g['grupoId'] as int))
-            : null,
-        subjectIds: map['eventosMaterias'] != null
-            ? List<int>.from(map['eventosMaterias'].map((m) => m['materiaId'] as int))
-            : null,
+        groupIds: map['grupoId'] != null ? [map['grupoId'] as int] : [], // 🔹 Se obtiene directamente
+        subjectIds: map['materiaId'] != null ? [map['materiaId'] as int] : [],
       );
     }).toList();
   }
@@ -33,14 +29,12 @@ class EventMapper {
       'titulo': event.title,
       'descripcion': event.description,
       'color': event.color,
-      'eventosGrupos': event.groupIds?.map((id) => {'grupoId': id}).toList(),
-      'eventosMaterias': event.subjectIds?.map((id) => {'materiaId': id}).toList(),
+      'grupoId': event.groupIds?.isNotEmpty == true ? event.groupIds!.first : null, // 🔹 Ajustado
+      'materiaId': event.subjectIds?.isNotEmpty == true ? event.subjectIds!.first : null,
     };
   }
 
-  /// Convierte una lista de eventos a una lista de mapas para enviar al backend.
   static List<Map<String, dynamic>> toMapList(List<Event> events) {
     return events.map((event) => toMap(event)).toList();
   }
 }
-

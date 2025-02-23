@@ -9,10 +9,11 @@ class CustomTextFormField extends StatelessWidget {
   final Function(String)? onChanged;
   final String? Function(String?)? validator;
   final TextEditingController? textEditingController;
-  final bool enableLineBreak; // Habilitación del salto de línea
-  final bool capitalizeFirstLetter; // Capitalizar primera letra
-  final double? customHeight; // Altura personalizada opcional
-  final bool isNumericKeyboard; // Propiedad para habilitar teclado numérico
+  final bool enableLineBreak;
+  final bool capitalizeFirstLetter;
+  final double? customHeight;
+  final bool isNumericKeyboard;
+  final String? initialValue; // Nuevo parámetro para el valor inicial
 
   const CustomTextFormField({
     super.key,
@@ -24,10 +25,11 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.textEditingController,
-    this.enableLineBreak = false, // Opcional
-    this.capitalizeFirstLetter = false, // Opcional
-    this.customHeight, // Altura personalizada opcional
-    this.isNumericKeyboard = false, // Teclado numérico desactivado por defecto
+    this.enableLineBreak = false,
+    this.capitalizeFirstLetter = false,
+    this.customHeight,
+    this.isNumericKeyboard = false,
+    this.initialValue, // Nuevo parámetro
   });
 
   @override
@@ -35,15 +37,15 @@ class CustomTextFormField extends StatelessWidget {
     final colors = Theme.of(context);
 
     return TextFormField(
-      controller: textEditingController,
+      controller: textEditingController ?? (initialValue != null ? TextEditingController(text: initialValue) : null),
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
       keyboardType: isNumericKeyboard ? TextInputType.number : keyboardType,
-      maxLines: enableLineBreak ? null : 1, // Permite o no el salto de línea
+      maxLines: enableLineBreak ? null : 1,
       textCapitalization: capitalizeFirstLetter
           ? TextCapitalization.sentences
-          : TextCapitalization.none, // Capitalización de la primera letra
+          : TextCapitalization.none,
       style: const TextStyle(fontSize: 20, color: Colors.black),
       decoration: InputDecoration(
         floatingLabelStyle: const TextStyle(
