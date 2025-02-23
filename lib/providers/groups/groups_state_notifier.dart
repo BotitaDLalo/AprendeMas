@@ -89,16 +89,11 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     List<Group> lsGroups = List.from(state.groups);
     final index =
         lsGroups.indexWhere((group) => group.grupoId == updateGroup.grupoId);
-    final groupId = updateGroup.grupoId;
     final newGroupName = updateGroup.nombreGrupo;
     final newDescriptionGroup = updateGroup.descripcion;
 
     if (index != -1) {
-      lsGroups[index] = Group(
-        grupoId: groupId,
-        nombreGrupo: newGroupName,
-        descripcion: newDescriptionGroup,
-      );
+      lsGroups[index] = lsGroups[index].copyWith(nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
 
       state = state.copyWith(groups: lsGroups);
     }
