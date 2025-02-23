@@ -29,7 +29,7 @@ class _TeacherHomeScreenState extends ConsumerState<TeacherHomeScreen> {
     WidgetOptions(
         title: 'Notificaciones',
         bottomNavigationBarItem: lsBarItems[2],
-        widget: const NoticesTeacherScreen()),
+        widget: const NotificationsTeacherScreen()),
     WidgetOptions(
         title: 'Chat',
         bottomNavigationBarItem: lsBarItems[3],
