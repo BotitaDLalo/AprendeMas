@@ -1,5 +1,6 @@
 class Submission {
   final int studentActivityId;
+  final int submissionId;
   String? answer;
   String? link;
   String? file;
@@ -8,7 +9,9 @@ class Submission {
   final String? submissionDate;
 
   Submission(
-      {required this.studentActivityId,
+      {
+      required this.studentActivityId,
+      required this.submissionId,
       this.submissionDate,
       this.answer,
       this.link,
@@ -21,6 +24,7 @@ class Submission {
       [
         Submission(
             studentActivityId: submissionRes['alumnoActividadId'],
+            submissionId: submissionRes['entregaId'],
             activityId: activityId,
             answer: submissionRes['respuesta'],
             submissionDate: submissionRes['fechaEntrega'],

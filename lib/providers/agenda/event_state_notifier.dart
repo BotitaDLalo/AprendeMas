@@ -57,26 +57,11 @@ class EventNotifier extends StateNotifier<EventState>{
     state = state.copyWith(events: event);
   }
 
-  Future<void> updateEvents(
-    String title,
-    String description,
-    Color color,
-    DateTime startDate,
-    DateTime endDate, {
-    List<int>? groupIds,
-    List<int>? subjectIds,
-}) async{
+  Future<void> updateEvents(Map<String, dynamic> eventLike) async{
     
     try {
       state = state.copyWith(isLoading: true);
-      final event = await eventRepository.createEvent(
-        title,
-        description,
-        color,
-        startDate,
-        endDate,
-        groupIds: groupIds,
-        subjectIds: subjectIds);
+      final event = await eventRepository.updateEvent(eventLike);
       _setupdateEvent(event);
     } catch (e) {
      state = state.copyWith(errorMessage: e.toString()); 

@@ -6,7 +6,6 @@ import 'package:aprende_mas/config/data/data.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_data_source.dart';
 import 'package:aprende_mas/config/utils/utils.dart';
 
-
 class GroupsDataSourceImpl implements GroupsDataSource {
   final storageService = KeyValueStorageServiceImpl();
   final cn = CatalogNames();
@@ -49,11 +48,10 @@ class GroupsDataSourceImpl implements GroupsDataSource {
 
   @override
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<SubjectsRow> subjectsList) async {
+       List<SubjectsRow> subjectsList) async {
     try {
       const uri = "/Grupos/CrearGrupoMaterias";
       final id = await storageService.getId();
-      final String hexColor = colorCode.value.toRadixString(16).toUpperCase();
       final subList = subjectsList
           .map((subject) => subject.toJsonGroupsSubjects())
           .toList();
@@ -62,7 +60,6 @@ class GroupsDataSourceImpl implements GroupsDataSource {
         "DocenteId": id,
         "NombreGrupo": groupName,
         "Descripcion": description,
-        "CodigoColor": hexColor,
         "Materias": subList
       });
 
@@ -81,14 +78,13 @@ class GroupsDataSourceImpl implements GroupsDataSource {
   //$CREAR GRUPO SIN MATERIAS
   @override
   Future<List<Group>> createGroup(
-      String nombreGrupo, String descripcion, Color codigoColor) async {
+      String nombreGrupo, String descripcion) async {
     const uri = "/Grupos/CrearGrupo";
     final id = await storageService.getId();
     try {
       final res = await dio.post(uri, data: {
         "NombreGrupo": nombreGrupo,
         "Descripcion": descripcion,
-        "CodigoColor": codigoColor.toString(),
         "DocenteId": id
       });
       if (res.statusCode == 200) {
@@ -111,21 +107,19 @@ class GroupsDataSourceImpl implements GroupsDataSource {
 
   @override
   Future<Group> updateGroup(int groupId, String groupName,
-      String descriptionGroup, Color colorGroup) async {
+      String descriptionGroup) async {
     try {
       const uri = "/Grupos/ActualizarGrupo";
-      final String hexColor = colorGroup.value.toRadixString(16).toUpperCase();
       final id = await storageService.getId();
       final res = await dio.put(uri, data: {
         "GrupoId": groupId,
         "NombreGrupo": groupName,
         "Descripcion": descriptionGroup,
-        "CodigoColor": hexColor,
         "DocenteId": id
       });
 
-      final group = Group.groupToEntity(res.data);
       if (res.statusCode == 200) {
+        final group = Group.groupToEntity(res.data);
         return group;
       }
       return Group.empty();

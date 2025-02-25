@@ -3,6 +3,8 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/config/data/db_local.dart';
 import 'package:aprende_mas/config/data/key_value_storage_service_impl.dart';
 
+import '../../../config/utils/packages.dart';
+
 class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
   final storageService = KeyValueStorageServiceImpl();
   @override
@@ -90,12 +92,13 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
           bool status = sa['EstatusEntrega'] == 1 ? true : false;
 
           final querylsSubmissions = await db.query('tbEntregableActividades',
-              columns: ['Respuesta'],
+              columns: ['EntregaId', 'Respuesta'],
               where: '"AlumnoActividadId" = ?',
               whereArgs: [studentActivityId]);
 
           for (var sub in querylsSubmissions) {
             Submission submission = Submission(
+                submissionId: sub['EntregaId'] as int,
                 studentActivityId: studentActivityId,
                 status: status,
                 submissionDate: submissionDate);
@@ -160,12 +163,13 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
           bool status = sa['EstatusEntrega'] == 1 ? true : false;
 
           final querylsSubmissions = await db.query('tbEntregableActividades',
-              columns: ['Respuesta'],
+              columns: ['EntregaId', 'Respuesta'],
               where: '"AlumnoActividadId" = ?',
               whereArgs: [studentActivityId]);
 
           for (var sub in querylsSubmissions) {
             Submission submission = Submission(
+                submissionId: sub['EntregaId'] as int,
                 studentActivityId: studentActivityId,
                 status: status,
                 submissionDate: submissionDate);
@@ -194,9 +198,9 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
       return [];
     }
   }
-  
+
   @override
-  Future<List<Submission>> getSubmissionsPending(int activityId) async{
+  Future<List<Submission>> getSubmissionsPending(int activityId) async {
     try {
       final db = await DbLocal.initDatabase();
       if (db.isOpen) {
@@ -212,12 +216,13 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
           bool status = sa['EstatusEntrega'] == 1 ? true : false;
 
           final querylsSubmissions = await db.query('tbEntregableActividades',
-              columns: ['Respuesta'],
+              columns: ['EntregaId', 'Respuesta'],
               where: '"AlumnoActividadId" = ?',
               whereArgs: [studentActivityId]);
 
           for (var sub in querylsSubmissions) {
             Submission submission = Submission(
+                submissionId: sub['EntregaId'] as int,
                 studentActivityId: studentActivityId,
                 status: status,
                 submissionDate: submissionDate);
@@ -242,6 +247,38 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
     } catch (e) {
       print(e.toString());
       return [];
+    }
+  }
+
+  @override
+  Future<void> deleteSubmissionOfflineSent(int submissionId) async {
+    try {
+      /**
+       * tbEntregableActividades
+       * tbAlumnosActividades
+       */
+
+      final db = await DbLocal.initDatabase();
+
+      if (db.isOpen) {
+        final querySubmission = await db.query('tbEntregableActividades',
+            columns: ['AlumnoActividadId'],
+            where: ' "EntregaId" = ? ',
+            whereArgs: [submissionId]);
+
+        int studentActivityId = querySubmission.first['AlumnoActividadId'] as int;
+
+        //& Eliminando registros tbEntregableActividades y tbAlumnosActividades
+        await db.rawDelete(
+            'DELETE FROM tbEntregableActividades WHERE EntregaId = ?',
+            [submissionId]);
+
+        await db.rawDelete(
+            'DELETE FROM tbAlumnosActividades WHERE AlumnoActividadId = ?',
+            [studentActivityId]);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
   }
 }

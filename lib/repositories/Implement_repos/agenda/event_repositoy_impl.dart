@@ -39,23 +39,8 @@ class EventRepositoyImpl implements EventRepository{
   }
 
   @override
-  Future<List<Event>> updateEvent (
-    String title, 
-    String description, 
-    Color color,
-    DateTime startDate, 
-    DateTime endDate, 
-    {List<int>? groupIds, 
-    List<int>? subjectIds}) {
-      return eventDataSource.updateEvent(
-        title,
-        description,
-        color,
-        startDate,
-        endDate,
-        groupIds: groupIds,
-        subjectIds: subjectIds,
-      );
+  Future<List<Event>> updateEvent (Map<String, dynamic> eventLike) {
+      return eventDataSource.updateEvent(eventLike);
   }
   
   @override

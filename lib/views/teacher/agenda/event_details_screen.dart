@@ -13,8 +13,8 @@ class EventDetailsScreen extends ConsumerWidget {
   final String color;
   final DateTime startDate;
   final DateTime endDate;
-  final List<String> groupIds;
-  final List<String> subjectIds;
+  final List<int> groupIds;
+  final List<int> subjectIds;
 
   const EventDetailsScreen({
     super.key, 
@@ -105,9 +105,9 @@ class EventDetailsScreen extends ConsumerWidget {
 
             Text('Destinatario: ', style: TextStyle(fontWeight: FontWeight.bold), ),
             if (groupIds.isNotEmpty)
-              Text("Grupos: ${groupIds.join(", ")}"),
+              Text("Grupos: ${groupIds}"),
             if (subjectIds.isNotEmpty)
-              Text("Materias: ${subjectIds.join(", ")}"),
+              Text("Materias: ${subjectIds}"),
             if (groupIds.isEmpty && subjectIds.isEmpty)
               Text("Este evento no está asignado a ningún grupo ni materia."),
 
@@ -133,13 +133,12 @@ class EventDetailsScreen extends ConsumerWidget {
                 startDate: startDate,
                 endDate: endDate,
                 color: color,
-                groupIds: groupIds?.map((id) => int.tryParse(id) ?? 0).toList(),  // Si es null, se mantiene null
-                subjectIds: subjectIds?.map((id) => int.tryParse(id) ?? 0).toList(),  // Si es null, se mantiene null
+                groupIds: groupIds,  // Si es null, se mantiene null
+                subjectIds: subjectIds,  // Si es null, se mantiene null
               );
-
-
               print("Navegando a /update-event con event: $event");
               context.push('/update-event', extra: event);
+              ref.read(eventProvider.notifier).getEvents();
             },
             child: const Icon(Icons.edit),
           ),
@@ -152,16 +151,15 @@ class EventDetailsScreen extends ConsumerWidget {
                if (confirm == true) {
                 try {
                   // Llamar al método deleteEvent del EventNotifier
-                  await eventNotifier.deleteEvent(teacherId, eventId);
-                  print("tecaherId: ${teacherId}, eventId: ${eventId} desde detalles");
-          
+                  await eventNotifier.deleteEvent(teacherId, eventId);          
                   // Mostrar un mensaje de éxito
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Evento eliminado correctamente")),
                   );
           
                   // Navegar de regreso a la pantalla anterior
-                  Navigator.pop(context);
+                  context.pop();
+                  ref.read(eventProvider.notifier).getEvents();
                 } catch (e) {
                   // Mostrar un mensaje de error
                   ScaffoldMessenger.of(context).showSnackBar(

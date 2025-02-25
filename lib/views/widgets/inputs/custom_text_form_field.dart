@@ -13,7 +13,6 @@ class CustomTextFormField extends StatelessWidget {
   final bool capitalizeFirstLetter;
   final double? customHeight;
   final bool isNumericKeyboard;
-  final String? initialValue; // Nuevo parámetro para el valor inicial
 
   const CustomTextFormField({
     super.key,
@@ -29,7 +28,6 @@ class CustomTextFormField extends StatelessWidget {
     this.capitalizeFirstLetter = false,
     this.customHeight,
     this.isNumericKeyboard = false,
-    this.initialValue, // Nuevo parámetro
   });
 
   @override
@@ -37,7 +35,7 @@ class CustomTextFormField extends StatelessWidget {
     final colors = Theme.of(context);
 
     return TextFormField(
-      controller: textEditingController ?? (initialValue != null ? TextEditingController(text: initialValue) : null),
+      controller: textEditingController,
       onChanged: onChanged,
       validator: validator,
       obscureText: obscureText,
@@ -77,3 +75,4 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
+

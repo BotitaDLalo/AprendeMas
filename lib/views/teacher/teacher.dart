@@ -6,7 +6,6 @@ export 'activities/options/create_activies/create_activities.dart';
 
 export 'groups/group_options/form_update_group.dart';
 export 'groups/group_options/students_group_assignment.dart';
-export 'package:aprende_mas/views/teacher/groups/group_options/notices_group_options_screen.dart';
 export 'package:aprende_mas/views/teacher/groups/group_options/teacher_group_options.dart';
 export 'package:aprende_mas/views/teacher/groups/group_options/students_group.dart';
 
@@ -17,4 +16,3 @@ export 'package:aprende_mas/views/teacher/subjects/subject_options/teacher_subje
 export 'package:aprende_mas/views/teacher/groups_subjects/groups_subjects_container.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/subjects_without_groups_container.dart';
 export 'package:aprende_mas/views/teacher/groups_subjects/groups_subjects_void.dart';
-export 'package:aprende_mas/views/teacher/activities/activity_settings.dart';

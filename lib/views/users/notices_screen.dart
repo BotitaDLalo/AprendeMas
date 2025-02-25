@@ -15,13 +15,13 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
   void initState() {
     super.initState();
 
-    ref.read(noticesProvider.notifier).getLsNotices();
+    ref.read(notificationsProvider.notifier).getLsNotices();
   }
 
   @override
   Widget build(BuildContext context) {
-    final lsNotices = ref.watch(noticesProvider);
-    final noticesNotifier = ref.read(noticesProvider.notifier);
+    final lsNotices = ref.watch(notificationsProvider);
+    final noticesNotifier = ref.read(notificationsProvider.notifier);
     showModalBottom(String sentDate) {
       showModalBottomSheet(
         context: context,
@@ -59,20 +59,19 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
             child: ListView.builder(
               itemCount: lsNotices.length,
               itemBuilder: (BuildContext context, int index) {
-                print(index);
                 final notification = lsNotices[index];
-                print(notification);
                 return GestureDetector(
                     onLongPress: () {
                       showModalBottom(notification.sentDate);
                     },
                     child: ElementTile(
-                      icon: const Icon(Icons.notifications, color: Colors.black),
+                      icon: Icons.notifications,
+                      iconSize: 28,
+                      iconColor: Colors.white,
                       title: notification.title,
                       subtitle: notification.sentDate,
-                      trailing: '',
                       onTapFunction: () {
-                        Notice notice = Notice(
+                        NotificationModel notice = NotificationModel(
                             messageId: notification.messageId,
                             title: notification.title,
                             body: notification.body,

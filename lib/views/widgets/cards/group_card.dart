@@ -3,16 +3,16 @@ import 'package:aprende_mas/models/groups/group.dart';
 import 'package:aprende_mas/config/utils/utils.dart';
 import 'package:aprende_mas/config/data/data.dart';
 
-class CustomExpansionTile extends ConsumerStatefulWidget {
+class GroupCard extends ConsumerStatefulWidget {
   final int id;
   final String title;
-  final String color;
+  final Color color;
   final String description;
   final String? accessCode;
   final List<Widget> children;
   final Duration animationDuration;
 
-  const CustomExpansionTile(
+  const GroupCard(
       {super.key,
       required this.id,
       required this.title,
@@ -26,7 +26,7 @@ class CustomExpansionTile extends ConsumerStatefulWidget {
   CustomExpansionTileState createState() => CustomExpansionTileState();
 }
 
-class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
+class CustomExpansionTileState extends ConsumerState<GroupCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   bool _isExpanded = false;
@@ -75,7 +75,7 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Card(
-              color: AppTheme.stringToColor(widget.color),
+              color: widget.color,
               child: Center(
                 child: ListTile(
                   leading: SvgPicture.asset(
@@ -106,8 +106,7 @@ class CustomExpansionTileState extends ConsumerState<CustomExpansionTile>
                           grupoId: widget.id,
                           nombreGrupo: widget.title,
                           descripcion: widget.description,
-                          codigoAcceso: widget.accessCode ?? "",
-                          codigoColor: widget.color);
+                          codigoAcceso: widget.accessCode ?? "",);
 
                       final role = await keyValueStorageService.getRole();
 

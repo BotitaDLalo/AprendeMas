@@ -19,61 +19,72 @@ class UpdateDropdownForm extends ConsumerStatefulWidget {
 
 class _OptionDropdownFormState extends ConsumerState<UpdateDropdownForm> {
   int? _selectedItemId;
+  late bool _isGroup;
 
   @override
-void initState() {
-  super.initState();
-  _selectedItemId = widget.initialItemId;
+  void initState() {
+    super.initState();
+    _isGroup = widget.isGroup;
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (!mounted) return; // Verifica si el widget aún está montado antes de modificar el estado
+      final groupsNotifier = ref.read(groupsProvider.notifier);
+      final subjectsNotifier = ref.read(subjectsProvider.notifier);
+
+      if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
+        groupsNotifier.getGroupsSubjects();
+      }
+      if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
+        subjectsNotifier.getSubjects();
+      }
+    });
+  }
+
+  void _onItemSelected(int? value) {
+    if (value == null || !mounted) return;
+
+    setState(() {
+      _selectedItemId = value;
+    });
+
+    final formEventNotifier = ref.read(formEventProvider.notifier);
+    if (!mounted) return;
+
+    // if (_isGroup) {
+    //   formEventNotifier.onUpdateGroupIdsChanged([value]);
+    //   formEventNotifier.onUpdateGroupColorChanged(Colors.blue);
+    // } else {
+    //   formEventNotifier.onUpdateSubjectIdsChanged([value]);
+    //   formEventNotifier.onUpdateGroupColorChanged(Colors.green);
+    // }
+  }
+
+  void _onTypeChanged(String? newValue) {
+    if (newValue == null || !mounted) return;
+
+    setState(() {
+      _isGroup = newValue == 'Grupo';
+      _selectedItemId = null;
+    });
 
     final groupsNotifier = ref.read(groupsProvider.notifier);
     final subjectsNotifier = ref.read(subjectsProvider.notifier);
 
-    if (widget.isGroup && ref.read(groupsProvider).groups.isEmpty) {
+    if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
       groupsNotifier.getGroupsSubjects();
     }
-    if (!widget.isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
+    if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
       subjectsNotifier.getSubjects();
     }
-  });
-}
-
-
-  void _onItemSelected(int? value) {
-  if (value == null || !mounted) return; // Asegura que el widget aún está montado
-
-  setState(() {
-    _selectedItemId = value;
-  });
-
-  final formEventNotifier = ref.read(formEventProvider.notifier);
-  if (!mounted) return; // Segunda verificación antes de modificar el estado global
-
-  if (widget.isGroup) {
-    formEventNotifier.onUpdateGroupIdsChanged([value]);
-    formEventNotifier.onUpdateGroupColorChanged(Colors.blue);
-  } else {
-    formEventNotifier.onUpdateSubjectIdsChanged([value]);
-    formEventNotifier.onUpdateGroupColorChanged(Colors.green);
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
-    // Usamos ref.watch() solo en lo necesario para evitar reconstrucciones
     final groupsState = ref.watch(groupsProvider.select((state) => state.groups));
     final subjectsState = ref.watch(subjectsProvider.select((state) => state.subjects));
 
-    // Si los datos aún no están cargados, mostramos un indicador de carga
-    if ((widget.isGroup && groupsState.isEmpty) || (!widget.isGroup && subjectsState.isEmpty)) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    // Construcción de la lista de opciones
-    final options = widget.isGroup
+    final options = _isGroup
         ? groupsState.map((group) => DropdownMenuItem<int>(
               value: group.grupoId,
               child: Text(group.nombreGrupo),
@@ -83,9 +94,15 @@ void initState() {
               child: Text(subject.nombreMateria),
             )).toList();
 
+    if (_selectedItemId == null && widget.initialItemId != null) {
+      final existsInOptions = options.any((option) => option.value == widget.initialItemId);
+      if (existsInOptions) {
+        _selectedItemId = widget.initialItemId;
+      }
+    }
+
     return Row(
       children: [
-        // Dropdown para seleccionar el tipo (Grupo/Materia) [Solo visual]
         Flexible(
           flex: 2,
           child: DropdownButtonFormField<String>(
@@ -100,17 +117,16 @@ void initState() {
               DropdownMenuItem(value: 'Grupo', child: Text('Grupo')),
               DropdownMenuItem(value: 'Materia', child: Text('Materia')),
             ],
-            value: widget.isGroup ? 'Grupo' : 'Materia',
-            onChanged: null, // Desactivado, solo visual
+            value: _isGroup ? 'Grupo' : 'Materia',
+            onChanged: _onTypeChanged,
           ),
         ),
         const SizedBox(width: 8),
-        // Dropdown para seleccionar el grupo o materia
         Flexible(
           flex: 2,
           child: DropdownButtonFormField<int>(
             decoration: InputDecoration(
-              labelText: widget.isGroup ? 'Grupo' : 'Materia',
+              labelText: _isGroup ? 'Grupo' : 'Materia',
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),

@@ -11,7 +11,6 @@ class DbLocal {
 
       if (!exist) {
         List<String> lsQuerys = Querys.querysCreateTables();
-
         Database db =
             await openDatabase(path, version: 1, onCreate: (db, version) async {
           for (var q in lsQuerys) {

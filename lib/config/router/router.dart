@@ -1,8 +1,10 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
 import 'package:aprende_mas/views/teacher/agenda/update_event_screen.dart';
+import 'package:aprende_mas/views/teacher/notices/teacher_create_notice.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -11,6 +13,7 @@ import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_student_submission_grading.dart';
 
 String routeAux = "";
 List<GoRoute> lsRouter = [];
@@ -62,28 +65,6 @@ final goRouterProvider = Provider((ref) {
         path: '/update-event',
         builder: (context, state) {
           final eventData = state.extra as Event;
-
-          final groupProvider = ref.watch(groupsProvider);
-          final subjectProvider = ref.watch(subjectsProvider);
-
-          // Obtener los nombres de los grupos
-          List<String> groupNames = (eventData.groupIds ?? []).map((id) {
-            final group = groupProvider.groups.firstWhere(
-              (group) => group.grupoId == id,
-              orElse: () => Group(grupoId: id, nombreGrupo: "Desconocido", codigoColor: ''),
-            );
-            return group.nombreGrupo;
-          }).toList();
-
-          // Obtener los nombres de las materias
-          List<String> subjectNames = (eventData.subjectIds ?? []).map((id) {
-            final subject = subjectProvider.subjects.firstWhere(
-              (subject) => subject.materiaId == id,
-              orElse: () => Subject(materiaId: id, nombreMateria: "Desconocido"),
-            );
-            return subject.nombreMateria;
-          }).toList();
-
           return UpdateEventScreen(
             eventId: eventData.eventId!,
             teacherId: eventData.teacherId,
@@ -92,8 +73,8 @@ final goRouterProvider = Provider((ref) {
             color: eventData.color,
             startDate: eventData.startDate,
             endDate: eventData.endDate,
-            groupIds: groupNames,  // List<int>
-            subjectIds: subjectNames, // List<int>
+            groupIds: eventData.groupIds!,  // List<int>
+            subjectIds: eventData.subjectIds!, // List<int>
           );
         },
       ),
@@ -102,28 +83,6 @@ final goRouterProvider = Provider((ref) {
         path: '/event-detail',
         builder: (context, state) {
           final eventData = state.extra as Event;
-          final groupProvider = ref.watch(groupsProvider);
-          final subjectProvider = ref.watch(subjectsProvider);
-
-          List<String> groupNames = (eventData.groupIds ?? []).map((id) {
-          final group = groupProvider.groups.firstWhere(
-            (group) => group.grupoId.toString() == id.toString(),
-            orElse: () {
-              return Group(grupoId: id, nombreGrupo: "Desconocido", codigoColor: '');
-            },
-          );
-          return group.nombreGrupo;
-        }).toList();
-
-        List<String> subjectNames = (eventData.subjectIds ?? [])
-        .map((id) => subjectProvider.subjects
-            .firstWhere(
-              (subject) => subject.materiaId == id,
-              orElse: () => Subject( materiaId: id, nombreMateria: "Desconocido"),
-            )
-            .nombreMateria)
-        .toList();
-
           return EventDetailsScreen(
             eventId: eventData.eventId!,
             teacherId: eventData.teacherId,
@@ -132,8 +91,8 @@ final goRouterProvider = Provider((ref) {
             color: eventData.color,
             startDate: eventData.startDate,
             endDate: eventData.endDate,
-            groupIds: groupNames,
-            subjectIds: subjectNames,
+            groupIds: eventData.groupIds!,
+            subjectIds: eventData.subjectIds!,
           );
         },
       ),
@@ -142,11 +101,11 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final groupData = state.extra as Group;
           return GroupTeacherOptions(
-            id: groupData.grupoId ?? -1,
+            groupId: groupData.grupoId ?? -1,
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",
             accessCode: groupData.codigoAcceso,
-            colorCode: groupData.codigoColor,
+            // colorCode: groupData.codigoColor,
           );
         },
       ),
@@ -172,7 +131,7 @@ final goRouterProvider = Provider((ref) {
         path: '/activities-options',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-          return ActivitiesOptionScreen(
+          return ActivityOptionScreen(
             subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
           );
@@ -203,7 +162,7 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/notification-content',
         builder: (context, state) {
-          final notificationData = state.extra as Notice;
+          final notificationData = state.extra as NotificationModel;
           return NotificationContentScreen(
             messageId: notificationData.messageId,
             title: notificationData.title,
@@ -212,20 +171,42 @@ final goRouterProvider = Provider((ref) {
           );
         },
       ),
-      GoRoute(
-        path: '/teacher-activity-settings',
-        builder: (context, state) {
-          final activity = state.extra as Activity;
 
-          return ActivitySettings(activity: activity);
-        },
-      ),
       GoRoute(
         path: '/student-activity-section-submissions',
         builder: (context, state) {
           final activity = state.extra as Activity;
 
           return ActivitySectionSubmissions(activity: activity);
+        },
+      ),
+
+      GoRoute(
+        path: '/teacher-activities-students-options',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+          return TeacherActivityStudentsSubmissions(
+            activity: activity,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/teacher-student-submission-grading',
+        builder: (context, state) {
+          final dataExtra = state.extra as TeacherStudentSubmissionGradingModel;
+          return TeacherStudentSubmissionGrading(
+            data: dataExtra,
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/teacher-create-notice',
+        builder: (context, state) {
+          final notice = state.extra as NoticeModel;
+          return TeacherCreateNotice(
+            notice: notice,
+          );
         },
       )
     ],

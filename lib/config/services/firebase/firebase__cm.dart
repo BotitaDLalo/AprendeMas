@@ -1,6 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/repositories/Implement_repos/notices/db_local_notices_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/notices/db_local_notifications%7D_repository_impl.dart';
 
 class FirebaseCM{
     static Future<String?> getFcmToken() async {
@@ -8,8 +8,8 @@ class FirebaseCM{
     return fcmToken;
   }
 
-  static Notice onNewMessage(RemoteMessage message) {
-    final notification = Notice(
+  static NotificationModel onNewMessage(RemoteMessage message) {
+    final notification = NotificationModel(
         messageId:
             message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? '',
         title: message.notification!.title ?? '',

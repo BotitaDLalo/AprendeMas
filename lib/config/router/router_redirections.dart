@@ -9,13 +9,16 @@ class RouterRedirections {
   "/create-event",
   "/update-event", // Asegúrate de que esté aquí
   "/create-event",
+  "/event-detail",
   "/group-teacher-settings",
   "/activities-options",
   "/notification-content",
   "/teacher-activity-settings",
-  "/event-detail"
+  "/teacher-activities-students-options",
+  '/teacher-activity-student-submission',
+  '/teacher-student-submission-grading',
+  '/teacher-create-notice'
 ];
-
 
   static List<String> routesStudent = [
     "/student-subject-options",

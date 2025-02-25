@@ -43,7 +43,7 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
     return Form(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-        child: Column(
+        child: Column( 
           children: [
             CustomTextFormField(
                 capitalizeFirstLetter: true,

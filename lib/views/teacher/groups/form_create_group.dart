@@ -12,32 +12,32 @@ class FormCreateGroup extends ConsumerWidget {
     final formCreateGroup = ref.watch(formGroupsProvider);
     final formCreateGroupNotifier = ref.read(formGroupsProvider.notifier);
 
-    Future<void> showColorDialog() async {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Escoge un color'),
-          content: SingleChildScrollView(
-            child: BlockPicker(
-              availableColors: AppTheme.availableColors,
-              pickerColor: formCreateGroup.pickerColor,
-              onColorChanged: (color) {
-                formCreateGroupNotifier.onColorCodeChanged(color);
-              },
-            ),
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Hecho'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ),
-      );
-    }
+    // Future<void> showColorDialog() async {
+    //   showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (context) => AlertDialog(
+    //       title: const Text('Escoge un color'),
+    //       content: SingleChildScrollView(
+    //         child: BlockPicker(
+    //           availableColors: AppTheme.availableColors,
+    //           pickerColor: formCreateGroup.pickerColor,
+    //           onColorChanged: (color) {
+    //             formCreateGroupNotifier.onColorCodeChanged(color);
+    //           },
+    //         ),
+    //       ),
+    //       actions: <Widget>[
+    //         ElevatedButton(
+    //           child: const Text('Hecho'),
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
 
     Future<void> showSubjectDialog() async {
       showDialog(
@@ -131,56 +131,57 @@ class FormCreateGroup extends ConsumerWidget {
             onChanged: formCreateGroupNotifier.onDescriptionChanged,
           ),
           const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                  height: 45,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    color: formCreateGroup.pickerColor,
-                    border: Border.all(
-                      color: formCreateGroup.pickerColor ==
-                              const Color.fromARGB(0, 255, 255, 255)
-                          ? const Color.fromARGB(100, 0, 0, 0)
-                          : formCreateGroup.pickerColor,
-                    ),
-                    borderRadius: BorderRadius.circular(50),
-                    boxShadow: [
-                      BoxShadow(
-                          color: formCreateGroup.pickerColor,
-                          spreadRadius: 0.1,
-                          blurRadius: 3,
-                          offset: const Offset(1, 1.5)),
-                    ],
-                  )),
-              const SizedBox(width: 10),
-              ButtonForm(
-                // style: AppTheme.buttonSecondary,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  foregroundColor: formCreateGroup.pickerColor ==
-                          const Color.fromARGB(0, 255, 255, 255)
-                      ? const Color.fromARGB(150, 0, 0, 0)
-                      : formCreateGroup.pickerColor,
-                  fixedSize: const Size.fromHeight(45),
-                  // side: BorderSide(color: _colorThemes[1]),
-                  side: BorderSide(
-                    color: formCreateGroup.pickerColor ==
-                            const Color.fromARGB(0, 255, 255, 255)
-                        ? const Color.fromARGB(100, 0, 0, 0)
-                        : formCreateGroup.pickerColor,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10), // border radius
-                  ),
-                ),
-                buttonName: "Seleccionar Color",
-                onPressed: () => showColorDialog(),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     Container(
+          //         height: 45,
+          //         width: 45,
+          //         decoration: BoxDecoration(
+          //           color: formCreateGroup.pickerColor,
+          //           border: Border.all(
+          //             color: formCreateGroup.pickerColor ==
+          //                     const Color.fromARGB(0, 255, 255, 255)
+          //                 ? const Color.fromARGB(100, 0, 0, 0)
+          //                 : formCreateGroup.pickerColor,
+          //           ),
+          //           borderRadius: BorderRadius.circular(50),
+          //           boxShadow: [
+          //             BoxShadow(
+          //                 color: formCreateGroup.pickerColor,
+          //                 spreadRadius: 0.1,
+          //                 blurRadius: 3,
+          //                 offset: const Offset(1, 1.5)),
+          //           ],
+          //         )),
+          //     const SizedBox(width: 10),
+          //     ButtonForm(
+          //       // style: AppTheme.buttonSecondary,
+          //       style: ElevatedButton.styleFrom(
+          //         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+          //         foregroundColor: formCreateGroup.pickerColor ==
+          //                 const Color.fromARGB(0, 255, 255, 255)
+          //             ? const Color.fromARGB(150, 0, 0, 0)
+          //             : formCreateGroup.pickerColor,
+          //         fixedSize: const Size.fromHeight(45),
+          //         // side: BorderSide(color: _colorThemes[1]),
+          //         side: BorderSide(
+          //           color: formCreateGroup.pickerColor ==
+          //                   const Color.fromARGB(0, 255, 255, 255)
+          //               ? const Color.fromARGB(100, 0, 0, 0)
+          //               : formCreateGroup.pickerColor,
+          //         ),
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(10), // border radius
+          //         ),
+          //       ),
+          //       buttonName: "Seleccionar Color",
+          //       onPressed: () => showColorDialog(),
+          //     ),
+            
+          //   ],
+          // ),
+          // const SizedBox(height: 15),
           Row(
             children: [
               Container(

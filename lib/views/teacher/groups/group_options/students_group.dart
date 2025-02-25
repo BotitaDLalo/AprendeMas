@@ -1,5 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
+import 'package:aprende_mas/providers/groups/students_group_provider.dart';
+import 'package:aprende_mas/views/teacher/groups_subjects/students_groups_subjects.dart';
 
 class StudentsGroup extends ConsumerStatefulWidget {
   final int id;
@@ -12,14 +14,18 @@ class StudentsGroup extends ConsumerStatefulWidget {
 class _StudentsGroupState extends ConsumerState<StudentsGroup> {
   @override
   Widget build(BuildContext context) {
-    final lsStudents = ref.watch(groupsProvider).lsStudentsGroup;
+    final lsStudents = ref.watch(studentsGroupProvider).lsStudentsGroup;
 
-    void showStudentOptions() {
+    void showStudentOptions(
+        {required String username,
+        required String name,
+        required String lastName,
+        required lastName2}) {
       showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(16), // Bordes redondeados
+            top: Radius.circular(16),
           ),
         ),
         builder: (context) {
@@ -30,10 +36,41 @@ class _StudentsGroupState extends ConsumerState<StudentsGroup> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ListTile(
-                  leading: const Icon(Icons.delete),
-                  title: const Text('Eliminar notificación'),
+                  leading: const Icon(Icons.person_remove_alt_1),
+                  title: const Text('Eliminar alumno'),
                   onTap: () {
-                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text(
+                          '¿Deseas eliminar el alumno?',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 20),
+                        ),
+                        content: ListTile(
+                          leading: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.person),
+                            iconSize: 30,
+                          ),
+                          title: Text(username),
+                          subtitle: Text("$name $lastName $lastName2"),
+                        ),
+                        contentPadding: const EdgeInsets.all(10),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancelar')),
+                          TextButton(
+                              onPressed: () {
+                                //TODO: Eliminar el alumno de la materia
+                              },
+                              child: const Text('Eliminar'))
+                        ],
+                      ),
+                    );
                   },
                 ),
               ],
@@ -43,49 +80,9 @@ class _StudentsGroupState extends ConsumerState<StudentsGroup> {
       );
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            width: 350,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  width: 360,
-                  child: ListView.builder(
-                    itemCount: lsStudents.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onLongPress: () {
-                          showStudentOptions();
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.grey.shade200,
-                          ),
-                          child: ListTile(
-                            leading: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.person),
-                              iconSize: 30,
-                            ),
-                            title: Text(lsStudents[index].username),
-                            subtitle: Text(
-                                "${lsStudents[index].name} ${lsStudents[index].lastName} ${lsStudents[index].lastName2}"),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+    return StudentsGroupsSubjects(
+      lsStudents: lsStudents,
+      studentOptionsFunction: showStudentOptions,
     );
   }
 }

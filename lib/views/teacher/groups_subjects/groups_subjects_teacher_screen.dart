@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/views/widgets/buttons/floating_action_button_custom.dart';
 
 class GroupsSubjectsTeacherScreen extends ConsumerStatefulWidget {
   const GroupsSubjectsTeacherScreen({super.key});
@@ -29,52 +30,50 @@ class _GroupsSubjectsTeacherScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(16), // Bordes redondeados
-                ),
-              ),
-              builder: (BuildContext context) {
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.group_add),
-                        title: const Text('Crear Grupo'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/create-group');
-                        },
-                      ),
-                      ListTile(
-                        leading: const Icon(Icons.create),
-                        title: const Text('Crear Materia'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          context.push('/create-subject');
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-          backgroundColor: Colors.white,
-          shape: AppTheme.shapeFloatingActionButton(),
-          child: Icon(
-            Icons.add,
-            color: Colors.grey.withOpacity(0.8),
+    void modalBottom() {
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16), // Bordes redondeados
           ),
         ),
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.group_add),
+                  title: const Text('Crear Grupo'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/create-group');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.create),
+                  title: const Text('Crear Materia'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.push('/create-subject');
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    return Scaffold(
+        floatingActionButton: FloatingActionButtonCustom(
+            voidCallback: () {
+              modalBottom();
+            },
+            icon: Icons.add),
         body: Column(
           children: [
             TabBar(

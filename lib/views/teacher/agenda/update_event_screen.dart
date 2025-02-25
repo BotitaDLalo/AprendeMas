@@ -10,8 +10,8 @@ class UpdateEventScreen extends StatelessWidget {
   final String color;
   final DateTime startDate;
   final DateTime endDate;
-  final List<String> groupIds;
-  final List<String> subjectIds;
+  final List<int> groupIds;
+  final List<int> subjectIds;
 
   const UpdateEventScreen({super.key, required this.eventId, required this.teacherId, required this.title, required this.description, required this.color, required this.startDate, required this.endDate, required this.groupIds, required this.subjectIds,});
 
@@ -41,7 +41,7 @@ class UpdateEventScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: FormUpdateEvents(
+                child: FormUpdateEvent(
                   eventId, teacherId, title, description, color,startDate, endDate, groupIds, subjectIds ),
               ),
             ],

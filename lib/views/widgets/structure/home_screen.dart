@@ -4,7 +4,7 @@ import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
-import 'package:aprende_mas/providers/notices/notices_provider.dart';
+import 'package:aprende_mas/providers/notifications/notifications_provider.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final List<WidgetOptions> lsWidgetsOptions;
@@ -65,7 +65,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   } else if (auth.authStatus == AuthStatus.authenticated) {
                     ref.watch(authProvider.notifier).logout();
                   }
-                  ref.read(noticesProvider.notifier).clearNotifications();
+                  ref.read(notificationsProvider.notifier).clearNotifications();
                   ref.read(activityProvider.notifier).clearActivityState();
                   ref.read(groupsProvider.notifier).clearGroupsState();
                 },

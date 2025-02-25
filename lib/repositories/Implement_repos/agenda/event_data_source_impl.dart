@@ -63,30 +63,19 @@ class EventDataSourceImpl implements EventDataSource {
   }
 
     @override
-  Future<List<Event>> updateEvent(
-    String title, 
-    String description,
-    Color color, 
-    DateTime startDate, 
-    DateTime endDate, 
-    {List<int>? groupIds, 
-    List<int>? subjectIds}) async {
+  Future<List<Event>> updateEvent(Map<String, dynamic> eventLike) async {
       try {
-        final teacherId = await storageService.getId();
-        const uri = "/EventosAgenda/ActualizarEvento";
-        final String hexColor = color.value.toRadixString(16).substring(2).toUpperCase();
-        // final String hexColor1 = color.;
+        final int eventId = eventLike['id'];
+        final uri = "/EventosAgenda/ActualizarEvento/$eventId";
+        final String method = (eventId == null) ? 'POST': 'PATCH';
 
-        final response = await dio.put(uri, data: {
-          "DocenteId": teacherId,
-          "FechaInicio": startDate.toIso8601String(),
-          "FechaFinal": endDate.toIso8601String(),
-          "Titulo": title,
-          "Descripcion": description,
-          "Color": hexColor,
-          "EventosGrupos": groupIds?.map((id) => {"GrupoId": id}).toList(),
-          "EventosMaterias": subjectIds?.map((id) => {"MateriaId": id}).toList(),
-        });
+        final response = await dio.request(
+          uri, 
+          data: eventLike,
+          options: Options(
+            method: method
+          )
+          );
 
         final updatedEvent = EventMapper.fromMapList(response.data);
         return updatedEvent;
@@ -117,29 +106,4 @@ class EventDataSourceImpl implements EventDataSource {
   }
   
 }
-
-
-
-// @override
-// Future<void> deleteEvent(int teacherId, int eventId) async {
-//   try {
-//     // Construimos la URI con el ID del evento en la ruta
-//     final uri = "/EventosAgenda/EliminarEvento/$eventId";
-
-//     // Obtenemos el ID del docente almacenado para mayor seguridad
-//     final storedTeacherId = await storageService.getId();
-
-//     final response = await dio.delete(uri, queryParameters: {
-//       'docenteId': storedTeacherId, // Se usa el ID almacenado del docente
-//     });
-
-//     if (response.statusCode == 200) {
-//       debugPrint("Evento $eventId eliminado correctamente.");
-//     } else {
-//       throw Exception("Error al eliminar el evento: ${response.data}");
-//     }
-//   } catch (e) {
-//     throw Exception("Error en deleteEvent: $e");
-//   }
-// }
 

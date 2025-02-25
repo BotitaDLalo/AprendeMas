@@ -29,7 +29,8 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
     );
   }
 
-  onFormSubmit() async {
+  
+   onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);

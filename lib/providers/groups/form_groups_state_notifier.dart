@@ -9,7 +9,7 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   // final Function(String, String, Color) createGroupCallback;
   final Function(String, String, Color, List<SubjectsRow>)
       createGroupSubjectsCallback;
-  final Function(int, String, String, Color) updateGroupCallback;
+  final Function(int, String, String) updateGroupCallback;
   final Function(String) verifyEmailCallback;
   final Function(int) addStudentsGroupCallback;
 
@@ -153,49 +153,50 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
         isValid: Formz.validate([state.description]));
   }
 
-  onUpdateGroupColorChanged(Color color) {
-    final newGroupColor = ColorInput.dirty(color);
-    state = state.copyWith(
-        pickerColor: color,
-        colorCode: newGroupColor,
-        isValid: Formz.validate([state.colorCode]));
-  }
+  // onUpdateGroupColorChanged(Color color) {
+  //   final newGroupColor = ColorInput.dirty(color);
+  //   state = state.copyWith(
+  //       pickerColor: color,
+  //       colorCode: newGroupColor,
+  //       isValid: Formz.validate([state.colorCode]));
+  // }
 
   onUpdateGroupSubmit(int groupId, String groupName, String description,
-      String colorCode) async {
+      ) async {
     onGroupId(groupId);
-    _updateGroupTouchEveryField(groupId, groupName, description, colorCode);
+    _updateGroupTouchEveryField(groupId, groupName, description);
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
     bool res = await updateGroupCallback(state.groupId, state.groupName.value,
-        state.description.value, state.colorCode.value);
+        state.description.value);
     state = state.copyWith(isFormPosted: res);
     state = state.copyWith(isPosting: false);
   }
 
   _updateGroupTouchEveryField(
-      int groupId, String groupName, String description, String colorCode) {
+      int groupId, String groupName, String description) {
     final groupNameInput = GenericInput.dirty(
         state.groupName.value == "" ? groupName : state.groupName.value);
     final groupDescriptionInput = GenericInput.dirty(
         state.description.value == "" ? description : state.description.value);
 
-    final colorCodeStr = state.pickerColor;
-    final String hexColor = colorCodeStr.value.toRadixString(16).toUpperCase();
+    // final colorCodeStr = state.pickerColor;
+    // final String hexColor = colorCodeStr.value.toRadixString(16).toUpperCase();
 
-    final colorGroup = hexColor == "FFFFFF"
-        ? AppTheme.stringToColor(colorCode)
-        : state.pickerColor;
+    // final colorGroup = hexColor == "FFFFFF"
+    //     ? AppTheme.stringToColor(colorCode)
+    //     : state.pickerColor;
 
-    final groupColorInput = ColorInput.dirty(colorGroup);
+    // final groupColorInput = ColorInput.dirty(colorGroup);
 
     state = state.copyWith(
         groupName: groupNameInput,
         description: groupDescriptionInput,
-        colorCode: groupColorInput,
+        // colorCode: groupColorInput,
         isValid: Formz.validate([groupNameInput]) ||
-            Formz.validate([groupDescriptionInput]) ||
-            Formz.validate([groupColorInput]));
+            Formz.validate([groupDescriptionInput]) 
+            // ||Formz.validate([groupColorInput])
+            );
   }
 
   //# Verificar email

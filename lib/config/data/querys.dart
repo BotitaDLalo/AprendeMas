@@ -29,7 +29,9 @@ class Querys {
                         TipoActividadId INTEGER,
                         FechaCreacion TEXT, 
                         FechaLimite TEXT,
-                        MateriaId INTEGER);
+                        MateriaId INTEGER,
+                        Puntaje INTEGER
+                        );
                                    
         """,
         """

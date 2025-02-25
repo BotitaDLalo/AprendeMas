@@ -5,24 +5,24 @@ import 'custom_container_style.dart';
 class ContainerNameGroupSubjects extends StatelessWidget {
   final String name;
   final String? accessCode;
-  final String? colorCode;
+  final Color color;
   const ContainerNameGroupSubjects(
-      {super.key, required this.name, this.accessCode, this.colorCode});
+      {super.key, required this.name, this.accessCode, required this.color});
 
   @override
   Widget build(BuildContext context) {
-    Color color(String colorCode) {
-      if (colorCode == "") {
-        return AppTheme.cardHeader;
-      } else {
-        return AppTheme.stringToColor(colorCode);
-      }
-    }
+    // Color color(String colorCode) {
+    //   if (colorCode == "") {
+    //     return AppTheme.cardHeader;
+    //   } else {
+    //     return AppTheme.stringToColor(colorCode);
+    //   }
+    // }
 
     return CustomContainerStyle(
       height: 90,
       width: double.infinity,
-      color: color(colorCode ?? ""),
+      color: color,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -30,12 +30,17 @@ class ContainerNameGroupSubjects extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis
+                        ),
+                  ),
                 ),
                 accessCode != null
                     ? Row(
