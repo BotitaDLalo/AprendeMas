@@ -47,7 +47,7 @@ class NoticeModel {
               title: e['titulo'],
               description: e['descripcion'],
               teacherFullName:
-                  "${e['apePaternoDocente'].toString()} ${e['apeMaternoDocente'].toString()} ${e['NombresDocente'].toString()}",
+                  "${e['apePaternoDocente'].toString()} ${e['apeMaternoDocente'].toString()} ${e['nombresDocente'].toString()}",
               createdDate: formatDate(e['fechaCreacion'].toString()),
               groupId: e['grupoId'],
               subjectId: e['materiaId'],
