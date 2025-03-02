@@ -61,6 +61,7 @@ class _NoticeOptionsScreenState
                       (e) => Column(
                         children: [
                           NoticeBody(
+                              optionsIsVisible: true,
                               noticeId: e.noticeId ?? 0,
                               teacherName: e.teacherFullName ?? "",
                               createdDate: e.createdDate.toString(),
