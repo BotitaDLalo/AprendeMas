@@ -1,8 +1,5 @@
-import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/activities_body/custom_container_style.dart';
 import 'package:flutter/material.dart';
-import '../../custom_divider.dart';
-import 'container_input.dart';
 import 'data_body.dart';
 import 'notice_description.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
@@ -13,8 +10,10 @@ class NoticeBody extends StatelessWidget {
   final String createdDate;
   final String title;
   final String content;
+  final bool optionsIsVisible;
   const NoticeBody(
       {super.key,
+      required this.optionsIsVisible,
       required this.noticeId,
       required this.teacherName,
       required this.createdDate,
@@ -36,6 +35,7 @@ class NoticeBody extends StatelessWidget {
               noticeId: noticeId,
               createdDate: createdDate,
               teacherName: teacherName,
+              optionsIsVisible: optionsIsVisible,
             ),
             NoticeDescription(
               title: title,
