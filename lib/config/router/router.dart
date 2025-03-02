@@ -2,6 +2,8 @@ import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/teacher/notices/teacher_create_notice.dart';
+import 'package:aprende_mas/views/users/authentication/confirmation_code_screen.dart';
+import 'package:aprende_mas/views/users/authentication/verify_email_signin_screen.dart';
 import 'router_redirections.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
@@ -18,13 +20,16 @@ final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    // initialLocation: '/create-event',
     refreshListenable: routerNotifier,
     routes: [
-      // GoRoute(
-      //   path: '/loading',
-      //   builder: (context, state) => const LoadingScreen(),
-      // ),
+      GoRoute(
+        path: '/confirmation-code-screen',
+        builder: (context, state) => const ConfirmationCodeScreen(),
+      ),
+      GoRoute(
+        path: '/verify-email-signin-screen',
+        builder: (context, state) => const VerifyEmailSigninScreen(),
+      ),
       GoRoute(
         path: '/login-user',
         builder: (context, state) => const LoginUserScreen(),
@@ -34,7 +39,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const MissingDataScreen(),
       ),
       GoRoute(
-        path: '/sigin-user',
+        path: '/signin-user',
         builder: (context, state) => const SinginUserScreen(),
       ),
       GoRoute(
@@ -89,16 +94,6 @@ final goRouterProvider = Provider((ref) {
         },
       ),
       GoRoute(
-        path: '/activities-options',
-        builder: (context, state) {
-          final subjectData = state.extra as Subject;
-          return ActivityOptionScreen(
-            subjectId: subjectData.materiaId,
-            subjectName: subjectData.nombreMateria,
-          );
-        },
-      ),
-      GoRoute(
         path: '/create-activities',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
@@ -114,6 +109,7 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final subjectData = state.extra as Subject;
           return StudentSubjectOptionsScreen(
+            groupId: subjectData.groupId,
             subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
@@ -132,7 +128,6 @@ final goRouterProvider = Provider((ref) {
           );
         },
       ),
-
       GoRoute(
         path: '/student-activity-section-submissions',
         builder: (context, state) {
@@ -141,7 +136,6 @@ final goRouterProvider = Provider((ref) {
           return ActivitySectionSubmissions(activity: activity);
         },
       ),
-
       GoRoute(
         path: '/teacher-activities-students-options',
         builder: (context, state) {
@@ -160,7 +154,6 @@ final goRouterProvider = Provider((ref) {
           );
         },
       ),
-
       GoRoute(
         path: '/teacher-create-notice',
         builder: (context, state) {

@@ -4,7 +4,7 @@ import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class RouterNotifier extends ChangeNotifier {
   final AuthStateNotifier _authStateNotifier;
-  
+
   AuthStatus _authStatus = AuthStatus.checking;
   AuthGoogleStatus _authGoogleStatus = AuthGoogleStatus.checking;
 
@@ -23,9 +23,8 @@ class RouterNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  set authGoogleStatus(AuthGoogleStatus value){
-    _authGoogleStatus=value;
+  set authGoogleStatus(AuthGoogleStatus value) {
+    _authGoogleStatus = value;
     notifyListeners();
   }
-
 }
