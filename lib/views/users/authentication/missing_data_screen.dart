@@ -12,18 +12,11 @@ class MissingDataScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
         ),
-        body: Center(
+        body: const Center(
           child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
+            physics: ClampingScrollPhysics(),
             child: Column(
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset('assets/logo.png', width: 150),
-                const SizedBox(
-                  height: 40,
-                ),
-                const FormMissingData()
-              ],
+              children: [FormMissingData()],
             ),
           ),
         ),

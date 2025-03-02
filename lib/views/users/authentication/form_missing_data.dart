@@ -1,6 +1,6 @@
 import 'package:aprende_mas/config/utils/utils.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
+import 'package:aprende_mas/providers/authentication/signin_form_provider.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_text_form_field.dart';
 import 'package:aprende_mas/views/widgets/inputs/role_dropdown.dart';
