@@ -21,22 +21,30 @@ class AuthDataSourceImpl implements AuthDataSource {
       if (e.response?.statusCode == 400 &&
           e.response?.data['errorCode'] == 1001) {
         final message = e.response?.data['errorMessage'];
-        throw WrongCredentials(message: message);
+        throw WrongCredentials(errorMessage: message);
       }
       if (e.type == DioExceptionType.connectionTimeout)
         throw ConnectionTimeout();
-      throw CustomError(message: 'Ocurrio un error desconocido.', errorCode: 1);
+      throw UncontrolledError();
     } catch (e) {
       debugPrint(e.toString());
-      throw CustomError(message: 'Ocurrio un error desconocido.', errorCode: 1);
+      throw UncontrolledError();
     }
   }
 
   @override
-  Future<User> signin(String name, String lastname, String secondLastname,
-      String email, String password, String role, String fcmToken) async {
-    const uri = "/Login/RegistroUsuario";
+  Future<User> signin(
+      {required String name,
+      required String lastname,
+      required String secondLastname,
+      required String password,
+      required String role,
+      required String fcmToken}) async {
     try {
+      const uri = "/Login/RegistroUsuario";
+
+      final email = await storageService.getEmail();
+
       final res = await dio.post(uri, data: {
         'NombreUsuario': name,
         'ApellidoPaterno': lastname,
@@ -51,11 +59,16 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       return user;
     } on DioException catch (e) {
+      if (e.response?.statusCode == 400 &&
+          e.response?.data['errorCode'] == 1006) {
+        final message = e.response?.data['errorMessage'];
+        throw UserAlreadyExists(errorMessage: message);
+      }
       if (e.type == DioExceptionType.connectionTimeout)
         throw ConnectionTimeout();
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
-    } catch (e) {
-      return User.userVoid();
+      throw UncontrolledError();
+    } on UncontrolledError {
+      throw UncontrolledError();
     }
   }
 
@@ -70,11 +83,14 @@ class AuthDataSourceImpl implements AuthDataSource {
       return user;
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-        throw CustomError(message: 'Token incorrecto', errorCode: 1);
+          throw UncontrolledError();
+
       }
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      throw UncontrolledError();
+    
     } catch (e) {
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      throw UncontrolledError();
+    
     }
   }
 
@@ -92,10 +108,10 @@ class AuthDataSourceImpl implements AuthDataSource {
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout)
         throw ConnectionTimeout();
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      throw UncontrolledError();
     } catch (e) {
       print(e);
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      throw UncontrolledError();
     }
   }
 
@@ -114,10 +130,10 @@ class AuthDataSourceImpl implements AuthDataSource {
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout)
         throw ConnectionTimeout();
-      throw CustomError(message: 'Ocurrio un error', errorCode: 1);
+      throw UncontrolledError();
     } catch (e) {
       // throw CustomError(message: 'Ocurrio un error', errorCode: 1);
-      print(e);
+      debugPrint(e.toString());
       throw Exception(e);
     }
   }
@@ -164,4 +180,61 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  @override
+  Future<AuthUser> registerAuthorizationCodeUser(String code) async {
+    try {
+      const uri = "/Login/ValidarCodigoDocente";
+
+      final email = await storageService.getEmail();
+
+      final res = await dio
+          .post(uri, queryParameters: {'email': email, 'codigoValidar': code});
+
+      final user = AuthUserMapper.userJsonToEntity(res.data);
+
+      return user;
+    } on DioException catch (e) {
+      if (e.response?.data['errorCode'] == 1004) {
+        throw InvalidAuthorizationCode();
+      }
+      if (e.response?.data['errorCode'] == 1005) {
+        throw ExpiredAuthorizationCode();
+      }
+      if (e.type == DioExceptionType.connectionTimeout)
+        throw ConnectionTimeout();
+      throw UncontrolledError();
+    } catch (e) {
+      debugPrint(e.toString());
+      throw UncontrolledError();
+    }
+  }
+
+  @override
+  Future<bool> verifyEmailSignin(String email) async {
+    try {
+      const uri = "/Login/VerificarEmailUsuario";
+
+      final res = await dio.post(uri, queryParameters: {'email': email});
+
+      if (res.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400 &&
+          e.response?.data['errorCode'] == 1002) {
+        final errorMessage = e.response?.data['errorMessage'];
+        final errorComment = e.response?.data['errorComment'];
+        throw InvalidEmailSignin(
+            errorMessage: errorMessage, errorComment: errorComment);
+      }
+      if (e.type == DioExceptionType.connectionTimeout)
+        throw ConnectionTimeout();
+      debugPrint(e.toString());
+      throw UncontrolledError();
+    } catch (e) {
+      debugPrint(e.toString());
+      throw UncontrolledError();
+    }
+  }
 }
