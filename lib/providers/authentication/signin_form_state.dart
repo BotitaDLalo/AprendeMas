@@ -1,8 +1,9 @@
 import 'package:aprende_mas/views/views.dart';
 
-class SiginFormState {
+class SigninFormState {
   final bool isPosting;
   final bool isFormPosted;
+  final bool isFormNotPosted;
   final bool isValid;
   final GenericInput name;
   final GenericInput lastName;
@@ -11,9 +12,10 @@ class SiginFormState {
   final Password password;
   final Role role;
 
-  SiginFormState(
+  SigninFormState(
       {this.isPosting = false,
       this.isFormPosted = false,
+      this.isFormNotPosted = false,
       this.isValid = false,
       this.name = const GenericInput.pure(),
       this.lastName = const GenericInput.pure(),
@@ -22,9 +24,10 @@ class SiginFormState {
       this.password = const Password.pure(),
       this.role = const Role.pure()});
 
-  SiginFormState copyWith({
+  SigninFormState copyWith({
     bool? isPosting,
     bool? isFormPosted,
+    bool? isFormNotPosted,
     bool? isValid,
     GenericInput? name,
     GenericInput? lastName,
@@ -33,9 +36,10 @@ class SiginFormState {
     Password? password,
     Role? role,
   }) =>
-      SiginFormState(
+      SigninFormState(
         isPosting: isPosting ?? this.isPosting,
         isFormPosted: isFormPosted ?? this.isFormPosted,
+        isFormNotPosted: isFormNotPosted ?? this.isFormPosted,
         isValid: isValid ?? this.isValid,
         name: name ?? this.name,
         lastName: lastName ?? this.lastName,

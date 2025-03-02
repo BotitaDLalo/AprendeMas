@@ -17,7 +17,7 @@ import 'package:aprende_mas/config/utils/utils.dart';
 class AuthStateNotifier extends StateNotifier<AuthState> {
   final cn = CatalogNames();
   final AuthRepository authRepository;
-  final KeyValueStorageService kv;
+  final KeyValueStorageService storageService;
   final GoogleSigninApi googleSigninApi;
   final AuthUserOfflineRepositoryImpl authUserOffline;
   final Function() getGroupsSubjectsCallback;
@@ -40,7 +40,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   AuthStateNotifier(
       {required this.authUserOffline,
       required this.authRepository,
-      required this.kv,
+      required this.storageService,
       required this.googleSigninApi,
       required this.setGroupsSubjectsState,
       required this.setSubjectsWithoutGroupState,
@@ -66,7 +66,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkInternet() async {
     final checkInternet = await ConnectivityCheck.checkInternetConnectivity();
     if (checkInternet) {
-      final authType = await kv.getAuthType();
+      final authType = await storageService.getAuthType();
       final authTypeEnum = AuthenticatedType.values.firstWhere(
         (element) => element.toString() == authType,
         orElse: () => AuthenticatedType.undefined,
@@ -88,29 +88,53 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       const caller = "loginUser";
       final user = await authRepository.login(email, password);
 
-      int id = user.userId;
-      String role = user.role;
-      await verifyExistingFcmToken(id, role);
-      _setLoggedUser(caller, user);
+      if (user.estaAutorizado == TeachersAuthorizationStatus.pending.value) {
+        state = state.copyWith(isPendingAuthorizationUser: true);
+      } else if (user.estaAutorizado ==
+          TeachersAuthorizationStatus.denied.value) {
+        //TODO: VISTA PARA NOTIFICAR QUE FUE DENEGADO
+      } else if (user.estaAutorizado ==
+          TeachersAuthorizationStatus.authorized.value) {
+        int id = user.userId;
+        String role = user.role;
+        final isFcmTokenValid = await verifyExistingFcmToken(id, role);
+        if (isFcmTokenValid) {
+          _setLoggedUser(caller, user);
+        } else {
+          throw FcmTokenVerificatioFailed();
+        }
+      }
     } on WrongCredentials catch (e) {
-      badResponseLogin(e.message);
+      badResponseLogin(e.errorMessage);
     } on FcmTokenVerificatioFailed catch (e) {
       badResponseLogin(e.message);
-    } on ConnectionTimeout {
-      badResponseLogin('Se agotó el tiempo.');
-    } catch (e) {
-      badResponseLogin('Error no controlado');
+    } on ConnectionTimeout catch (e) {
+      badResponseLogin(e.message);
+    } on UncontrolledError catch (e) {
+      badResponseLogin(e.message);
     }
   }
 
-  Future<bool> signinUser(String names, String lastName, String secondLastName,
-      String email, String password, String role) async {
+  Future<bool> signinUser(
+      {required String names,
+      required String lastName,
+      required String secondLastName,
+      required String password,
+      required String role}) async {
     try {
       final fcmToken = await FirebaseCM.getFcmToken();
 
       if (fcmToken != null) {
+        // final user = await authRepository.signin(
+        //     names, lastName, secondLastName, password, role, fcmToken);
+
         final user = await authRepository.signin(
-            names, lastName, secondLastName, email, password, role, fcmToken);
+            name: names,
+            lastname: lastName,
+            secondLastname: secondLastName,
+            password: password,
+            role: role,
+            fcmToken: fcmToken);
 
         if (user.email != "" && user.nombre != "" && user.rol != "") {
           _setRegisterUser(user);
@@ -119,6 +143,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         return false;
       }
 
+      return false;
+    } on UserAlreadyExists catch (e) {
+      badReponseSnackBar(e.errorMessage);
       return false;
     } on ConnectionTimeout {
       logoutGoogle('Timeout');
@@ -145,7 +172,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthStatus() async {
     try {
       const caller = "checkAuthStatus";
-      final token = await kv.getToken();
+      final token = await storageService.getToken();
       if (token == "") return logout();
       final user = await authRepository.checkAuthStatus(token);
 
@@ -161,15 +188,25 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> badResponseLogin([String? errorMessage]) async {
+  void badResponseLogin([String? errorMessage]) {
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
         user: null,
-        errorMessage: errorMessage);
+        errorMessage: errorMessage,
+        errorHandlingStyle: ErrorHandlingStyle.snackBar);
   }
 
-  Future<void> badResponseCheckAuthStatus([String? errorMessage]) async {
-    await logout();
+  void badReponseSnackBar([String? errorMessage]) {
+    state = state.copyWith(
+        errorMessage: errorMessage,
+        errorHandlingStyle: ErrorHandlingStyle.snackBar);
+  }
+
+  void badResponseDialog([String? errorMessage, String? errorComment]) {
+    state = state.copyWith(
+        errorMessage: errorMessage,
+        errorComment: errorComment,
+        errorHandlingStyle: ErrorHandlingStyle.dialog);
   }
 
   Future<bool> verifyExistingFcmToken(int id, String role) async {
@@ -182,7 +219,46 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     return false;
   }
 
-  // bool verified = await verifyExistingFcmToken();
+  Future<bool> verifyEmailSignin(String email) async {
+    try {
+      bool res = await authRepository.verifyEmailSignin(email);
+      return res;
+    } on InvalidEmailSignin catch (e) {
+      badResponseDialog(e.errorMessage, e.errorComment);
+    } on ConnectionTimeout catch (e) {
+      badReponseSnackBar(e.message);
+    } on UncontrolledError catch (e) {
+      badReponseSnackBar(e.message);
+    }
+    return false;
+  }
+
+  Future<void> verifyConfirmationCode(String code) async {
+    try {
+      const caller = "verifyConfirmationCode";
+      final user = await authRepository.registerAuthorizationCodeUser(code);
+      int id = user.userId;
+      String role = user.role;
+      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
+        final isFcmTokenValid = await verifyExistingFcmToken(id, role);
+        if (isFcmTokenValid) {
+          _setLoggedUser(caller, user);
+        } else {
+          throw FcmTokenVerificatioFailed();
+        }
+      }
+    } on InvalidAuthorizationCode catch (e) {
+      badReponseSnackBar(e.errorMessage);
+    } on ExpiredAuthorizationCode catch (e) {
+      badReponseSnackBar(e.errorMessage);
+    } on FcmTokenVerificatioFailed catch (e) {
+      badReponseSnackBar(e.message);
+    } on ConnectionTimeout catch (e) {
+      badReponseSnackBar(e.message);
+    } on UncontrolledError catch (e) {
+      badReponseSnackBar(e.message);
+    }
+  }
 
   void _setLoggedUser(String caller, AuthUser user) async {
     const limit = 7;
@@ -193,18 +269,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     // final tokenFCM = await FirebaseCM.getFcmToken();
 
     await _saveUserDataKeyValue(
-        cn.getKeyTokenName,
-        user.token,
-        cn.getKeyIdName,
-        user.userId,
-        cn.getKeyRoleName,
-        user.role,
-        cn.getKeyUserName,
-        user.userName,
-        cn.getKeyAuthTypeName,
-        authType);
+        user.token, user.userId, user.role, user.userName, authType);
 
-    if (caller == "loginUser") {
+    if (caller == "loginUser" || caller == "verifyConfirmationCode") {
       ActiveUser activeUser = ActiveUser(
           userId: user.userId,
           userName: user.userName,
@@ -378,14 +445,22 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> logout([String? errorMessage]) async {
-    await kv.removeKeyValue(cn.getKeyTokenName, cn.getKeyIdName,
-        cn.getKeyRoleName, cn.getKeyUserName);
-    await authUserOffline.deleteUser();
+  void logout([String? errorMessage]) {
+    deleteUserData();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
         user: null,
         errorMessage: errorMessage);
+  }
+
+  void deleteUserData() async {
+    await authUserOffline.deleteUser();
+    await storageService.removeAuthType();
+    await storageService.removeEmail();
+    await storageService.getId();
+    await storageService.getRole();
+    await storageService.getToken();
+    await storageService.getUserName();
   }
 
   //# LOGIN USER OFFLINE
@@ -499,7 +574,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void checkAuthGoogleStatus() async {
     try {
       // final currentUser = await googleSigninApi.verifyExistingUser();
-      final token = await kv.getToken();
+      final token = await storageService.getToken();
       if (token == "") return logoutGoogle();
       final user = await googleSigninApi.checkSignInStatus(token);
       _setLoggedGoogleUser(user);
@@ -511,16 +586,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void _setLoggedGoogleUser(AuthUser user) async {
     const authType = AuthenticatedType.authGoogle;
     await _saveUserDataKeyValue(
-        cn.getKeyTokenName,
-        user.token,
-        cn.getKeyIdName,
-        user.userId,
-        cn.getKeyRoleName,
-        user.role,
-        cn.getKeyUserName,
-        user.userName,
-        cn.getKeyAuthTypeName,
-        authType);
+        user.token, user.userId, user.role, user.userName, authType);
 
     List<Group> lsGroups = await groups.getGroupsSubjects();
 
@@ -560,15 +626,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void _setMissingDataGoogleUserConfirmed(String token) async {
-    await kv.setKeyValue(cn.getKeyTokenName, token);
+    await storageService.saveToken(token);
     state = state.copyWith(theresMissingData: true);
   }
 
   Future<void> logoutGoogle([String? errorMessage]) async {
     try {
       await googleSigninApi.handlerGoogleLogout();
-      await kv.removeKeyValue(cn.getKeyTokenName, cn.getKeyIdName,
-          cn.getKeyRoleName, cn.getKeyUserName);
+      await storageService.removeToken();
+      await storageService.removeId();
+      await storageService.removeRole();
+      await storageService.removeUserName();
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           user: null,
@@ -579,21 +647,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
 //# KEY VALUE STORAGE
-  _saveUserDataKeyValue<T>(
-      String keyToken,
-      T valueToken,
-      String keyId,
-      T valueId,
-      String keyRole,
-      T valueRole,
-      String keyUserName,
-      T valueUserName,
-      String keyAuthType,
-      T valueAuthType) async {
-    await kv.setKeyValue(keyToken, valueToken);
-    await kv.setKeyValue(keyId, valueId);
-    await kv.setKeyValue(keyRole, valueRole);
-    await kv.setKeyValue(keyUserName, valueUserName);
-    await kv.setKeyValue(keyAuthType, valueAuthType);
+  _saveUserDataKeyValue<T>(T valueToken, T valueId, T valueRole,
+      T valueUserName, T valueAuthType) async {
+    await storageService.saveToken(valueToken);
+    await storageService.saveId(valueId);
+    await storageService.saveRole(valueRole);
+    await storageService.saveUserName(valueUserName);
+    await storageService.saveAuthType(valueAuthType);
   }
 }
