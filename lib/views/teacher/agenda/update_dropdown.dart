@@ -1,9 +1,12 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
+import 'package:aprende_mas/providers/agenda/form_update_event_provider.dart';
 import 'package:aprende_mas/providers/groups/groups_provider.dart';
 import 'package:aprende_mas/providers/subjects/subjects_provider.dart';
 
 class UpdateDropdownForm extends ConsumerStatefulWidget {
+  final Event event;
   final int? initialItemId;
   final bool isGroup;
 
@@ -11,6 +14,7 @@ class UpdateDropdownForm extends ConsumerStatefulWidget {
     super.key,
     required this.isGroup,
     this.initialItemId,
+    required this.event,
   });
 
   @override
@@ -22,24 +26,26 @@ class _OptionDropdownFormState extends ConsumerState<UpdateDropdownForm> {
   late bool _isGroup;
 
   @override
-  void initState() {
-    super.initState();
-    _isGroup = widget.isGroup;
-    
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
+void initState() {
+  super.initState();
+  _isGroup = widget.isGroup;
+  _selectedItemId = widget.initialItemId; // Asignamos el valor inicial directamente
+  
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (!mounted) return;
 
-      final groupsNotifier = ref.read(groupsProvider.notifier);
-      final subjectsNotifier = ref.read(subjectsProvider.notifier);
+    final groupsNotifier = ref.read(groupsProvider.notifier);
+    final subjectsNotifier = ref.read(subjectsProvider.notifier);
 
-      if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
-        groupsNotifier.getGroupsSubjects();
-      }
-      if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
-        subjectsNotifier.getSubjects();
-      }
-    });
-  }
+    if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
+      groupsNotifier.getGroupsSubjects();
+    }
+    if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
+      subjectsNotifier.getSubjects();
+    }
+  });
+}
+
 
   void _onItemSelected(int? value) {
     if (value == null || !mounted) return;
@@ -48,16 +54,17 @@ class _OptionDropdownFormState extends ConsumerState<UpdateDropdownForm> {
       _selectedItemId = value;
     });
 
-    final formEventNotifier = ref.read(formEventProvider.notifier);
+    final formEventNotifier = ref.read(formUpdateEventProvider(widget.event).notifier);
     if (!mounted) return;
 
-    // if (_isGroup) {
-    //   formEventNotifier.onUpdateGroupIdsChanged([value]);
-    //   formEventNotifier.onUpdateGroupColorChanged(Colors.blue);
-    // } else {
-    //   formEventNotifier.onUpdateSubjectIdsChanged([value]);
-    //   formEventNotifier.onUpdateGroupColorChanged(Colors.green);
-    // }
+    if (_isGroup) {
+      formEventNotifier.onUpdateGroupIdsChanged([value]);
+      formEventNotifier.onUpdateGroupColorChanged(const Color(0xFF2196F3));
+       print("Asignando color azul para grupo");
+    } else {
+      formEventNotifier.onUpdateSubjectIdsChanged([value]);
+      formEventNotifier.onUpdateGroupColorChanged(Colors.green);
+    }
   }
 
   void _onTypeChanged(String? newValue) {

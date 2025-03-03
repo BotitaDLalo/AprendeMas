@@ -7,7 +7,7 @@ import 'package:aprende_mas/providers/agenda/form_update_event_notifier.dart';
 final formUpdateEventProvider = 
   StateNotifierProvider.autoDispose.family<FormUpdateEventNotifier, FormEventState, Event>(
     (ref, event) {
-      final updateEvent = ref.read(eventProvider.notifier).updateEvents;
+      final updateEvent = ref.watch(eventProvider.notifier).updateEvents;
 
       return FormUpdateEventNotifier(updateEventCallback: updateEvent, event: event);
     }

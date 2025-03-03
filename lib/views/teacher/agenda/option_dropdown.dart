@@ -57,12 +57,12 @@ class _OptionDropdownFormState extends ConsumerState<OptionDropdownForm> {
     formEventNotifier.onGroupIdsChanged([value]);
 
     // Asignar color por defecto al seleccionar un grupo
-    formEventNotifier.onColorCodeChanged(const Color(0xFF2196F3));
+    formEventNotifier.onColorCodeChanged(Colors.blue);
   } else if (_selectedType == 'Materia') {
     formEventNotifier.onSubjectIdsChanged([value]);
 
     // Asignar color por defecto al seleccionar una materia
-    formEventNotifier.onColorCodeChanged(const Color(0xFF9E9E9E));
+    formEventNotifier.onColorCodeChanged(Colors.grey);
   }
 }
 

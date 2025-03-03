@@ -63,23 +63,29 @@ class EventDataSourceImpl implements EventDataSource {
   }
 
     @override
-  Future<List<Event>> updateEvent(Map<String, dynamic> eventLike) async {
+  Future<Event> updateEvent(Map<String, dynamic> eventLike) async {
       try {
-        final int eventId = eventLike['id'];
-        final uri = "/EventosAgenda/ActualizarEvento/$eventId";
+        final int eventId = eventLike['eventoId'];
         final String method = (eventId == null) ? 'POST': 'PATCH';
+        final url = (eventId == null)? "/post" : "/EventosAgenda/ActualizarEvento/$eventId";
 
+        eventLike.remove('eventoId');
         final response = await dio.request(
-          uri, 
+          url, 
           data: eventLike,
           options: Options(
             method: method
           )
           );
 
-        final updatedEvent = EventMapper.fromMapList(response.data);
+        final updatedEvent = EventMapper.jsonToEntity(response.data);
         return updatedEvent;
       } catch (e) {
+        if (e is DioException) {
+        // Imprimir el cuerpo de la respuesta y el código de error
+        print('Error al actualizar evento: ${e.response?.data}');
+        print('Código de estado: ${e.response?.statusCode}');
+      }
         throw Exception("Error en updateEvent: $e");
       }
   }

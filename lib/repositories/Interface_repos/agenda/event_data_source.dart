@@ -14,7 +14,7 @@ abstract class EventDataSource {
     List<int>? subjectIds,}
   );  
 
-  Future<List<Event>> updateEvent(Map<String, dynamic> eventLike);  
+  Future<Event> updateEvent(Map<String, dynamic> eventLike);  
 
   Future<List<Event>> deleteEvent(int teacherId, int eventId);
 

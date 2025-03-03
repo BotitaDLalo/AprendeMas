@@ -62,19 +62,16 @@ final goRouterProvider = Provider((ref) {
         ),
 
       GoRoute(
+        path: '/agenda-teacher',
+        builder: (context, state) => const AgendaTeacherScreen(),
+        ),
+
+      GoRoute(
         path: '/update-event',
         builder: (context, state) {
           final eventData = state.extra as Event;
           return UpdateEventScreen(
-            eventId: eventData.eventId!,
-            teacherId: eventData.teacherId,
-            title: eventData.title,
-            description: eventData.description,
-            color: eventData.color,
-            startDate: eventData.startDate,
-            endDate: eventData.endDate,
-            groupIds: eventData.groupIds!,  // List<int>
-            subjectIds: eventData.subjectIds!, // List<int>
+            event: eventData,// List<int>
           );
         },
       ),
@@ -83,17 +80,7 @@ final goRouterProvider = Provider((ref) {
         path: '/event-detail',
         builder: (context, state) {
           final eventData = state.extra as Event;
-          return EventDetailsScreen(
-            eventId: eventData.eventId!,
-            teacherId: eventData.teacherId,
-            title: eventData.title,
-            description: eventData.description,
-            color: eventData.color,
-            startDate: eventData.startDate,
-            endDate: eventData.endDate,
-            groupIds: eventData.groupIds!,
-            subjectIds: eventData.subjectIds!,
-          );
+          return EventDetailsScreen(event: eventData, eventId: eventData.eventId!,);
         },
       ),
       GoRoute(

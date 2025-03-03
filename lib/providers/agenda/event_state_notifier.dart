@@ -70,9 +70,15 @@ class EventNotifier extends StateNotifier<EventState>{
     }
   }
 
-  _setupdateEvent(List<Event> event) {
-    state = state.copyWith(events: event);
-  }
+  // _setupdateEvent(Event event) {
+  //   state = state.copyWith(event: event );
+  // }
+
+  void _setupdateEvent(Event event) {
+  final updatedEvents = state.events.map((e) => e.eventId == event.eventId ? event : e).toList();
+  state = state.copyWith(event: event, events: updatedEvents);
+}
+
 
   Future<void> deleteEvent(int teacherId, int eventId) async {
   try {

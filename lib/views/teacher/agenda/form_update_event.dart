@@ -1,49 +1,41 @@
+import 'package:aprende_mas/config/utils/general_utils.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:aprende_mas/providers/agenda/event_provider.dart';
 import 'package:aprende_mas/providers/agenda/form_update_event_provider.dart';
 import 'package:aprende_mas/views/teacher/agenda/button_event_form.dart';
 import 'package:aprende_mas/views/teacher/agenda/update_dropdown.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_input_field.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_time_form_field.dart';
-import 'package:intl/intl.dart';
-
 
 class FormUpdateEvent extends ConsumerWidget {
-  final int eventId;
-  final int teacherId;
-  final String title;
-  final String description;
-  final String color;
-  final DateTime startDate;
-  final DateTime endDate;
-  final List<int> groupIds;
-  final List<int> subjectIds;
+  final Event event;
 
-  const FormUpdateEvent(
-    this.eventId,
-    this.teacherId,
-    this.title,
-    this.description,
-    this.color,
-    this.startDate,
-    this.endDate,
-    this.groupIds,
-    this.subjectIds,
-    {super.key});
+  const FormUpdateEvent(this.event, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final formUpdateEvent = ref.watch(formEventProvider);
-    // final formUpdateEventNotifier = ref.read(formUpdateEventProvider());
-    String _formatTimeOfDay(TimeOfDay time) {
-      final now = DateTime.now();
-      final dateTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
-      return DateFormat('hh:mm').format(dateTime); // Formato de 12 horas con AM/PM
-    }
+    final formUpdateEvent = ref.watch(formUpdateEventProvider(event));
+    final formUpdateEventNotifier =
+        ref.read(formUpdateEventProvider(event).notifier);
 
     void goRouterPop() {
-      context.pop();
+      context.go("/agenda-teacher");
     }
+
+    ref.listen(formUpdateEventProvider(event), (previous, next) {
+      if (next.isFormPosted && !next.isPosting) {
+        goRouterPop();
+        ref.read(eventProvider.notifier).getEvents();
+      }
+    });
+
+    debugPrint("FormUpdateEvent");
+    debugPrint("idgrupo: ${event.groupIds}");
+    debugPrint("idmateria: ${event.subjectIds}");
+    debugPrint("id profesor: ${event.teacherId}");
+    print("Color inicial del evento en FormUpdateEvent: ${event.color}");
+
 
     return Form(
       child: Padding(
@@ -52,14 +44,16 @@ class FormUpdateEvent extends ConsumerWidget {
           CustomInputField(
             enableLineBreak: true,
             capitalizeFirstLetter: true,
-            label: title,
-            initialValue: title,
+            label: 'Titulo',
+            initialValue: formUpdateEvent.title.value,
+            onChanged: formUpdateEventNotifier.onUpdateTitleChanged,
           ),
           const SizedBox(height: 20),
           CustomInputField(
             capitalizeFirstLetter: true,
-            label: description,
-            initialValue: description,
+            label: 'Descripción',
+            initialValue: formUpdateEvent.description.value,
+            onChanged: formUpdateEventNotifier.onUpdateDescriptionChanged,
           ),
           const SizedBox(height: 20),
           const Text('Inicia', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -71,7 +65,8 @@ class FormUpdateEvent extends ConsumerWidget {
                 isDateField: true,
                 hint: 'Fecha',
                 width: 150,
-                initialValue: DateFormat('yyyy-MM-dd').format(startDate),
+                initialValue: formatOnlyDate(event.startDate),
+                onChanged: formUpdateEventNotifier.onUpdateStartDateChanged,
               ),
               const SizedBox(width: 20),
               CustomTimeFormField(
@@ -79,7 +74,8 @@ class FormUpdateEvent extends ConsumerWidget {
                 isTimeField: true,
                 hint: 'Hora',
                 width: 150,
-                initialValue: _formatTimeOfDay(TimeOfDay.fromDateTime(startDate)),
+                initialValue: formatOnlyTime(event.startDate),
+                onChanged: formUpdateEventNotifier.onUpdateStartTimeChanged,
               ),
             ],
           ),
@@ -93,7 +89,8 @@ class FormUpdateEvent extends ConsumerWidget {
                 isDateField: true,
                 hint: 'Fecha',
                 width: 150,
-                initialValue: DateFormat('yyyy-MM-dd').format(endDate),
+                initialValue: formatOnlyDate(event.endDate),
+                onChanged: formUpdateEventNotifier.onUpdateEndDateChanged,
               ),
               const SizedBox(width: 20),
               CustomTimeFormField(
@@ -101,31 +98,38 @@ class FormUpdateEvent extends ConsumerWidget {
                 isTimeField: true,
                 hint: 'Hora',
                 width: 150,
-                initialValue: _formatTimeOfDay(TimeOfDay.fromDateTime(endDate)),
+                initialValue: formatOnlyTime(event.endDate),
+                onChanged: formUpdateEventNotifier.onUpdateEndTimeChanged,
               ),
             ],
           ),
           const SizedBox(height: 20),
-          // UpdateDropdownForm(
-          //   isGroup: widget.groupIds.isNotEmpty, // Determina si es grupo o materia
-          //   initialItemId: widget.groupIds.isEmpty
-          //       ? widget.groupIds
-          //       : widget.subjectIds // Pasa el ID correcto
-          // ),
+          UpdateDropdownForm(
+            event: event,
+            isGroup: (event.groupIds != null &&
+                event.groupIds!.isNotEmpty), // Convertimos a bool
+            initialItemId: event.groupIds != null && event.groupIds!.isNotEmpty
+                ? event.groupIds!.first // Si hay grupo, toma el primer ID
+                : (event.subjectIds != null && event.subjectIds!.isNotEmpty
+                    ? event.subjectIds!
+                        .first // Si no hay grupo, toma el primer ID de materia
+                    : null), // Si no hay nada, envía null
+          ),
           const SizedBox(height: 30),
           ButtonEventForm(
             buttonName: 'Actualizar',
             onPressed: () async {
-              // if (!ref.read(formEventProvider).isPosting) {
-              //   await formUpdateEventNotifier.onUpdateFormSubmit(
-              //     eventId
-              //     // widget.title, 
-              //     // widget.description, 
-              //     // widget.startDate, 
-              //     // widget.endDate
-              //   );
-              // }
+
+              if (!ref.watch(formUpdateEventProvider(event)).isPosting) {
+                await formUpdateEventNotifier.onUpdateFormSubmit(
+                  event.eventId!,
+                  event.teacherId,
+                );
+                print("color: ${event.color}");
               goRouterPop();
+
+              }
+              // goRouterPop();
             },
           ),
         ]),

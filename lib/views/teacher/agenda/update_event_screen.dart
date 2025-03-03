@@ -1,19 +1,12 @@
+import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/views/teacher/agenda/form_update_event.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:flutter/material.dart';
 
 class UpdateEventScreen extends StatelessWidget {
-  final int eventId;
-  final int teacherId;
-  final String title;
-  final String description;
-  final String color;
-  final DateTime startDate;
-  final DateTime endDate;
-  final List<int> groupIds;
-  final List<int> subjectIds;
+  final Event event;
 
-  const UpdateEventScreen({super.key, required this.eventId, required this.teacherId, required this.title, required this.description, required this.color, required this.startDate, required this.endDate, required this.groupIds, required this.subjectIds,});
+  const UpdateEventScreen({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +34,7 @@ class UpdateEventScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: FormUpdateEvent(
-                  eventId, teacherId, title, description, color,startDate, endDate, groupIds, subjectIds ),
+                child: FormUpdateEvent(event),
               ),
             ],
           ),

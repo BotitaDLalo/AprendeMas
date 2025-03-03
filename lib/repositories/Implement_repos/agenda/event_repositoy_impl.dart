@@ -39,7 +39,7 @@ class EventRepositoyImpl implements EventRepository{
   }
 
   @override
-  Future<List<Event>> updateEvent (Map<String, dynamic> eventLike) {
+  Future<Event> updateEvent (Map<String, dynamic> eventLike) {
       return eventDataSource.updateEvent(eventLike);
   }
   

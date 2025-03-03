@@ -17,7 +17,8 @@ class RouterRedirections {
   "/teacher-activities-students-options",
   '/teacher-activity-student-submission',
   '/teacher-student-submission-grading',
-  '/teacher-create-notice'
+  '/teacher-create-notice',
+  '/agenda-teacher',
 ];
 
   static List<String> routesStudent = [
