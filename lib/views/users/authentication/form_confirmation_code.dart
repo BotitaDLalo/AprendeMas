@@ -3,11 +3,9 @@ import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/authentication/form_confirmation_code_provider.dart';
-import 'package:aprende_mas/providers/authentication/signin_form_provider.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_login.dart';
 import 'package:aprende_mas/views/widgets/inputs/textfield_number.dart';
-import 'package:aprende_mas/views/widgets/structure/loading_screen.dart';
 
 class FormConfirmationCode extends ConsumerWidget {
   const FormConfirmationCode({super.key});

@@ -14,7 +14,7 @@ class MissingDataScreen extends StatelessWidget {
         ),
         body: const Center(
           child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
+            // physics: ClampingScrollPhysics(),
             child: Column(
               children: [FormMissingData()],
             ),

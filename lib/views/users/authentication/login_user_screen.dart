@@ -14,10 +14,6 @@ class LoginUserScreen extends ConsumerWidget {
       errorMessage(context, message);
     }
 
-    void pop() {
-      Navigator.pop(context);
-    }
-
     hideSnackBar() {
       ScaffoldMessenger.of(context).clearSnackBars();
     }
@@ -45,7 +41,9 @@ class LoginUserScreen extends ConsumerWidget {
       (previous, next) {
         if (next.errorMessage.isNotEmpty) {
           if (next.errorHandlingStyle == ErrorHandlingStyle.snackBar) {
-            Navigator.of(context).pop();
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
             hideSnackBar();
             showErrorMessage(next.errorMessage);
           }

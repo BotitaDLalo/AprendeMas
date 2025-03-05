@@ -15,6 +15,7 @@ class FormSingin extends ConsumerWidget {
     final List<String> users = [cn.getRoleStudentName, cn.getRoleTeacherName];
     final signinForm = ref.watch(signinFormProvider);
     final signinFormNotifier = ref.read(signinFormProvider.notifier);
+
     // hideSnackBar() {
     //   ScaffoldMessenger.of(context).clearSnackBars();
     // }
