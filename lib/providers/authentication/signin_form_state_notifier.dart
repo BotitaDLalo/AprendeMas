@@ -94,24 +94,27 @@ class SigninFormStateNotifier extends StateNotifier<SigninFormState> {
   onFormSigninSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    state = state.copyWith(isPosting: true);
-    bool res = await siginUserCallback(
-        names: state.name.value,
-        lastName: state.lastName.value,
-        secondLastName: state.secondLastName.value,
-        password: state.password.value,
-        role: state.role.value);
+    try {
+      state = state.copyWith(isPosting: true);
+      bool res = await siginUserCallback(
+          names: state.name.value,
+          lastName: state.lastName.value,
+          secondLastName: state.secondLastName.value,
+          password: state.password.value,
+          role: state.role.value);
 
-    if (res) {
-      state = state.copyWith(isFormPosted: true, isPosting: false);
-    } else {
+      if (res) {
+        state = state.copyWith(isFormPosted: true, isPosting: false);
+      } else {
+        state = state.copyWith(isFormNotPosted: true, isPosting: false);
+      }
+    } catch (e) {
       state = state.copyWith(isFormNotPosted: true, isPosting: false);
+    } finally {
+      //* Reiniciamos el estado
+      state = state.copyWith(
+          isValid: false, isFormPosted: false, isFormNotPosted: false);
     }
-    // state = state.copyWith(isPosting: false);
-
-    //* Reiniciamos el estado
-    state = state.copyWith(
-        isValid: false, isFormPosted: false, isFormNotPosted: false);
   }
 
   _touchEveryField() {

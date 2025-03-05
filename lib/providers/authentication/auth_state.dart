@@ -2,7 +2,7 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class AuthState {
-  final User? user;
+  // final User? user;
 
   final AuthStatus? authStatus;
   final AuthUser? authUser;
@@ -25,7 +25,7 @@ class AuthState {
       {this.authStatus = AuthStatus.checking,
       this.registerStatus = RegisterStatus.notRegistered,
       this.authUser,
-      this.user,
+      // this.user,
       this.errorMessage = '',
       this.errorComment = '',
       this.authGoogleStatus = AuthGoogleStatus.checking,
@@ -40,7 +40,7 @@ class AuthState {
           {AuthStatus? authStatus,
           RegisterStatus? registerStatus,
           AuthUser? authUser,
-          User? user,
+          // User? user,
           AuthenticatedType? authenticatedType,
           String? errorMessage,
           String? errorComment,
@@ -54,7 +54,7 @@ class AuthState {
           authStatus: authStatus ?? this.authStatus,
           registerStatus: registerStatus ?? this.registerStatus,
           authUser: authUser ?? this.authUser,
-          user: user ?? this.user,
+          // user: user ?? this.user,
           authenticatedType: authenticatedType ?? this.authenticatedType,
           errorMessage: errorMessage ?? this.errorMessage,
           errorComment: errorComment ?? this.errorComment,

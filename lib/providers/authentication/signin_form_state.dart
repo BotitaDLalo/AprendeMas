@@ -4,6 +4,7 @@ class SigninFormState {
   final bool isPosting;
   final bool isFormPosted;
   final bool isFormNotPosted;
+  final bool needConfirm;
   final bool isValid;
   final GenericInput name;
   final GenericInput lastName;
@@ -16,6 +17,7 @@ class SigninFormState {
       {this.isPosting = false,
       this.isFormPosted = false,
       this.isFormNotPosted = false,
+      this.needConfirm = false,
       this.isValid = false,
       this.name = const GenericInput.pure(),
       this.lastName = const GenericInput.pure(),
@@ -28,6 +30,7 @@ class SigninFormState {
     bool? isPosting,
     bool? isFormPosted,
     bool? isFormNotPosted,
+    bool? needConfirm,
     bool? isValid,
     GenericInput? name,
     GenericInput? lastName,
@@ -40,6 +43,7 @@ class SigninFormState {
         isPosting: isPosting ?? this.isPosting,
         isFormPosted: isFormPosted ?? this.isFormPosted,
         isFormNotPosted: isFormNotPosted ?? this.isFormPosted,
+        needConfirm: needConfirm ?? this.needConfirm,
         isValid: isValid ?? this.isValid,
         name: name ?? this.name,
         lastName: lastName ?? this.lastName,

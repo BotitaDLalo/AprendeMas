@@ -122,12 +122,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       required String password,
       required String role}) async {
     try {
+      const caller = "siginUser";
       final fcmToken = await FirebaseCM.getFcmToken();
 
       if (fcmToken != null) {
-        // final user = await authRepository.signin(
-        //     names, lastName, secondLastName, password, role, fcmToken);
-
         final user = await authRepository.signin(
             name: names,
             lastname: lastName,
@@ -136,23 +134,30 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
             role: role,
             fcmToken: fcmToken);
 
-        if (user.email != "" && user.nombre != "" && user.rol != "") {
-          _setRegisterUser(user);
+        if (user.estaAutorizado ==
+            TeachersAuthorizationStatus.authorized.value) {
+          _setLoggedUser(caller, user);
+        } else if (user.estaAutorizado ==
+            TeachersAuthorizationStatus.pending.value) {
           return true;
         }
-        return false;
       }
-
       return false;
+    } on FcmTokenVerificatioFailed catch (e) {
+      badReponseSnackBar(e.message);
+      rethrow;
     } on UserAlreadyExists catch (e) {
       badReponseSnackBar(e.errorMessage);
-      return false;
-    } on ConnectionTimeout {
-      logoutGoogle('Timeout');
-      return false;
-    } catch (e) {
-      logoutGoogle('Error no controlado');
-      return false;
+      rethrow;
+    } on ConnectionTimeout catch (e) {
+      badReponseSnackBar(e.message);
+      rethrow;
+      // logoutGoogle('Timeout');
+    } on UncontrolledError catch (e) {
+      badReponseSnackBar(e.message);
+      rethrow;
+
+      // logoutGoogle('Error no controlado');
     }
   }
 
@@ -191,7 +196,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   void badResponseLogin([String? errorMessage]) {
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
-        user: null,
+        // user: null,
+        errorMessage: errorMessage,
+        errorHandlingStyle: ErrorHandlingStyle.snackBar);
+  }
+
+  void badResponseGoogleLogin([String? errorMessage]) {
+    state = state.copyWith(
+        authGoogleStatus: AuthGoogleStatus.notAuthenticated,
+        // user: null,
         errorMessage: errorMessage,
         errorHandlingStyle: ErrorHandlingStyle.snackBar);
   }
@@ -236,13 +249,20 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> verifyConfirmationCode(String code) async {
     try {
       const caller = "verifyConfirmationCode";
-      final user = await authRepository.registerAuthorizationCodeUser(code);
+      final idToken = await storageService.getToken();
+
+      final user =
+          await authRepository.registerAuthorizationCodeUser(code, idToken);
       int id = user.userId;
       String role = user.role;
       if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
         final isFcmTokenValid = await verifyExistingFcmToken(id, role);
         if (isFcmTokenValid) {
-          _setLoggedUser(caller, user);
+          if (idToken.isEmpty) {
+            _setLoggedUser(caller, user);
+          } else {
+            _setLoggedGoogleUser(user);
+          }
         } else {
           throw FcmTokenVerificatioFailed();
         }
@@ -271,7 +291,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await _saveUserDataKeyValue(
         user.token, user.userId, user.role, user.userName, authType);
 
-    if (caller == "loginUser" || caller == "verifyConfirmationCode") {
+    if (caller == "loginUser" ||
+        caller == "siginUser" ||
+        caller == "verifyConfirmationCode") {
       ActiveUser activeUser = ActiveUser(
           userId: user.userId,
           userName: user.userName,
@@ -305,11 +327,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       authConectionType: AuthConectionType.online,
       errorMessage: '',
     );
-  }
-
-  void _setRegisterUser(User user) {
-    state =
-        state.copyWith(user: user, registerStatus: RegisterStatus.registered);
   }
 
   void _saveUserAndUpdateState(ActiveUser user, List<Group> lsGroups,
@@ -446,21 +463,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   void logout([String? errorMessage]) {
-    deleteUserData();
+    _deleteUserData();
     state = state.copyWith(
         authStatus: AuthStatus.notAuthenticated,
-        user: null,
+        // user: null,
         errorMessage: errorMessage);
-  }
-
-  void deleteUserData() async {
-    await authUserOffline.deleteUser();
-    await storageService.removeAuthType();
-    await storageService.removeEmail();
-    await storageService.getId();
-    await storageService.getRole();
-    await storageService.getToken();
-    await storageService.getUserName();
   }
 
   //# LOGIN USER OFFLINE
@@ -552,23 +559,53 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> loginGoogleUser() async {
     try {
       final user = await authRepository.loginGoogle();
-      if (user.role != "") {
-        _setLoggedGoogleUser(user);
-      } else {
-        _setMissingDataGoogleUserConfirmed(user.token);
+      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
+        int id = user.userId;
+        String role = user.role;
+        final isFcmTokenValid = await verifyExistingFcmToken(id, role);
+        if (isFcmTokenValid) {
+          _setLoggedGoogleUser(user);
+        } else {
+          throw FcmTokenVerificatioFailed();
+        }
+      } else if (user.estaAutorizado ==
+          TeachersAuthorizationStatus.pending.value) {
+        if (user.requiereDatosAdicionales == true) {
+          await storageService.saveToken(user.token);
+          await storageService.saveEmail(user.email);
+          state = state.copyWith(theresMissingData: true);
+        } else {
+          await storageService.saveEmail(user.email);
+          await storageService.saveToken(user.token);
+          state = state.copyWith(isPendingAuthorizationUser: true);
+        }
       }
+    } on FcmTokenVerificatioFailed catch (e) {
+      badResponseLogin(e.message);
     } on ConnectionTimeout {
       badResponseLogin('Timeout');
-    } catch (e) {
-      badResponseLogin('Error no controlado');
+    } on UncontrolledError catch (e) {
+      badResponseLogin(e.message);
     }
   }
 
-  Future<void> missingDataGoogleUser(
+  Future<bool> missingDataGoogleUser(
       String names, String lastname, String secondLastname, String role) async {
-    final user = await authRepository.registerMissingDataGoogle(
-        names, lastname, secondLastname, role);
-    _setLoggedGoogleUser(user);
+    try {
+      final user = await authRepository.registerMissingDataGoogle(
+          names, lastname, secondLastname, role);
+
+      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
+        _setLoggedGoogleUser(user);
+      } else if (user.estaAutorizado ==
+          TeachersAuthorizationStatus.pending.value) {
+        return true;
+      }
+      return false;
+    } on UncontrolledError catch (e) {
+      badReponseSnackBar(e.message);
+      return false;
+    }
   }
 
   void checkAuthGoogleStatus() async {
@@ -577,7 +614,17 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final token = await storageService.getToken();
       if (token == "") return logoutGoogle();
       final user = await googleSigninApi.checkSignInStatus(token);
-      _setLoggedGoogleUser(user);
+      int id = user.userId;
+      String role = user.role;
+      final isFcmTokenValid = await verifyExistingFcmToken(id, role);
+      if (isFcmTokenValid) {
+        _setLoggedGoogleUser(user);
+      } else {
+        throw FcmTokenVerificatioFailed();
+      }
+    } on FcmTokenVerificatioFailed {
+      // badResponseLogin(e.message);
+      logoutGoogle();
     } catch (e) {
       logoutGoogle();
     }
@@ -625,23 +672,16 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  void _setMissingDataGoogleUserConfirmed(String token) async {
-    await storageService.saveToken(token);
-    state = state.copyWith(theresMissingData: true);
-  }
-
   Future<void> logoutGoogle([String? errorMessage]) async {
     try {
       await googleSigninApi.handlerGoogleLogout();
-      await storageService.removeToken();
-      await storageService.removeId();
-      await storageService.removeRole();
-      await storageService.removeUserName();
+      _deleteUserData();
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
-          user: null,
+          // user: null,
           errorMessage: errorMessage);
     } catch (e) {
+      debugPrint(e.toString());
       return;
     }
   }
@@ -654,5 +694,15 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await storageService.saveRole(valueRole);
     await storageService.saveUserName(valueUserName);
     await storageService.saveAuthType(valueAuthType);
+  }
+
+  void _deleteUserData() async {
+    await authUserOffline.deleteUser();
+    await storageService.removeAuthType();
+    await storageService.removeEmail();
+    await storageService.getId();
+    await storageService.getRole();
+    await storageService.getToken();
+    await storageService.getUserName();
   }
 }
