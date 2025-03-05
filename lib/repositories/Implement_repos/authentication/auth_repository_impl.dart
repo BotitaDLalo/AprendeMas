@@ -15,7 +15,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<User> signin(
+  Future<AuthUser> signin(
       {required String name,
       required String lastname,
       required String secondLastname,
@@ -59,8 +59,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<AuthUser> registerAuthorizationCodeUser(String code) {
-    return dataSource.registerAuthorizationCodeUser(code);
+  Future<AuthUser> registerAuthorizationCodeUser(String code, String? idToken) {
+    return dataSource.registerAuthorizationCodeUser(code,idToken);
   }
 
   @override

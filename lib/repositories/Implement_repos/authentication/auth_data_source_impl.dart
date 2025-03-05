@@ -33,7 +33,7 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<User> signin(
+  Future<AuthUser> signin(
       {required String name,
       required String lastname,
       required String secondLastname,
@@ -55,7 +55,8 @@ class AuthDataSourceImpl implements AuthDataSource {
         'TipoUsuario': role,
         'FcmToken': fcmToken
       });
-      final user = UserMapper.userSiginJsonToEntity(res.data);
+      // final user = UserMapper.userSiginJsonToEntity(res.data);
+      final user = AuthUserMapper.userJsonToEntity(res.data);
 
       return user;
     } on DioException catch (e) {
@@ -83,14 +84,11 @@ class AuthDataSourceImpl implements AuthDataSource {
       return user;
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
-          throw UncontrolledError();
-
+        throw UncontrolledError();
       }
       throw UncontrolledError();
-    
     } catch (e) {
       throw UncontrolledError();
-    
     }
   }
 
@@ -134,7 +132,7 @@ class AuthDataSourceImpl implements AuthDataSource {
     } catch (e) {
       // throw CustomError(message: 'Ocurrio un error', errorCode: 1);
       debugPrint(e.toString());
-      throw Exception(e);
+      throw UncontrolledError();
     }
   }
 
@@ -155,7 +153,8 @@ class AuthDataSourceImpl implements AuthDataSource {
       final user = AuthUserMapper.userJsonToEntity(res.data);
       return user;
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
+      throw UncontrolledError();
     }
   }
 
@@ -181,17 +180,23 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<AuthUser> registerAuthorizationCodeUser(String code) async {
+  Future<AuthUser> registerAuthorizationCodeUser(
+      String code, String? idToken) async {
+    String uri = "";
     try {
-      const uri = "/Login/ValidarCodigoDocente";
-
       final email = await storageService.getEmail();
 
-      final res = await dio
-          .post(uri, queryParameters: {'email': email, 'codigoValidar': code});
+      Map<String, dynamic> body = {'Email': email, 'CodigoValidar': code};
 
+      if (idToken!.isEmpty) {
+        uri = "/Login/ValidarCodigoDocente";
+      } else {
+        uri = "/GoogleSignin/ValidarCodigoDocenteGoogle";
+        body['IdToken'] = idToken;
+      }
+
+      final res = await dio.post(uri, data: body);
       final user = AuthUserMapper.userJsonToEntity(res.data);
-
       return user;
     } on DioException catch (e) {
       if (e.response?.data['errorCode'] == 1004) {
@@ -200,6 +205,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       if (e.response?.data['errorCode'] == 1005) {
         throw ExpiredAuthorizationCode();
       }
+
       if (e.type == DioExceptionType.connectionTimeout)
         throw ConnectionTimeout();
       throw UncontrolledError();

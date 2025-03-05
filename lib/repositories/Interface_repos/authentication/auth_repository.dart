@@ -3,7 +3,7 @@ import 'package:aprende_mas/models/models.dart';
 abstract class AuthRepository {
   Future<AuthUser> login(String email, String password);
 
-  Future<User> signin(
+  Future<AuthUser> signin(
       {required String name,
       required String lastname,
       required String secondLastname,
@@ -24,5 +24,5 @@ abstract class AuthRepository {
 
   Future<bool> verifyEmailSignin(String email);
 
-  Future<AuthUser> registerAuthorizationCodeUser(String code);
+  Future<AuthUser> registerAuthorizationCodeUser(String code, String? idToken);
 }
