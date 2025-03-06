@@ -88,13 +88,12 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       const caller = "loginUser";
       final user = await authRepository.login(email, password);
 
-      if (user.estaAutorizado == TeachersAuthorizationStatus.pending.value) {
+      if (user.estaAutorizado == AuthorizationUserStatus.pending.value) {
         state = state.copyWith(isPendingAuthorizationUser: true);
-      } else if (user.estaAutorizado ==
-          TeachersAuthorizationStatus.denied.value) {
+      } else if (user.estaAutorizado == AuthorizationUserStatus.denied.value) {
         //TODO: VISTA PARA NOTIFICAR QUE FUE DENEGADO
       } else if (user.estaAutorizado ==
-          TeachersAuthorizationStatus.authorized.value) {
+          AuthorizationUserStatus.authorized.value) {
         int id = user.userId;
         String role = user.role;
         final isFcmTokenValid = await verifyExistingFcmToken(id, role);
@@ -134,11 +133,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
             role: role,
             fcmToken: fcmToken);
 
-        if (user.estaAutorizado ==
-            TeachersAuthorizationStatus.authorized.value) {
+        if (user.estaAutorizado == AuthorizationUserStatus.authorized.value) {
           _setLoggedUser(caller, user);
         } else if (user.estaAutorizado ==
-            TeachersAuthorizationStatus.pending.value) {
+            AuthorizationUserStatus.pending.value) {
           return true;
         }
       }
@@ -255,7 +253,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           await authRepository.registerAuthorizationCodeUser(code, idToken);
       int id = user.userId;
       String role = user.role;
-      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
+      if (user.estaAutorizado == AuthorizationUserStatus.authorized.value) {
         final isFcmTokenValid = await verifyExistingFcmToken(id, role);
         if (isFcmTokenValid) {
           if (idToken.isEmpty) {
@@ -559,24 +557,20 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   Future<void> loginGoogleUser() async {
     try {
       final user = await authRepository.loginGoogle();
-      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
+
+      if (user.estaAutorizado == AuthorizationUserStatus.authorized.value) {
         int id = user.userId;
         String role = user.role;
+
         final isFcmTokenValid = await verifyExistingFcmToken(id, role);
-        if (isFcmTokenValid) {
-          _setLoggedGoogleUser(user);
-        } else {
-          throw FcmTokenVerificatioFailed();
-        }
-      } else if (user.estaAutorizado ==
-          TeachersAuthorizationStatus.pending.value) {
+        if (!isFcmTokenValid) throw FcmTokenVerificatioFailed();
+
+        _setLoggedGoogleUser(user);
+      } else if (user.estaAutorizado == AuthorizationUserStatus.pending.value) {
+        _saveUserDataLoginGoogle(user.email, user.token);
         if (user.requiereDatosAdicionales == true) {
-          await storageService.saveToken(user.token);
-          await storageService.saveEmail(user.email);
           state = state.copyWith(theresMissingData: true);
         } else {
-          await storageService.saveEmail(user.email);
-          await storageService.saveToken(user.token);
           state = state.copyWith(isPendingAuthorizationUser: true);
         }
       }
@@ -589,17 +583,30 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  void _saveUserDataLoginGoogle(String email, String token) async {
+    await storageService.saveEmail(email);
+    await storageService.saveToken(token);
+  }
+
   Future<bool> missingDataGoogleUser(
       String names, String lastname, String secondLastname, String role) async {
     try {
-      final user = await authRepository.registerMissingDataGoogle(
-          names, lastname, secondLastname, role);
+      final fcmToken = await FirebaseCM.getFcmToken();
+      if (fcmToken != null) {
+        final user = await authRepository.registerMissingDataGoogle(
+            names: names,
+            lastname: lastname,
+            secondLastname: secondLastname,
+            role: role,
+            fcmToken: fcmToken);
 
-      if (user.estaAutorizado == TeachersAuthorizationStatus.authorized.value) {
-        _setLoggedGoogleUser(user);
-      } else if (user.estaAutorizado ==
-          TeachersAuthorizationStatus.pending.value) {
-        return true;
+        if (user.estaAutorizado == AuthorizationUserStatus.authorized.value) {
+          _setLoggedGoogleUser(user);
+        } else if (user.estaAutorizado ==
+            AuthorizationUserStatus.pending.value) {
+          return true;
+        }
+        return false;
       }
       return false;
     } on UncontrolledError catch (e) {
