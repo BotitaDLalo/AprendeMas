@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
+import 'package:aprende_mas/views/student/notices/student_notice_options_screen.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:aprende_mas/views/student/student.dart';
 
@@ -8,10 +9,12 @@ final itemTappedProvider = StateProvider<int>((ref) => 1);
 
 class StudentSubjectOptionsScreen extends ConsumerStatefulWidget {
   final int subjectId;
+  final int? groupId;
   final String subjectName;
   final String description;
   const StudentSubjectOptionsScreen({
     super.key,
+    this.groupId,
     required this.subjectId,
     required this.subjectName,
     required this.description,
@@ -37,13 +40,18 @@ class _StudentSubjectOptionsScreenState
           optionId: 1,
           isVisible: true,
           optionText: 'Avisos',
-          widgetOption: const StudentNoticeOptionsScreen()),
+          widgetOption: StudentNoticeOptionsScreen(
+            groupId: widget.groupId ?? 0,
+            subjectId: widget.subjectId,
+          )),
       GroupSubjectWidgetOption(
           optionId: 2,
           isVisible: true,
           optionText: 'Actividades',
           widgetOption: ActivityOptionScreen(
-              subjectId: widget.subjectId, subjectName: widget.subjectName)),
+              buttonCreateIsVisible: false,
+              subjectId: widget.subjectId,
+              subjectName: widget.subjectName)),
     ];
 
     List<GroupSubjectWidgetOption> lsSubjectOptions =

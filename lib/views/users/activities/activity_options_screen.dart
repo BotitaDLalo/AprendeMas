@@ -9,11 +9,13 @@ import 'package:aprende_mas/models/models.dart';
 class ActivityOptionScreen extends ConsumerStatefulWidget {
   final int subjectId;
   final String subjectName;
+  final bool buttonCreateIsVisible;
   final ButtonCreateGeneral? buttonCreateGeneral;
 
   const ActivityOptionScreen(
       {super.key,
       this.buttonCreateGeneral,
+      required this.buttonCreateIsVisible,
       required this.subjectId,
       required this.subjectName});
 
@@ -22,7 +24,6 @@ class ActivityOptionScreen extends ConsumerStatefulWidget {
 }
 
 class _ActivityOptionState extends ConsumerState<ActivityOptionScreen> {
-  final kvs = KeyValueStorageServiceImpl();
   final cn = CatalogNames();
 
   @override
@@ -32,8 +33,6 @@ class _ActivityOptionState extends ConsumerState<ActivityOptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
-   
     void buttonModal() {
       showModalBottomSheet(
         context: context,
@@ -80,23 +79,13 @@ class _ActivityOptionState extends ConsumerState<ActivityOptionScreen> {
     }
 
     return Scaffold(
-      floatingActionButton:
-          //  FloatingActionButton(
-          //   backgroundColor: Colors.white,
-          //   shape: AppTheme.shapeFloatingActionButton(),
-          //   child: Icon(
-          //     Icons.add,
-          //     color: Colors.grey.withOpacity(0.8),
-          //   ),
-          //   onPressed: () {
-          //     buttonModal();
-          //   },
-          // )
-          FloatingActionButtonCustom(
+      floatingActionButton: widget.buttonCreateIsVisible
+          ? FloatingActionButtonCustom(
               voidCallback: () {
                 buttonModal();
               },
-              icon: Icons.add),
+              icon: Icons.add)
+          : const SizedBox(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(

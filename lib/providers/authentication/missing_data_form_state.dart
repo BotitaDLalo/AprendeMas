@@ -3,6 +3,7 @@ import 'package:aprende_mas/views/views.dart';
 class MissingDataFormState {
   final bool isPosting;
   final bool isFormPosted;
+  final bool isFormNotPosted;
   final bool isValid;
   final GenericInput names;
   final GenericInput lastName;
@@ -12,6 +13,7 @@ class MissingDataFormState {
   MissingDataFormState(
       {this.isPosting = false,
       this.isFormPosted = false,
+      this.isFormNotPosted = false,
       this.isValid = false,
       this.names = const GenericInput.pure(),
       this.lastName = const GenericInput.pure(),
@@ -21,6 +23,7 @@ class MissingDataFormState {
   MissingDataFormState copyWith({
     bool? isPosting,
     bool? isFormPosted,
+    bool? isFormNotPosted,
     bool? isValid,
     GenericInput? names,
     GenericInput? lastName,
@@ -30,6 +33,7 @@ class MissingDataFormState {
       MissingDataFormState(
         isPosting: isPosting ?? this.isPosting,
         isFormPosted: isFormPosted ?? this.isFormPosted,
+        isFormNotPosted: isFormNotPosted ?? this.isFormNotPosted,
         isValid: isValid ?? this.isValid,
         names: names ?? this.names,
         lastName: lastName ?? this.lastName,

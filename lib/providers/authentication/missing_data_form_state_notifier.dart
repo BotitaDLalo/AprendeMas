@@ -44,11 +44,21 @@ class MissingDataFormStateNotifier extends StateNotifier<MissingDataFormState> {
             [state.names, state.lastName, state.secondLastName, state.role]));
   }
 
-  onFormSubmit() {
+  onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    missingDataCallback(state.names.value, state.lastName.value,
-        state.secondLastName.value, state.role.value);
+    state = state.copyWith(isPosting: true);
+    bool res = await missingDataCallback(state.names.value,
+        state.lastName.value, state.secondLastName.value, state.role.value);
+    if (res) {
+      state = state.copyWith(isFormPosted: true, isPosting: false);
+    } else {
+      state = state.copyWith(isFormNotPosted: true, isPosting: false);
+    }
+
+    //* Reiniciamos el estado
+    state = state.copyWith(
+        isValid: false, isFormPosted: false, isFormNotPosted: false);
   }
 
   _touchEveryField() {
@@ -58,7 +68,6 @@ class MissingDataFormStateNotifier extends StateNotifier<MissingDataFormState> {
     final role = Role.dirty(state.role.value);
 
     state = state.copyWith(
-        isFormPosted: true,
         names: names,
         role: role,
         isValid: Formz.validate([names, lastName, secondLastName, role]));

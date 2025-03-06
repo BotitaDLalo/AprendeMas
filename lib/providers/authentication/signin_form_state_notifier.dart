@@ -1,13 +1,17 @@
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/sigin_form_state.dart';
+import 'package:aprende_mas/providers/authentication/signin_form_state.dart';
 import 'package:aprende_mas/views/views.dart';
 
-class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
-  final Function(String, String, String, String, String, String)
-      siginUserCallback;
+class SigninFormStateNotifier extends StateNotifier<SigninFormState> {
+  final Future<bool> Function(
+      {required String names,
+      required String lastName,
+      required String secondLastName,
+      required String password,
+      required String role}) siginUserCallback;
 
-  SiginFormStateNotifier({required this.siginUserCallback})
-      : super(SiginFormState());
+  SigninFormStateNotifier({required this.siginUserCallback})
+      : super(SigninFormState());
 
   onNameChanged(String value) {
     final newName = GenericInput.dirty(value);
@@ -48,18 +52,18 @@ class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
         ]));
   }
 
-  onEmailChanged(String value) {
-    final newEmail = Email.dirty(value);
-    state = state.copyWith(
-        email: newEmail,
-        isValid: Formz.validate([
-          state.name,
-          state.lastName,
-          newEmail,
-          state.password,
-          state.role
-        ]));
-  }
+  // onEmailChanged(String value) {
+  //   final newEmail = Email.dirty(value);
+  //   state = state.copyWith(
+  //       email: newEmail,
+  //       isValid: Formz.validate([
+  //         state.name,
+  //         state.lastName,
+  //         newEmail,
+  //         state.password,
+  //         state.role
+  //       ]));
+  // }
 
   onPasswordChanged(String value) {
     final newPassword = Password.dirty(value);
@@ -87,36 +91,51 @@ class SiginFormStateNotifier extends StateNotifier<SiginFormState> {
         ]));
   }
 
-  onFormSubmit() async {
+  onFormSigninSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
-    state = state.copyWith(isPosting: true);
-    bool res = await siginUserCallback(
-        state.name.value,
-        state.lastName.value,
-        state.secondLastName.value,
-        state.email.value,
-        state.password.value,
-        state.role.value);
-    state = state.copyWith(isPosting: false);
+    try {
+      state = state.copyWith(isPosting: true);
+      bool res = await siginUserCallback(
+          names: state.name.value,
+          lastName: state.lastName.value,
+          secondLastName: state.secondLastName.value,
+          password: state.password.value,
+          role: state.role.value);
 
-    if (res) {
-      state = state.copyWith(isFormPosted: true);
+      if (res) {
+        state = state.copyWith(isFormPosted: true, isPosting: false);
+      } else {
+        state = state.copyWith(isFormNotPosted: true, isPosting: false);
+      }
+    } catch (e) {
+      state = state.copyWith(isFormNotPosted: true, isPosting: false);
+    } finally {
+      //* Reiniciamos el estado
+      state = state.copyWith(
+          isValid: false, isFormPosted: false, isFormNotPosted: false);
     }
   }
 
   _touchEveryField() {
     final name = GenericInput.dirty(state.name.value);
-    final email = Email.dirty(state.email.value);
+    // final email = Email.dirty(state.email.value);
+    final lastName = GenericInput.dirty(state.lastName.value);
+    final secondLastName = GenericInput.dirty(state.secondLastName.value);
     final password = Password.dirty(state.password.value);
     final role = Role.dirty(state.role.value);
 
     state = state.copyWith(
-        isFormPosted: true,
         name: name,
-        email: email,
+        // email: email,
+        lastName: lastName,
+        secondLastName: secondLastName,
         password: password,
         role: role,
-        isValid: Formz.validate([name, email, password, role]));
+        isValid: Formz.validate([name, lastName, password, role]));
+  }
+
+  clearFormSigninState() {
+    state = SigninFormState();
   }
 }

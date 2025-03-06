@@ -1,10 +1,9 @@
 export 'package:aprende_mas/views/student/agenda/agenda_student_screen.dart';
 export 'package:aprende_mas/views/student/groups_subjects/groups_subjects_student_screen.dart';
-export 'package:aprende_mas/views/student/notices/notices_student_screen.dart';
+export 'package:aprende_mas/views/student/notifications/notifications_student_screen.dart';
 export 'package:aprende_mas/views/student/groups_subjects/subjects_without_groups_container.dart';
 export 'package:aprende_mas/views/student/groups_subjects/groups_subjects_container.dart';
-export 'package:aprende_mas/views/student/groups_subjects/student_subject_options_screen.dart';
-export 'package:aprende_mas/views/student/groups_subjects/student_subject_options.dart';
-export 'package:aprende_mas/views/student/activities/student_notice_options_screen.dart';
+export 'package:aprende_mas/views/student/subjects/student_subject_options_screen.dart';
+export 'package:aprende_mas/views/student/subjects/student_subject_options.dart';
 export 'package:aprende_mas/views/users/activities/activity_options_screen.dart';
 export 'package:aprende_mas/views/student/activities/activity_section_submissions.dart';

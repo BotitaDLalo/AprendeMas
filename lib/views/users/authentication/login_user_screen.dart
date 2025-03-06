@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/users/authentication/form_login.dart';
+import 'package:aprende_mas/views/widgets/alerts/error_snackbar.dart';
 import 'package:aprende_mas/views/widgets/structure/loading_screen.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
@@ -9,46 +10,60 @@ class LoginUserScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final loginForm = ref.watch(loginFormProvider);
-    final authStatus = ref.watch(authProvider);
+    void showErrorMessage(String message) {
+      errorMessage(context, message);
+    }
+
+    hideSnackBar() {
+      ScaffoldMessenger.of(context).clearSnackBars();
+    }
+
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.theresMissingData) {
+          context.go("/missing-data");
+        }
+      },
+    );
+
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.isPendingAuthorizationUser) {
+          context.go('/confirmation-code-screen');
+        }
+      },
+    );
+
+    ref.listen(
+      authProvider,
+      (previous, next) {
+        if (next.errorMessage.isNotEmpty) {
+          if (next.errorHandlingStyle == ErrorHandlingStyle.snackBar) {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            }
+            hideSnackBar();
+            showErrorMessage(next.errorMessage);
+          }
+        }
+      },
+    );
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Stack(
         children: [
-          // loginForm.isPosting && authStatus.authStatus != AuthStatus.authenticated
-          //     ? const LoadingScreen()
-          //     : Scaffold(
-          //         body: Center(
-          //           child: SingleChildScrollView(
-          //             physics: const ClampingScrollPhysics(),
-          //             child: Column(
-          //               //crossAxisAlignment: CrossAxisAlignment.center,
-          //               children: [
-          //                 Image.asset('assets/logo.png', width: 150),
-          //                 const SizedBox(
-          //                   height: 40,
-          //                 ),
-          //                 const FormLogin()
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-
           Scaffold(
-            body: Center(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+            ),
+            body: const Center(
               child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
+                physics: ClampingScrollPhysics(),
                 child: Column(
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/logo.png', width: 150),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    const FormLogin()
-                  ],
+                  children: [FormLogin()],
                 ),
               ),
             ),

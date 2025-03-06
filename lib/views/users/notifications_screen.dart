@@ -3,14 +3,14 @@ import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 
-class NoticesScreen extends ConsumerStatefulWidget {
-  const NoticesScreen({super.key});
+class NotificationsScreen extends ConsumerStatefulWidget {
+  const NotificationsScreen({super.key});
 
   @override
   NoticesScreenState createState() => NoticesScreenState();
 }
 
-class NoticesScreenState extends ConsumerState<NoticesScreen> {
+class NoticesScreenState extends ConsumerState<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
@@ -22,6 +22,8 @@ class NoticesScreenState extends ConsumerState<NoticesScreen> {
   Widget build(BuildContext context) {
     final lsNotices = ref.watch(notificationsProvider);
     final noticesNotifier = ref.read(notificationsProvider.notifier);
+   
+   
     showModalBottom(String sentDate) {
       showModalBottomSheet(
         context: context,

@@ -20,7 +20,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
           Activity.activitiesBySubject(lsActivities, subjectId);
       return lsActivitiesBySubject;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return [];
     }
   }

@@ -47,8 +47,11 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     state = state.copyWith(groupsCreated: groupsCreated);
   }
 
-  Future<bool> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<SubjectsRow> subjectsList) async {
+  Future<bool> createGroupSubjects(
+      String groupName,
+      String description,
+      // Color colorCode,
+      List<SubjectsRow> subjectsList) async {
     try {
       final group = await groupsRepository.createGroupSubjects(
           groupName, description, subjectsList);
@@ -93,7 +96,8 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
     final newDescriptionGroup = updateGroup.descripcion;
 
     if (index != -1) {
-      lsGroups[index] = lsGroups[index].copyWith(nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
+      lsGroups[index] = lsGroups[index].copyWith(
+          nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
 
       state = state.copyWith(groups: lsGroups);
     }

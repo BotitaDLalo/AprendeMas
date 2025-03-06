@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:flutter/material.dart';
 
 const List<Color> _colorThemes = [
@@ -13,7 +14,7 @@ const List<Color> _colorThemes = [
 class AppTheme {
   // final Color buttonColor = _colorThemes[1];
 
-  static Color mainColor =_colorThemes[6];
+  static Color mainColor = _colorThemes[6];
   // static Color secondMainColor =Colors.yellow[700]!;
 
   static final Color isSelectedGroup = _colorThemes[1];
@@ -40,15 +41,15 @@ class AppTheme {
   ];
 
 //#Text theme style
-  final TextTheme textThemes = const TextTheme(
-    titleLarge: TextStyle(
+  final TextTheme textThemes = TextTheme(
+    titleLarge: const TextStyle(
         fontSize: 22, color: Colors.black, fontWeight: FontWeight.w500),
-    bodyLarge: TextStyle(
+    bodyLarge: const TextStyle(
       fontSize: 22,
       color: Colors.black,
     ),
-    bodyMedium: TextStyle(fontSize: 20, color: Colors.black),
-    bodySmall: TextStyle(fontSize: 14, color: Colors.black),
+    bodyMedium: const TextStyle(fontSize: 20, color: Colors.black),
+    bodySmall: TextStyle(fontSize: 15, color: Colors.grey[700]),
     // labelLarge: TextStyle(fontSize: 20, color: Colors.black)
   );
 
@@ -82,7 +83,7 @@ class AppTheme {
     backgroundColor: _colorThemes[0],
     // textStyle: const TextStyle(fontSize: 16),
     foregroundColor: _colorThemes[2],
-    fixedSize: const Size.fromHeight(45),
+    // fixedSize: const Size.fromHeight(45),
     // side: BorderSide(color: _colorThemes[1]),
     side: BorderSide(color: _colorThemes[3]),
     shape: RoundedRectangleBorder(

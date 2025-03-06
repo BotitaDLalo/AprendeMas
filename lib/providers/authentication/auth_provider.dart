@@ -56,11 +56,12 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
   final sendSubmissionsCallback =
       ref.read(activityProvider.notifier).sendSubmission;
 
+
   return AuthStateNotifier(
     setSubjectsWithoutGroupState: setSubjectsWithoutGroup,
     authUserOffline: authUserOffline,
     authRepository: authStateRepository,
-    kv: keyValueStorageService,
+    storageService: keyValueStorageService,
     googleSigninApi: googleSigninApi,
     getSubmissionsCallback: getSubmissionsCallback,
     setGroupsSubjectsState: setGroupsSubjectsState,
@@ -74,8 +75,8 @@ final authProvider = StateNotifierProvider<AuthStateNotifier, AuthState>((ref) {
     subjects: subjects,
     groupsOffline: groupsOffline,
     subjectsOffline: subjectsOffline,
-    sendSubmission: sendSubmissionsCallback
-    // activity: activity
+    sendSubmission: sendSubmissionsCallback,
+    
 
   );
 });

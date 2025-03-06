@@ -7,8 +7,9 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 
 class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   // final Function(String, String, Color) createGroupCallback;
-  final Function(String, String, Color, List<SubjectsRow>)
-      createGroupSubjectsCallback;
+  // final Function(String, String, Color, List<SubjectsRow>)
+  //     createGroupSubjectsCallback;
+  final Function(String, String, List<SubjectsRow>) createGroupSubjectsCallback;
   final Function(int, String, String) updateGroupCallback;
   final Function(String) verifyEmailCallback;
   final Function(int) addStudentsGroupCallback;
@@ -48,8 +49,8 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
     if (state.subjectsRow.isNotEmpty) {
-      bool res = await createGroupSubjectsCallback(state.groupName.value,
-          state.description.value, state.colorCode.value, state.subjectsRow);
+      bool res = await createGroupSubjectsCallback(
+          state.groupName.value, state.description.value, state.subjectsRow);
       state = state.copyWith(isFormPosted: res);
     }
     state = state.copyWith(isPosting: false);
@@ -58,13 +59,13 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   _touchEveryField() {
     final groupName = GenericInput.dirty(state.groupName.value);
     final description = GenericInput.dirty(state.description.value);
-    final colorCode = ColorInput.dirty(state.colorCode.value);
+    // final colorCode = ColorInput.dirty(state.colorCode.value);
 
     state = state.copyWith(
         groupName: groupName,
         description: description,
-        colorCode: colorCode,
-        isValid: Formz.validate([groupName, colorCode]));
+        // colorCode: colorCode,
+        isValid: Formz.validate([groupName]));
   }
 
 //#FORMULARIO PARA CREAR UNA MATERIA  DENTRO DEL FORMULARIO DE CREACION DE UN GRUPO
@@ -161,14 +162,17 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   //       isValid: Formz.validate([state.colorCode]));
   // }
 
-  onUpdateGroupSubmit(int groupId, String groupName, String description,
-      ) async {
+  onUpdateGroupSubmit(
+    int groupId,
+    String groupName,
+    String description,
+  ) async {
     onGroupId(groupId);
     _updateGroupTouchEveryField(groupId, groupName, description);
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
-    bool res = await updateGroupCallback(state.groupId, state.groupName.value,
-        state.description.value);
+    bool res = await updateGroupCallback(
+        state.groupId, state.groupName.value, state.description.value);
     state = state.copyWith(isFormPosted: res);
     state = state.copyWith(isPosting: false);
   }
@@ -194,9 +198,9 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
         description: groupDescriptionInput,
         // colorCode: groupColorInput,
         isValid: Formz.validate([groupNameInput]) ||
-            Formz.validate([groupDescriptionInput]) 
-            // ||Formz.validate([groupColorInput])
-            );
+            Formz.validate([groupDescriptionInput])
+        // ||Formz.validate([groupColorInput])
+        );
   }
 
   //# Verificar email

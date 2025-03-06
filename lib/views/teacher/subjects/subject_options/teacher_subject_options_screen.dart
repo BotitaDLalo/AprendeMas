@@ -64,6 +64,7 @@ class _ActividadesScreenState
           isVisible: true,
           optionText: 'Actividades',
           widgetOption: ActivityOptionScreen(
+            buttonCreateIsVisible: true,
             subjectId: widget.subjectId,
             subjectName: widget.subjectName,
           )),

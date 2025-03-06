@@ -12,6 +12,15 @@ class FormCreateGroup extends ConsumerWidget {
     final formCreateGroup = ref.watch(formGroupsProvider);
     final formCreateGroupNotifier = ref.read(formGroupsProvider.notifier);
 
+    // ref.listen(
+    //   formGroupsProvider,
+    //   (previous, next) {
+    //     if (next.isFormPosted && !next.isPosting) {
+    //       context.pop();
+    //     }
+    //   },
+    // );
+
     // Future<void> showColorDialog() async {
     //   showDialog(
     //     barrierDismissible: false,
@@ -80,9 +89,9 @@ class FormCreateGroup extends ConsumerWidget {
                     child: ButtonForm(
                       style: AppTheme.buttonPrimary,
                       buttonName: "Agregar materia",
-                      onPressed: () async {
+                      onPressed: () {
                         formCreateGroupNotifier.onSubjectSubmit();
-                        //# ESTO ES PARA SALIR SIMPLEMENTE, HAY QUE QUITARLO
+
                         Navigator.of(context).pop();
                       },
                     ),
@@ -178,7 +187,7 @@ class FormCreateGroup extends ConsumerWidget {
           //       buttonName: "Seleccionar Color",
           //       onPressed: () => showColorDialog(),
           //     ),
-            
+
           //   ],
           // ),
           // const SizedBox(height: 15),
@@ -241,4 +250,3 @@ class FormCreateGroup extends ConsumerWidget {
     );
   }
 }
- 
