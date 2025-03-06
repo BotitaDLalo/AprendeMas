@@ -138,7 +138,11 @@ class AuthDataSourceImpl implements AuthDataSource {
 
   @override
   Future<AuthUser> registerMissingDataGoogle(
-      String names, String lastname, String secondLastname, String role) async {
+      {required String names,
+      required String lastname,
+      required String secondLastname,
+      required String role,
+      required String fcmToken}) async {
     try {
       const uri = "/GoogleSignin/RegistrarDatosFaltantesGoogle";
       final idToken = await storageService.getToken();
@@ -148,7 +152,8 @@ class AuthDataSourceImpl implements AuthDataSource {
         "ApellidoPaterno": lastname,
         "ApellidoMaterno": secondLastname,
         "Role": role,
-        "IdToken": idToken
+        "IdToken": idToken,
+        "FcmToken": fcmToken
       });
       final user = AuthUserMapper.userJsonToEntity(res.data);
       return user;

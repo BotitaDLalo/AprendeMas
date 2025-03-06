@@ -48,9 +48,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthUser> registerMissingDataGoogle(
-      String names, String lastname, String secondLastname, String role) {
+      {required String names,
+      required String lastname,
+      required String secondLastname,
+      required String role,
+      required String fcmToken}) {
     return dataSource.registerMissingDataGoogle(
-        names, lastname, secondLastname, role);
+        names: names,
+        lastname: lastname,
+        secondLastname: secondLastname,
+        role: role,
+        fcmToken: fcmToken);
   }
 
   @override
@@ -60,7 +68,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<AuthUser> registerAuthorizationCodeUser(String code, String? idToken) {
-    return dataSource.registerAuthorizationCodeUser(code,idToken);
+    return dataSource.registerAuthorizationCodeUser(code, idToken);
   }
 
   @override

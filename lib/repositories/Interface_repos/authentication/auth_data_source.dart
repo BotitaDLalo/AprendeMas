@@ -18,7 +18,11 @@ abstract class AuthDataSource {
   Future<AuthUser> loginGoogle();
 
   Future<AuthUser> registerMissingDataGoogle(
-      String names, String lastname, String secondLastname, String role);
+      {required String names,
+      required String lastname,
+      required String secondLastname,
+      required String role,
+      required String fcmToken});
 
   Future<bool> verifyExistingFcmToken(int id, String fcmToken, String role);
 
