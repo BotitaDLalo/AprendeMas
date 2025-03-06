@@ -10,13 +10,13 @@ enum AuthConectionType { online, offline, unverified }
 
 enum ErrorHandlingStyle { snackBar, dialog , undefined}
 
-enum TeachersAuthorizationStatus {
+enum AuthorizationUserStatus {
   authorized("Autorizado"),
   denied("Denegado"),
   pending("Pendiente");
 
   final String value;
-  const TeachersAuthorizationStatus(this.value);
+  const AuthorizationUserStatus(this.value);
 }
 
 class CatalogNames {
