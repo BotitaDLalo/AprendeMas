@@ -7,7 +7,6 @@ final formEventProvider =
   StateNotifierProvider.autoDispose<FormEventNotifier, FormEventState>(
     (ref) {
       final createEvent = ref.read(eventProvider.notifier).createEvents;
-
       return FormEventNotifier(eventCallback: createEvent);
     }
   );

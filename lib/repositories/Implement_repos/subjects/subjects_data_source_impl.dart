@@ -19,11 +19,13 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
         const uri = "/Materias/ObtenerMateriasDocente";
         final res = await dio.get(uri, queryParameters: {'docenteid': id});
         resList = List<Map<String, dynamic>>.from(res.data);
+        debugPrint("SubjectsDataSourceImpl: ${res.data}");
       } else if (role == cn.getRoleStudentName) {
         const uri = "/Materias/ObtenerMateriasAlumno";
         final res = await dio.get(uri, queryParameters: {'alumnoid': id});
         resList = List<Map<String, dynamic>>.from(res.data);
       }
+      
       final lsSubjects = Subject.subjectsJsonToEntityList(resList);
       return lsSubjects;
     } catch (e) {

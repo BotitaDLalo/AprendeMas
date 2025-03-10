@@ -1,11 +1,18 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class EventCalendarDataSource extends CalendarDataSource {
   EventCalendarDataSource(List<Event> events) {
     appointments = events;
   }
+
+  void updateEvents(List<Event> newEvents) {
+    appointments = newEvents;
+    notifyListeners(CalendarDataSourceAction.reset, newEvents); // 🔔 Notificar al calendario
+  }
+
 
   // Método para convertir un String hexadecimal en un Color.
   Color stringToColor(String hexColor) {
@@ -27,12 +34,12 @@ class EventCalendarDataSource extends CalendarDataSource {
 
   @override
   DateTime getStartTime(int index) {
-    return appointments![index].startDate;
+    return DateFormat("dd-MM-yyyy HH:mm:ss").parse(appointments![index].startDate);
   }
 
   @override
   DateTime getEndTime(int index) {
-    return appointments![index].endDate;
+    return DateFormat("dd-MM-yyyy HH:mm:ss").parse(appointments![index].endDate);
   }
 
   @override

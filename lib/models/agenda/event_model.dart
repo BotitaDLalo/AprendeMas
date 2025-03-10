@@ -1,8 +1,8 @@
 class Event {
   final int? eventId; // Identificador único
   final int teacherId; // Relación con el docente que crea el evento
-  final DateTime startDate; // Fecha y hora de inicio
-  final DateTime endDate; // Fecha y hora de fin
+  final String startDate; // Fecha y hora de inicio
+  final String endDate; // Fecha y hora de fin
   final String title; // Título del evento
   final String description; // Descripción del evento
   final String color; // Código de color (en formato hexadecimal)

@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/agenda/event_provider.dart';
 
 class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
   // final VoidCallback? onPopCallback;
@@ -23,6 +24,7 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
       leading: IconButton(
           onPressed: () {
             actionsAppBar();
+            ref.read(eventProvider.notifier).getEvents();
           },
           icon: const Icon(
             Icons.arrow_back,

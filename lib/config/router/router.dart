@@ -1,6 +1,9 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
+import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
+import 'package:aprende_mas/views/teacher/agenda/update_event_screen.dart';
 import 'package:aprende_mas/views/teacher/notices/teacher_create_notice.dart';
 import 'package:aprende_mas/views/users/authentication/confirmation_code_screen.dart';
 import 'package:aprende_mas/views/users/authentication/verify_email_signin_screen.dart';
@@ -61,6 +64,29 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/create-event',
         builder: (context, state) => const CreateEventScreen(),
+        ),
+
+      GoRoute(
+        path: '/agenda-teacher',
+        builder: (context, state) => const AgendaTeacherScreen(),
+        ),
+
+      GoRoute(
+        path: '/update-event',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return UpdateEventScreen(
+            event: eventData,// List<int>
+          );
+        },
+      ),
+
+      GoRoute(
+        path: '/event-detail',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return EventDetailsScreen(event: eventData, eventId: eventData.eventId!,);
+        },
       ),
       GoRoute(
         path: '/group-teacher-settings',
@@ -173,7 +199,6 @@ final goRouterProvider = Provider((ref) {
       final role = authState.authUser?.role;
       // final roleGoogle = user?.rol;
       final authType = authState.authenticatedType;
-      debugPrint(isGoingTo);
 
       if (authType != AuthenticatedType.undefined) {
         if (authType == AuthenticatedType.auth) {

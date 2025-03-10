@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
@@ -14,7 +13,7 @@ class FormEventState {
   final GenericInput startTime;
   final GenericInput endDate;
   final GenericInput endTime;
-  final Color pickerColor; 
+  // final Color pickerColor; 
   final ColorInput colorCode;
   final List<int>? groupIds;
   final List<int>? subjectIds; 
@@ -31,7 +30,7 @@ class FormEventState {
     this.endDate = const GenericInput.pure(),
     this.endTime = const GenericInput.pure(),
     this.colorCode = const ColorInput.pure(),
-    this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
+    // this.pickerColor = const Color.fromARGB(0, 255, 255, 255),
     this.groupIds = const [],
     this.subjectIds = const []
   });
@@ -47,7 +46,7 @@ class FormEventState {
     GenericInput? startTime,
     GenericInput? endDate, 
     GenericInput? endTime,
-    Color? pickerColor,
+    // Color? pickerColor,
     ColorInput? colorCode,
     List<int>? groupIds,
     List<int>? subjectIds,
@@ -62,7 +61,7 @@ class FormEventState {
     startTime: startTime ?? this.startTime,
     endDate: endDate ?? this.endDate,
     endTime: endTime ?? this.endTime,
-    pickerColor: pickerColor ?? this.pickerColor,
+    // pickerColor: pickerColor ?? this.pickerColor,
     colorCode: colorCode ?? this.colorCode,
     groupIds: groupIds ?? this.groupIds,
     subjectIds: subjectIds ?? this.subjectIds

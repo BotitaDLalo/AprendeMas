@@ -45,18 +45,27 @@ class _OptionDropdownFormState extends ConsumerState<OptionDropdownForm> {
   }
 
   void _onItemSelected(int? value) {
-    if (value == null) return;
-    
-    setState(() {
-      _selectedItemId = value;
-    });
+  if (value == null) return;
+  
+  setState(() {
+    _selectedItemId = value;
+  });
 
-    if (_selectedType == 'Grupo') {
-      ref.read(formEventProvider.notifier).onGroupIdsChanged;
-    } else if (_selectedType == 'Materia') {
-      ref.read(formEventProvider.notifier).onSubjectIdsChanged;
-    }
+  final formEventNotifier = ref.read(formEventProvider.notifier);
+
+  if (_selectedType == 'Grupo') {
+    formEventNotifier.onGroupIdsChanged([value]);
+
+    // Asignar color por defecto al seleccionar un grupo
+    formEventNotifier.onColorCodeChanged(Colors.blue);
+  } else if (_selectedType == 'Materia') {
+    formEventNotifier.onSubjectIdsChanged([value]);
+
+    // Asignar color por defecto al seleccionar una materia
+    formEventNotifier.onColorCodeChanged(Colors.grey);
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
