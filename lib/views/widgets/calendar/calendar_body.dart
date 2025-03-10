@@ -23,6 +23,10 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
     Future.microtask(() => ref.read(eventProvider.notifier).getEvents());
   } 
 
+  void getRole() async{
+    // role = await kvs.getRole;
+  }
+
   @override
   Widget build(BuildContext context) {
 
