@@ -1,5 +1,6 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:aprende_mas/views/student/agenda/event_details_student_screen.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
@@ -86,6 +87,13 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) {
           final eventData = state.extra as Event;
           return EventDetailsScreen(event: eventData, eventId: eventData.eventId!,);
+        },
+      ),
+      GoRoute(
+        path: '/event-detail-student',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return EventDetailsStudentScreen(event:eventData,);
         },
       ),
       GoRoute(

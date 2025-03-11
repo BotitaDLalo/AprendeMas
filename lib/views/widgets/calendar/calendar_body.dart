@@ -1,7 +1,8 @@
+import 'package:aprende_mas/config/data/key_value_storage_service_impl.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/providers/agenda/event_provider.dart';
-import 'package:aprende_mas/providers/agenda/form_event_provider.dart';
 import 'package:aprende_mas/views/widgets/calendar/event_calendar_data_source.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -18,33 +19,45 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
   CalendarController calendarController = CalendarController();
    late EventCalendarDataSource calendarDataSource;
 
-  @override
-  void initState() {
-    super.initState();
-    calendarDataSource = EventCalendarDataSource([]);
-    Future.microtask(() {
-      final events = ref.watch(eventProvider).events;
-      calendarDataSource.updateEvents(events);
-      ref.read(eventProvider.notifier).getEvents();
-    });
-  }
+  final cn = CatalogNames();
+  final kvs = KeyValueStorageServiceImpl();
+  late String role = "";
+
+@override
+void initState() {
+  super.initState();
+  calendarDataSource = EventCalendarDataSource([]);
+  getRole();
+}
+
+Future<void> getRole() async {
+  final userRole = await kvs.getRole();
+  setState(() {
+    role = userRole;
+  });
+
+  Future.microtask(() async {
+    if (role == cn.getRoleTeacherName) {
+      await ref.read(eventProvider.notifier).getEvents(); // 🔹 Cargar eventos de docentes
+      final teacherEvents = ref.read(eventProvider).events; // 🔹 Obtener eventos actualizados
+      calendarDataSource.updateEvents(teacherEvents); // 🔹 Actualizar UI solo para docentes
+    } else if (role == cn.getRoleStudentName) {
+      await ref.read(eventProvider.notifier).getEventsStudent(); // 🔹 Cargar eventos de alumnos (pero sin actualizar la UI)
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
 
     // Obtener el estado global de eventos
-    final eventState = ref.watch(eventProvider);
+    // final eventState = ref.watch(eventProvider);
 
     ref.listen(eventProvider, (previous, next) {
     calendarDataSource.updateEvents(next.events);
   });
 
-  //   ref.listen(eventProvider, (previous, next) {
-  //   setState(() {  // 🔹 Forzamos la reconstrucción de la UI
-  //     calendarDataSource.updateEvents(next.events);
-  //   });
-  // });
-    debugPrint("CalendarBody Eventos cargados: ${eventState.events}");
 
     return Scaffold(
     body: Column(
@@ -61,31 +74,39 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
             view: calendarView,
             showDatePickerButton: true,
             onTap: (CalendarTapDetails details) {
-              if (details.targetElement == CalendarElement.appointment &&
-                  details.appointments != null) {
-                final Event selectedEvent = details.appointments!.first as Event;
-                context.push('/event-detail', extra: selectedEvent);
-              }
+            if (details.targetElement == CalendarElement.appointment &&
+                details.appointments != null) {
+              final Event selectedEvent = details.appointments!.first as Event;
+              
+              // 🔹 Condicional para seleccionar la ruta correcta según el rol
+              final String route = (role == cn.getRoleTeacherName) 
+                ? '/event-detail' 
+                : '/event-detail-student';
+
+              context.push(route, extra: selectedEvent);
+            }
             },
           ),
         ),
       ],
     ),
-    floatingActionButton: FloatingActionButton(
-      onPressed: () async {
-        await context.push('/create-event'); 
-        ref.read(eventProvider.notifier).getEvents(); // Refresca eventos
-      },
-      backgroundColor: Colors.white,
-      elevation: 8,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Icon(
-        Icons.add,
-        color: Colors.grey.withValues(alpha: 0.5),
-      ),
-    ),
+    floatingActionButton: role == cn.getRoleTeacherName
+          ? FloatingActionButton(
+              onPressed: () async {
+                await context.push('/create-event');
+                ref.read(eventProvider.notifier).getEvents();
+              },
+              backgroundColor: Colors.blue,
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null, // No muestra el botón si no es docente
   );
 }
 }

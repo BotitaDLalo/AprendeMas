@@ -111,5 +111,22 @@ class EventDataSourceImpl implements EventDataSource {
     }
   }
   
+  @override
+  Future<List<Event>> getEventsStudent() async{
+    try {
+      final id = await storageService.getId();
+      const uri = "/EventosAgenda/ObtenerEventosAlumno";
+      final res = await dio.get(uri, queryParameters: {'alumnoId': id});
+      debugPrint("Respuesta del backend: ${res.data}");
+
+      final List<Map<String, dynamic>> responseList =
+          List<Map<String, dynamic>>.from(res.data);
+
+      return EventMapper.fromMapList(responseList);
+    } catch (e) {
+      throw Exception("Error al obtener eventos: $e");
+    }
+  }
+  
 }
 
