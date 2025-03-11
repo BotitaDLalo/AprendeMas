@@ -16,6 +16,8 @@ class EventRepositoyImpl implements EventRepository{
     return eventDataSource.getEvents();
   }
 
+  
+
   @override
   Future<List<Event>> createEvent(
     String title,
@@ -46,6 +48,11 @@ class EventRepositoyImpl implements EventRepository{
   @override
   Future<List<Event>> deleteEvent(int teacherId, int eventId) {
     return eventDataSource.deleteEvent(teacherId, eventId);
+  }
+  
+  @override
+  Future<List<Event>> getEventsStudent() {
+    return eventDataSource.getEventsStudent();
   }
   
   

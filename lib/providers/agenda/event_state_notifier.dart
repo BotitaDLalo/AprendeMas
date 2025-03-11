@@ -25,6 +25,20 @@ class EventNotifier extends StateNotifier<EventState>{
     state = state.copyWith(events: events);
   }
 
+    Future<void> getEventsStudent() async {
+    try {
+      final events = await eventRepository.getEventsStudent();
+      _setEventsStudent(events);
+      debugPrint("Estado actualizado con eventos: ${state.events}");
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  _setEventsStudent(List<Event> events) {
+    state = state.copyWith(events: events);
+  }
+
   Future<void> createEvents(
     String title,
     String description,

@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/agenda/event_provider.dart';
 
@@ -15,6 +16,9 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
       // }
     }
 
+    final cn = CatalogNames();
+    late String role = "";
+
     return AppBar(
       forceMaterialTransparency: true,
       backgroundColor: Colors.white,
@@ -23,8 +27,12 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
           ),
       leading: IconButton(
           onPressed: () {
-            actionsAppBar();
-            ref.read(eventProvider.notifier).getEvents();
+          actionsAppBar();
+          if (role == cn.getRoleTeacherName) {
+            ref.read(eventProvider.notifier).getEvents(); // 🔹 Solo actualiza para docentes
+          } else if (role == cn.getRoleStudentName) {
+            ref.read(eventProvider.notifier).getEventsStudent(); // 🔹 Solo actualiza para alumnos
+          }
           },
           icon: const Icon(
             Icons.arrow_back,

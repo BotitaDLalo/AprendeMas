@@ -23,45 +23,41 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
   final kvs = KeyValueStorageServiceImpl();
   late String role = "";
 
-  @override
-  void initState() {
-    super.initState();
-    calendarDataSource = EventCalendarDataSource([]);
-    getRole();
-    Future.microtask(() {
-      final events = ref.watch(eventProvider).events;
-      calendarDataSource.updateEvents(events);
-      ref.read(eventProvider.notifier).getEvents();
-    });
-  }
+@override
+void initState() {
+  super.initState();
+  calendarDataSource = EventCalendarDataSource([]);
+  getRole();
+}
 
-  Future<void> getRole() async {
-    final userRole = await kvs.getRole();
-    setState(() {
-      role = userRole;
-    });
-  }
+Future<void> getRole() async {
+  final userRole = await kvs.getRole();
+  setState(() {
+    role = userRole;
+  });
 
-  void getRole() async{
-    // role = await kvs.getRole;
-  }
+  Future.microtask(() async {
+    if (role == cn.getRoleTeacherName) {
+      await ref.read(eventProvider.notifier).getEvents(); // 🔹 Cargar eventos de docentes
+      final teacherEvents = ref.read(eventProvider).events; // 🔹 Obtener eventos actualizados
+      calendarDataSource.updateEvents(teacherEvents); // 🔹 Actualizar UI solo para docentes
+    } else if (role == cn.getRoleStudentName) {
+      await ref.read(eventProvider.notifier).getEventsStudent(); // 🔹 Cargar eventos de alumnos (pero sin actualizar la UI)
+    }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
 
     // Obtener el estado global de eventos
-    final eventState = ref.watch(eventProvider);
+    // final eventState = ref.watch(eventProvider);
 
     ref.listen(eventProvider, (previous, next) {
     calendarDataSource.updateEvents(next.events);
   });
 
-  //   ref.listen(eventProvider, (previous, next) {
-  //   setState(() {  // 🔹 Forzamos la reconstrucción de la UI
-  //     calendarDataSource.updateEvents(next.events);
-  //   });
-  // });
-    debugPrint("CalendarBody Eventos cargados: ${eventState.events}");
 
     return Scaffold(
     body: Column(
@@ -78,11 +74,17 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
             view: calendarView,
             showDatePickerButton: true,
             onTap: (CalendarTapDetails details) {
-              if (details.targetElement == CalendarElement.appointment &&
-                  details.appointments != null) {
-                final Event selectedEvent = details.appointments!.first as Event;
-                context.push('/event-detail', extra: selectedEvent);
-              }
+            if (details.targetElement == CalendarElement.appointment &&
+                details.appointments != null) {
+              final Event selectedEvent = details.appointments!.first as Event;
+              
+              // 🔹 Condicional para seleccionar la ruta correcta según el rol
+              final String route = (role == cn.getRoleTeacherName) 
+                ? '/event-detail' 
+                : '/event-detail-student';
+
+              context.push(route, extra: selectedEvent);
+            }
             },
           ),
         ),
@@ -94,14 +96,14 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
                 await context.push('/create-event');
                 ref.read(eventProvider.notifier).getEvents();
               },
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.blue,
               elevation: 8,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
                 Icons.add,
-                color: Colors.grey.withOpacity(0.5),
+                color: Colors.white,
               ),
             )
           : null, // No muestra el botón si no es docente

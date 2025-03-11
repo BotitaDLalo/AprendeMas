@@ -24,7 +24,8 @@ class RouterRedirections {
   static List<String> routesStudent = [
     "/student-subject-options",
     "/student-activity-section-submissions",
-    '/notification-content'
+    '/notification-content',
+    '/event-detail-student'
   ];
 
   static List<String> routesNotAuthenticated = [

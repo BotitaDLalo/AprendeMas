@@ -4,6 +4,8 @@ import 'package:aprende_mas/models/agenda/event_model.dart';
 abstract class EventRepository {
   Future<List<Event>> getEvents();
 
+  Future<List<Event>> getEventsStudent();
+
   Future<List<Event>> createEvent(
     String title,
     String description,
