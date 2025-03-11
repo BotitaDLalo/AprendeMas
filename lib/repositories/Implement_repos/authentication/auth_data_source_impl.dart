@@ -225,7 +225,10 @@ class AuthDataSourceImpl implements AuthDataSource {
     try {
       const uri = "/Login/VerificarEmailUsuario";
 
-      final res = await dio.post(uri, queryParameters: {'email': email});
+      final res = await dio.post(
+        uri,
+        data: '"$email"',
+      );
 
       if (res.statusCode == 200) {
         return true;
