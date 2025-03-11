@@ -68,4 +68,8 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
   _setSubjectsWithoutGroups(List<Subject> subjects) {
     state = state.copyWith(subjects: subjects);
   }
+
+    void clearSubjectsState() {
+    state = SubjectsState();
+  }
 }

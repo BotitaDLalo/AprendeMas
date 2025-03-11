@@ -28,6 +28,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         widget.lsWidgetsOptions.elementAt(ref.watch(itemTappedProvider));
 
     final auth = ref.read(authProvider);
+
+    void logoutClearStates() {
+      if (auth.authGoogleStatus == AuthGoogleStatus.authenticated) {
+        ref.watch(authProvider.notifier).logoutGoogle();
+      } else if (auth.authStatus == AuthStatus.authenticated) {
+        ref.watch(authProvider.notifier).logout();
+      }
+      ref.read(notificationsProvider.notifier).clearNotifications();
+      ref.read(activityProvider.notifier).clearActivityState();
+      ref.read(groupsProvider.notifier).clearGroupsState();
+      ref.read(subjectsProvider.notifier).clearSubjectsState();
+    }
+
     return Scaffold(
       endDrawer: SizedBox(
         width: 250,
@@ -60,14 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(fontSize: 20),
                 ),
                 onTap: () {
-                  if (auth.authGoogleStatus == AuthGoogleStatus.authenticated) {
-                    ref.watch(authProvider.notifier).logoutGoogle();
-                  } else if (auth.authStatus == AuthStatus.authenticated) {
-                    ref.watch(authProvider.notifier).logout();
-                  }
-                  ref.read(notificationsProvider.notifier).clearNotifications();
-                  ref.read(activityProvider.notifier).clearActivityState();
-                  ref.read(groupsProvider.notifier).clearGroupsState();
+                  logoutClearStates();
                 },
               ),
             ],
