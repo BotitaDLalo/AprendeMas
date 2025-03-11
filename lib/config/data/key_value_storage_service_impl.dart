@@ -9,22 +9,7 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
     return await SharedPreferences.getInstance();
   }
 
-  @override
-  Future<bool> removeKeyValue(
-      String keyToken, String keyId, String keyRole, String keyUserName) async {
-    final prefs = await getSharedPrefs();
-    bool removeToken = await prefs.remove(keyToken);
-    bool removeId = await prefs.remove(keyId);
-    bool removeRol = await prefs.remove(keyRole);
-    bool removeUserName = await prefs.remove(keyUserName);
-    if (removeToken && removeId && removeRol && removeUserName) {
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Future<void> setKeyValue<T>(String key, T value) async {
+  Future<void> _setKeyValue<T>(String key, T value) async {
     final prefs = await getSharedPrefs();
     if (value is int) {
       await prefs.setInt(key, value as int);
@@ -37,8 +22,17 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
     }
   }
 
-  @override
-  Future<T?> getValue<T>(String key) async {
+  Future<bool> _removeKeyValue(String key) async {
+    try {
+      final prefs = await getSharedPrefs();
+      final valueRemoved = await prefs.remove(key);
+      return valueRemoved;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<T?> _getValue<T>(String key) async {
     final prefs = await getSharedPrefs();
     switch (T) {
       case const (int):
@@ -53,27 +47,92 @@ class KeyValueStorageServiceImpl implements KeyValueStorageService {
   }
 
   @override
+  Future<void> saveAuthType<T>(T value) async {
+    await _setKeyValue(cn.getKeyAuthTypeName, value);
+  }
+
+  @override
+  Future<void> saveEmail<T>(T value) async {
+    await _setKeyValue(cn.getKeyEmailName, value);
+  }
+
+  @override
+  Future<void> saveId<T>(T value) async {
+    await _setKeyValue(cn.getKeyIdName, value);
+  }
+
+  @override
+  Future<void> saveRole<T>(T value) async {
+    await _setKeyValue(cn.getKeyRoleName, value);
+  }
+
+  @override
+  Future<void> saveToken<T>(T value) async {
+    await _setKeyValue(cn.getKeyTokenName, value);
+  }
+
+  @override
+  Future<void> saveUserName<T>(T value) async {
+    await _setKeyValue(cn.getKeyUserName, value);
+  }
+
+  @override
   Future<int> getId() async {
-    return await getValue<int>(cn.getKeyIdName) ?? -1;
+    return await _getValue<int>(cn.getKeyIdName) ?? -1;
   }
 
   @override
   Future<String> getRole() async {
-    return await getValue<String>(cn.getKeyRoleName) ?? "";
+    return await _getValue<String>(cn.getKeyRoleName) ?? "";
   }
 
   @override
   Future<String> getToken() async {
-    return await getValue<String>(cn.getKeyTokenName) ?? "";
+    return await _getValue<String>(cn.getKeyTokenName) ?? "";
   }
 
   @override
   Future<String> getUserName() async {
-    return await getValue<String>(cn.getKeyUserName) ?? "";
+    return await _getValue<String>(cn.getKeyUserName) ?? "";
   }
 
   @override
   Future<String> getAuthType() async {
-    return await getValue<String>(cn.getKeyAuthTypeName) ?? "";
+    return await _getValue<String>(cn.getKeyAuthTypeName) ?? "";
+  }
+
+  @override
+  Future<String> getEmail() async {
+    return await _getValue<String>(cn.getKeyEmailName) ?? "";
+  }
+
+  @override
+  Future<bool> removeAuthType() async {
+    return await _removeKeyValue(cn.getKeyAuthTypeName);
+  }
+
+  @override
+  Future<bool> removeEmail() async {
+    return await _removeKeyValue(cn.getKeyEmailName);
+  }
+
+  @override
+  Future<bool> removeId() {
+    return _removeKeyValue(cn.getKeyIdName);
+  }
+
+  @override
+  Future<bool> removeRole() async {
+    return await _removeKeyValue(cn.getKeyRoleName);
+  }
+
+  @override
+  Future<bool> removeToken() async {
+    return await _removeKeyValue(cn.getKeyIdName);
+  }
+
+  @override
+  Future<bool> removeUserName() async {
+    return await _removeKeyValue(cn.getKeyUserName);
   }
 }

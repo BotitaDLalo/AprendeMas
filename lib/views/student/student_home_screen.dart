@@ -27,7 +27,7 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
     WidgetOptions(
       title: 'Notificaciones',
         bottomNavigationBarItem: lsBarItems[2],
-        widget: const NoticesStudentScreen())
+        widget: const NotificationsStudentScreen())
   ];
 
   @override

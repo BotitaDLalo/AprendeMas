@@ -45,6 +45,7 @@ class ActivityDataSourceImpl implements ActivityDataSource {
 
       return activities;
     } catch (e) {
+      debugPrint(e.toString());
       return [];
       // throw Exception(
       //     "ActivityDataSourceImpl post Error al crear una actividad: $e");

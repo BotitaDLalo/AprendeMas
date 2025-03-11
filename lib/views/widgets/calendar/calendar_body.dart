@@ -42,6 +42,10 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
     });
   }
 
+  void getRole() async{
+    // role = await kvs.getRole;
+  }
+
   @override
   Widget build(BuildContext context) {
 

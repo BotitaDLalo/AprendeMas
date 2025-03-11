@@ -241,7 +241,8 @@ class _ActivitySectionSubmissionState
                     widget.activity.puntaje.toString(),
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 18,
+                      fontSize: 24,
+                     fontWeight: FontWeight.bold
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -256,7 +257,7 @@ class _ActivitySectionSubmissionState
                       widget.activity.descripcion,
                       style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 18,
                       ),
                     ),
                   ),

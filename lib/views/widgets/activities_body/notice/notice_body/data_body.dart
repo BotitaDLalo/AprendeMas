@@ -7,8 +7,10 @@ class DataBody extends ConsumerWidget {
   final int noticeId;
   final String teacherName;
   final String createdDate;
+  final bool optionsIsVisible;
   const DataBody(
       {super.key,
+      required this.optionsIsVisible,
       required this.noticeId,
       required this.teacherName,
       required this.createdDate});
@@ -56,6 +58,8 @@ class DataBody extends ConsumerWidget {
               ],
             ),
           ),
+
+          if(optionsIsVisible)
           PopupMenuButton(
             color: Colors.white,
             elevation: 10.0,
@@ -114,14 +118,6 @@ class DataBody extends ConsumerWidget {
               // )),
             ],
           )
-          // GestureDetector(
-          //   onTap: (){
-          //   },
-          //   child: const Icon(
-          //     Icons.more_vert,
-          //     size: 30,
-          //   ),
-          // ),
         ],
       ),
     );

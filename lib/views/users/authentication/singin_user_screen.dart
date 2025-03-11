@@ -1,13 +1,20 @@
-import 'package:aprende_mas/config/router/router.dart';
-import 'package:aprende_mas/views/users/authentication/form_singin.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:aprende_mas/config/data/data.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/users/authentication/form_signin.dart';
 
-class SinginUserScreen extends StatelessWidget {
+class SinginUserScreen extends ConsumerWidget {
   const SinginUserScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final storageService = KeyValueStorageServiceImpl();
+    final formSigninNotifier = ref.read(signinFormProvider.notifier);
+
+    void deleteEmaulUser() async {
+      await storageService.removeEmail();
+    }
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -15,24 +22,15 @@ class SinginUserScreen extends StatelessWidget {
           backgroundColor: Colors.transparent,
           leading: IconButton(
               onPressed: () {
+                formSigninNotifier.clearFormSigninState();
+                deleteEmaulUser();
                 FocusScope.of(context).unfocus();
                 context.pop();
               },
               icon: const Icon(Icons.arrow_back)),
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            physics: const ClampingScrollPhysics(),
-            child: Column(
-              children: [
-                Image.asset('assets/logo.png', width: 150),
-                const SizedBox(
-                  height: 30,
-                ),
-                const FormSingin(),
-              ],
-            ),
-          ),
+        body: const SingleChildScrollView(
+          child: FormSingin(),
         ),
       ),
     );

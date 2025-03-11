@@ -15,10 +15,20 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<User> signin(String name, String lastname, String secondLastname,
-      String email, String password, String role, String fcmToken) {
+  Future<AuthUser> signin(
+      {required String name,
+      required String lastname,
+      required String secondLastname,
+      required String password,
+      required String role,
+      required String fcmToken}) {
     return dataSource.signin(
-        name, lastname, secondLastname, email, password, role, fcmToken);
+        name: name,
+        lastname: lastname,
+        secondLastname: secondLastname,
+        password: password,
+        role: role,
+        fcmToken: fcmToken);
   }
 
   @override
@@ -46,5 +56,15 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> verifyExistingFcmToken(int id, String fcmToken, String role) {
     return dataSource.verifyExistingFcmToken(id, fcmToken, role);
+  }
+
+  @override
+  Future<AuthUser> registerAuthorizationCodeUser(String code, String? idToken) {
+    return dataSource.registerAuthorizationCodeUser(code,idToken);
+  }
+
+  @override
+  Future<bool> verifyEmailSignin(String email) {
+    return dataSource.verifyEmailSignin(email);
   }
 }

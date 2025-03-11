@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
 
 Future<void> showLoadingScreen(BuildContext context) {
   return showDialog(

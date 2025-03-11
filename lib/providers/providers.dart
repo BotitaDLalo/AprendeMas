@@ -2,7 +2,7 @@
 export 'authentication/auth_provider.dart';
 export 'authentication/auth_state.dart';
 export 'authentication/login_form_provider.dart';
-export 'authentication/sigin_form_provider.dart';
+export 'authentication/signin_form_provider.dart';
 export 'authentication/forgot_password_form_provider.dart';
 export 'authentication/missing_data_form_provider.dart';
 

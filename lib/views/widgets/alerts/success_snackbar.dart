@@ -22,15 +22,17 @@ successMessage(BuildContext context, String message) {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
-                  const Text(
-                    'Exito',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                  Text(
-                    message,
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
-                  ),
+              const Text(
+                'Exito',
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              Text(
+                message,
+                style: const TextStyle(
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 16,
+                    color: Colors.white),
+              ),
             ],
           ))
         ],

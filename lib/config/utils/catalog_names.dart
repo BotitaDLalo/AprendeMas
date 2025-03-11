@@ -8,6 +8,17 @@ enum RegisterStatus { registered, notRegistered }
 
 enum AuthConectionType { online, offline, unverified }
 
+enum ErrorHandlingStyle { snackBar, dialog , undefined}
+
+enum TeachersAuthorizationStatus {
+  authorized("Autorizado"),
+  denied("Denegado"),
+  pending("Pendiente");
+
+  final String value;
+  const TeachersAuthorizationStatus(this.value);
+}
+
 class CatalogNames {
   String get getRoleTeacherName => "Docente";
   String get getRoleStudentName => "Alumno";
@@ -16,4 +27,5 @@ class CatalogNames {
   String get getKeyTokenName => "token";
   String get getKeyUserName => "username";
   String get getKeyAuthTypeName => "authtype";
+  String get getKeyEmailName => "email";
 }

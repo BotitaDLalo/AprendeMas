@@ -38,7 +38,7 @@ class SubjectsDataSourceImpl implements SubjectsDataSource {
       String description, Color colorCode, List<int> groupsId) async {
     try {
       const uri = "/Materias/CrearMateriaGrupos";
-      final id = await storageService.getValue<int>('id');
+      final id = await storageService.getId();
       final res = await dio.post(uri, data: {
         "NombreMateria": subjectName,
         "Descripcion": description,

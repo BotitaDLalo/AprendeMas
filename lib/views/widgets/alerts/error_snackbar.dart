@@ -27,7 +27,7 @@ errorMessage(BuildContext context, String message) {
                   ),
                   Text(
                     message,
-                    style: const TextStyle(fontSize: 16, color: Colors.white),
+                    style: const TextStyle(overflow: TextOverflow.ellipsis,fontSize: 16, color: Colors.white),
                   ),
                 ],
               ),

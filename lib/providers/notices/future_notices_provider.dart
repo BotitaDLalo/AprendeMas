@@ -5,7 +5,6 @@ import 'package:aprende_mas/repositories/Implement_repos/notices/notices_reposit
 final futureNoticesProvider =
     FutureProvider.autoDispose.family<List<NoticeModel>, NoticeModel>(
   (ref, notice) async {
-    // ref.keepAlive();
     final noticesRepository = NoticesRepositoryImpl();
 
     final lsNotices = await noticesRepository.getlsNotices(notice);

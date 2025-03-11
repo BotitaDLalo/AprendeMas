@@ -19,8 +19,6 @@ class _TeacherCreateNoticeState extends ConsumerState<TeacherCreateNotice> {
     final formNoticeNotifier = ref.read(noticesFormProvider.notifier);
     final formNotice = ref.watch(noticesFormProvider);
     NoticeModel notice = widget.notice;
-    final groupId = notice.groupId;
-    final subjectId = notice.subjectId;
 
     ref.listen(
       noticesFormProvider,

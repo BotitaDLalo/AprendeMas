@@ -23,13 +23,16 @@ class RouterRedirections {
 
   static List<String> routesStudent = [
     "/student-subject-options",
-    "/student-activity-section-submissions"
+    "/student-activity-section-submissions",
+    '/notification-content'
   ];
 
   static List<String> routesNotAuthenticated = [
-    "/sigin-user",
+    '/signin-user',
     "/forgot-password",
     "/missing-data",
+    '/confirmation-code-screen',
+    '/verify-email-signin-screen'
   ];
 
   static String redirectNotAuthenticated(String isGoingTo) =>
