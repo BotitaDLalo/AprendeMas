@@ -707,9 +707,9 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await authUserOffline.deleteUser();
     await storageService.removeAuthType();
     await storageService.removeEmail();
-    await storageService.getId();
-    await storageService.getRole();
-    await storageService.getToken();
-    await storageService.getUserName();
+    await storageService.removeId();
+    await storageService.removeRole();
+    await storageService.removeToken();
+    await storageService.removeUserName();
   }
 }
