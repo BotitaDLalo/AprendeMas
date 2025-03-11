@@ -106,11 +106,11 @@ class _ActivitySectionSubmissionState
           actions: [
             TextButton(
                 onPressed: () {
-                  if (authConectionType == AuthConectionType.online) {
+                  if (authConectionType == AuthConnectionType.online) {
                     ref
                         .read(activityFormProvider.notifier)
                         .onSendSubmission(activityId);
-                  } else if (authConectionType == AuthConectionType.offline) {
+                  } else if (authConectionType == AuthConnectionType.offline) {
                     //TODO: REGISTRAR SUBMISSION EN BD LOCAL
                     ref
                         .read(activityFormProvider.notifier)
@@ -163,11 +163,11 @@ class _ActivitySectionSubmissionState
                   leading: const Icon(Icons.delete),
                   title: const Text('Cancelar Entregable'),
                   onTap: () {
-                    if (authConectionType == AuthConectionType.online) {
+                    if (authConectionType == AuthConnectionType.online) {
                       ref.read(activityProvider.notifier).cancelSubmission(
                           studentActivityId, widget.activity.actividadId);
                     } else if (authConectionType ==
-                        AuthConectionType.offline) {}
+                        AuthConnectionType.offline) {}
 
                     Navigator.pop(context);
                   },

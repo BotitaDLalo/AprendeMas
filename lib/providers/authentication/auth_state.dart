@@ -16,7 +16,7 @@ class AuthState {
 
   final AuthGoogleStatus? authGoogleStatus;
   final bool theresMissingData;
-  final AuthConectionType authConectionType;
+  final AuthConnectionType authConectionType;
 
   final bool isPendingAuthorizationUser;
   final bool isDeniedUserAuthorization;
@@ -30,7 +30,7 @@ class AuthState {
       this.errorComment = '',
       this.authGoogleStatus = AuthGoogleStatus.checking,
       this.authenticatedType = AuthenticatedType.undefined,
-      this.authConectionType = AuthConectionType.unverified,
+      this.authConectionType = AuthConnectionType.unverified,
       this.theresMissingData = false,
       this.isDeniedUserAuthorization = false,
       this.isPendingAuthorizationUser = false,
@@ -46,7 +46,7 @@ class AuthState {
           String? errorComment,
           AuthGoogleStatus? authGoogleStatus,
           bool? theresMissingData,
-          AuthConectionType? authConectionType,
+          AuthConnectionType? authConectionType,
           bool? isDeniedUserAuthorization,
           bool? isPendingAuthorizationUser,
           ErrorHandlingStyle? errorHandlingStyle}) =>

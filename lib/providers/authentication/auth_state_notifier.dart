@@ -67,10 +67,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     final checkInternet = await ConnectivityCheck.checkInternetConnectivity();
     if (checkInternet) {
       final authType = await storageService.getAuthType();
-      final authTypeEnum = AuthenticatedType.values.firstWhere(
-        (element) => element.toString() == authType,
-        orElse: () => AuthenticatedType.undefined,
-      );
+      final authTypeEnum = getAuthConnectionType(authType);
       if (authTypeEnum == AuthenticatedType.auth) {
         checkAuthStatus();
       } else if (authTypeEnum == AuthenticatedType.authGoogle) {
@@ -108,7 +105,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     } on FcmTokenVerificatioFailed catch (e) {
       badResponseLogin(e.message);
     } on ConnectionTimeout catch (e) {
-      badResponseLogin(e.message);
+      connectionTimeoutLogin(e.message);
     } on UncontrolledError catch (e) {
       badResponseLogin(e.message);
     }
@@ -322,7 +319,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       authUser: user,
       authenticatedType: authType,
       authStatus: AuthStatus.authenticated,
-      authConectionType: AuthConectionType.online,
+      authConectionType: AuthConnectionType.online,
       errorMessage: '',
     );
   }
@@ -512,7 +509,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       authUser: user,
       authStatus: AuthStatus.authenticated,
       authenticatedType: AuthenticatedType.auth,
-      authConectionType: AuthConectionType.offline,
+      authConectionType: AuthConnectionType.offline,
       errorMessage: '',
     );
   }
@@ -576,11 +573,21 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       }
     } on FcmTokenVerificatioFailed catch (e) {
       badResponseLogin(e.message);
-    } on ConnectionTimeout {
-      badResponseLogin('Timeout');
+    } on ConnectionTimeout catch (e) {
+      connectionTimeoutLoginGoogle(e.message);
     } on UncontrolledError catch (e) {
       badResponseLogin(e.message);
     }
+  }
+
+  void connectionTimeoutLogin(String message) async {
+    logout();
+    badResponseLogin(message);
+  }
+
+  void connectionTimeoutLoginGoogle(String message) async {
+    logoutGoogle();
+    badResponseLogin(message);
   }
 
   void _saveUserDataLoginGoogle(String email, String token) async {
@@ -650,7 +657,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         authUser: user,
         authenticatedType: authType,
         authGoogleStatus: AuthGoogleStatus.authenticated,
-        authConectionType: AuthConectionType.offline,
+        authConectionType: AuthConnectionType.offline,
         errorMessage: '');
   }
 
@@ -683,13 +690,14 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       await googleSigninApi.handlerGoogleLogout();
       _deleteUserData();
+    } catch (e) {
+      debugPrint(e.toString());
+      // return;
+    } finally {
       state = state.copyWith(
           authGoogleStatus: AuthGoogleStatus.notAuthenticated,
           // user: null,
           errorMessage: errorMessage);
-    } catch (e) {
-      debugPrint(e.toString());
-      return;
     }
   }
 
