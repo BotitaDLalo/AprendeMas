@@ -75,7 +75,7 @@ class _StudentsGroupsSubjectsState
                       iconColor: Colors.white,
                       iconSize: 32,
                       title: username,
-                      subtitle: "$lastname $lastname2 $name}",
+                      subtitle: "$lastname $lastname2 $name",
                       trailingIcon: Icons.more_vert,
                       trailingColor: Colors.black,
                       trailingVoidCallback: () {
