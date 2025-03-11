@@ -23,6 +23,14 @@ class _CalendarBodyState extends ConsumerState<CalendarBody> {
   final kvs = KeyValueStorageServiceImpl();
   late String role = "";
 
+    final List<CalendarView> _allowedViews = <CalendarView>[
+    CalendarView.day,
+    CalendarView.week,
+    CalendarView.workWeek,
+    CalendarView.month,
+    CalendarView.schedule,
+  ];
+
 @override
 void initState() {
   super.initState();
@@ -64,6 +72,7 @@ Future<void> getRole() async {
       children: [
         Expanded(
           child: SfCalendar(
+            allowedViews: _allowedViews,
             cellBorderColor: Colors.transparent,
             dataSource: calendarDataSource,
             controller: calendarController,
