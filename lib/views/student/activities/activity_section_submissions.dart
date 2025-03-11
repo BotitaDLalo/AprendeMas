@@ -86,8 +86,8 @@ class _ActivitySectionSubmissionState
     final authConectionType = ref.read(authProvider).authConectionType;
     final activityId = widget.activity.actividadId;
     final activitiesForm = ref.watch(activityFormProvider);
-    final lsSubmissions = Submission.activitiesBySubject(
-        ref.watch(activityProvider).lsSubmissions, activityId);
+    final lsSub = ref.watch(activityProvider).lsSubmissions;
+    final lsSubmissions = Submission.activitiesBySubject(lsSub, activityId);
 
     // final lsSubmissions = ref
     //     .read(activityProvider.notifier)
@@ -111,7 +111,6 @@ class _ActivitySectionSubmissionState
                         .read(activityFormProvider.notifier)
                         .onSendSubmission(activityId);
                   } else if (authConectionType == AuthConnectionType.offline) {
-                    //TODO: REGISTRAR SUBMISSION EN BD LOCAL
                     ref
                         .read(activityFormProvider.notifier)
                         .onSendSubmissionOffline(activityId);
@@ -240,10 +239,9 @@ class _ActivitySectionSubmissionState
                   Text(
                     widget.activity.puntaje.toString(),
                     style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                     fontWeight: FontWeight.bold
-                    ),
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   const Divider(
