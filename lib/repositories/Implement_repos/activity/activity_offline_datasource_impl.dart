@@ -37,6 +37,7 @@ class ActivityOfflineDatasourceImpl implements ActivityOfflineDatasource {
 
       return [];
     } catch (e) {
+      debugPrint(e.toString());
       return [];
     }
   }

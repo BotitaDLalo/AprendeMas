@@ -18,6 +18,7 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       return user;
     } on DioException catch (e) {
+      debugPrint(e.message);
       if (e.response?.statusCode == 400 &&
           e.response?.data['errorCode'] == 1001) {
         final message = e.response?.data['errorMessage'];
