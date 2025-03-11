@@ -650,8 +650,10 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         user.token, user.userId, user.role, user.userName, authType);
 
     List<Group> lsGroups = await groups.getGroupsSubjects();
+    List<Subject> lsSubjectsWithoutGroup =
+        await subjects.getSubjectsWithoutGroup();
 
-    _setUserDataGoogleState(lsGroups);
+    _setUserDataGoogleState(lsGroups, lsSubjectsWithoutGroup);
 
     state = state.copyWith(
         authUser: user,
@@ -661,9 +663,11 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         errorMessage: '');
   }
 
-  void _setUserDataGoogleState(List<Group> lsGroups) async {
+  void _setUserDataGoogleState(
+      List<Group> lsGroups, List<Subject> lsSubjectsWithoutGroup) async {
     //& set para groups y subjects y activities state
     await setGroupsSubjectsState(lsGroups);
+    await setSubjectsWithoutGroupState(lsSubjectsWithoutGroup);
 
     //& set para activity state
     for (var group in lsGroups) {
@@ -682,6 +686,19 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           await getSubmissionsCallback(activityId);
           // await activityOffline.saveSubmissions(lsSubmissions, activityId);
         }
+      }
+    }
+
+    //& set para activity state materias sin grupo
+    for (var subject in lsSubjectsWithoutGroup) {
+      final subjectId = subject.materiaId;
+
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subject.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.actividadId;
+
+        await getSubmissionsCallback(activityId);
       }
     }
   }

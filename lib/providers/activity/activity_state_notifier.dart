@@ -97,7 +97,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
       final submissionSent =
           await activityRepository.sendSubmission(activityId, answer);
       if (submissionSent.isNotEmpty) {
-        // _setLsSubmissions(submissionSent);
+        _setLsSubmissions(submissionSent);
         return true;
       }
       return false;
