@@ -37,7 +37,7 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
     final isNotEmpty = ref.watch(addStudentGroupMessageProvider);
     final content = ref.watch(contentGroupProvider);
 
-    final formGroups = ref.watch(formGroupsProvider);
+    final formStudentsGroups = ref.watch(formStudentsGroupProvider);
 
     final lsEmails = ref.watch(studentsGroupProvider).lsEmails;
 
@@ -48,7 +48,7 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
     }
 
     ref.listen(
-      formGroupsProvider,
+      formStudentsGroupProvider,
       (previous, next) {
         final isValid = next.verifyEmail?.isEmailValid ?? false;
         if (isValid) {
@@ -57,9 +57,8 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
       },
     );
 
-    ref.listen(formGroupsProvider, (previous, next) {
-      final isFormPosted = next.isFormPosted;
-      if (isFormPosted) {
+    ref.listen(formStudentsGroupProvider, (previous, next) {
+      if (next.isFormPosted) {
         ref.read(studentsGroupProvider.notifier).clearLsEmails();
       }
     });
@@ -83,11 +82,11 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                           color: Colors.grey.shade200,
                           child: ListTile(
                             onTap: () async {
-                              if (formGroups.isPosting) {
+                              if (formStudentsGroups.isPosting) {
                                 return;
                               }
                               await ref
-                                  .read(formGroupsProvider.notifier)
+                                  .read(formStudentsGroupProvider.notifier)
                                   .onVerifyEmailSubmit(content);
                             },
                             title: const Text(
@@ -167,13 +166,13 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                             style: AppTheme.buttonPrimary,
                             buttonName: "Agregar",
                             onPressed: () async {
-                              if (formGroups.isPosting) {
+                              if (formStudentsGroups.isPosting) {
                                 return;
                               }
                               ref
-                                  .read(formGroupsProvider.notifier)
+                                  .read(formStudentsGroupProvider.notifier)
                                   .onAddStudentsGroup(widget.id);
-                              if (formGroups.isFormPosted) {
+                              if (formStudentsGroups.isFormPosted) {
                                 ref
                                     .read(studentsGroupProvider.notifier)
                                     .clearLsEmails();
