@@ -34,6 +34,13 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
 
   @override
   Widget build(BuildContext context) {
+    final isNotEmpty = ref.watch(addStudentGroupMessageProvider);
+    final content = ref.watch(contentGroupProvider);
+
+    final formGroups = ref.watch(formGroupsProvider);
+
+    final lsEmails = ref.watch(studentsGroupProvider).lsEmails;
+
     void clear() {
       controller.clear();
       ref.read(addStudentGroupMessageProvider.notifier).state = false;
@@ -50,23 +57,13 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
       },
     );
 
-    final isNotEmpty = ref.watch(addStudentGroupMessageProvider);
-    final content = ref.watch(contentGroupProvider);
-
-    final formGroups = ref.watch(formGroupsProvider);
-    final formGroupsNotifier = ref.read(formGroupsProvider.notifier);
-
-    final lsEmails = ref.watch(studentsGroupProvider).lsEmails;
-    final groupsNotifier = ref.read(groupsProvider.notifier);
-    final studentsGroupNotifier = ref.read(studentsGroupProvider.notifier);
-
     ref.listen(formGroupsProvider, (previous, next) {
       final isFormPosted = next.isFormPosted;
       if (isFormPosted) {
-        // clear();
-        studentsGroupNotifier.clearLsEmails();
+        ref.read(studentsGroupProvider.notifier).clearLsEmails();
       }
     });
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -89,7 +86,8 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                               if (formGroups.isPosting) {
                                 return;
                               }
-                              await formGroupsNotifier
+                              await ref
+                                  .read(formGroupsProvider.notifier)
                                   .onVerifyEmailSubmit(content);
                             },
                             title: const Text(
@@ -151,7 +149,8 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                                 trailing: IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () {
-                                    studentsGroupNotifier
+                                    ref
+                                        .read(studentsGroupProvider.notifier)
                                         .onDeleteVeryfyEmail(index);
                                   },
                                 ),
@@ -171,9 +170,13 @@ class _StudentsGroupState extends ConsumerState<StudentsGroupAssigment> {
                               if (formGroups.isPosting) {
                                 return;
                               }
-                              formGroupsNotifier.onAddStudentsGroup(widget.id);
+                              ref
+                                  .read(formGroupsProvider.notifier)
+                                  .onAddStudentsGroup(widget.id);
                               if (formGroups.isFormPosted) {
-                                studentsGroupNotifier.clearLsEmails();
+                                ref
+                                    .read(studentsGroupProvider.notifier)
+                                    .clearLsEmails();
                               }
                             })),
                   ],

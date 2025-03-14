@@ -30,13 +30,13 @@ class _OptionDropdownFormState extends ConsumerState<OptionDropdownForm> {
 
       if (_selectedType == 'Grupo') {
         final groupsState = ref.watch(groupsProvider);
-        _options = groupsState.groups.map((group) => {
+        _options = groupsState.lsGroups.map((group) => {
               'id': group.grupoId.toString(),
               'name': group.nombreGrupo,
             }).toList();
       } else if (_selectedType == 'Materia') {
         final subjectsState = ref.watch(subjectsProvider);
-        _options = subjectsState.subjects.map((subject) => {
+        _options = subjectsState.lsSubjects.map((subject) => {
               'id': subject.materiaId.toString(),
               'name': subject.nombreMateria,
             }).toList();

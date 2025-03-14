@@ -1,16 +1,16 @@
 import 'package:aprende_mas/models/models.dart';
 
 class SubjectsState {
-  final List<Subject> subjects;
+  final List<Subject> lsSubjects;
 
   SubjectsState({
-    this.subjects = const [],
+    this.lsSubjects = const [],
   });
 
   SubjectsState copyWith({
-    List<Subject>? subjects,
+    List<Subject>? lsSubjects,
   }) =>
       SubjectsState(
-        subjects: subjects ?? this.subjects,
+        lsSubjects: lsSubjects ?? this.lsSubjects,
       );
 }

@@ -16,7 +16,6 @@ class _SubjectsWithoutGroupsState
   void initState() {
     super.initState();
     // ref.read(subjectsProvider.notifier).getSubjects();
-    
   }
 
   Color stringToColor(String hexColor) {
@@ -26,11 +25,11 @@ class _SubjectsWithoutGroupsState
 
   @override
   Widget build(BuildContext context) {
-    final subjects = ref.watch(subjectsProvider).subjects;
+    final subjects = ref.watch(subjectsProvider);
     return ListView.builder(
-      itemCount: subjects.length,
+      itemCount: subjects.lsSubjects.length,
       itemBuilder: (context, index) {
-        final subject = subjects[index];
+        final subject = subjects.lsSubjects[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SubjectCard(

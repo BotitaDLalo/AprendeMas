@@ -27,7 +27,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
 
   Future<List<Subject>> getSubjectsWithoutGroup() async {
     try {
-      List<Subject> lsSubjects = List.from(state.subjects);
+      List<Subject> lsSubjects = List.from(state.lsSubjects);
       return lsSubjects;
     } catch (e) {
       return [];
@@ -35,7 +35,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
   }
 
   setSubjects(List<Subject> subjects) {
-    state = state.copyWith(subjects: subjects);
+    state = state.copyWith(lsSubjects: subjects);
   }
 
   Future<void> createSubjectWithGroups(String subjectName, String description,
@@ -66,7 +66,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
   }
 
   _setSubjectsWithoutGroups(List<Subject> subjects) {
-    state = state.copyWith(subjects: subjects);
+    state = state.copyWith(lsSubjects: subjects);
   }
 
     void clearSubjectsState() {
