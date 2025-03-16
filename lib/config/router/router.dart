@@ -15,8 +15,8 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_student_submission_grading.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 String routeAux = "";
 List<GoRoute> lsRouter = [];
