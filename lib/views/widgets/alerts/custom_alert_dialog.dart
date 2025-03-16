@@ -2,14 +2,22 @@ import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_form.dart';
 
-class ErrorAlertDialog extends ConsumerWidget {
-  final String errorMessage;
-  final String errorComment;
+class CustomAlertDialog extends ConsumerWidget {
+  final String message;
+  final String comment;
+  final String buttonContinueName;
+  final String buttonCancelName;
+  final VoidCallback onPressedContinue;
+  final VoidCallback onPressedCancel;
 
-  const ErrorAlertDialog({
+  const CustomAlertDialog({
     super.key,
-    required this.errorMessage,
-    required this.errorComment,
+    required this.message,
+    required this.comment,
+    required this.buttonCancelName,
+    required this.buttonContinueName,
+    required this.onPressedContinue,
+    required this.onPressedCancel
   });
 
   @override
@@ -17,7 +25,7 @@ class ErrorAlertDialog extends ConsumerWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       title: Text(
-        errorMessage,
+        message,
         textAlign: TextAlign.center,
         style: const TextStyle(
           fontSize: 20,
@@ -32,7 +40,7 @@ class ErrorAlertDialog extends ConsumerWidget {
           children: [
             Text(
               textAlign: TextAlign.center,
-              errorComment,
+              comment,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(
@@ -42,30 +50,18 @@ class ErrorAlertDialog extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ButtonForm(
-                    buttonName: 'Cancelar',
-                    onPressed: () => Navigator.of(context).pop(),
+                    buttonName: buttonCancelName,
+                    onPressed: onPressedCancel,
                     style: AppTheme.buttonSecondary),
                 ButtonForm(
-                    buttonName: 'Iniciar sesión',
-                    onPressed: () {
-                      context.go('/login-user');
-                    },
+                    buttonName: buttonContinueName,
+                    onPressed: onPressedContinue,
                     style: AppTheme.buttonPrimary)
               ],
             )
           ],
         ),
       ),
-      // actions: [
-      //   ButtonForm(
-      //       buttonName: 'Cancelar',
-      //       onPressed: () {},
-      //       style: AppTheme.buttonSecondary),
-      //   ButtonForm(
-      //       buttonName: 'Iniciar sesión',
-      //       onPressed: () {},
-      //       style: AppTheme.buttonPrimary)
-      // ],
     );
   }
 }

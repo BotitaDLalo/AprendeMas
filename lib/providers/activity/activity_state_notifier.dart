@@ -13,9 +13,12 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     required this.activityOfflineRepository,
   }) : super(ActivityState());
 
-  List<Activity> getActivitiesBySubject(int subjectId) {
+  void errorMessage(String errorMessage) {
+    state = state.copyWith(errorMessage: errorMessage);
+  }
+
+  List<Activity> getActivitiesBySubject(int subjectId, List<Activity> lsActivities) {
     try {
-      List<Activity> lsActivities = List.from(state.activities);
       final lsActivitiesBySubject =
           Activity.activitiesBySubject(lsActivities, subjectId);
       return lsActivitiesBySubject;
@@ -40,7 +43,8 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   Future<void> getAllActivitiesOffline(int subjectId) async {
     try {
       state = state.copyWith(isLoading: true);
-      final lsActivities = await activityOfflineRepository.getAllActivitiesOffline(subjectId);
+      final lsActivities =
+          await activityOfflineRepository.getAllActivitiesOffline(subjectId);
       _setActivities(lsActivities);
     } catch (e) {
       debugPrint(e.toString());
@@ -51,8 +55,8 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   void _setActivities(List<Activity> activities) {
     if (activities.isNotEmpty) {
-      List<Activity> lsActivities = List.from(state.activities);
-      state = state.copyWith(activities: [...activities, ...lsActivities]);
+      List<Activity> lsActivities = List.from(state.lsActivities);
+      state = state.copyWith(lsActivities: [...activities, ...lsActivities]);
     }
   }
 
@@ -78,7 +82,27 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
   }
 
   void _setCreatedActivity(List<Activity> activity) {
-    state = state.copyWith(activities: activity);
+    state = state.copyWith(lsActivities: activity);
+  }
+
+  Future<void> deleteActivity(int activityId) async {
+    try {
+      await activityRepository.deleteActivity(activityId);
+      _deleteActivityInState(activityId);
+    } on UncontrolledError catch (e) {
+      errorMessage(e.message);
+    }
+  }
+
+  _deleteActivityInState(int activityId) {
+    List<Activity> lsActivitiesFromState = List.from(state.lsActivities);
+    final lsActivities = lsActivitiesFromState
+        .where(
+          (activity) => activity.activityId != activityId,
+        )
+        .toList();
+
+    state = state.copyWith(lsActivities: lsActivities);
   }
 
   Future<List<Submission>> getSubmissions(int activityId) async {

@@ -5,7 +5,7 @@ import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_offli
 import 'package:aprende_mas/config/utils/general_utils.dart';
 import '../../../config/utils/packages.dart';
 
-class SubjectsOfflineDataSourceImpl implements SubjectsOfflineDataSource {
+class SubjectsOfflineDataSourceImpl extends SubjectsOfflineDataSource {
   @override
   Future<List<Subject>> getSujectsWithoutGroup() async {
     try {
@@ -34,7 +34,7 @@ class SubjectsOfflineDataSourceImpl implements SubjectsOfflineDataSource {
                   [activityId]);
 
               lsActivities.add(Activity(
-                actividadId: queryActivities[0]['ActividadId'] as int,
+                activityId: queryActivities[0]['ActividadId'] as int,
                 nombreActividad:
                     queryActivities[0]['NombreActividad'] as String,
                 descripcion: queryActivities[0]['Descripcion'] as String,
@@ -89,7 +89,7 @@ class SubjectsOfflineDataSourceImpl implements SubjectsOfflineDataSource {
           if (subject.actividades != null) {
             for (var activity in subject.actividades!) {
               await db.insert('tbActividades', {
-                'ActividadId': activity.actividadId,
+                'ActividadId': activity.activityId,
                 'NombreActividad': activity.nombreActividad,
                 'TipoActividadId': activity.tipoActividadId,
                 'Descripcion': activity.descripcion,
@@ -101,7 +101,7 @@ class SubjectsOfflineDataSourceImpl implements SubjectsOfflineDataSource {
 
               await db.insert('tbMateriasActividades', {
                 'MateriaId': subjectId,
-                'ActividadId': activity.actividadId
+                'ActividadId': activity.activityId
               });
             }
           }

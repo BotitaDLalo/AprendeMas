@@ -44,7 +44,7 @@ class GroupsOfflineDataSourceImpl implements GroupsOfflineDataSource {
                     [activityId]);
 
                 actividades.add(Activity(
-                    actividadId: queryActivitie[0]['ActividadId'] as int,
+                    activityId: queryActivitie[0]['ActividadId'] as int,
                     nombreActividad:
                         queryActivitie[0]['NombreActividad'] as String,
                     descripcion: queryActivitie[0]['Descripcion'] as String,
@@ -125,7 +125,7 @@ class GroupsOfflineDataSourceImpl implements GroupsOfflineDataSource {
               if (subject.actividades != null) {
                 for (var activity in subject.actividades!) {
                   await db.insert('tbActividades', {
-                    'ActividadId': activity.actividadId,
+                    'ActividadId': activity.activityId,
                     'NombreActividad': activity.nombreActividad,
                     'TipoActividadId': activity.tipoActividadId,
                     'Descripcion': activity.descripcion,
@@ -137,7 +137,7 @@ class GroupsOfflineDataSourceImpl implements GroupsOfflineDataSource {
 
                   await db.insert('tbMateriasActividades', {
                     'MateriaId': subjectId,
-                    'ActividadId': activity.actividadId
+                    'ActividadId': activity.activityId
                   });
                 }
               }
