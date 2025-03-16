@@ -8,7 +8,7 @@ class ActivityMapper {
   static List<Activity> fromMapList(List<Map<String, dynamic>> data) {
     return data.map((map) {
       return Activity(
-          actividadId: map['actividadId'] as int,
+          activityId: map['actividadId'] as int,
           nombreActividad: map['nombreActividad'] as String,
           descripcion: map['descripcionActividad'] as String,
           tipoActividadId: map['tipoActividadId'] as int,
@@ -21,7 +21,7 @@ class ActivityMapper {
 
   static Map<String, dynamic> toMap(Activity activity) {
     return {
-      'actividadId': activity.actividadId,
+      'actividadId': activity.activityId,
       'nombreActividad': activity.nombreActividad,
       'descripcionActividad': activity.descripcion,
       'tipoActividadId': activity.tipoActividadId,
