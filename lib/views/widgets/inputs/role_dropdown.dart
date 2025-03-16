@@ -14,7 +14,7 @@ class RoleDropdown extends ConsumerStatefulWidget {
 class _RoleDropdownState extends ConsumerState<RoleDropdown> {
   @override
   Widget build(BuildContext context) {
-    final cn = CatalogNames();
+    final cn = ref.watch(catalogNamesProvider);
     final List<String> users = [cn.getRoleStudentName, cn.getRoleTeacherName];
     final selectedValue = ref.watch(roleProvider);
     final missingDataNotifier = ref.read(missingDataFormProvider.notifier);

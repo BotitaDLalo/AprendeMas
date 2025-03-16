@@ -1,9 +1,8 @@
-import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/config/utils/app_theme.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 final hasSubmissionsProvider = StateProvider(
   (ref) => false,
@@ -84,7 +83,7 @@ class _ActivitySectionSubmissionState
   @override
   Widget build(BuildContext context) {
     final authConectionType = ref.read(authProvider).authConectionType;
-    final activityId = widget.activity.actividadId;
+    final activityId = widget.activity.activityId;
     final activitiesForm = ref.watch(activityFormProvider);
     final lsSub = ref.watch(activityProvider).lsSubmissions;
     final lsSubmissions = Submission.activitiesBySubject(lsSub, activityId);
@@ -164,7 +163,7 @@ class _ActivitySectionSubmissionState
                   onTap: () {
                     if (authConectionType == AuthConnectionType.online) {
                       ref.read(activityProvider.notifier).cancelSubmission(
-                          studentActivityId, widget.activity.actividadId);
+                          studentActivityId, widget.activity.activityId);
                     } else if (authConectionType ==
                         AuthConnectionType.offline) {}
 

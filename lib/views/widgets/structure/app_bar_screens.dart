@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/agenda/event_provider.dart';
+import 'package:aprende_mas/providers/providers.dart';
 
 class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
   // final VoidCallback? onPopCallback;
@@ -8,6 +9,11 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final cn = ref.watch(catalogNamesProvider);
+    final role = ref.watch(roleFutureProvider).maybeWhen(
+          data: (role) => role,
+          orElse: () => '',
+        );
     void actionsAppBar() {
       FocusScope.of(context).unfocus();
       context.pop();
@@ -16,8 +22,6 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
       // }
     }
 
-    final cn = CatalogNames();
-    late String role = "";
 
     return AppBar(
       forceMaterialTransparency: true,
@@ -27,12 +31,16 @@ class AppBarScreens extends ConsumerWidget implements PreferredSizeWidget {
           ),
       leading: IconButton(
           onPressed: () {
-          actionsAppBar();
-          if (role == cn.getRoleTeacherName) {
-            ref.read(eventProvider.notifier).getEvents(); // 🔹 Solo actualiza para docentes
-          } else if (role == cn.getRoleStudentName) {
-            ref.read(eventProvider.notifier).getEventsStudent(); // 🔹 Solo actualiza para alumnos
-          }
+            actionsAppBar();
+            if (role == cn.getRoleTeacherName) {
+              ref
+                  .read(eventProvider.notifier)
+                  .getEvents(); // 🔹 Solo actualiza para docentes
+            } else if (role == cn.getRoleStudentName) {
+              ref
+                  .read(eventProvider.notifier)
+                  .getEventsStudent(); // 🔹 Solo actualiza para alumnos
+            }
           },
           icon: const Icon(
             Icons.arrow_back,

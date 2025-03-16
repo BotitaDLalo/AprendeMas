@@ -28,7 +28,6 @@ class FormUpdateGroup extends ConsumerStatefulWidget {
 class _FormUpdateGroupState extends ConsumerState<FormUpdateGroup> {
   @override
   Widget build(BuildContext context) {
-    final formUpdateGroup = ref.watch(formGroupsProvider);
     final formUpdateGroupNotifier = ref.read(formGroupsProvider.notifier);
 
     // Future<void> showColorDialog() async {

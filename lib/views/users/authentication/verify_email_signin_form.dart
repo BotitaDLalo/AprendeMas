@@ -1,12 +1,11 @@
 import 'package:aprende_mas/config/data/data.dart';
-import 'package:aprende_mas/config/utils/app_theme.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/providers/authentication/form_email_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/views/widgets/alerts/error_alert_dialog.dart';
+import 'package:aprende_mas/views/widgets/alerts/custom_alert_dialog.dart';
 import 'package:aprende_mas/views/widgets/buttons/button_login.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 class VerifyEmailSigninForm extends ConsumerWidget {
   const VerifyEmailSigninForm({super.key});
@@ -21,8 +20,14 @@ class VerifyEmailSigninForm extends ConsumerWidget {
       showDialog(
         context: context,
         builder: (context) {
-          return ErrorAlertDialog(
-              errorMessage: errorMessage, errorComment: errorComment);
+          return CustomAlertDialog(
+            message: errorMessage,
+            comment: errorComment,
+            buttonCancelName: 'Cancelar',
+            onPressedCancel: () => Navigator.of(context).pop(),
+            buttonContinueName: 'Iniciar Sesión',
+            onPressedContinue: () => context.go('/login-user'),
+          );
         },
       );
     }

@@ -1,10 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/providers/authentication/auth_provider.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/views/views.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
-import 'package:aprende_mas/providers/notifications/notifications_provider.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final List<WidgetOptions> lsWidgetsOptions;
