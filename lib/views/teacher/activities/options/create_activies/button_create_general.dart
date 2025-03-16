@@ -7,9 +7,10 @@ class ButtonCreateGeneral extends StatelessWidget {
   final String subjectName;
 
   const ButtonCreateGeneral({
-    super.key, 
-    required this.subjectId, 
-    required this.subjectName,});
+    super.key,
+    required this.subjectId,
+    required this.subjectName,
+  });
 
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
@@ -22,9 +23,8 @@ class ButtonCreateGeneral extends StatelessWidget {
               leading: const Icon(Icons.create),
               title: const Text("Actividad"),
               onTap: () {
-                final data = Subject(
-                  materiaId: subjectId, 
-                  nombreMateria: subjectName);
+                final data =
+                    Subject(materiaId: subjectId, nombreMateria: subjectName);
 
                 context.push('/create-activities', extra: data);
                 // context.pop();

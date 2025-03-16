@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/activity/activity_provider.dart';
 import 'package:aprende_mas/providers/activity/activty_form_provider.dart';
 import 'package:aprende_mas/views/teacher/activities/options/create_activies/button_activity_form.dart';
 import 'package:aprende_mas/views/widgets/inputs/custom_time_form_field.dart';
@@ -40,11 +41,11 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
       });
     }
 
-    ref.listen(activityFormProvider, (previous, next) {
-      if (next.isFormPosted) {
-        goRouterPop();
-      }
-    });
+    // ref.listen(activityFormProvider, (previous, next) {
+    //   if (next.isFormPosted && mounted) {
+    //     goRouterPop();
+    //   }
+    // });
 
     return Form(
       child: Padding(
@@ -128,12 +129,14 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
                     if (!ref.read(activityFormProvider).isPosting) {
                       await activityCreated.onFormSubmit(
                           widget.subjectId, widget.nombreMateria);
+
+                      ref.read(activityProvider.notifier).getActivitiesBySubject(widget.subjectId);
                     }
                     // final updatedState = ref.read(activityFormProvider);
                     // if (updatedState.isFormPosted) {
                     //   return goRouterPop();
                     // }
-                    // goRouterPop();
+                    goRouterPop();
                   }),
             ),
           ],
