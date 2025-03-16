@@ -87,11 +87,34 @@ class VerifyEmailSigninForm extends ConsumerWidget {
             child: ButtonLogin(
               text: 'Verificar',
               textColor: Colors.white,
-              onPressed: () {
-                if (formEmail.isPosting) {
-                  return;
+              onPressed: () async {
+                // if (formEmail.isPosting) {
+                //   return;
+                // }
+                // formEmailNotifier.onVerifyEmailSigninSubmit();
+
+                if (formEmail.isPosting) return;
+
+                if (!formEmail.email.isValid) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: const Text("El correo no es válido"),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                  return; // Detener la ejecución si el formulario no es válido
                 }
-                formEmailNotifier.onVerifyEmailSigninSubmit();
+
+                try {
+                  await formEmailNotifier.onVerifyEmailSigninSubmit();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error: $e"),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                }
               },
               buttonStyle: AppTheme.buttonPrimary,
             ),

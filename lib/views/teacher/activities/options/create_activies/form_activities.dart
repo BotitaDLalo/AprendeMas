@@ -40,10 +40,16 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
       });
     }
 
+    ref.listen(activityFormProvider, (previous, next) {
+      if (next.isFormPosted) {
+        goRouterPop();
+      }
+    });
+
     return Form(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-        child: Column( 
+        child: Column(
           children: [
             CustomTextFormField(
                 capitalizeFirstLetter: true,
@@ -123,9 +129,10 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
                       await activityCreated.onFormSubmit(
                           widget.subjectId, widget.nombreMateria);
                     }
-                    if (activityForm.isFormPosted) {
-                      return goRouterPop();
-                    }
+                    // final updatedState = ref.read(activityFormProvider);
+                    // if (updatedState.isFormPosted) {
+                    //   return goRouterPop();
+                    // }
                     // goRouterPop();
                   }),
             ),

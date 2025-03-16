@@ -27,7 +27,7 @@ class ButtonCreateGeneral extends StatelessWidget {
                   nombreMateria: subjectName);
 
                 context.push('/create-activities', extra: data);
-                context.pop();
+                // context.pop();
               },
             ),
             ListTile(
