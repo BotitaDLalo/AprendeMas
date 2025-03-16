@@ -6,6 +6,7 @@ import 'package:aprende_mas/providers/groups/students_group_provider.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 import 'package:aprende_mas/views/teacher/teacher.dart';
 
+final _itemTappedProvider = StateProvider<int>((ref) => 1);
 class GroupTeacherOptions extends ConsumerStatefulWidget {
   final int groupId;
   final String groupName;
@@ -33,15 +34,14 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
     ref.read(studentsGroupProvider.notifier).getStudentsGroup(widget.groupId);
   }
 
-  final itemTappedProvider = StateProvider<int>((ref) => 1);
 
   void onOptionSelected(int index) {
-    ref.read(itemTappedProvider.notifier).state = index;
+    ref.read(_itemTappedProvider.notifier).state = index;
   }
 
   @override
   Widget build(BuildContext context) {
-    final itemTapped = ref.watch(itemTappedProvider);
+    final itemTapped = ref.watch(_itemTappedProvider);
 
     void clearScreen() {
       ref.read(addStudentMessageProvider.notifier).state = false;
@@ -108,7 +108,7 @@ class _GroupTeacherOptionsState extends ConsumerState<GroupTeacherOptions> {
             TeacherGroupOptions(
                 lsGroupOptions: lsGroupOptions,
                 onOptionSelected: onOptionSelected,
-                selectedOptionIndex: ref.watch(itemTappedProvider)),
+                selectedOptionIndex: ref.watch(_itemTappedProvider)),
             Expanded(
               child: getWidget(itemTapped),
             ),

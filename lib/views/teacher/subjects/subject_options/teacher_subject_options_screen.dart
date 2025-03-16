@@ -8,8 +8,8 @@ import 'package:aprende_mas/views/teacher/subjects/subject_options/students_subj
 import 'package:aprende_mas/views/teacher/subjects/subject_options/teacher_subject_options.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
 
-final itemTappedProvider = StateProvider<int>((ref) => 1);
 
+final _itemTappedProvider = StateProvider<int>((ref) => 1);
 class TeacherSubjectOptionsScreen extends ConsumerStatefulWidget {
   final int? groupId;
   final int subjectId;
@@ -40,13 +40,13 @@ class _ActividadesScreenState
   }
 
   void onOptionSelected(int index) {
-    ref.read(itemTappedProvider.notifier).state = index;
+    ref.read(_itemTappedProvider.notifier).state = index;
   }
 
   @override
   Widget build(BuildContext context) {
 
-    final itemTapped = ref.watch(itemTappedProvider);
+    final itemTapped = ref.watch(_itemTappedProvider);
 
     void clearScreen() {
       ref.read(addStudentMessageProvider.notifier).state = false;
@@ -111,7 +111,7 @@ class _ActividadesScreenState
             TeacherSubjectOptions(
               lsSubjectOptions: lsSubjectOptions,
               onOptionSelected: onOptionSelected,
-              selectedOptionIndex: ref.watch(itemTappedProvider),
+              selectedOptionIndex: ref.watch(_itemTappedProvider),
             ),
             Expanded(
               child: getWidget(itemTapped),

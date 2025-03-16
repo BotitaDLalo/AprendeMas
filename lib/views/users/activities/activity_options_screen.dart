@@ -24,7 +24,6 @@ class ActivityOptionScreen extends ConsumerStatefulWidget {
 }
 
 class _ActivityOptionState extends ConsumerState<ActivityOptionScreen> {
-  final cn = CatalogNames();
 
   @override
   void initState() {

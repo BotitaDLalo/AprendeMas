@@ -48,9 +48,6 @@ class _DialogTextFieldState extends ConsumerState<DialogTextField> {
               onChanged: (text) {
                 ref.read(activityFormProvider.notifier).onAnswerChanged(text);
                 ref.read(dialogHeightProvider.notifier).state = 150.0 + (controller.text.length / 2);
-                // setState(() {
-                //   dialogHeight = 150.0 + (controller.text.length / 2);
-                // });
               },
               decoration: const InputDecoration(
                 hintText: 'Escribe tu respuesta',

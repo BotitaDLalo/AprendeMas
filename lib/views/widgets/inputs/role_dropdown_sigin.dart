@@ -15,7 +15,7 @@ class RoleDropdownSigin extends ConsumerStatefulWidget {
 class _RoleDropdownSiginState extends ConsumerState<RoleDropdownSigin> {
   @override
   Widget build(BuildContext context) {
-    final cn = CatalogNames();
+    final cn = ref.watch(catalogNamesProvider);
     final List<String> users = [cn.getRoleStudentName, cn.getRoleTeacherName];
     final selectedValue = ref.watch(roleProvider);
     final siginNotifier = ref.read(signinFormProvider.notifier);

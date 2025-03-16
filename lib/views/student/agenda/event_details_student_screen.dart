@@ -27,14 +27,14 @@ class EventDetailsStudentScreen extends ConsumerWidget {
     int? subjectId = event.subjectIds?.isNotEmpty == true ? event.subjectIds!.first : null;
 
     String? groupName = groupId != null
-      ? groupProvider.groups.firstWhere(
+      ? groupProvider.lsGroups.firstWhere(
           (g) => g.grupoId == groupId,
           orElse: () => Group(grupoId: groupId, nombreGrupo: "Grupo no encontrado"),
         ).nombreGrupo
       : null;
 
     String? subjectName = subjectId != null
-      ? subjectProvider.subjects.firstWhere(
+      ? subjectProvider.lsSubjects.firstWhere(
           (s) => s.materiaId == subjectId,
           orElse: () => Subject(materiaId: subjectId, nombreMateria: "Materia no encontrada"),
         ).nombreMateria

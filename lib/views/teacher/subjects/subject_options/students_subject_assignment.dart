@@ -42,8 +42,6 @@ class _StudentsSubjectAssignmentState
 
     final formSubjects = ref.watch(formSubjectsProvider);
 
-    // final subjects = ref.watch(subjectsProvider);
-
     final lsEmails = ref.watch(studentsSubjectProvider).lsEmails;
 
     void clear() {

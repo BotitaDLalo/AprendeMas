@@ -38,7 +38,7 @@ class Group {
         List<Activity> actividades =
             (materia['actividades'] as List).map((actividad) {
           return Activity(
-              actividadId: actividad['actividadId'],
+              activityId: actividad['actividadId'],
               nombreActividad: actividad['nombreActividad'],
               descripcion: actividad['descripcion'],
               tipoActividadId: actividad['tipoActividadId'],

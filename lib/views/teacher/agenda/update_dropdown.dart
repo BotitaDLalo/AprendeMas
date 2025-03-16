@@ -37,10 +37,10 @@ void initState() {
     final groupsNotifier = ref.read(groupsProvider.notifier);
     final subjectsNotifier = ref.read(subjectsProvider.notifier);
 
-    if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
+    if (_isGroup && ref.read(groupsProvider).lsGroups.isEmpty) {
       groupsNotifier.getGroupsSubjects();
     }
-    if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
+    if (!_isGroup && ref.read(subjectsProvider).lsSubjects.isEmpty) {
       subjectsNotifier.getSubjects();
     }
   });
@@ -78,18 +78,18 @@ void initState() {
     final groupsNotifier = ref.read(groupsProvider.notifier);
     final subjectsNotifier = ref.read(subjectsProvider.notifier);
 
-    if (_isGroup && ref.read(groupsProvider).groups.isEmpty) {
+    if (_isGroup && ref.read(groupsProvider).lsGroups.isEmpty) {
       groupsNotifier.getGroupsSubjects();
     }
-    if (!_isGroup && ref.read(subjectsProvider).subjects.isEmpty) {
+    if (!_isGroup && ref.read(subjectsProvider).lsSubjects.isEmpty) {
       subjectsNotifier.getSubjects();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final groupsState = ref.watch(groupsProvider.select((state) => state.groups));
-    final subjectsState = ref.watch(subjectsProvider.select((state) => state.subjects));
+    final groupsState = ref.watch(groupsProvider.select((state) => state.lsGroups));
+    final subjectsState = ref.watch(subjectsProvider.select((state) => state.lsSubjects));
 
     final options = _isGroup
         ? groupsState.map((group) => DropdownMenuItem<int>(

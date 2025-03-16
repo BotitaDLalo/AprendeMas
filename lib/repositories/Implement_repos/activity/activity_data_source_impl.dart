@@ -181,4 +181,14 @@ class ActivityDataSourceImpl implements ActivityDataSource {
       return false;
     }
   }
+
+  @override
+  Future<void> deleteActivity(int activityId) async {
+    try {
+      const uri = "/Actividades/EliminarActividad/";
+      await dio.delete(uri + activityId.toString());
+    } catch (e) {
+      throw UncontrolledError();
+    }
+  }
 }

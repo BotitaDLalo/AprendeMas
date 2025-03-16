@@ -31,7 +31,7 @@ class Subject {
             codigoAcceso: e['codigoAcceso'],
             actividades: (e['actividades'] as List<dynamic>? ?? [])
                 .map((e) => Activity(
-                    actividadId: e['actividadId'],
+                    activityId: e['actividadId'],
                     nombreActividad: e['nombreActividad'],
                     descripcion: e['descripcion'],
                     tipoActividadId: e['tipoActividadId'],

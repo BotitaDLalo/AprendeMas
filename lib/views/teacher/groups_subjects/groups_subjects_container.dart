@@ -22,12 +22,12 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final groups = ref.watch(groupsProvider).groups;
+    final groups = ref.watch(groupsProvider);
 
     return ListView.builder(
-      itemCount: groups.length,
+      itemCount: groups.lsGroups.length,
       itemBuilder: (context, index) {
-        final grupo = groups[index];
+        final grupo = groups.lsGroups[index];
         return GroupCard(
           id: grupo.grupoId ?? -1,
           title: grupo.nombreGrupo,

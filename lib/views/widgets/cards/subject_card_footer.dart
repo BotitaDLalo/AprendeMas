@@ -3,7 +3,7 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
 import 'package:aprende_mas/config/data/data.dart';
 
-class CustomFooterContainer extends StatelessWidget {
+class CustomFooterContainer extends ConsumerWidget {
   final int? groupId;
   final int subjectId;
   final String subjectName;
@@ -16,8 +16,8 @@ class CustomFooterContainer extends StatelessWidget {
       required this.description});
 
   @override
-  Widget build(BuildContext context) {
-    final cn = CatalogNames();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cn = ref.watch(catalogNamesProvider);
     final storageService = KeyValueStorageServiceImpl();
 
     void teacherSubjectOptions(Subject data) {

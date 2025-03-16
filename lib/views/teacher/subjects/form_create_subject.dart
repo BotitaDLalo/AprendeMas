@@ -183,7 +183,7 @@ class FormCreateSubjectState extends ConsumerState<FormCreateSubject> {
                 scrollDirection: Axis.vertical,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: groups.groupsCreated
+                  children: groups.lsGroupsCreated
                       .map(
                         (e) => groupsItems(e.groupId, e.groupName),
                       )

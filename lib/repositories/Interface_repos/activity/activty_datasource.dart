@@ -6,6 +6,8 @@ abstract class ActivityDataSource {
   Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
       String descripcion, DateTime fechaLimite, int puntaje);
 
+  Future<void> deleteActivity(int activityId);
+
   Future<Activity> updateActivity(int activityId, String nombreActividad,
       String descripcion, DateTime fechaLimite);
 
@@ -17,6 +19,6 @@ abstract class ActivityDataSource {
       int studentActivityId, int activityId);
 
   Future<ActivityStudentSubmissionsData> getStudentSubmissions(int activityId);
-  
+
   Future<bool> submissionGrading(int submissionId, int grade);
 }

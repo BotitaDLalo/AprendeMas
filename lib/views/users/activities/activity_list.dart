@@ -1,10 +1,9 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/config/utils/catalog_names.dart';
-import 'package:aprende_mas/providers/activity/activity_provider.dart';
-import 'package:aprende_mas/views/widgets/cards/activity_body_model.dart';
+import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/widgets/alerts/custom_alert_dialog.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/widgets/widgets.dart';
-import 'package:aprende_mas/config/data/data.dart';
 
 class ActivityList extends ConsumerStatefulWidget {
   final int subjectId;
@@ -15,13 +14,8 @@ class ActivityList extends ConsumerStatefulWidget {
 }
 
 class _ActivityListState extends ConsumerState<ActivityList> {
-  final cn = CatalogNames();
-  final kvs = KeyValueStorageServiceImpl();
-  late String role = "";
-
   @override
   void initState() {
-    getRole();
     Future.microtask(
       () {
         ref.read(activityProvider.notifier).clearSubmissionData();
@@ -30,15 +24,23 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     super.initState();
   }
 
-  void getRole() async {
-    role = await kvs.getRole();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final activityState = ref
-        .watch(activityProvider.notifier)
-        .getActivitiesBySubject(widget.subjectId);
+    final cn = ref.watch(catalogNamesProvider);
+    final role = ref.watch(roleFutureProvider).maybeWhen(
+          data: (role) => role,
+          orElse: () => "",
+        );
+
+    final act = ref.watch(activityProvider);
+    final lsActivities = ref
+        .read(activityProvider.notifier)
+        .getActivitiesBySubject(widget.subjectId, act.lsActivities);
+
+    // final lsActivities = ref
+    //     .read(activityProvider.notifier)
+    //     .getActivitiesBySubject(widget.subjectId);
+
     // final activityState = ref.watch(activityProvider);
     // if (activityState.isLoading) {
     //   return const Center(child: CircularProgressIndicator());
@@ -60,7 +62,33 @@ class _ActivityListState extends ConsumerState<ActivityList> {
       context.push('/student-activity-section-submissions', extra: activity);
     }
 
-    void showModalBottomActivityOptions() {
+    void closeDialog() {
+      Navigator.of(context).pop();
+    }
+
+    void showDialogDeleteConfirmation(int activityId) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return CustomAlertDialog(
+            message: '¿Desea eliminar la actividad?',
+            comment: 'Todas las entregas y calificaciones serán eliminadas',
+            buttonCancelName: 'Cancelar',
+            onPressedContinue: () async {
+              await ref
+                  .read(activityProvider.notifier)
+                  .deleteActivity(activityId);
+
+              closeDialog();
+            },
+            buttonContinueName: 'Eliminar',
+            onPressedCancel: () => closeDialog(),
+          );
+        },
+      );
+    }
+
+    void showModalBottomActivityOptions(int activityId) {
       showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -86,7 +114,8 @@ class _ActivityListState extends ConsumerState<ActivityList> {
                   leading: const Icon(Icons.delete_forever),
                   title: const Text('Eliminar'),
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
+                    showDialogDeleteConfirmation(activityId);
                   },
                 ),
               ],
@@ -97,13 +126,13 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     }
 
     return ListView.builder(
-      itemCount: activityState.length,
+      itemCount: lsActivities.length,
       itemBuilder: (context, index) {
-        final activity = activityState[index];
+        final activity = lsActivities[index];
         return GestureDetector(
           onLongPress: () async {
             if (role == cn.getRoleTeacherName) {
-              showModalBottomActivityOptions();
+              showModalBottomActivityOptions(activity.activityId);
             }
           },
           child: ElementTile(
@@ -114,7 +143,7 @@ class _ActivityListState extends ConsumerState<ActivityList> {
               subtitle: activity.fechaLimite.toString(),
               onTapFunction: () async {
                 final activityData = Activity(
-                    actividadId: activity.actividadId,
+                    activityId: activity.activityId,
                     nombreActividad: activity.nombreActividad,
                     descripcion: activity.descripcion,
                     tipoActividadId: activity.tipoActividadId,

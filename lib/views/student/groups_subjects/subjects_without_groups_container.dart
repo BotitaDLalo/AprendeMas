@@ -19,7 +19,7 @@ class _SubjectsWithoutGroupsContainerState
 
   @override
   Widget build(BuildContext context) {
-    final subjects = ref.watch(subjectsProvider).subjects;
+    final subjects = ref.watch(subjectsProvider).lsSubjects;
     return ListView.builder(
       itemCount: subjects.length,
       itemBuilder: (context, index) {

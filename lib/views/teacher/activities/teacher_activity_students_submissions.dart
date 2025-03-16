@@ -17,7 +17,7 @@ class _TeacherActivityStudentsSubmissionsState
     extends ConsumerState<TeacherActivityStudentsSubmissions> {
   @override
   Widget build(BuildContext context) {
-    final activityId = widget.activity.actividadId;
+    final activityId = widget.activity.activityId;
     final activityStudentsSubmissions =
         ref.watch(activityStudentsSubmissionsProvider(activityId));
 

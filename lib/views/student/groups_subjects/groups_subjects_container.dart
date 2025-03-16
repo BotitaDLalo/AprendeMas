@@ -15,7 +15,7 @@ class _GroupsSubjectsContainerState
     extends ConsumerState<GroupsSubjectsContainer> {
   @override
   Widget build(BuildContext context) {
-    final groups = ref.watch(groupsProvider).groups;
+    final groups = ref.watch(groupsProvider).lsGroups;
     return ListView.builder(
       itemCount: groups.length,
       itemBuilder: (context, index) {

@@ -6,6 +6,8 @@ abstract class ActivityRepository {
   Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
       String descripcion, DateTime fechaLimite, int puntaje);
 
+  Future<void> deleteActivity(int activityId);
+
   Future<Activity> updateActivity(int activityId, String nombreActividad,
       String descripcion, DateTime fechaLimite);
 

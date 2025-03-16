@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:aprende_mas/config/utils/general_utils.dart';
 
 class Activity {
-  final int actividadId;
+  final int activityId;
   final String nombreActividad;
   final String descripcion;
   final String fechaCreacion;
@@ -12,7 +12,7 @@ class Activity {
   final int materiaId;
 
   Activity(
-      {required this.actividadId,
+      {required this.activityId,
       this.puntaje,
       required this.nombreActividad,
       required this.descripcion,
@@ -28,7 +28,7 @@ class Activity {
     final lsActivities = querylsActivities
         .map(
           (e) => Activity(
-              actividadId: e['ActividadId'] as int,
+              activityId: e['ActividadId'] as int,
               nombreActividad: e['NombreActividad'] as String,
               descripcion: e['Descripcion'] as String,
               tipoActividadId: e['TipoActividadId'] as int,

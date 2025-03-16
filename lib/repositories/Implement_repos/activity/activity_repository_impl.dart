@@ -9,53 +9,56 @@ class ActivityRepositoryImpl implements ActivityRepository {
   final ActivityDataSource activityDataSource;
 
   ActivityRepositoryImpl({ActivityDataSource? activityDataSource})
-  : activityDataSource = activityDataSource ?? ActivityDataSourceImpl();
-  
+      : activityDataSource = activityDataSource ?? ActivityDataSourceImpl();
+
   @override
   Future<List<Activity>> getAllActivities(int materiaId) async {
     final activities = await activityDataSource.getAllActivities(materiaId);
     return activities;
   }
-  
+
   @override
-  Future<Activity> updateActivity(int activityId, String nombreActividad, String descripcion, DateTime fechaLimite) {
+  Future<Activity> updateActivity(int activityId, String nombreActividad,
+      String descripcion, DateTime fechaLimite) {
     // TODO: implement updateActivity
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad, String descripcion, DateTime fechaLimite, int puntaje) {
-    return activityDataSource.createdActivity(materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
+  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
+      String descripcion, DateTime fechaLimite, int puntaje) {
+    return activityDataSource.createdActivity(
+        materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
   }
-  
+
   @override
   Future<List<Submission>> sendSubmission(int activityId, String answer) {
     return activityDataSource.sendSubmission(activityId, answer);
   }
-  
+
   @override
   Future<List<Submission>> getSubmissions(int activityId) {
     return activityDataSource.getSubmissions(activityId);
   }
-  
+
   @override
-  Future<List<Submission>> cancelSubmission(int studentActivityId, int activityId) {
-    return activityDataSource.cancelSubmission(studentActivityId,activityId);
+  Future<List<Submission>> cancelSubmission(
+      int studentActivityId, int activityId) {
+    return activityDataSource.cancelSubmission(studentActivityId, activityId);
   }
-  
+
   @override
   Future<ActivityStudentSubmissionsData> getStudentSubmissions(int activityId) {
     return activityDataSource.getStudentSubmissions(activityId);
   }
-  
+
   @override
   Future<bool> submissionGrading(int submissionId, int grade) {
     return activityDataSource.submissionGrading(submissionId, grade);
   }
-  
 
-
-
-
-  
+  @override
+  Future<void> deleteActivity(int activityId) {
+    return activityDataSource.deleteActivity(activityId);
+  }
 }

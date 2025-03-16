@@ -1,9 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 import 'package:aprende_mas/views/users/authentication/form_login.dart';
 import 'package:aprende_mas/views/widgets/alerts/error_snackbar.dart';
-import 'package:aprende_mas/views/widgets/structure/loading_screen.dart';
 import 'package:aprende_mas/providers/providers.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
 
 class LoginUserScreen extends ConsumerWidget {
   const LoginUserScreen({super.key});

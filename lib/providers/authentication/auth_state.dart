@@ -1,5 +1,5 @@
 import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/config/utils/catalog_names.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 class AuthState {
   // final User? user;

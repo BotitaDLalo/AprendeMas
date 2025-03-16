@@ -31,7 +31,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   void setGroupsSubjects(List<Group> lsGroups) {
-    state = state.copyWith(groups: lsGroups);
+    state = state.copyWith(lsGroups: lsGroups);
   }
 
   Future<void> getCreatedGroups() async {
@@ -44,7 +44,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setCreatedGroups(List<GroupsCreated> groupsCreated) {
-    state = state.copyWith(groupsCreated: groupsCreated);
+    state = state.copyWith(lsGroupsCreated: groupsCreated);
   }
 
   Future<bool> createGroupSubjects(
@@ -67,7 +67,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setCreateGroupSubjects(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+    state = state.copyWith(lsGroups: groups);
   }
 
   Future<void> deleteGroup() async {}
@@ -89,7 +89,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setUpdateGroup(Group updateGroup) {
-    List<Group> lsGroups = List.from(state.groups);
+    List<Group> lsGroups = List.from(state.lsGroups);
     final index =
         lsGroups.indexWhere((group) => group.grupoId == updateGroup.grupoId);
     final newGroupName = updateGroup.nombreGrupo;
@@ -99,12 +99,12 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
       lsGroups[index] = lsGroups[index].copyWith(
           nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
 
-      state = state.copyWith(groups: lsGroups);
+      state = state.copyWith(lsGroups: lsGroups);
     }
   }
 
   onNewSubject(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+    state = state.copyWith(lsGroups: groups);
   }
 
   void clearGroupsState() {

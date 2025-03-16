@@ -15,7 +15,6 @@ import 'package:aprende_mas/config/services/services.dart';
 import 'package:aprende_mas/config/utils/utils.dart';
 
 class AuthStateNotifier extends StateNotifier<AuthState> {
-  final cn = CatalogNames();
   final AuthRepository authRepository;
   final KeyValueStorageService storageService;
   final GoogleSigninApi googleSigninApi;
@@ -349,7 +348,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         await getAllActivitiesCallback(subjectId);
         for (var act in subj.actividades ?? []) {
           final activity = act as Activity;
-          final activityId = activity.actividadId;
+          final activityId = activity.activityId;
           //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
 
           //& Guardar entregables offline set para submissions state
@@ -367,7 +366,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await getAllActivitiesCallback(subjectId);
       for (var act in subject.actividades ?? []) {
         final activity = act as Activity;
-        final activityId = activity.actividadId;
+        final activityId = activity.activityId;
 
         List<Submission> lsSubmissions =
             await getSubmissionsCallback(activityId);
@@ -389,7 +388,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         await getAllActivitiesCallback(subjectId);
         for (var act in sub.actividades ?? []) {
           final activity = act as Activity;
-          final activityId = activity.actividadId;
+          final activityId = activity.activityId;
           await getSubmissionsCallback(activityId);
         }
       }
@@ -400,7 +399,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await getAllActivitiesCallback(subjectId);
       for (var act in subject.actividades ?? []) {
         final activity = act as Activity;
-        final activityId = activity.actividadId;
+        final activityId = activity.activityId;
         await getSubmissionsCallback(activityId);
       }
     }
@@ -416,7 +415,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         for (var subj in group.materias ?? []) {
           for (var act in subj.actividades ?? []) {
             final activity = act as Activity;
-            final activityId = activity.actividadId;
+            final activityId = activity.activityId;
 
             //& Guardar entregables para submissions state
             List<Submission> lsSubmissions =
@@ -431,7 +430,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       for (var subject in lsSubjectsWithoutGroup) {
         for (var act in subject.actividades ?? []) {
           final activity = act as Activity;
-          final activityId = activity.actividadId;
+          final activityId = activity.activityId;
 
           //& Guardar entregables para submissions state
           List<Submission> lsSubmissions =
@@ -528,7 +527,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         await getAllActivitiesOfflineCallback(subjectId);
         for (var act in sub.actividades ?? []) {
           final activity = act as Activity;
-          final activityId = activity.actividadId;
+          final activityId = activity.activityId;
           // await getSubmissionsCallback(activityId);
           await getSubmissionsOfflineCallback(activityId);
         }
@@ -541,7 +540,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await getAllActivitiesOfflineCallback(subjectId);
       for (var act in subject.actividades ?? []) {
         final activity = act as Activity;
-        final activityId = activity.actividadId;
+        final activityId = activity.activityId;
         // await getSubmissionsCallback(activityId);
 
         await getSubmissionsOfflineCallback(activityId);
@@ -679,7 +678,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         await getAllActivitiesCallback(subjectId);
         for (var act in subj.actividades ?? []) {
           final activity = act as Activity;
-          final activityId = activity.actividadId;
+          final activityId = activity.activityId;
           //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
 
           //& Guardar entregables offline set para submissions state
@@ -696,7 +695,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       await getAllActivitiesCallback(subjectId);
       for (var act in subject.actividades ?? []) {
         final activity = act as Activity;
-        final activityId = activity.actividadId;
+        final activityId = activity.activityId;
 
         await getSubmissionsCallback(activityId);
       }
