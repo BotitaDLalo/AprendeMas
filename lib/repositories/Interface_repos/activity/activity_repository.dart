@@ -3,8 +3,7 @@ import 'package:aprende_mas/models/models.dart';
 abstract class ActivityRepository {
   Future<List<Activity>> getAllActivities(int materiaId);
 
-  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
-      String descripcion, DateTime fechaLimite, int puntaje);
+  Future<Activity> createdActivity(Map<String, dynamic> activityLike);
 
   Future<void> deleteActivity(int activityId);
 

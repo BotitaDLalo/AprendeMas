@@ -86,7 +86,7 @@ class _ActivitySectionSubmissionState
     final activityId = widget.activity.activityId;
     final activitiesForm = ref.watch(activityFormProvider);
     final lsSub = ref.watch(activityProvider).lsSubmissions;
-    final lsSubmissions = Submission.activitiesBySubject(lsSub, activityId);
+    final lsSubmissions = Submission.activitiesBySubject(lsSub, activityId!);
 
     // final lsSubmissions = ref
     //     .read(activityProvider.notifier)
@@ -108,11 +108,11 @@ class _ActivitySectionSubmissionState
                   if (authConectionType == AuthConnectionType.online) {
                     ref
                         .read(activityFormProvider.notifier)
-                        .onSendSubmission(activityId);
+                        .onSendSubmission(activityId!);
                   } else if (authConectionType == AuthConnectionType.offline) {
                     ref
                         .read(activityFormProvider.notifier)
-                        .onSendSubmissionOffline(activityId);
+                        .onSendSubmissionOffline(activityId!);
                   }
                   Navigator.pop(context);
                 },
@@ -163,7 +163,7 @@ class _ActivitySectionSubmissionState
                   onTap: () {
                     if (authConectionType == AuthConnectionType.online) {
                       ref.read(activityProvider.notifier).cancelSubmission(
-                          studentActivityId, widget.activity.activityId);
+                          studentActivityId, widget.activity.activityId!);
                     } else if (authConectionType ==
                         AuthConnectionType.offline) {}
 

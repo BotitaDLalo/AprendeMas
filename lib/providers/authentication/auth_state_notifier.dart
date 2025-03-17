@@ -353,7 +353,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
           //& Guardar entregables offline set para submissions state
           List<Submission> lsSubmissions =
-              await getSubmissionsCallback(activityId);
+              await getSubmissionsCallback(activityId!);
           await activityOffline.saveSubmissions(lsSubmissions, activityId);
         }
       }
@@ -369,7 +369,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         final activityId = activity.activityId;
 
         List<Submission> lsSubmissions =
-            await getSubmissionsCallback(activityId);
+            await getSubmissionsCallback(activityId!);
         await activityOffline.saveSubmissions(lsSubmissions, activityId);
       }
     }
@@ -389,7 +389,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         for (var act in sub.actividades ?? []) {
           final activity = act as Activity;
           final activityId = activity.activityId;
-          await getSubmissionsCallback(activityId);
+          await getSubmissionsCallback(activityId!);
         }
       }
     }
@@ -400,7 +400,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       for (var act in subject.actividades ?? []) {
         final activity = act as Activity;
         final activityId = activity.activityId;
-        await getSubmissionsCallback(activityId);
+        await getSubmissionsCallback(activityId!);
       }
     }
   }
@@ -419,7 +419,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
             //& Guardar entregables para submissions state
             List<Submission> lsSubmissions =
-                await activityOffline.getSubmissionsPending(activityId);
+                await activityOffline.getSubmissionsPending(activityId!);
             lsSubmissionsPending.addAll(lsSubmissions);
           }
         }
@@ -434,7 +434,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
           //& Guardar entregables para submissions state
           List<Submission> lsSubmissions =
-              await activityOffline.getSubmissionsPending(activityId);
+              await activityOffline.getSubmissionsPending(activityId!);
           lsSubmissionsPending.addAll(lsSubmissions);
         }
       }
@@ -529,7 +529,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           final activity = act as Activity;
           final activityId = activity.activityId;
           // await getSubmissionsCallback(activityId);
-          await getSubmissionsOfflineCallback(activityId);
+          await getSubmissionsOfflineCallback(activityId!);
         }
       }
     }
@@ -543,7 +543,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         final activityId = activity.activityId;
         // await getSubmissionsCallback(activityId);
 
-        await getSubmissionsOfflineCallback(activityId);
+        await getSubmissionsOfflineCallback(activityId!);
       }
     }
   }
@@ -682,7 +682,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
 
           //& Guardar entregables offline set para submissions state
-          await getSubmissionsCallback(activityId);
+          await getSubmissionsCallback(activityId!);
           // await activityOffline.saveSubmissions(lsSubmissions, activityId);
         }
       }
@@ -697,7 +697,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
         final activity = act as Activity;
         final activityId = activity.activityId;
 
-        await getSubmissionsCallback(activityId);
+        await getSubmissionsCallback(activityId!);
       }
     }
   }

@@ -25,10 +25,8 @@ class ActivityRepositoryImpl implements ActivityRepository {
   }
 
   @override
-  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
-      String descripcion, DateTime fechaLimite, int puntaje) {
-    return activityDataSource.createdActivity(
-        materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
+  Future<Activity> createdActivity(Map<String, dynamic> activityLike) {
+    return activityDataSource.createdActivity(activityLike);
   }
 
   @override
@@ -61,4 +59,5 @@ class ActivityRepositoryImpl implements ActivityRepository {
   Future<void> deleteActivity(int activityId) {
     return activityDataSource.deleteActivity(activityId);
   }
+  
 }

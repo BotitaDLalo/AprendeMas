@@ -19,7 +19,7 @@ class _TeacherActivityStudentsSubmissionsState
   Widget build(BuildContext context) {
     final activityId = widget.activity.activityId;
     final activityStudentsSubmissions =
-        ref.watch(activityStudentsSubmissionsProvider(activityId));
+        ref.watch(activityStudentsSubmissionsProvider(activityId!));
 
     void refreshScreen() {
       void _ = ref.refresh(activityStudentsSubmissionsProvider(activityId));

@@ -19,6 +19,7 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     Future.microtask(
       () {
         ref.read(activityProvider.notifier).clearSubmissionData();
+        ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
       },
     );
     super.initState();
@@ -31,28 +32,21 @@ class _ActivityListState extends ConsumerState<ActivityList> {
           data: (role) => role,
           orElse: () => "",
         );
-
-    final act = ref.watch(activityProvider);
-    final lsActivities = ref
-        .read(activityProvider.notifier)
-        .getActivitiesBySubject(widget.subjectId, act.lsActivities);
-
+    
+    // final act = ref.watch(activityProvider);
     // final lsActivities = ref
-    //     .read(activityProvider.notifier)
-    //     .getActivitiesBySubject(widget.subjectId);
+    //     .watch(activityProvider.notifier)
+    //     .getActivitiesBySubject(widget.subjectId, act.lsActivities);
 
-    // final activityState = ref.watch(activityProvider);
-    // if (activityState.isLoading) {
-    //   return const Center(child: CircularProgressIndicator());
-    // }
 
-    // if (activityState.errorMessage != null) {
-    //   return _ErrorMessage(message: activityState.errorMessage!);
-    // }
+  final act = ref.watch(activityProvider);
+  final lsActivities = act.lsActivities
+      .where((activity) => activity.materiaId == widget.subjectId)
+      .toList();
 
-    // if (activityState.activities.isEmpty) {
-    //   return const _EmptyMessage(message: 'No hay actividades disponibles.');
-    // }
+    // print("Actividades 1 : ${lsActivities}");
+    // print("Actividades 2 : ${lsActivities.length}"); 
+    // print("filteredActivities ${filteredActivities.length}");
 
     void teacherActivityStudentsSubmissions(Activity activity) {
       context.push('/teacher-activities-students-options', extra: activity);
@@ -132,7 +126,7 @@ class _ActivityListState extends ConsumerState<ActivityList> {
         return GestureDetector(
           onLongPress: () async {
             if (role == cn.getRoleTeacherName) {
-              showModalBottomActivityOptions(activity.activityId);
+              showModalBottomActivityOptions(activity.activityId!);
             }
           },
           child: ElementTile(
@@ -160,37 +154,6 @@ class _ActivityListState extends ConsumerState<ActivityList> {
         );
       },
     );
-  }
-}
-
-class _ErrorMessage extends StatelessWidget {
-  final String message;
-
-  const _ErrorMessage({super.key, required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Error: $message',
-        style: const TextStyle(color: Colors.red),
-      ),
-    );
-  }
-}
-
-class _EmptyMessage extends StatelessWidget {
-  final String message;
-
-  const _EmptyMessage({super.key, required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        message,
-        style: const TextStyle(color: Colors.grey),
-      ),
-    );
+    
   }
 }

@@ -5,7 +5,7 @@ import 'package:aprende_mas/views/widgets/inputs/generic_input.dart';
 // import 'package:aprende_mas/views/widgets/inputs/time_input.dart';
 
 class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
-  final Function(int, String, String, DateTime, int) activityCallback;
+  final Function(Map<String, dynamic> activityLike)? activityCallback;
   final Function(int, String) sendSubmissionCallback;
   final Function(int, String) sendSubmissionOfflineCallback;
   final Function({required int submissionId, required int grade})
@@ -18,7 +18,8 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
   final TextEditingController puntajeController;
 
   ActivityFormNotifier(
-      {required this.activityCallback,
+      {
+      required this.activityCallback,
       required this.sendSubmissionCallback,
       required this.sendSubmissionOfflineCallback,
       required this.submissionGradingCallback})
@@ -167,10 +168,17 @@ class ActivityFormNotifier extends StateNotifier<ActivityFormState> {
     // Marcar el inicio de la petición
     state = state.copyWith(isPosting: true);
 
+    final activityLike = {
+      "nombreActividad": state.nombre.value,
+      "descripcion": state.descripcion.value,
+      "fechaLimite": fechaHoraConcatenada.toIso8601String(),
+      "puntaje": state.puntaje.value,
+      "materiaId": subjectId
+    };
+
     try {
       // Llamar al callback y obtener el resultado
-      bool res = await activityCallback(subjectId, state.nombre.value,
-          state.descripcion.value, fechaHoraConcatenada, puntajeInt);
+      bool res = await activityCallback!(activityLike);
 
       // Actualizar el estado según el resultado
       state = state.copyWith(isFormPosted: res);

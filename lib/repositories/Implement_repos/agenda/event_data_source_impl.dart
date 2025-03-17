@@ -81,11 +81,11 @@ class EventDataSourceImpl implements EventDataSource {
         final updatedEvent = EventMapper.jsonToEntity(response.data);
         return updatedEvent;
       } catch (e) {
-        if (e is DioException) {
-        // Imprimir el cuerpo de la respuesta y el código de error
-        print('Error al actualizar evento: ${e.response?.data}');
-        print('Código de estado: ${e.response?.statusCode}');
-      }
+      //   if (e is DioException) {
+      //   // Imprimir el cuerpo de la respuesta y el código de error
+      //   print('Error al actualizar evento: ${e.response?.data}');
+      //   print('Código de estado: ${e.response?.statusCode}');
+      // }
         throw Exception("Error en updateEvent: $e");
       }
   }

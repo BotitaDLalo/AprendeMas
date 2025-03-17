@@ -30,7 +30,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> getAllActivities(int subjectId) async {
     try {
-      state = state.copyWith(isLoading: true);
+      state = state.copyWith(isLoading: true, lsActivities: []);
       final activities = await activityRepository.getAllActivities(subjectId);
       _setActivities(activities);
     } catch (e) {
@@ -39,6 +39,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
       state = state.copyWith(isLoading: false);
     }
   }
+
 
   Future<void> getAllActivitiesOffline(int subjectId) async {
     try {
@@ -60,30 +61,54 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  Future<bool> createdActivity(int materiaId, String nombreActividad,
-      String descripcion, DateTime fechaLimite, int puntaje) async {
-    try {
-      state = state.copyWith(isLoading: true); // Indicando que está cargando
-      final activity = await activityRepository.createdActivity(
-          materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
-
-      if (activity.isNotEmpty) {
-        _setCreatedActivity(activity);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      state = state.copyWith(errorMessage: e.toString());
-      return false;
-    } finally {
-      state =
-          state.copyWith(isLoading: false); // Indicando que terminó la carga
-    }
+Future<bool> createdActivity(Map<String, dynamic> activityLike) async {
+  try {
+    final activity = await activityRepository.createdActivity(activityLike);
+     print("Actividad creada: $activity");
+    _setCreatedActivity(activity);
+    // await getAllActivities(activityLike['materiaId']);
+    return true;
+  } catch (e) {
+    state = state.copyWith(errorMessage: e.toString());
+    return false;
+  } finally {
+    state = state.copyWith(isLoading: false);
   }
+}
 
-  void _setCreatedActivity(List<Activity> activity) {
-    state = state.copyWith(lsActivities: activity);
-  }
+void _setCreatedActivity(Activity activity) {
+  // Actualizamos el estado con la nueva actividad
+  List<Activity> updatedList = List.from(state.lsActivities)..add(activity);
+  print("Actividades antes de actualizar: ${state.lsActivities.length}");
+  state = state.copyWith(lsActivities: updatedList);
+  print("Actividades después de agregar nueva: ${updatedList.length}");
+}
+
+  // Future<bool> createdActivity(int materiaId, String nombreActividad,
+  //     String descripcion, DateTime fechaLimite, int puntaje) async {
+  //   try {
+  //     state = state.copyWith(isLoading: true); // Indicando que está cargando
+  //     final activity = await activityRepository.createdActivity(
+  //         materiaId, nombreActividad, descripcion, fechaLimite, puntaje);
+
+  //     if (activity.isNotEmpty) {
+  //       _setCreatedActivity(activity);
+  //       return true;
+  //     }
+  //     return false;
+  //   } catch (e) {
+  //     state = state.copyWith(errorMessage: e.toString());
+  //     return false;
+  //   } finally {
+  //     state =
+  //         state.copyWith(isLoading: false); // Indicando que terminó la carga
+  //   }
+  // }
+
+  // void _setCreatedActivity(List<Activity> activity) {
+  //   state = state.copyWith(lsActivities: activity);
+  // }
+
 
   Future<void> deleteActivity(int activityId) async {
     try {

@@ -27,26 +27,18 @@ class ActivityDataSourceImpl implements ActivityDataSource {
   }
 
   @override
-  Future<List<Activity>> createdActivity(int materiaId, String nombreActividad,
-      String descripcion, DateTime fechaLimite, int puntaje) async {
+  Future<Activity> createdActivity(Map<String, dynamic> activityLike) async {
     try {
       const uri = "/Actividades/CrearActividad";
-      final response = await dio.post(uri, data: {
-        "nombreActividad": nombreActividad,
-        "descripcion": descripcion,
-        "fechaLimite": fechaLimite.toIso8601String(),
-        "materiaId": materiaId,
-        "puntaje": puntaje,
-      });
+      final response = await dio.post(uri, data: activityLike);
       debugPrint("Response: ${response.data}");
 
-      final resList = List<Map<String, dynamic>>.from(response.data);
-      final activities = ActivityMapper.fromMapList(resList);
+      final activity = ActivityMapper.jsonToEntity(response.data);
 
-      return activities;
+      return activity;
     } catch (e) {
       debugPrint(e.toString());
-      return [];
+      throw Exception("ActivityDataSourceImpl get Error al crear actividades: $e");
       // throw Exception(
       //     "ActivityDataSourceImpl post Error al crear una actividad: $e");
     }

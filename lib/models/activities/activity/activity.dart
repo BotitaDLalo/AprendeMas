@@ -2,22 +2,23 @@ import 'package:intl/intl.dart';
 import 'package:aprende_mas/config/utils/general_utils.dart';
 
 class Activity {
-  final int activityId;
+  final int? activityId;
   final String nombreActividad;
   final String descripcion;
-  final String fechaCreacion;
+  final String? fechaCreacion;
   final String fechaLimite;
-  final int tipoActividadId;
+  final int? tipoActividadId;
   final int? puntaje;
   final int materiaId;
 
   Activity(
-      {required this.activityId,
+      { 
+      this.activityId,
       this.puntaje,
       required this.nombreActividad,
       required this.descripcion,
-      required this.tipoActividadId,
-      required this.fechaCreacion,
+      this.tipoActividadId,
+      this.fechaCreacion,
       required this.fechaLimite,
       required this.materiaId});
 

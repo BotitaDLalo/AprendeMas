@@ -20,6 +20,7 @@ class FormActivities extends ConsumerStatefulWidget {
 }
 
 class _FormActivitiesState extends ConsumerState<FormActivities> {
+
   @override
   Widget build(BuildContext context) {
     final activityForm = ref.watch(activityFormProvider);
@@ -29,23 +30,17 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
       context.pop();
     }
 
-    @override
-    void initState() {
-      super.initState();
-      final refreshKey = StateProvider<bool>((ref) => false);
-      // Escuchar el estado del formulario para actualizar la lista y navegar
-      ref.listen(activityFormProvider, (previous, next) {
-        if (next.isFormPosted) {
-          ref.read(refreshKey.notifier).state = true; // Actualiza el estado
-        }
-      });
-    }
-
-    // ref.listen(activityFormProvider, (previous, next) {
-    //   if (next.isFormPosted && mounted) {
-    //     goRouterPop();
-    //   }
-    // });
+    // @override
+    // void initState() {
+    //   super.initState();
+    //   final refreshKey = StateProvider<bool>((ref) => false);
+    //   // Escuchar el estado del formulario para actualizar la lista y navegar
+    //   ref.listen(activityFormProvider, (previous, next) {
+    //     if (next.isFormPosted) {
+    //       ref.read(refreshKey.notifier).state = true; // Actualiza el estado
+    //     }
+    //   });
+    // }
 
     return Form(
       child: Padding(
@@ -129,14 +124,20 @@ class _FormActivitiesState extends ConsumerState<FormActivities> {
                     if (!ref.read(activityFormProvider).isPosting) {
                       await activityCreated.onFormSubmit(
                           widget.subjectId, widget.nombreMateria);
-
-                      ref.read(activityProvider.notifier).getActivitiesBySubject(widget.subjectId);
                     }
+
+                    // if(activityForm.isFormPosted) return goRouterPop();
+                    ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
+
+                    goRouterPop();
+
                     // final updatedState = ref.read(activityFormProvider);
+
+                    // print("res: ${updatedState.isFormPosted}");
                     // if (updatedState.isFormPosted) {
+                    //   print("res: ${updatedState.isFormPosted}");
                     //   return goRouterPop();
                     // }
-                    goRouterPop();
                   }),
             ),
           ],
