@@ -1,5 +1,8 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/views/student/student.dart';
+import 'package:aprende_mas/views/users/groups_subjects/groups_subjects_screen.dart';
+import 'package:aprende_mas/views/widgets/buttons/floating_action_button_custom.dart';
+import 'package:aprende_mas/views/widgets/structure/modal_bottom_sheet_custom.dart';
 
 class GroupsSubjectsStudentScreen extends ConsumerStatefulWidget {
   const GroupsSubjectsStudentScreen({super.key});
@@ -28,28 +31,19 @@ class _GroupsSubjectsTeacherScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Column(
-      children: [
-        TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.blue,
-          labelColor: Colors.blue,
-          tabs: const [
-            Tab(text: 'Grupos y Materias'),
-            Tab(text: 'Materias Sin Grupo'),
-          ],
-        ),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: const [
-              GroupsSubjectsContainer(),
-              SubjectsWithoutGroupsContainer(),
-            ],
-          ),
-        ),
-      ],
-    ));
+    List<Widget> lsOptions = [
+      ListTile(
+        leading: const Icon(Icons.group_add),
+        title: const Text('Unirse a clase'),
+        onTap: () {
+          Navigator.pop(context);
+          context.push('/student-join-group-subject');
+        },
+      ),
+    ];
+
+    return GroupsSubjectsScreen(
+      voidCallback: () => modalBottomSheetCustom(context, lsOptions),
+    );
   }
 }
