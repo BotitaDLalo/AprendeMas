@@ -45,13 +45,14 @@ class _StudentSubjectOptionsScreenState
             subjectId: widget.subjectId,
           )),
       GroupSubjectWidgetOption(
-          optionId: 2,
-          isVisible: true,
-          optionText: 'Actividades',
-          widgetOption: ActivityOptionScreen(
-              buttonCreateIsVisible: false,
-              subjectId: widget.subjectId,
-              subjectName: widget.subjectName)),
+        optionId: 2,
+        isVisible: true,
+        optionText: 'Actividades',
+        widgetOption: ActivityOptionScreen(
+            buttonCreateIsVisible: false,
+            subjectId: widget.subjectId,
+            subjectName: widget.subjectName),
+      ),
     ];
 
     List<GroupSubjectWidgetOption> lsSubjectOptions =

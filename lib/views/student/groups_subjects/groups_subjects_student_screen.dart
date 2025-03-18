@@ -34,7 +34,7 @@ class _GroupsSubjectsTeacherScreenState
     List<Widget> lsOptions = [
       ListTile(
         leading: const Icon(Icons.group_add),
-        title: const Text('Unirse a clase'),
+        title: const Text('Unirse a una clase'),
         onTap: () {
           Navigator.pop(context);
           context.push('/student-join-group-subject');

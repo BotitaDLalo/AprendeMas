@@ -2,13 +2,24 @@ import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/providers/subjects/subjects_state.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_repository.dart';
 
 class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
+  Function(int) getAllActivitiesCallback;
+  Function(int) getSubmissionsCallback;
   final SubjectsRepository subjectsRepository;
+  final SubjectsOfflineRepositoryImpl subjectsOffline;
+  final ActivityOfflineRepositoryImpl activityOffline;
   final Ref ref;
 
-  SubjectsStateNotifier(this.ref, {required this.subjectsRepository})
+  SubjectsStateNotifier(this.ref,
+      {required this.subjectsRepository,
+      required this.getAllActivitiesCallback,
+      required this.getSubmissionsCallback,
+      required this.subjectsOffline,
+      required this.activityOffline})
       : super(SubjectsState());
 
   Future<void> getSubjects() async {
@@ -69,7 +80,24 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
     state = state.copyWith(lsSubjects: subjects);
   }
 
-    void clearSubjectsState() {
+  void addSubjectToState(Subject subject) async {
+    final subjectId = subject.materiaId;
+    state = state.copyWith(lsSubjects: [subject, ...state.lsSubjects]);
+
+    List<Subject> lsSubject = [subject];
+    await subjectsOffline.saveSubjectsWithoutGroup(lsSubject);
+
+    await getAllActivitiesCallback(subjectId);
+
+    for (var act in subject.actividades ?? []) {
+      final activity = act as Activity;
+      final activityId = activity.activityId;
+      List<Submission> lsSubmissions = await getSubmissionsCallback(activityId);
+      await activityOffline.saveSubmissions(lsSubmissions, activityId);
+    }
+  }
+
+  void clearSubjectsState() {
     state = SubjectsState();
   }
 }

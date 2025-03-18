@@ -21,11 +21,11 @@ class Group {
   });
 
   static Group empty() => Group(
-      grupoId: -1,
-      descripcion: '',
-      nombreGrupo: '',
-      codigoAcceso: '',
-      // codigoColor: ''
+        grupoId: -1,
+        descripcion: '',
+        nombreGrupo: '',
+        codigoAcceso: '',
+        // codigoColor: ''
       );
 
   static List<Group> groupsJsonToEntityList(
@@ -54,7 +54,7 @@ class Group {
           descripcion: materia['descripcion'] ?? "",
           codigoColor: materia['codigoColor'] ?? "",
           codigoAcceso: materia['codigoAcceso'] ?? "",
-          actividades: actividades, // Asignar las actividades a la materia
+          actividades: actividades,
         );
       }).toList();
 
@@ -70,26 +70,33 @@ class Group {
     return groups;
   }
 
+  static Group mapToEntity(Map<String, dynamic> map) => Group(
+      grupoId: map['grupoId'],
+      nombreGrupo: map['nombreGrupo'],
+      descripcion: map['descripcion'],
+      codigoAcceso: map['codigoAcceso'],
+      materias: Subject.subjectsJsonToEntityList(
+        (map['materias'] as List<dynamic>)
+            .map((e) => e as Map<String, dynamic>)
+            .toList(),
+      ));
+
   static Group groupToEntity(Map<String, dynamic> group) => Group(
-      grupoId: group['grupoId'],
-      nombreGrupo: group['nombreGrupo'],
-      descripcion: group['descripcion'],
-      codigoAcceso: group['codigoAcceso'],
-      // codigoColor: group['codigoColor']
-      
+        grupoId: group['grupoId'],
+        nombreGrupo: group['nombreGrupo'],
+        descripcion: group['descripcion'],
+        codigoAcceso: group['codigoAcceso'],
       );
 
   static Group queryToEntityGroup(Map<String, Object?> queryGroup) {
     final group = queryGroup as Group;
     return Group(
-        nombreGrupo: group.nombreGrupo,
-        descripcion: group.descripcion,
-        codigoAcceso: group.codigoAcceso,
-        // codigoColor: group.codigoColor
-        
-        );
+      nombreGrupo: group.nombreGrupo,
+      descripcion: group.descripcion,
+      codigoAcceso: group.codigoAcceso,
+      // codigoColor: group.codigoColor
+    );
   }
-
 
   Group copyWith({
     int? grupoId,
