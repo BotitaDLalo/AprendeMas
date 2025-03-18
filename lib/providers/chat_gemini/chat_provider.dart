@@ -52,35 +52,6 @@ class ChatProvider extends ChangeNotifier {
 }
 
 
-  // Future<void> generateQuestionnaire(String topic, int quantity) async {
-  //   try {
-  //     // Crear el JSON con el tema y la cantidad de preguntas
-  //     final questionnaireJson = {
-  //       "topic": topic,
-  //       "quantity": quantity,
-  //     };
-
-  //     // Convertir a un String JSON
-  //     final jsonString = jsonEncode(questionnaireJson);
-
-  //     // Agregar el mensaje del usuario
-  //     _messages.add(Message(text: jsonString, isUser: true));
-  //     notifyListeners();
-
-  //     // Llamar al modelo de Gemini
-  //     final model = GenerativeModel(model: 'gemini-1.5-flash-latest', apiKey: dotenv.env['GOOGLE_API_KEY']!);
-  //     final content = [Content.text(jsonString)]; // Enviamos el JSON como texto
-  //     final response = await model.generateContent(content);
-
-  //     // Agregar la respuesta de Gemini a la lista
-  //     _messages.add(Message(text: response.text!, isUser: false));
-  //     notifyListeners();
-  //     moveScrollToBottom();
-  //   } catch (e) {
-  //     debugPrint('Error al llamar a Gemini: $e');
-  //   }
-  // }
-
   void moveScrollToBottom() {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     if (chatScrollController.hasClients) {
