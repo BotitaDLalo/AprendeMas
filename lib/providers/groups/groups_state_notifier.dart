@@ -1,15 +1,23 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/groups/groups_state.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_repository.dart';
 
 class GroupsNotifier extends StateNotifier<GroupsState> {
+  final Function(int) getAllActivitiesCallback;
+  final Function(int) getSubmissionsCallback;
   final GroupsRepository groupsRepository;
+  final ActivityOfflineRepositoryImpl activityOffline;
   final GroupsOfflineRepository groupsOfflineRepository;
 
   GroupsNotifier(
-      {required this.groupsRepository, required this.groupsOfflineRepository})
+      {required this.getAllActivitiesCallback,
+      required this.getSubmissionsCallback,
+      required this.groupsRepository,
+      required this.activityOffline,
+      required this.groupsOfflineRepository})
       : super(GroupsState());
 
   Future<void> getGroupsSubjects() async {
@@ -105,6 +113,34 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
   onNewSubject(List<Group> groups) {
     state = state.copyWith(lsGroups: groups);
+  }
+
+  void addGroupToState(Group group) async {
+    state = state.copyWith(lsGroups: [group, ...state.lsGroups]);
+
+    List<Group> lsGroup = [group];
+
+    await groupsOfflineRepository.saveGroupSubjects(lsGroup);
+
+    final lsSubjects = group.materias;
+
+    for (var subj in lsSubjects ?? []) {
+      final subject = subj as Subject;
+      final subjectId = subject.materiaId;
+
+      //& Actualizamos el state de actividades
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subj.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.activityId;
+        //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
+
+        //& Guardar entregables offline set para submissions state
+        List<Submission> lsSubmissions =
+            await getSubmissionsCallback(activityId);
+        await activityOffline.saveSubmissions(lsSubmissions, activityId);
+      }
+    }
   }
 
   void clearGroupsState() {

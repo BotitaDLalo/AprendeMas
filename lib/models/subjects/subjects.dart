@@ -43,4 +43,21 @@ class Subject {
         .toList();
     return lsSubjects;
   }
+
+  static Subject mapToEntity(Map<String, dynamic> map) => Subject(
+      materiaId: map['materiaId'],
+      nombreMateria: map['nombreMateria'],
+      descripcion: map['descripcion'],
+      codigoAcceso: map['codigoAcceso'],
+      actividades: (map['actividades'] as List<dynamic>? ?? [])
+          .map((e) => Activity(
+              activityId: e['actividadId'],
+              nombreActividad: e['nombreActividad'],
+              descripcion: e['descripcion'],
+              tipoActividadId: e['tipoActividadId'],
+              fechaCreacion: formatDate(e['fechaCreacion']),
+              fechaLimite: formatDate(e['fechaLimite']),
+              puntaje: e['puntaje'],
+              materiaId: e['materiaId']))
+          .toList());
 }

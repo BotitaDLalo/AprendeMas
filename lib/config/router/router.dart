@@ -1,6 +1,7 @@
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
 import 'package:aprende_mas/models/agenda/event_model.dart';
 import 'package:aprende_mas/views/student/agenda/event_details_student_screen.dart';
+import 'package:aprende_mas/views/student/groups_subjects/student_join_group_subject.dart';
 import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
 import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
 import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
@@ -65,35 +66,37 @@ final goRouterProvider = Provider((ref) {
       GoRoute(
         path: '/create-event',
         builder: (context, state) => const CreateEventScreen(),
-        ),
-
+      ),
       GoRoute(
         path: '/agenda-teacher',
         builder: (context, state) => const AgendaTeacherScreen(),
-        ),
-
+      ),
       GoRoute(
         path: '/update-event',
         builder: (context, state) {
           final eventData = state.extra as Event;
           return UpdateEventScreen(
-            event: eventData,// List<int>
+            event: eventData, // List<int>
           );
         },
       ),
-
       GoRoute(
         path: '/event-detail',
         builder: (context, state) {
           final eventData = state.extra as Event;
-          return EventDetailsScreen(event: eventData, eventId: eventData.eventId!,);
+          return EventDetailsScreen(
+            event: eventData,
+            eventId: eventData.eventId!,
+          );
         },
       ),
       GoRoute(
         path: '/event-detail-student',
         builder: (context, state) {
           final eventData = state.extra as Event;
-          return EventDetailsStudentScreen(event:eventData,);
+          return EventDetailsStudentScreen(
+            event: eventData,
+          );
         },
       ),
       GoRoute(
@@ -196,6 +199,10 @@ final goRouterProvider = Provider((ref) {
             notice: notice,
           );
         },
+      ),
+      GoRoute(
+        path: '/student-join-group-subject',
+        builder: (context, state) => const StudentJoinGroupSubject(),
       )
     ],
     redirect: (context, state) {

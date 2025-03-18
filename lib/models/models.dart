@@ -25,5 +25,5 @@ export 'various/verify_email.dart';
 export 'various/active_user.dart';
 export 'various/group_subject_widget_option.dart';
 export 'various/form_submited_response_status.dart';
-
+export 'various/join_class.dart';
 export 'users/student_group_subject.dart';
