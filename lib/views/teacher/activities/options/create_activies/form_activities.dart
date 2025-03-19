@@ -8,11 +8,15 @@ import 'package:aprende_mas/views/widgets/widgets.dart';
 class FormActivities extends ConsumerStatefulWidget {
   final int subjectId;
   final String nombreMateria;
+  // final TextEditingController descripcionController;
+  // final TextEditingController titleController;
 
   const FormActivities({
     super.key,
     required this.subjectId,
     required this.nombreMateria,
+    // required this.descripcionController, 
+    // required this.titleController,
   });
 
   @override

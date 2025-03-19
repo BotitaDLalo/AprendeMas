@@ -92,7 +92,7 @@ class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
     for (var act in subject.actividades ?? []) {
       final activity = act as Activity;
       final activityId = activity.activityId;
-      List<Submission> lsSubmissions = await getSubmissionsCallback(activityId);
+      List<Submission> lsSubmissions = await getSubmissionsCallback(activityId!);
       await activityOffline.saveSubmissions(lsSubmissions, activityId);
     }
   }

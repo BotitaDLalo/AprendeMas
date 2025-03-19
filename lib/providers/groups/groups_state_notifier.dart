@@ -137,7 +137,7 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
 
         //& Guardar entregables offline set para submissions state
         List<Submission> lsSubmissions =
-            await getSubmissionsCallback(activityId);
+            await getSubmissionsCallback(activityId!);
         await activityOffline.saveSubmissions(lsSubmissions, activityId);
       }
     }
