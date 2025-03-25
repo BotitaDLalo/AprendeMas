@@ -29,9 +29,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     void logoutClearStates() {
       if (auth.authGoogleStatus == AuthGoogleStatus.authenticated) {
-        ref.watch(authProvider.notifier).logoutGoogle();
+        ref.read(authProvider.notifier).logoutGoogle();
       } else if (auth.authStatus == AuthStatus.authenticated) {
-        ref.watch(authProvider.notifier).logout();
+        ref.read(authProvider.notifier).logout();
       }
       ref.read(notificationsProvider.notifier).clearNotifications();
       ref.read(activityProvider.notifier).clearActivityState();
