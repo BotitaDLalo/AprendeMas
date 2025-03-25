@@ -12,10 +12,30 @@ class SubjectsOfflineDataSourceImpl extends SubjectsOfflineDataSource {
       final db = await DbLocal.initDatabase();
 
       if (db.isOpen) {
-        final querylsSubjects = await db.rawQuery('SELECT * FROM tbMaterias');
+        List<Map<String, Object?>> querylsSubjects =
+            await db.rawQuery('SELECT * FROM tbMaterias');
 
         if (querylsSubjects.isNotEmpty) {
           List<Subject> lsSubjects = [];
+
+          final querylsGroupsSubjects =
+              await db.query('tbGruposMaterias', columns: ['MateriaId']);
+
+          List<int> lsSubjectsWithGroupIds = querylsGroupsSubjects
+              .map(
+                (e) => e['MateriaId'] as int,
+              )
+              .toList();
+
+          //# Filtra las materias que no tienen grupo
+          if (lsSubjectsWithGroupIds.isNotEmpty) {
+            querylsSubjects = querylsSubjects.where(
+              (e) {
+                int subjectId = e['MateriaId'] as int;
+                return !lsSubjectsWithGroupIds.contains(subjectId);
+              },
+            ).toList();
+          }
 
           for (var subjectRow in querylsSubjects) {
             int subjectId = subjectRow['MateriaId'] as int;
@@ -99,10 +119,8 @@ class SubjectsOfflineDataSourceImpl extends SubjectsOfflineDataSource {
                 'Puntaje': activity.puntaje
               });
 
-              await db.insert('tbMateriasActividades', {
-                'MateriaId': subjectId,
-                'ActividadId': activity.activityId
-              });
+              await db.insert('tbMateriasActividades',
+                  {'MateriaId': subjectId, 'ActividadId': activity.activityId});
             }
           }
         }
