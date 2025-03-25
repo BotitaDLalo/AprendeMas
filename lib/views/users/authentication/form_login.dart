@@ -63,7 +63,7 @@ class FormLoginState extends ConsumerState<FormLogin> {
               ),
               label: 'Contraseña',
               textEditingController: loginFormNotifier.passwordController,
-              // obscureText: true,
+              obscureText: true,
               onChanged: loginFormNotifier.onPasswordChanged,
               errorMessage: loginForm.isFormPosted
                   ? loginForm.password.errorMessage
