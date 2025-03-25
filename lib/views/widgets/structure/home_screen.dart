@@ -47,20 +47,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               const SizedBox(height: 80),
-              ListTile(
-                leading: const Icon(
-                  Icons.account_circle,
-                  size: 30,
-                ),
-                title: const Text(
-                  'Cuenta',
-                  style: TextStyle(fontSize: 20),
-                ),
-                onTap: () {
-                  // Acción al tocar el ítem
-                },
-              ),
-              const SizedBox(height: 10),
+              // ListTile(
+              //   leading: const Icon(
+              //     Icons.account_circle,
+              //     size: 30,
+              //   ),
+              //   title: const Text(
+              //     'Cuenta',
+              //     style: TextStyle(fontSize: 20),
+              //   ),
+              //   onTap: () {
+              //     // Acción al tocar el ítem
+              //   },
+              // ),
+              // const SizedBox(height: 10),
               ListTile(
                 leading: const Icon(
                   Icons.exit_to_app,
