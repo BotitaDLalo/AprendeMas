@@ -1,3 +1,4 @@
+import 'package:aprende_mas/config/utils/general_utils.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/views/views.dart';
@@ -108,11 +109,11 @@ class _ActivitySectionSubmissionState
                   if (authConectionType == AuthConnectionType.online) {
                     ref
                         .read(activityFormProvider.notifier)
-                        .onSendSubmission(activityId!);
+                        .onSendSubmission(activityId);
                   } else if (authConectionType == AuthConnectionType.offline) {
                     ref
                         .read(activityFormProvider.notifier)
-                        .onSendSubmissionOffline(activityId!);
+                        .onSendSubmissionOffline(activityId);
                   }
                   Navigator.pop(context);
                 },
@@ -177,24 +178,33 @@ class _ActivitySectionSubmissionState
       );
     }
 
+    void showErrorMessage(String message) {
+      errorMessage(context, message);
+    }
+
+    DateTime dateNow = DateTime.now();
+
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              activitiesForm.existsAnswer
-                  ? showSendConfirmation()
-                  : showModalActivityType(context);
-            },
-            shape: AppTheme.shapeFloatingActionButton(),
-            backgroundColor: Colors.white,
-            child: activitiesForm.existsAnswer
-                ? Icon(
-                    Icons.send,
-                    color: Colors.grey.withOpacity(0.8),
-                  )
-                : Icon(
-                    Icons.add,
-                    color: Colors.grey.withOpacity(0.8),
-                  )),
+        floatingActionButton:
+            dateNow.isBefore(parseCustomDate(widget.activity.fechaLimite))
+                ? FloatingActionButton(
+                    onPressed: () {
+                      activitiesForm.existsAnswer
+                          ? showSendConfirmation()
+                          : showModalActivityType(context);
+                    },
+                    shape: AppTheme.shapeFloatingActionButton(),
+                    backgroundColor: Colors.white,
+                    child: activitiesForm.existsAnswer
+                        ? Icon(
+                            Icons.send,
+                            color: Colors.grey.withOpacity(0.8),
+                          )
+                        : Icon(
+                            Icons.add,
+                            color: Colors.grey.withOpacity(0.8),
+                          ))
+                : const SizedBox(),
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
@@ -249,16 +259,20 @@ class _ActivitySectionSubmissionState
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    child: Text(
-                      widget.activity.descripcion,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
+                    height: MediaQuery.of(context).size.height * 0.20,
+                    child: SingleChildScrollView(
+                      child: Text(
+                        widget.activity.descripcion,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                        ),
                       ),
                     ),
                   ),
-
+                  const SizedBox(
+                    height: 15,
+                  ),
                   //TODO: AQUI VAN A ESTAR LAS TAREAS ENTREGADAS
                   lsSubmissions.isNotEmpty
                       ? SizedBox(
@@ -318,7 +332,9 @@ class _ActivitySectionSubmissionState
                                             );
                                           },
                                           trailingString: submission.status
-                                              ? "Enviado"
+                                              ? (submission.grade == null
+                                                  ? "Enviado"
+                                                  : "${submission.grade} /${widget.activity.puntaje}")
                                               : "Pendiente a envió"),
                                     );
                                   },

@@ -25,7 +25,6 @@ class MainApp extends ConsumerWidget {
         final notices = ref.read(notificationsProvider.notifier);
         NotificationModel notice = FirebaseCM.onNewMessage(message);
         notices.onNewNotice(notice);
-        debugPrint("CAYO UNA NOTIFICACION");
       }
     });
   }

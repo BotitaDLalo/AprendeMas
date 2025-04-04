@@ -11,7 +11,7 @@ class ActivityOptionScreen extends ConsumerStatefulWidget {
   final String subjectName;
   final bool buttonCreateIsVisible;
   final ButtonCreateGeneral? buttonCreateGeneral;
-
+ 
   const ActivityOptionScreen(
       {super.key,
       this.buttonCreateGeneral,

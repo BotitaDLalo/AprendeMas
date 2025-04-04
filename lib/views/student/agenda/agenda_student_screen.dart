@@ -12,6 +12,6 @@ class AgendaStudentScreen extends ConsumerStatefulWidget {
 class _AgendaStudentScreenState extends ConsumerState<AgendaStudentScreen> {
   @override
   Widget build(BuildContext context) {
-    return CalendarBody();
+    return const CalendarBody();
   }
 }

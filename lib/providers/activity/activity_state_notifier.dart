@@ -30,7 +30,7 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
 
   Future<void> getAllActivities(int subjectId) async {
     try {
-      state = state.copyWith(isLoading: true, lsActivities: []);
+      state = state.copyWith(isLoading: true);
       final activities = await activityRepository.getAllActivities(subjectId);
       _setActivities(activities);
     } catch (e) {
@@ -54,12 +54,20 @@ class ActivityNotifier extends StateNotifier<ActivityState> {
     }
   }
 
-  void _setActivities(List<Activity> activities) {
-    if (activities.isNotEmpty) {
-      List<Activity> lsActivities = List.from(state.lsActivities);
-      state = state.copyWith(lsActivities: [...activities, ...lsActivities]);
+void _setActivities(List<Activity> activities) {
+  if (activities.isNotEmpty) {
+    List<Activity> lsActivities = List.from(state.lsActivities);
+
+    List<Activity> newActivities = activities.where((newActivity) {
+      return !lsActivities.any((existingActivity) => existingActivity.activityId == newActivity.activityId);
+    }).toList();
+
+    if (newActivities.isNotEmpty) {
+      state = state.copyWith(lsActivities: [...newActivities, ...lsActivities]);
     }
   }
+}
+
 
 Future<bool> createdActivity(Map<String, dynamic> activityLike) async {
   try {

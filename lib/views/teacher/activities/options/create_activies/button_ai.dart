@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/providers/activity/activty_form_provider.dart';
 import 'package:aprende_mas/providers/chat_gemini/ai_activity.dart';
 
 class ButtonAI extends ConsumerWidget {
@@ -25,14 +26,14 @@ class ButtonAI extends ConsumerWidget {
         final suggestion = await ai.generateActivitySuggestion(prompt);
 
         if (suggestion != null && context.mounted) {
-          _showSuggestionDialog(context, suggestion);
+          _showSuggestionDialog(context, suggestion, ref);
         }
       },
       child: const Icon(Icons.lightbulb),
     );
   }
 
-  void _showSuggestionDialog(BuildContext context, String suggestion) {
+  void _showSuggestionDialog(BuildContext context, String suggestion, WidgetRef ref) {
     // Dividir la respuesta en sugerencias (aquí se dividen por saltos de línea)
     List<String> suggestions = suggestion.split('\n');
 
@@ -112,6 +113,7 @@ class ButtonAI extends ConsumerWidget {
                             onPressed: () {
                               descripcionController.text =
                                   selectedSuggestion; // Llenar el input con la selección
+                              ref.read(activityFormProvider.notifier).onDescripcionChanged(selectedSuggestion);
                               Navigator.pop(context);
                             },
                             child: const Text("✔️ Usar sugerencia"),

@@ -15,12 +15,6 @@ class _SubjectsWithoutGroupsState
   @override
   void initState() {
     super.initState();
-    // ref.read(subjectsProvider.notifier).getSubjects();
-  }
-
-  Color stringToColor(String hexColor) {
-    Color colorCode = Color(int.parse("0xFF$hexColor"));
-    return colorCode;
   }
 
   @override
@@ -36,6 +30,7 @@ class _SubjectsWithoutGroupsState
               subjectId: subject.materiaId,
               nombreMateria: subject.nombreMateria,
               description: subject.descripcion ?? "",
+              accessCode: subject.codigoAcceso ?? "",
               actividades: subject.actividades),
         );
       },

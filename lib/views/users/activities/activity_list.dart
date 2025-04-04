@@ -19,7 +19,7 @@ class _ActivityListState extends ConsumerState<ActivityList> {
     Future.microtask(
       () {
         ref.read(activityProvider.notifier).clearSubmissionData();
-        ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
+        // ref.read(activityProvider.notifier).getAllActivities(widget.subjectId);
       },
     );
     super.initState();
@@ -32,20 +32,19 @@ class _ActivityListState extends ConsumerState<ActivityList> {
           data: (role) => role,
           orElse: () => "",
         );
-    
+
+    final actls = ref.watch(activityProvider).lsActivities;
+    final lsActivities = ref
+        .read(activityProvider.notifier)
+        .getActivitiesBySubject(widget.subjectId, actls);
+
     // final act = ref.watch(activityProvider);
-    // final lsActivities = ref
-    //     .watch(activityProvider.notifier)
-    //     .getActivitiesBySubject(widget.subjectId, act.lsActivities);
-
-
-  final act = ref.watch(activityProvider);
-  final lsActivities = act.lsActivities
-      .where((activity) => activity.materiaId == widget.subjectId)
-      .toList();
+    // final lsActivities = act.lsActivities
+    //     .where((activity) => activity.materiaId == widget.subjectId)
+    //     .toList();
 
     // print("Actividades 1 : ${lsActivities}");
-    // print("Actividades 2 : ${lsActivities.length}"); 
+    // print("Actividades 2 : ${lsActivities.length}");
     // print("filteredActivities ${filteredActivities.length}");
 
     void teacherActivityStudentsSubmissions(Activity activity) {
@@ -154,6 +153,5 @@ class _ActivityListState extends ConsumerState<ActivityList> {
         );
       },
     );
-    
   }
 }
