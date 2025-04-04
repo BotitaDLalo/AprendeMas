@@ -16,8 +16,8 @@ class ConfirmationCodeScreen extends ConsumerWidget {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              // context.go('/verify-email-signin-screen');
-              context.pop();
+              ref.read(authProvider.notifier).popAuth();
+              context.go('/');
             },
           ),
         ),

@@ -85,6 +85,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       final user = await authRepository.login(email, password);
 
       if (user.estaAutorizado == AuthorizationUserStatus.pending.value) {
+        await storageService.saveEmail(email);
         state = state.copyWith(isPendingAuthorizationUser: true);
       } else if (user.estaAutorizado == AuthorizationUserStatus.denied.value) {
         //TODO: VISTA PARA NOTIFICAR QUE FUE DENEGADO
@@ -715,6 +716,16 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
           // user: null,
           errorMessage: errorMessage);
     }
+  }
+
+  popAuth() async {
+    bool isSignedIn = await googleSigninApi.isSignedIn();
+    if (isSignedIn) {
+      await googleSigninApi.handlerGoogleLogout();
+    }else{
+      storageService.removeEmail();
+    }
+    state = AuthState();
   }
 
 //# KEY VALUE STORAGE

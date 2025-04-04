@@ -9,4 +9,6 @@ abstract class GoogleSigninApi {
   Future<AuthUser> checkSignInStatus(String idToken);
 
   Future<bool> verifyExistingUser();
+
+  Future<bool> isSignedIn();
 }

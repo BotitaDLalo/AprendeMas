@@ -15,7 +15,6 @@ class AuthDataSourceImpl implements AuthDataSource {
           await dio.post(uri, data: {'correo': email, 'clave': password});
 
       final user = AuthUserMapper.userJsonToEntity(res.data);
-
       return user;
     } on DioException catch (e) {
       debugPrint(e.message);
@@ -117,8 +116,8 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<AuthUser> loginGoogle() async {
     const uri = "/GoogleSignin/IniciarSesionGoogle";
+    final googleSigninApi = GoogleSigninApiImpl();
     try {
-      final googleSigninApi = GoogleSigninApiImpl();
       final googleUserData = await googleSigninApi.handlerGoogleSignIn();
       final idToken = googleUserData?.idToken;
 
@@ -127,8 +126,14 @@ class AuthDataSourceImpl implements AuthDataSource {
       final user = AuthUserMapper.userJsonToEntity(res.data);
       return user;
     } on DioException catch (e) {
-      if (e.type == DioExceptionType.connectionTimeout)
+      final isSignedIn = await googleSigninApi.isSignedIn();
+      if (isSignedIn) {
+        await googleSigninApi.handlerGoogleLogout();
+      }
+
+      if (e.type == DioExceptionType.connectionTimeout) {
         throw ConnectionTimeout();
+      }
       throw UncontrolledError();
     } catch (e) {
       // throw CustomError(message: 'Ocurrio un error', errorCode: 1);

@@ -52,4 +52,10 @@ class GoogleSigninApiImpl implements GoogleSigninApi {
       throw Exception(e);
     }
   }
+  
+  @override
+  Future<bool> isSignedIn() async{
+      bool isSignedIn = await _googleSignIn.isSignedIn();
+      return isSignedIn;
+  }
 }

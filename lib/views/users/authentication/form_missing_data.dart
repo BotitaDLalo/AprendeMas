@@ -44,14 +44,6 @@ class _FormMissingDataState extends ConsumerState<FormMissingData> {
       },
     );
 
-    // ref.listen(
-    //   missingDataFormProvider,
-    //   (previous, next) {
-    //     if (next.isFormNotPosted && !next.isPosting) {
-    //       closeLoadingScreen();
-    //     }
-    //   },
-    // );
     ref.listen(
       authProvider,
       (previous, next) {

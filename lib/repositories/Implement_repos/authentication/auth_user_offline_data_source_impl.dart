@@ -40,7 +40,6 @@ class AuthUserOfflineDataSourceImpl implements AuthUserOfflineDataSource {
       Database db = await DbLocal.initDatabase();
       if (db.isOpen) {
         List<Map<String, Object?>> user = await db.query(table, limit: 1);
-        print(user[0]);
         return user;
       }
       return [];
