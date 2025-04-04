@@ -11,6 +11,7 @@ class SubjectCard extends ConsumerWidget {
   final int subjectId;
   final String nombreMateria;
   final String description;
+  final String accessCode;
   // final List<Activities>? actividades;
   final List<Activity>? actividades;
 
@@ -20,6 +21,7 @@ class SubjectCard extends ConsumerWidget {
     required this.subjectId,
     required this.nombreMateria,
     required this.description,
+    required this.accessCode,
     required this.actividades,
   });
 
@@ -67,6 +69,7 @@ class SubjectCard extends ConsumerWidget {
               subjectId: subjectId,
               subjectName: nombreMateria,
               description: description,
+              accessCode: accessCode,
             ),
           ],
         ),

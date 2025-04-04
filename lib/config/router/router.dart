@@ -150,6 +150,7 @@ final goRouterProvider = Provider((ref) {
             subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
+            accessCode: subjectData.codigoAcceso ?? "",
           );
         },
       ),

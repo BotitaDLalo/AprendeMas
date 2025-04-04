@@ -30,6 +30,7 @@ class _SubjectsWithoutGroupsContainerState
               subjectId: subject.materiaId,
               nombreMateria: subject.nombreMateria,
               description: subject.descripcion ?? "",
+              accessCode: subject.codigoAcceso ?? "",
               actividades: subject.actividades),
         );
       },

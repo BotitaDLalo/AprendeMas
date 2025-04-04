@@ -12,11 +12,13 @@ class StudentSubjectOptionsScreen extends ConsumerStatefulWidget {
   final int? groupId;
   final String subjectName;
   final String description;
+  final String accessCode;
   const StudentSubjectOptionsScreen({
     super.key,
     this.groupId,
     required this.subjectId,
     required this.subjectName,
+    required this.accessCode,
     required this.description,
   });
 
@@ -76,6 +78,7 @@ class _StudentSubjectOptionsScreenState
           ContainerNameGroupSubjects(
             name: widget.subjectName,
             color: AppTheme.mainColor,
+            accessCode: widget.accessCode,
           ),
           StudentSubjectOptions(
               lsSubjectOptions: lsSubjectOptions,
