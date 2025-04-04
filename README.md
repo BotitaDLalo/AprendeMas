@@ -1,7 +1,7 @@
 # aprende_mas
+Ejecuta:
 
-A new Flutter project.
-
+flutter pub get
 # Comandos para generar archivo.jks
 
 https://docs.flutter.dev/deployment/android
