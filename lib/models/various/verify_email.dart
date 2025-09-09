@@ -5,6 +5,6 @@ class VerifyEmail {
   VerifyEmail({required this.email, required this.isEmailValid});
 
   static verifyEmailToEntity(Map<String, dynamic> json, bool isValid) {
-    return VerifyEmail(email: json['email'], isEmailValid: isValid);
+    return VerifyEmail(email: json['Email'], isEmailValid: isValid);
   }
 }

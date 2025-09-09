@@ -13,3 +13,4 @@ export 'package:sqflite/sqflite.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 export 'package:firebase_core/firebase_core.dart';
 export 'package:flutter_colorpicker/flutter_colorpicker.dart';
+export 'package:google_fonts/google_fonts.dart';

@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/subjects/form_subjects_state.dart';
 import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
 import '../../views/widgets/inputs/color_input.dart';
@@ -8,10 +9,14 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
       createSubjectWithGroupsCallback;
 
   final Function(String, String, Color) createSubjectWithoutGroup;
+  final Function(String) verifyEmailCallback;
+  final Function(int) addStudentsSubjectCallback;
 
   FormSubjectsStateNotifier(
       {required this.createSubjectWithGroupsCallback,
-      required this.createSubjectWithoutGroup})
+      required this.createSubjectWithoutGroup,
+      required this.verifyEmailCallback,
+      required this.addStudentsSubjectCallback})
       : super(FormSubjectsState());
 
   onSubjectNameChanged(String value) {
@@ -99,5 +104,27 @@ class FormSubjectsStateNotifier extends StateNotifier<FormSubjectsState> {
         subjectDescription: description,
         colorCode: colorCode,
         isValid: Formz.validate([subjectName]));
+  }
+
+  Future<void> onVerifyEmailSubmit(String email) async {
+    state = state.copyWith(isPosting: true);
+    VerifyEmail e = await verifyEmailCallback(email);
+    _setVerifyEmail(e);
+    state = state.copyWith(isPosting: false);
+  }
+
+  _setVerifyEmail(VerifyEmail verifyEmail) {
+    state = state.copyWith(verifyEmail: verifyEmail);
+  }
+
+  // onAddStudentsSubjectWithoutGroup(int? groupId, int subjectId) async {
+  onAddStudentsSubjectWithoutGroup(int subjectId) async {
+    state = state.copyWith(isPosting: true);
+    // bool res = await addStudentsGroupCallback(groupId, subjectId);
+    bool res = await addStudentsSubjectCallback(subjectId);
+    if (res) {
+      state = state.copyWith(isFormPosted: res);
+    }
+    state = state.copyWith(isPosting: false);
   }
 }

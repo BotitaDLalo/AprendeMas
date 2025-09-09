@@ -1,4 +1,5 @@
 import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/views/views.dart';
 
 class AgendaStudentScreen extends ConsumerStatefulWidget {
   const AgendaStudentScreen({super.key});
@@ -11,6 +12,6 @@ class AgendaStudentScreen extends ConsumerStatefulWidget {
 class _AgendaStudentScreenState extends ConsumerState<AgendaStudentScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const CalendarBody();
   }
 }

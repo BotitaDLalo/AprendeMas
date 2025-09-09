@@ -6,7 +6,7 @@ import 'package:aprende_mas/providers/authentication/forgot_password_form_state_
 final forgotPasswordFormProvider = StateNotifierProvider.autoDispose<
     ForgotPasswordFormStateNotifier, ForgotPasswordFormState>((ref) {
 
-      final forgotPasswordCallback = ref.watch(authProvider.notifier).resetPassword;
+      final forgotPasswordCallback = ref.read(authProvider.notifier).resetPassword;
  
   return ForgotPasswordFormStateNotifier(forgotPasswordCallback: forgotPasswordCallback);
 });

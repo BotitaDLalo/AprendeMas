@@ -1,24 +1,45 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/groups/groups_state.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/groups/groups_repository.dart';
+import 'package:aprende_mas/repositories/Interface_repos/groups/groups_offline_repository.dart';
 
 class GroupsNotifier extends StateNotifier<GroupsState> {
+  final Function(int) getAllActivitiesCallback;
+  final Function(int) getSubmissionsCallback;
   final GroupsRepository groupsRepository;
+  final ActivityOfflineRepositoryImpl activityOffline;
+  final GroupsOfflineRepository groupsOfflineRepository;
 
-  GroupsNotifier({required this.groupsRepository}) : super(GroupsState());
+  GroupsNotifier(
+      {required this.getAllActivitiesCallback,
+      required this.getSubmissionsCallback,
+      required this.groupsRepository,
+      required this.activityOffline,
+      required this.groupsOfflineRepository})
+      : super(GroupsState());
 
   Future<void> getGroupsSubjects() async {
     try {
       final groups = await groupsRepository.getGroupsSubjects();
-      _setGroups(groups);
+      setGroupsSubjects(groups);
     } catch (e) {
-      throw Exception(e);
+      debugPrint(e.toString());
     }
   }
 
-  _setGroups(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+  Future<void> getGroupsSubjectsOffile() async {
+    try {
+      final groups = await groupsOfflineRepository.getGroupsSubjects();
+      setGroupsSubjects(groups);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void setGroupsSubjects(List<Group> lsGroups) {
+    state = state.copyWith(lsGroups: lsGroups);
   }
 
   Future<void> getCreatedGroups() async {
@@ -31,14 +52,17 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setCreatedGroups(List<GroupsCreated> groupsCreated) {
-    state = state.copyWith(groupsCreated: groupsCreated);
+    state = state.copyWith(lsGroupsCreated: groupsCreated);
   }
 
-  Future<bool> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<SubjectsRow> subjectsList) async {
+  Future<bool> createGroupSubjects(
+      String groupName,
+      String description,
+      // Color colorCode,
+      List<SubjectsRow> subjectsList) async {
     try {
       final group = await groupsRepository.createGroupSubjects(
-          groupName, description, colorCode, subjectsList);
+          groupName, description, subjectsList);
 
       if (group.isNotEmpty) {
         _setCreateGroupSubjects(group);
@@ -51,16 +75,16 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setCreateGroupSubjects(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+    state = state.copyWith(lsGroups: groups);
   }
 
   Future<void> deleteGroup() async {}
 
-  Future<bool> updateGroup(int groupId, String groupName,
-      String descriptionGroup, Color colorGroup) async {
+  Future<bool> updateGroup(
+      int groupId, String groupName, String descriptionGroup) async {
     try {
       Group updateGroup = await groupsRepository.updateGroup(
-          groupId, groupName, descriptionGroup, colorGroup);
+          groupId, groupName, descriptionGroup);
 
       if (updateGroup.grupoId != -1) {
         _setUpdateGroup(updateGroup);
@@ -73,100 +97,53 @@ class GroupsNotifier extends StateNotifier<GroupsState> {
   }
 
   _setUpdateGroup(Group updateGroup) {
-    List<Group> lsGroups = List.from(state.groups);
+    List<Group> lsGroups = List.from(state.lsGroups);
     final index =
         lsGroups.indexWhere((group) => group.grupoId == updateGroup.grupoId);
-    final groupId = updateGroup.grupoId;
     final newGroupName = updateGroup.nombreGrupo;
     final newDescriptionGroup = updateGroup.descripcion;
-    final newColorGroup = updateGroup.codigoColor;
 
     if (index != -1) {
-      lsGroups[index] = Group(
-          grupoId: groupId,
-          nombreGrupo: newGroupName,
-          descripcion: newDescriptionGroup,
-          codigoColor: newColorGroup);
+      lsGroups[index] = lsGroups[index].copyWith(
+          nombreGrupo: newGroupName, descripcion: newDescriptionGroup);
 
-      state = state.copyWith(groups: lsGroups);
+      state = state.copyWith(lsGroups: lsGroups);
     }
   }
 
   onNewSubject(List<Group> groups) {
-    state = state.copyWith(groups: groups);
+    state = state.copyWith(lsGroups: groups);
   }
 
-  Future<VerifyEmail> verifyEmail(String email) async {
-    try {
-      List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-      bool emailExist = lsEmails.any((element) => element.email == email);
-      if (!emailExist) {
-        final res = await groupsRepository.verifyEmail(email);
-        _setVerifyEmail(res);
-        return res;
+  void addGroupToState(Group group) async {
+    state = state.copyWith(lsGroups: [group, ...state.lsGroups]);
+
+    List<Group> lsGroup = [group];
+
+    await groupsOfflineRepository.saveGroupSubjects(lsGroup);
+
+    final lsSubjects = group.materias;
+
+    for (var subj in lsSubjects ?? []) {
+      final subject = subj as Subject;
+      final subjectId = subject.materiaId;
+
+      //& Actualizamos el state de actividades
+      await getAllActivitiesCallback(subjectId);
+      for (var act in subj.actividades ?? []) {
+        final activity = act as Activity;
+        final activityId = activity.activityId;
+        //TODO: METODO PARA GUARDAR ENTREGABLES OFFLINE (tbAlumnoActividades, tbEntregable)
+
+        //& Guardar entregables offline set para submissions state
+        List<Submission> lsSubmissions =
+            await getSubmissionsCallback(activityId!);
+        await activityOffline.saveSubmissions(lsSubmissions, activityId);
       }
-      return VerifyEmail(email: '', isEmailValid: false);
-    } catch (e) {
-      return VerifyEmail(email: '', isEmailValid: false);
     }
   }
 
-  _setVerifyEmail(VerifyEmail verifyEmail) {
-    final lsEmails = List.from(state.lsEmails);
-    state = state.copyWith(lsEmails: [verifyEmail, ...lsEmails]);
-  }
-
-  onDeleteVeryfyEmail(int index) {
-    List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-    lsEmails.removeAt(index);
-    state = state.copyWith(lsEmails: lsEmails);
-  }
-
-  Future<bool> addStudentsGroup(int groupId) async {
-    try {
-      List<VerifyEmail> lsEmails = List.from(state.lsEmails);
-      List<String> lsVerifiedEmails = lsEmails
-          .where((element) => element.isEmailValid)
-          .map((e) => e.email)
-          .toList();
-
-      final res =
-          await groupsRepository.addStudentsGroup(groupId, lsVerifiedEmails);
-
-      if (res.isNotEmpty) {
-        _setAddStudentsGroup(res);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  _setAddStudentsGroup(List<StudentGroup> lsStudentsGroup) {
-    state = state.copyWith(lsStudentsGroup: lsStudentsGroup);
-  }
-
-  clearLsEmails() {
-    state = state.copyWith(lsEmails: []);
-  }
-
-  Future<void> getStudentsGroup(int groupId) async {
-    try {
-      final lsStudentsGroup = await groupsRepository.getStudentsGroup(groupId);
-      _setStudentsGroup(lsStudentsGroup);
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  _setStudentsGroup(List<StudentGroup> lsStudentsGroup) {
-    List<StudentGroup> lsStudents = List.from(state.lsStudentsGroup);
-    state =
-        state.copyWith(lsStudentsGroup: [...lsStudentsGroup, ...lsStudents]);
-  }
-
-  void clearGroupTeacherOptionsLs() {
-    state = state.copyWith(lsEmails: [], lsStudentsGroup: []);
+  void clearGroupsState() {
+    state = GroupsState();
   }
 }

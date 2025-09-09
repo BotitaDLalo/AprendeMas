@@ -10,58 +10,47 @@ class ChatProvider extends ChangeNotifier {
   final ScrollController chatScrollController = ScrollController(); 
   final TextEditingController controller = TextEditingController();
   final List<Message> _messages = [];
+  final List<DateTime> requestTimestamps = [];
 
   List<Message> get messages => _messages;
 
-  Future<void> callGeminiModel(String prompt) async {
+    Future<void> callGeminiModel(String prompt) async {
+    final now = DateTime.now();
+
+    // Filtrar las solicitudes de los últimos 60 segundos
+    requestTimestamps.removeWhere((timestamp) => now.difference(timestamp).inSeconds > 60);
+
+    // Si se hicieron más de 5 peticiones en el último minuto, bloquear
+    if (requestTimestamps.length >= 3) {
+      debugPrint('Límite de peticiones alcanzado. Espera un momento.');
+      return;
+    }
+
+    requestTimestamps.add(now); // Registrar la nueva petición
+    notifyListeners();
+
     try {
-      // Lógica para agregar el mensaje del usuario
       _messages.add(Message(text: prompt, isUser: true));
-      // controller.clear();
       notifyListeners();
 
-      // Llamada a la API de Gemini
       final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: dotenv.env['GOOGLE_API_KEY']!);
       final content = [Content.text(prompt)];
       final response = await model.generateContent(content);
 
-      // Agregar la respuesta de Gemini a la lista
-      _messages.add(Message(text: response.text!, isUser: false));
+      String cleanAnswer = cleanText(response.text ?? "");
+
+    _messages.add(Message(text: cleanAnswer, isUser: false));
       notifyListeners();
       moveScrollToBottom();
     } catch (e) {
-      print('Error al llamar a Gemini: $e');
+      debugPrint('Error al llamar a Gemini: $e');
     }
   }
 
-  Future<void> generateQuestionnaire(String topic, int quantity) async {
-    try {
-      // Crear el JSON con el tema y la cantidad de preguntas
-      final questionnaireJson = {
-        "topic": topic,
-        "quantity": quantity,
-      };
+  String cleanText(String texto) {
+  return texto.replaceAll(RegExp(r'[*#]+'), '').trim();
+}
 
-      // Convertir a un String JSON
-      final jsonString = jsonEncode(questionnaireJson);
-
-      // Agregar el mensaje del usuario
-      _messages.add(Message(text: jsonString, isUser: true));
-      notifyListeners();
-
-      // Llamar al modelo de Gemini
-      final model = GenerativeModel(model: 'gemini-1.5-flash', apiKey: dotenv.env['GOOGLE_API_KEY']!);
-      final content = [Content.text(jsonString)]; // Enviamos el JSON como texto
-      final response = await model.generateContent(content);
-
-      // Agregar la respuesta de Gemini a la lista
-      _messages.add(Message(text: response.text!, isUser: false));
-      notifyListeners();
-      moveScrollToBottom();
-    } catch (e) {
-      print('Error al llamar a Gemini: $e');
-    }
-  }
 
   void moveScrollToBottom() {
   WidgetsBinding.instance.addPostFrameCallback((_) {

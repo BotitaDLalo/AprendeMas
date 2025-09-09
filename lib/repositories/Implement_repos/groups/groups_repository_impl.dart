@@ -17,15 +17,15 @@ class GroupsRepositoryImpl implements GroupsRepository {
 
   @override
   Future<List<Group>> createGroup(
-      String nombreGrupo, String descripcion, Color codigoColor) {
-    return groupsDataSource.createGroup(nombreGrupo, descripcion, codigoColor);
+      String nombreGrupo, String descripcion) {
+    return groupsDataSource.createGroup(nombreGrupo, descripcion);
   }
 
   @override
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<SubjectsRow> subjectsList) {
+      List<SubjectsRow> subjectsList) {
     return groupsDataSource.createGroupSubjects(
-        groupName, description, colorCode, subjectsList);
+        groupName, description, subjectsList);
   }
 
   @override
@@ -40,9 +40,9 @@ class GroupsRepositoryImpl implements GroupsRepository {
 
   @override
   Future<Group> updateGroup(
-      int groupId, String groupName, String descriptionGroup, Color colorGroup) {
+      int groupId, String groupName, String descriptionGroup) {
     return groupsDataSource.updateGroup(
-        groupId, groupName, descriptionGroup, colorGroup);
+        groupId, groupName, descriptionGroup);
   }
   
   @override
@@ -51,14 +51,12 @@ class GroupsRepositoryImpl implements GroupsRepository {
   }
   
   @override
-  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails) {
-    return groupsDataSource.addStudentsGroup(groupId, emails);
+  Future<List<StudentGroupSubject>> addStudentsGroup(int subjectId, List<String> emails) {
+    return groupsDataSource.addStudentsGroup(subjectId, emails);
   }
   
   @override
-  Future<List<StudentGroup>> getStudentsGroup(int groupId) {
-    return groupsDataSource.getStudentsGroup(groupId);
+  Future<List<StudentGroupSubject>> getStudentsGroup(int subjectId) {
+    return groupsDataSource.getStudentsGroup(subjectId);
   }
-
-  
 }

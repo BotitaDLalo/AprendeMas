@@ -1,26 +1,20 @@
 import 'package:aprende_mas/models/models.dart';
 
 class GroupsState {
-  final List<Group> groups;
-  final List<GroupsCreated> groupsCreated;
-  final List<VerifyEmail> lsEmails;
-  final List<StudentGroup> lsStudentsGroup;
+  final List<Group> lsGroups;
+  final List<GroupsCreated> lsGroupsCreated;
 
-  GroupsState(
-      {this.groups = const [],
-      this.groupsCreated = const [],
-      this.lsEmails = const [],
-      this.lsStudentsGroup = const []});
+  GroupsState({
+    this.lsGroups = const [],
+    this.lsGroupsCreated = const [],
+  });
 
   GroupsState copyWith({
-    List<Group>? groups,
-    List<GroupsCreated>? groupsCreated,
-    List<VerifyEmail>? lsEmails,
-    List<StudentGroup>? lsStudentsGroup,
+    List<Group>? lsGroups,
+    List<GroupsCreated>? lsGroupsCreated,
   }) =>
       GroupsState(
-          lsStudentsGroup: lsStudentsGroup ?? this.lsStudentsGroup,
-          groups: groups ?? this.groups,
-          groupsCreated: groupsCreated ?? this.groupsCreated,
-          lsEmails: lsEmails ?? this.lsEmails);
+        lsGroups: lsGroups ?? this.lsGroups,
+        lsGroupsCreated: lsGroupsCreated ?? this.lsGroupsCreated,
+      );
 }

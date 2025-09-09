@@ -1,26 +1,52 @@
 import 'package:aprende_mas/config/utils/packages.dart';
 import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/providers/subjects/subjects_state.dart';
+import 'package:aprende_mas/repositories/Implement_repos/activity/activity_offline_repository_impl.dart';
+import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_offline_repository_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_repository.dart';
 
-class SubjectsStateNotifier extends StateNotifier<List<Subject>> {
+class SubjectsStateNotifier extends StateNotifier<SubjectsState> {
+  Function(int) getAllActivitiesCallback;
+  Function(int) getSubmissionsCallback;
   final SubjectsRepository subjectsRepository;
+  final SubjectsOfflineRepositoryImpl subjectsOffline;
+  final ActivityOfflineRepositoryImpl activityOffline;
   final Ref ref;
 
-  SubjectsStateNotifier(this.ref, {required this.subjectsRepository})
-      : super([]);
+  SubjectsStateNotifier(this.ref,
+      {required this.subjectsRepository,
+      required this.getAllActivitiesCallback,
+      required this.getSubmissionsCallback,
+      required this.subjectsOffline,
+      required this.activityOffline})
+      : super(SubjectsState());
 
   Future<void> getSubjects() async {
     try {
-      final subjects = await subjectsRepository.getSubjects();
-      _setSubjects(subjects);
-    } catch (e) {
+      final subjects = await subjectsRepository.getSubjectsWithoutGroup();
+      debugPrint("SubjectsStateNotifier: $subjects");
+      if (mounted) {
+        setSubjects(subjects);
+      }
+    } catch (e, stacktrace) {
+      debugPrint("Error en getSubjects: $e");
+      debugPrint("Stacktrace: $stacktrace");
       throw Exception(e);
     }
   }
 
-  _setSubjects(List<Subject> subjects) {
-    state = subjects;
+  Future<List<Subject>> getSubjectsWithoutGroup() async {
+    try {
+      List<Subject> lsSubjects = List.from(state.lsSubjects);
+      return lsSubjects;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  setSubjects(List<Subject> subjects) {
+    state = state.copyWith(lsSubjects: subjects);
   }
 
   Future<void> createSubjectWithGroups(String subjectName, String description,
@@ -34,7 +60,7 @@ class SubjectsStateNotifier extends StateNotifier<List<Subject>> {
     }
   }
 
-  void _setSubjectWithGroups(List<Group> groups) {
+  _setSubjectWithGroups(List<Group> groups) {
     final groupsNotifier = ref.read(groupsProvider.notifier);
     groupsNotifier.onNewSubject(groups);
   }
@@ -51,6 +77,27 @@ class SubjectsStateNotifier extends StateNotifier<List<Subject>> {
   }
 
   _setSubjectsWithoutGroups(List<Subject> subjects) {
-    state = subjects;
+    state = state.copyWith(lsSubjects: subjects);
+  }
+
+  void addSubjectToState(Subject subject) async {
+    final subjectId = subject.materiaId;
+    state = state.copyWith(lsSubjects: [subject, ...state.lsSubjects]);
+
+    List<Subject> lsSubject = [subject];
+    await subjectsOffline.saveSubjectsWithoutGroup(lsSubject);
+
+    await getAllActivitiesCallback(subjectId);
+
+    for (var act in subject.actividades ?? []) {
+      final activity = act as Activity;
+      final activityId = activity.activityId;
+      List<Submission> lsSubmissions = await getSubmissionsCallback(activityId!);
+      await activityOffline.saveSubmissions(lsSubmissions, activityId);
+    }
+  }
+
+  void clearSubjectsState() {
+    state = SubjectsState();
   }
 }

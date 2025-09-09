@@ -1,34 +1,50 @@
-import 'package:aprende_mas/models/models.dart';
-import 'package:aprende_mas/views/teacher/activities/activities_teacher_screen.dart';
 import 'package:aprende_mas/config/router/router_notifier_provider.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:aprende_mas/views/student/agenda/event_details_student_screen.dart';
+import 'package:aprende_mas/views/student/groups_subjects/student_join_group_subject.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_activity_students_submissions.dart';
+import 'package:aprende_mas/views/teacher/agenda/create_event_screen.dart';
+import 'package:aprende_mas/views/teacher/agenda/event_details_screen.dart';
+import 'package:aprende_mas/views/teacher/agenda/update_event_screen.dart';
+import 'package:aprende_mas/views/teacher/notices/teacher_create_notice.dart';
+import 'package:aprende_mas/views/users/authentication/confirmation_code_screen.dart';
+import 'package:aprende_mas/views/users/authentication/verify_email_signin_screen.dart';
+import 'router_redirections.dart';
+import 'package:aprende_mas/models/models.dart';
+import 'package:aprende_mas/providers/providers.dart';
 import 'package:aprende_mas/config/utils/packages.dart';
-import 'package:aprende_mas/providers/authentication/auth_provider.dart';
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/create_group_screen.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/create_subject_screen.dart';
-import 'package:aprende_mas/views/teacher/groups_subjects/group_options/group_teacher_options.dart';
-import 'package:aprende_mas/views/teacher/teacher.dart';
-import 'package:aprende_mas/views/users/forgot_password_screen.dart';
+import 'package:aprende_mas/views/student/student.dart';
 import 'package:aprende_mas/views/views.dart';
+import 'package:aprende_mas/views/teacher/teacher.dart';
+import 'package:aprende_mas/views/teacher/activities/teacher_student_submission_grading.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 String routeAux = "";
+List<GoRoute> lsRouter = [];
 final goRouterProvider = Provider((ref) {
   final routerNotifier = ref.read(routerNotifierProvider);
 
   return GoRouter(
-    initialLocation: '/loading',
     refreshListenable: routerNotifier,
     routes: [
       GoRoute(
-        path: '/loading',
-        builder: (context, state) => const LoadingScreen(),
+        path: '/confirmation-code-screen',
+        builder: (context, state) => const ConfirmationCodeScreen(),
+      ),
+      GoRoute(
+        path: '/verify-email-signin-screen',
+        builder: (context, state) => const VerifyEmailSigninScreen(),
       ),
       GoRoute(
         path: '/login-user',
         builder: (context, state) => const LoginUserScreen(),
       ),
       GoRoute(
-        path: '/sigin-user',
+        path: '/missing-data',
+        builder: (context, state) => const MissingDataScreen(),
+      ),
+      GoRoute(
+        path: '/signin-user',
         builder: (context, state) => const SinginUserScreen(),
       ),
       GoRoute(
@@ -48,15 +64,51 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const CreateGroupScreen(),
       ),
       GoRoute(
+        path: '/create-event',
+        builder: (context, state) => const CreateEventScreen(),
+      ),
+      GoRoute(
+        path: '/agenda-teacher',
+        builder: (context, state) => const AgendaTeacherScreen(),
+      ),
+      GoRoute(
+        path: '/update-event',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return UpdateEventScreen(
+            event: eventData, // List<int>
+          );
+        },
+      ),
+      GoRoute(
+        path: '/event-detail',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return EventDetailsScreen(
+            event: eventData,
+            eventId: eventData.eventId!,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/event-detail-student',
+        builder: (context, state) {
+          final eventData = state.extra as Event;
+          return EventDetailsStudentScreen(
+            event: eventData,
+          );
+        },
+      ),
+      GoRoute(
         path: '/group-teacher-settings',
         builder: (context, state) {
           final groupData = state.extra as Group;
           return GroupTeacherOptions(
-            id: groupData.grupoId ?? -1,
+            groupId: groupData.grupoId ?? -1,
             groupName: groupData.nombreGrupo,
             description: groupData.descripcion ?? "",
-            accessCode: groupData.codigoAcceso ?? "",
-            colorCode: groupData.codigoColor,
+            accessCode: groupData.codigoAcceso,
+            // colorCode: groupData.codigoColor,
           );
         },
       ),
@@ -65,25 +117,93 @@ final goRouterProvider = Provider((ref) {
         builder: (context, state) => const CreateSubjectsScreen(),
       ),
       GoRoute(
-        path: '/activities',
+        path: '/teacher-subject-options',
         builder: (context, state) {
           final subjectData = state.extra as Subject;
-          return ActivitiesTeacherScreen(
-            subjectId: subjectData.subjectId,
+          debugPrint(subjectData.groupId.toString());
+          return TeacherSubjectOptionsScreen(
+            groupId: subjectData.groupId,
+            subjectId: subjectData.materiaId,
             subjectName: subjectData.nombreMateria,
             description: subjectData.descripcion ?? "",
-            codeAccess: subjectData.codeAccess ?? "",
+            codeAccess: subjectData.codigoAcceso ?? "",
           );
         },
       ),
       GoRoute(
         path: '/create-activities',
-        builder: (context, state)  {
+        builder: (context, state) {
           final subjectData = state.extra as Subject;
-          return ActivitiesOptionScreen(
-            subjectId: subjectData.subjectId,
-            nombreMateria: subjectData.nombreMateria,);
+          debugPrint(
+              'Route /create-activity: subjectId: ${subjectData.materiaId}, nombreMateria: ${subjectData.nombreMateria}');
+          return CreateActivitiesScreen(
+              subjectId: subjectData.materiaId,
+              nombreMateria: subjectData.nombreMateria);
         },
+      ),
+      GoRoute(
+        path: '/student-subject-options',
+        builder: (context, state) {
+          final subjectData = state.extra as Subject;
+          return StudentSubjectOptionsScreen(
+            groupId: subjectData.groupId,
+            subjectId: subjectData.materiaId,
+            subjectName: subjectData.nombreMateria,
+            description: subjectData.descripcion ?? "",
+            accessCode: subjectData.codigoAcceso ?? "",
+          );
+        },
+      ),
+      GoRoute(
+        path: '/notification-content',
+        builder: (context, state) {
+          final notificationData = state.extra as NotificationModel;
+          return NotificationContentScreen(
+            messageId: notificationData.messageId,
+            title: notificationData.title,
+            body: notificationData.body,
+            sentDate: notificationData.sentDate,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/student-activity-section-submissions',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+
+          return ActivitySectionSubmissions(activity: activity);
+        },
+      ),
+      GoRoute(
+        path: '/teacher-activities-students-options',
+        builder: (context, state) {
+          final activity = state.extra as Activity;
+          return TeacherActivityStudentsSubmissions(
+            activity: activity,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/teacher-student-submission-grading',
+        builder: (context, state) {
+          final dataExtra = state.extra as TeacherStudentSubmissionGradingModel;
+          return TeacherStudentSubmissionGrading(
+            data: dataExtra,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/teacher-create-notice',
+        builder: (context, state) {
+          final notice = state.extra as NoticeModel;
+          return TeacherCreateNotice(
+            notice: notice,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/student-join-group-subject',
+        builder: (context, state) => const StudentJoinGroupSubject(),
       )
     ],
     redirect: (context, state) {
@@ -91,91 +211,35 @@ final goRouterProvider = Provider((ref) {
       final authStatus = routerNotifier.authStatus;
       final authGoogleStatus = routerNotifier.authGoogleStatus;
       final authState = ref.read(authProvider);
-      final authUser = authState.authUser;
-      final user = authState.user;
-      final role = authUser?.rol;
-      final roleGoogle = user?.rol;
-      print(isGoingTo);
+      // final user = authState.user;
+      final role = authState.authUser?.role;
+      // final roleGoogle = user?.rol;
+      final authType = authState.authenticatedType;
 
-      if (isGoingTo == routeAux) {
-        routeAux = "";
-        return null;
-      }
-      /*
-      *1. Si es googe o normal
+      if (authType != AuthenticatedType.undefined) {
+        if (authType == AuthenticatedType.auth) {
+          switch (authStatus) {
+            case AuthStatus.authenticated:
+              return RouterRedirections.redirectsToRoute(role, isGoingTo);
+            case AuthStatus.notAuthenticated:
+              return RouterRedirections.redirectNotAuthenticated(isGoingTo);
 
-      *2. Si se esta autenticado o no
-       */
-      if (role != "") {
-        switch (authStatus) {
-          case AuthStatus.authenticated:
-            switch (role) {
-              case "Docente":
-                switch (isGoingTo) {
-                  case "/create-group":
-                    return "/create-group";
+            default:
+              return "/login-user";
+          }
+        } else if (authType == AuthenticatedType.authGoogle) {
+          switch (authGoogleStatus) {
+            case AuthGoogleStatus.authenticated:
+              return RouterRedirections.redirectsToRoute(role, isGoingTo);
+            case AuthGoogleStatus.notAuthenticated:
+              return RouterRedirections.redirectNotAuthenticated(isGoingTo);
 
-                  case "/create-subject":
-                    return "/create-subject";
-
-                  case "/activities":
-                    return "/activities";
-
-                  case "/create-activities":
-                    return "/create-activities";
-
-                  case "/group-teacher-settings":
-                    return "/group-teacher-settings";
-                }
-                return "/teacher-home";
-              case "Alumno":
-                switch (isGoingTo) {
-                  //TODO: COLOCAR LAS RUTAS PARA USUARIO ALUMNO
-                }
-                return "/student-home";
-            }
-            break;
-
-          case AuthStatus.notAuthenticated:
-            switch (isGoingTo) {
-              // case "/login-user":
-              //   return "/login-user";
-
-              case "/sigin-user":
-                return "/sigin-user";
-
-              case "/forgot-password":
-                return "/forgot-password";
-            }
-            return "/login-user";
-          default:
-            return null;
+            default:
+              return "/login-user";
+          }
         }
-      } else if (roleGoogle != "") {
-        switch (authGoogleStatus) {
-          case AuthGoogleStatus.authenticated:
-            switch (roleGoogle) {
-              case "Docente":
-                switch (isGoingTo) {
-                  case "/create-group":
-                    return "/create-group";
-
-                  case "/create-subject":
-                    return "/create-subject";
-                }
-                return "/teacher-home";
-              case "Alumno":
-                switch (isGoingTo) {
-                  //TODO: COLOCAR LAS RUTAS PARA USUARIO ALUMNO
-                }
-                return "/student-home";
-            }
-            break;
-
-          case AuthGoogleStatus.notAuthenticated:
-            break;
-          default:
-        }
+      } else {
+        return RouterRedirections.redirectNotAuthenticated(isGoingTo);
       }
       return null;
     },

@@ -2,9 +2,12 @@ import 'package:aprende_mas/models/models.dart';
 
 class AuthUserMapper {
   static AuthUser userJsonToEntity(Map<String, dynamic> user) => AuthUser(
-    id: user['id'],
-      nombre: user['nombre'],
-      email: user['correo'],
-      rol: user['rol'],
-      token: user['token']);
+        userId: user['Id'] ?? -1,
+        userName: user['UserName'] ?? "",
+        email: user['Correo'] ?? "",
+        role: user['Rol'] ?? "",
+        token: user['Token'] ?? "",
+        estaAutorizado: user['EstaAutorizado'] ?? "",
+        requiereDatosAdicionales: user['RequiereDatosAdicionales'] ?? false,
+      );
 }

@@ -1,10 +1,10 @@
-import 'package:aprende_mas/providers/authentication/auth_state.dart';
 import 'package:aprende_mas/providers/authentication/auth_state_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
 
 class RouterNotifier extends ChangeNotifier {
   final AuthStateNotifier _authStateNotifier;
-  
+
   AuthStatus _authStatus = AuthStatus.checking;
   AuthGoogleStatus _authGoogleStatus = AuthGoogleStatus.checking;
 
@@ -23,9 +23,8 @@ class RouterNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  set authGoogleStatus(AuthGoogleStatus value){
-    _authGoogleStatus=value;
+  set authGoogleStatus(AuthGoogleStatus value) {
+    _authGoogleStatus = value;
     notifyListeners();
   }
-
 }

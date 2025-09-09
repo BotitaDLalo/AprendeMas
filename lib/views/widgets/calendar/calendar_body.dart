@@ -1,198 +1,126 @@
-import 'dart:collection';
-import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'calendar_header.dart';
-import 'utils.dart';
+import 'package:aprende_mas/config/data/key_value_storage_service_impl.dart';
+import 'package:aprende_mas/config/utils/catalog_names.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/agenda/event_model.dart';
+import 'package:aprende_mas/providers/agenda/event_provider.dart';
+import 'package:aprende_mas/views/widgets/calendar/event_calendar_data_source.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 
-class CalendarBody extends StatefulWidget {
+class CalendarBody extends ConsumerStatefulWidget {
+  const CalendarBody({super.key});
+
   @override
-  _TableComplexExampleState createState() => _TableComplexExampleState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _CalendarBodyState();
 }
 
-class _TableComplexExampleState extends State<CalendarBody> {
-  late final ValueNotifier<List<Event>> _selectedEvents;
-  final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
-  final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
-    equals: isSameDay,
-    hashCode: getHashCode,
-  );
+class _CalendarBodyState extends ConsumerState<CalendarBody> {
+  CalendarView calendarView = CalendarView.month; // Vista predeterminada
+  CalendarController calendarController = CalendarController();
+   late EventCalendarDataSource calendarDataSource;
 
-  late PageController _pageController;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
+  final cn = CatalogNames();
+  final kvs = KeyValueStorageServiceImpl();
+  late String role = "";
 
-  @override
-  void initState() {
-    super.initState();
+    final List<CalendarView> _allowedViews = <CalendarView>[
+    CalendarView.day,
+    CalendarView.week,
+    CalendarView.workWeek,
+    CalendarView.month,
+    CalendarView.schedule,
+  ];
 
-    _selectedDays.add(_focusedDay.value);
-    _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay.value));
-  }
+@override
+void initState() {
+  super.initState();
+  calendarDataSource = EventCalendarDataSource([]);
+  getRole();
+}
 
-  @override
-  void dispose() {
-    _focusedDay.dispose();
-    _selectedEvents.dispose();
-    super.dispose();
-  }
+Future<void> getRole() async {
+  final userRole = await kvs.getRole();
+  setState(() {
+    role = userRole;
+  });
 
-  bool get canClearSelection =>
-      _selectedDays.isNotEmpty || _rangeStart != null || _rangeEnd != null;
-
-  List<Event> _getEventsForDay(DateTime day) {
-    return kEvents[day] ?? [];
-  }
-
-  List<Event> _getEventsForDays(Iterable<DateTime> days) {
-    return [
-      for (final d in days) ..._getEventsForDay(d),
-    ];
-  }
-
-  List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    final days = daysInRange(start, end);
-    return _getEventsForDays(days);
-  }
-
-  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
-    setState(() {
-      if (_selectedDays.contains(selectedDay)) {
-        _selectedDays.remove(selectedDay);
-      } else {
-        _selectedDays.add(selectedDay);
-      }
-
-      _focusedDay.value = focusedDay;
-      _rangeStart = null;
-      _rangeEnd = null;
-      _rangeSelectionMode = RangeSelectionMode.toggledOff;
-    });
-
-    _selectedEvents.value = _getEventsForDays(_selectedDays);
-  }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _focusedDay.value = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _selectedDays.clear();
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
-
-    if (start != null && end != null) {
-      _selectedEvents.value = _getEventsForRange(start, end);
-    } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start);
-    } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end);
+  Future.microtask(() async {
+    if (role == cn.getRoleTeacherName) {
+      await ref.read(eventProvider.notifier).getEvents(); // 🔹 Cargar eventos de docentes
+      final teacherEvents = ref.read(eventProvider).events; // 🔹 Obtener eventos actualizados
+      calendarDataSource.updateEvents(teacherEvents); // 🔹 Actualizar UI solo para docentes
+    } else if (role == cn.getRoleStudentName) {
+      await ref.read(eventProvider.notifier).getEventsStudent(); // 🔹 Cargar eventos de alumnos (pero sin actualizar la UI)
     }
-  }
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
+
+    // Obtener el estado global de eventos
+    // final eventState = ref.watch(eventProvider);
+
+    ref.listen(eventProvider, (previous, next) {
+    calendarDataSource.updateEvents(next.events);
+  });
+
+
     return Scaffold(
-      body: Column(
-        children: [
-          ValueListenableBuilder<DateTime>(
-            valueListenable: _focusedDay,
-            builder: (context, value, _) {
-              return CalendarHeader(
-                focusedDay: value,
-                clearButtonVisible: canClearSelection,
-                onTodayButtonTap: () {
-                  setState(() => _focusedDay.value = DateTime.now());
-                },
-                onClearButtonTap: () {
-                  setState(() {
-                    _rangeStart = null;
-                    _rangeEnd = null;
-                    _selectedDays.clear();
-                    _selectedEvents.value = [];
-                  });
-                },
-                onLeftArrowTap: () {
-                  _pageController.previousPage(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                },
-                onRightArrowTap: () {
-                  _pageController.nextPage(
-                    duration: Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                  );
-                },
-              );
+    body: Column(
+      children: [
+        Expanded(
+          child: SfCalendar(
+            allowedViews: _allowedViews,
+            cellBorderColor: Colors.transparent,
+            dataSource: calendarDataSource,
+            controller: calendarController,
+            monthViewSettings: const MonthViewSettings(
+              appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+              showAgenda: true,
+            ),
+            view: calendarView,
+            showDatePickerButton: true,
+            onTap: (CalendarTapDetails details) {
+            if (details.targetElement == CalendarElement.appointment &&
+                details.appointments != null) {
+              final Event selectedEvent = details.appointments!.first as Event;
+              
+              // 🔹 Condicional para seleccionar la ruta correcta según el rol
+              final String route = (role == cn.getRoleTeacherName) 
+                ? '/event-detail' 
+                : '/event-detail-student';
+
+              context.push(route, extra: selectedEvent);
+            }
             },
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TableCalendar<Event>(
-              rowHeight: 50.0,
-              daysOfWeekStyle: const DaysOfWeekStyle(
-                weekdayStyle: TextStyle(fontSize: 13),
-                weekendStyle: TextStyle(fontSize: 13),
+        ),
+      ],
+    ),
+    floatingActionButton: role == cn.getRoleTeacherName
+          ? FloatingActionButton(
+              onPressed: () async {
+                await context.push('/create-event');
+                ref.read(eventProvider.notifier).getEvents();
+              },
+              backgroundColor: Colors.blue,
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
               ),
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
-              focusedDay: _focusedDay.value,
-              headerVisible: false,
-              selectedDayPredicate: (day) => _selectedDays.contains(day),
-              rangeStartDay: _rangeStart,
-              rangeEndDay: _rangeEnd,
-              calendarFormat: _calendarFormat,
-              rangeSelectionMode: _rangeSelectionMode,
-              eventLoader: _getEventsForDay,
-              holidayPredicate: (day) {
-                // Every 20th day of the month will be treated as a holiday
-                return day.day == 20;
-              },
-              onDaySelected: _onDaySelected,
-              onRangeSelected: _onRangeSelected,
-              onCalendarCreated: (controller) => _pageController = controller,
-              onPageChanged: (focusedDay) => _focusedDay.value = focusedDay,
-              onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                  setState(() => _calendarFormat = format);
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          Expanded(
-            child: ValueListenableBuilder<List<Event>>(
-              valueListenable: _selectedEvents,
-              builder: (context, value, _) {
-                return ListView.builder(
-                  itemCount: value.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 4.0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: ListTile(
-                        onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
+          : null, // No muestra el botón si no es docente
+  );
+}
 }
 
 
+
+
+  

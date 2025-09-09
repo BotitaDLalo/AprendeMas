@@ -17,11 +17,13 @@ class _ChatGeminiScreenState extends ConsumerState<ChatGeminiScreen> {
     // Expresión regular para buscar el formato de preguntas
     final match = RegExp(r'(\d+)\s+preguntas sobre (.+)').firstMatch(inputText);
     if (match != null) {
-      int quantity = int.parse(match.group(1)!);
-      String topic = match.group(2)!;
+      // int quantity = int.parse(match.group(1)!);
+      // String topic = match.group(2)!;
 
       // Llamada a generar el cuestionario con la cantidad y el tema
-      ref.read(chatProvider).generateQuestionnaire(topic, quantity);
+      // ref.read(chatProvider).generateQuestionnaire(topic, quantity);
+
+      ref.read(chatProvider).callGeminiModel(inputText);
     } else {
       // Si no es un cuestionario, envía el mensaje como un mensaje general
       ref.read(chatProvider).callGeminiModel(inputText);

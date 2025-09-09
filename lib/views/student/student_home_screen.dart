@@ -17,14 +17,17 @@ class _StudentHomeScreenState extends ConsumerState<StudentHomeScreen> {
 
   List<WidgetOptions> lsWidgetsOptions = [
     WidgetOptions(
+      title: 'Agenda',
         bottomNavigationBarItem: lsBarItems[0],
         widget: const AgendaStudentScreen()),
     WidgetOptions(
+      title: 'Grupos y Materias',
         bottomNavigationBarItem: lsBarItems[1],
-        widget: const SubjectsStudentScreen()),
+        widget: const GroupsSubjectsStudentScreen()),
     WidgetOptions(
+      title: 'Notificaciones',
         bottomNavigationBarItem: lsBarItems[2],
-        widget: const NoticesStudentScreen())
+        widget: const NotificationsStudentScreen())
   ];
 
   @override

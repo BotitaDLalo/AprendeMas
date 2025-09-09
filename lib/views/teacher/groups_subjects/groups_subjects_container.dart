@@ -1,8 +1,7 @@
-import 'package:aprende_mas/providers/groups/groups_provider.dart';
-import 'package:aprende_mas/views/widgets/cards/subjects_scroll.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../widgets/cards/group_card.dart';
+import 'package:aprende_mas/config/utils/app_theme.dart';
+import 'package:aprende_mas/providers/providers.dart';
+import 'package:aprende_mas/views/widgets/widgets.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
 
 class GroupsSubjectsContainer extends ConsumerStatefulWidget {
   const GroupsSubjectsContainer({
@@ -18,27 +17,28 @@ class _CustomExpansionState extends ConsumerState<GroupsSubjectsContainer> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupsProvider.notifier).getGroupsSubjects();
+    // ref.read(groupsProvider.notifier).getGroupsSubjects();
   }
 
   @override
   Widget build(BuildContext context) {
-    final groups = ref.watch(groupsProvider).groups;
+    final groups = ref.watch(groupsProvider);
 
     return ListView.builder(
-      itemCount: groups.length,
+      itemCount: groups.lsGroups.length,
       itemBuilder: (context, index) {
-        final grupo = groups[index];
-        return CustomExpansionTile(
+        final grupo = groups.lsGroups[index];
+        return GroupCard(
           id: grupo.grupoId ?? -1,
           title: grupo.nombreGrupo,
           description: grupo.descripcion ?? "",
-          accessCode: grupo.codigoAcceso ?? "",
-          color: grupo.codigoColor,
+          accessCode: grupo.codigoAcceso,
+          color: AppTheme.mainColor,
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SubjectScroll(
+                groupId: grupo.grupoId,
                 materias: grupo.materias,
               ),
             )

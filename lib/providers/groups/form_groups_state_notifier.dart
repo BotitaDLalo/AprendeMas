@@ -3,22 +3,22 @@ import 'package:aprende_mas/providers/groups/form_groups_state.dart';
 import 'package:aprende_mas/views/widgets/inputs/color_input.dart';
 import 'package:aprende_mas/views/widgets/inputs/inputs.dart';
 import '../../models/models.dart';
-import 'package:aprende_mas/config/utils/app_theme.dart';
 
 class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   // final Function(String, String, Color) createGroupCallback;
-  final Function(String, String, Color, List<SubjectsRow>)
-      createGroupSubjectsCallback;
-  final Function(int, String, String, Color) updateGroupCallback;
-  final Function(String) verifyEmailCallback;
-  final Function(int) addStudentsGroupCallback;
+  // final Function(String, String, Color, List<SubjectsRow>)
+  //     createGroupSubjectsCallback;
+  final Function(String, String, List<SubjectsRow>) createGroupSubjectsCallback;
+  final Function(int, String, String) updateGroupCallback;
+  // final Function(String) verifyEmailCallback;
+  // final Function(int) addStudentsGroupCallback;
 
-  FormGroupsStateNotifier(
-      {required this.createGroupSubjectsCallback,
-      required this.updateGroupCallback,
-      required this.verifyEmailCallback,
-      required this.addStudentsGroupCallback})
-      : super(FormGroupsState());
+  FormGroupsStateNotifier({
+    required this.createGroupSubjectsCallback,
+    required this.updateGroupCallback,
+    // required this.verifyEmailCallback,
+    // required this.addStudentsGroupCallback
+  }) : super(FormGroupsState());
 
 //#FORMULARIO PARA CREACION DE UN GRUPO
   onGroupNameChanged(String value) {
@@ -35,21 +35,21 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
         isValid: Formz.validate([state.groupName, state.colorCode]));
   }
 
-  onColorCodeChanged(Color color) {
-    final newColorCode = ColorInput.dirty(color);
-    state = state.copyWith(
-        pickerColor: color,
-        colorCode: newColorCode,
-        isValid: Formz.validate([state.groupName, state.colorCode]));
-  }
+  // onColorCodeChanged(Color color) {
+  //   final newColorCode = ColorInput.dirty(color);
+  //   state = state.copyWith(
+  //       pickerColor: color,
+  //       colorCode: newColorCode,
+  //       isValid: Formz.validate([state.groupName, state.colorCode]));
+  // }
 
   onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
     if (state.subjectsRow.isNotEmpty) {
-      bool res = await createGroupSubjectsCallback(state.groupName.value,
-          state.description.value, state.colorCode.value, state.subjectsRow);
+      bool res = await createGroupSubjectsCallback(
+          state.groupName.value, state.description.value, state.subjectsRow);
       state = state.copyWith(isFormPosted: res);
     }
     state = state.copyWith(isPosting: false);
@@ -58,13 +58,13 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
   _touchEveryField() {
     final groupName = GenericInput.dirty(state.groupName.value);
     final description = GenericInput.dirty(state.description.value);
-    final colorCode = ColorInput.dirty(state.colorCode.value);
+    // final colorCode = ColorInput.dirty(state.colorCode.value);
 
     state = state.copyWith(
         groupName: groupName,
         description: description,
-        colorCode: colorCode,
-        isValid: Formz.validate([groupName, colorCode]));
+        // colorCode: colorCode,
+        isValid: Formz.validate([groupName]));
   }
 
 //#FORMULARIO PARA CREAR UNA MATERIA  DENTRO DEL FORMULARIO DE CREACION DE UN GRUPO
@@ -153,71 +153,52 @@ class FormGroupsStateNotifier extends StateNotifier<FormGroupsState> {
         isValid: Formz.validate([state.description]));
   }
 
-  onUpdateGroupColorChanged(Color color) {
-    final newGroupColor = ColorInput.dirty(color);
-    state = state.copyWith(
-        pickerColor: color,
-        colorCode: newGroupColor,
-        isValid: Formz.validate([state.colorCode]));
-  }
+  // onUpdateGroupColorChanged(Color color) {
+  //   final newGroupColor = ColorInput.dirty(color);
+  //   state = state.copyWith(
+  //       pickerColor: color,
+  //       colorCode: newGroupColor,
+  //       isValid: Formz.validate([state.colorCode]));
+  // }
 
-  onUpdateGroupSubmit(int groupId, String groupName, String description,
-      String colorCode) async {
+  onUpdateGroupSubmit(
+    int groupId,
+    String groupName,
+    String description,
+  ) async {
     onGroupId(groupId);
-    _updateGroupTouchEveryField(groupId, groupName, description, colorCode);
+    _updateGroupTouchEveryField(groupId, groupName, description);
     if (!state.isValid) return;
     state = state.copyWith(isPosting: true);
-    bool res = await updateGroupCallback(state.groupId, state.groupName.value,
-        state.description.value, state.colorCode.value);
+    bool res = await updateGroupCallback(
+        state.groupId, state.groupName.value, state.description.value);
     state = state.copyWith(isFormPosted: res);
     state = state.copyWith(isPosting: false);
   }
 
   _updateGroupTouchEveryField(
-      int groupId, String groupName, String description, String colorCode) {
+      int groupId, String groupName, String description) {
     final groupNameInput = GenericInput.dirty(
         state.groupName.value == "" ? groupName : state.groupName.value);
     final groupDescriptionInput = GenericInput.dirty(
         state.description.value == "" ? description : state.description.value);
 
-    final colorCodeStr = state.pickerColor;
-    final String hexColor = colorCodeStr.value.toRadixString(16).toUpperCase();
+    // final colorCodeStr = state.pickerColor;
+    // final String hexColor = colorCodeStr.value.toRadixString(16).toUpperCase();
 
-    final colorGroup = hexColor == "FFFFFF"
-        ? AppTheme.stringToColor(colorCode)
-        : state.pickerColor;
+    // final colorGroup = hexColor == "FFFFFF"
+    //     ? AppTheme.stringToColor(colorCode)
+    //     : state.pickerColor;
 
-    final groupColorInput = ColorInput.dirty(colorGroup);
+    // final groupColorInput = ColorInput.dirty(colorGroup);
 
     state = state.copyWith(
         groupName: groupNameInput,
         description: groupDescriptionInput,
-        colorCode: groupColorInput,
+        // colorCode: groupColorInput,
         isValid: Formz.validate([groupNameInput]) ||
-            Formz.validate([groupDescriptionInput]) ||
-            Formz.validate([groupColorInput]));
-  }
-
-  //# Verificar email
-  Future<void> onVerifyEmailSubmit(String email) async {
-    state = state.copyWith(isPosting: true);
-    VerifyEmail e = await verifyEmailCallback(email);
-    _setVerifyEmail(e);
-    state = state.copyWith(isPosting: false);
-  }
-
-  _setVerifyEmail(VerifyEmail verifyEmail) {
-    state = state.copyWith(verifyEmail: verifyEmail);
-  }
-
-  //#Agregar alumnos a grupo
-
-  onAddStudentsGroup(int groupId) async {
-    state = state.copyWith(isPosting: true);
-    bool res = await addStudentsGroupCallback(groupId);
-    if (res) {
-      state = state.copyWith(isFormPosted: res);
-    }
-    state = state.copyWith(isPosting: false);
+            Formz.validate([groupDescriptionInput])
+        // ||Formz.validate([groupColorInput])
+        );
   }
 }

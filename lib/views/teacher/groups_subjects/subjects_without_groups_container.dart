@@ -15,27 +15,22 @@ class _SubjectsWithoutGroupsState
   @override
   void initState() {
     super.initState();
-    ref.read(subjectsProvider.notifier).getSubjects();
-  }
-
-  Color stringToColor(String hexColor) {
-    Color colorCode = Color(int.parse("0xFF$hexColor"));
-    return colorCode;
   }
 
   @override
   Widget build(BuildContext context) {
     final subjects = ref.watch(subjectsProvider);
     return ListView.builder(
-      itemCount: subjects.length,
+      itemCount: subjects.lsSubjects.length,
       itemBuilder: (context, index) {
-        final subject = subjects[index];
+        final subject = subjects.lsSubjects[index];
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SubjectCard(
-              subjectId: subject.subjectId,
+              subjectId: subject.materiaId,
               nombreMateria: subject.nombreMateria,
               description: subject.descripcion ?? "",
+              accessCode: subject.codigoAcceso ?? "",
               actividades: subject.actividades),
         );
       },

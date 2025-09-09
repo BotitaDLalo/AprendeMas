@@ -28,12 +28,14 @@ class CustomInputMessage extends StatelessWidget {
             Expanded(
               child: TextField(
                 controller: controller,
+                textCapitalization: TextCapitalization.sentences,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: const InputDecoration(
                   hintText: 'Envia una pregunta',
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(horizontal: 20),
                 ),
-                // onSubmitted: (_) => onPressed(),
               ),
             ),
             const SizedBox(

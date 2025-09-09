@@ -1,6 +1,5 @@
-import 'dart:ui';
-import 'package:aprende_mas/models/groups/group.dart';
-import 'package:aprende_mas/models/subjects/subjects.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/models/models.dart';
 import 'package:aprende_mas/repositories/Implement_repos/subjects/subjects_data_source_impl.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_data_source.dart';
 import 'package:aprende_mas/repositories/Interface_repos/subjects/subjects_repository.dart';
@@ -36,10 +35,27 @@ class SubjectsRespositoryImpl implements SubjectsRepository {
     // TODO: implement updateSubject
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<List<Subject>> getSubjects() {
-    return subjectsDataSource.getSubjects();
+  Future<List<Subject>> getSubjectsWithoutGroup() {
+    debugPrint("SubjectsRespositoryImpl: ${subjectsDataSource}");
+    return subjectsDataSource.getSubjectsWithoutGroup();
   }
 
+  @override
+  Future<List<StudentGroupSubject>> getStudentsSubject(int? groupId, int subjectId) {
+    return subjectsDataSource.getStudentsSubject(groupId, subjectId);
+  }
+
+  @override
+  Future<VerifyEmail> verifyEmail(String email) {
+    return subjectsDataSource.verifyEmail(email);
+  }
+
+  @override
+  // Future<List<StudentGroupSubject>> addStudentsSubject(int? groupId, int subjectId, List<String> emails) {
+  Future<List<StudentGroupSubject>> addStudentsSubject(
+      int subjectId, List<String> emails) {
+    return subjectsDataSource.addStudentsSubject(subjectId, emails);
+  }
 }

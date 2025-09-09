@@ -9,15 +9,26 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl({AuthDataSource? dataSource})
       : dataSource = dataSource ?? AuthDataSourceImpl();
 
-
   @override
   Future<AuthUser> login(String email, String password) {
     return dataSource.login(email, password);
   }
 
   @override
-  Future<User> signin(String name, String email, String password, String role) {
-    return dataSource.signin(name, email, password, role);
+  Future<AuthUser> signin(
+      {required String name,
+      required String lastname,
+      required String secondLastname,
+      required String password,
+      required String role,
+      required String fcmToken}) {
+    return dataSource.signin(
+        name: name,
+        lastname: lastname,
+        secondLastname: secondLastname,
+        password: password,
+        role: role,
+        fcmToken: fcmToken);
   }
 
   @override
@@ -29,9 +40,39 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<bool> resetPasswordRequest(String email) {
     return dataSource.resetPasswordRequest(email);
   }
-  
+
   @override
   Future<AuthUser> loginGoogle() {
     return dataSource.loginGoogle();
+  }
+
+  @override
+  Future<AuthUser> registerMissingDataGoogle(
+      {required String names,
+      required String lastname,
+      required String secondLastname,
+      required String role,
+      required String fcmToken}) {
+    return dataSource.registerMissingDataGoogle(
+        names: names,
+        lastname: lastname,
+        secondLastname: secondLastname,
+        role: role,
+        fcmToken: fcmToken);
+  }
+
+  @override
+  Future<bool> verifyExistingFcmToken(int id, String fcmToken, String role) {
+    return dataSource.verifyExistingFcmToken(id, fcmToken, role);
+  }
+
+  @override
+  Future<AuthUser> registerAuthorizationCodeUser(String code, String? idToken) {
+    return dataSource.registerAuthorizationCodeUser(code, idToken);
+  }
+
+  @override
+  Future<bool> verifyEmailSignin(String email) {
+    return dataSource.verifyEmailSignin(email);
   }
 }

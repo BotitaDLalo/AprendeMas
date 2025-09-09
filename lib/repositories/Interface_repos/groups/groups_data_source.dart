@@ -7,19 +7,19 @@ abstract class GroupsDataSource {
   Future<List<GroupsCreated>> getCreatedGroups();
 
   Future<List<Group>> createGroup(
-      String nombreGrupo, String descripcion, Color codigoColor);
+      String nombreGrupo, String descripcion);
 
   Future<List<Group>> createGroupSubjects(String groupName, String description,
-      Color colorCode, List<SubjectsRow> subjectsList);
+       List<SubjectsRow> subjectsList);
 
   Future<void> deleteGroup(int teacherId, int groupId);
 
   Future<Group> updateGroup(
-      int groupId, String groupName, String descriptionGroup, Color colorGroup);
+      int groupId, String groupName, String descriptionGroup);
   
   Future<VerifyEmail> verifyEmail(String email);
 
-  Future<List<StudentGroup>> addStudentsGroup(int groupId, List<String> emails);
+  Future<List<StudentGroupSubject>> addStudentsGroup(int groupId, List<String> emails);
 
-  Future<List<StudentGroup>> getStudentsGroup(int groupId);
+  Future<List<StudentGroupSubject>> getStudentsGroup(int groupId);
 }

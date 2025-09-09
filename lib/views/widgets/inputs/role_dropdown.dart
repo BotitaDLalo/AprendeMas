@@ -1,60 +1,80 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:aprende_mas/providers/authentication/sigin_form_provider.dart';
+import 'package:aprende_mas/config/utils/packages.dart';
+import 'package:aprende_mas/config/utils/utils.dart';
+import 'package:aprende_mas/providers/providers.dart';
 
-
+final roleProvider = StateProvider<String?>((ref) => null);
 
 class RoleDropdown extends ConsumerStatefulWidget {
   const RoleDropdown({super.key});
 
   @override
-  ConsumerState<RoleDropdown> createState() => _RoleDropdownState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _RoleDropdownState();
 }
 
 class _RoleDropdownState extends ConsumerState<RoleDropdown> {
-  String? selectedRole;
-
   @override
   Widget build(BuildContext context) {
-    final siginFormNotifier = ref.watch(siginFormProvider.notifier); // Acceder al notifier
+    final cn = ref.watch(catalogNamesProvider);
+    final List<String> users = [cn.getRoleStudentName, cn.getRoleTeacherName];
+    final selectedValue = ref.watch(roleProvider);
+    final missingDataNotifier = ref.read(missingDataFormProvider.notifier);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DropdownButton<String>(
-          value: selectedRole,
-          hint: const Text(
-            "Seleccione un rol",
-            style: TextStyle(fontSize: 25),
-          ),
-          items: const <DropdownMenuItem<String>>[
-            DropdownMenuItem(
-              value: "Docente",
-              child: Text(
-                "Docente",
-                style: TextStyle(fontSize: 25),
-              ),
-            ),
-            DropdownMenuItem(
-              value: "Alumno",
-              child: Text(
-                "Alumno",
-                style: TextStyle(fontSize: 25),
-              ),
-            ),
-          ],
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedRole = newValue;
-            });
-            if (newValue == "Docente") {
-              siginFormNotifier.onRoleChanged(newValue.toString());
-            } else if (newValue == "Alumno") {
-              siginFormNotifier.onRoleChanged(newValue.toString());
-            }
-          },
+    ref.listen(
+      missingDataFormProvider,
+      (previous, next) {
+        if (previous?.role != next.role) {
+          missingDataNotifier.onRoleChanged(selectedValue ?? "");
+        }
+      },
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(96, 70, 70, 70),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(1.5),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
         ),
-      ],
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              hint: const Row(
+                children: [
+                  Text(
+                    "Rol",
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                  ),
+                ],
+              ),
+              isExpanded: true,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
+              dropdownColor: Colors.white,
+              value: selectedValue,
+              items: users.map((user) {
+                return DropdownMenuItem<String>(
+                  value: user,
+                  child: Text(
+                    user,
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                ref.read(roleProvider.notifier).state = value;
+              },
+            ),
+          ),
+        ),
+      ),
     );
   }
+
 }

@@ -1,14 +1,21 @@
 class AuthUser {
-  final int id;
-  final String nombre;
+  final int userId;
+  final String userName;
   final String email;
-  final String rol;
+  final String role;
   final String token;
+  final String? estaAutorizado;
+  final bool? requiereDatosAdicionales;
 
   AuthUser(
-      {required this.id,
-      required this.nombre,
+      {required this.userId,
+      required this.userName,
       required this.email,
-      required this.rol,
-      required this.token});
+      required this.role,
+      required this.token,
+      this.estaAutorizado,
+      this.requiereDatosAdicionales});
+
+  static AuthUser authUserVoid() =>
+      AuthUser(userId: -1, userName: '', email: '', role: '', token: '');
 }

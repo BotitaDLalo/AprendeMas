@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SubjectScroll extends ConsumerWidget {
+  final int? groupId;
   final List<Subject>? materias;
-  const SubjectScroll({super.key, required this.materias});
+  const SubjectScroll({super.key, required this.materias, this.groupId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,11 +16,12 @@ class SubjectScroll extends ConsumerWidget {
         children: [
           for (var materia in materias ?? [])
             SubjectCard(
-              subjectId: materia.subjectId,
+              groupId: groupId,
+              subjectId: materia.materiaId,
               nombreMateria: materia.nombreMateria,
+              accessCode: materia.codigoAcceso,
               description: materia.descripcion ?? "",
-              // actividades: materia.actividades,
-              actividades: [],
+              actividades: materia.actividades,
             )
         ],
       ),
