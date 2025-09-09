@@ -21,23 +21,23 @@ class ActivityStudentSubmissionsData {
 
   static ActivityStudentSubmissionsData responseToEntity(
       Map<String, dynamic> response) {
-    final lsResponse = response['alumnosEntregables'] as List<dynamic>;
+    final lsResponse = response['AlumnosEntregables'] as List<dynamic>;
     return ActivityStudentSubmissionsData(
-        activityId: response['actividadId'] as int,
-        score: response['puntaje'] as int,
-        totalSubmissions: response['totalEntregados'] as int,
+        activityId: response['ActividadId'] as int,
+        score: response['Puntaje'] as int,
+        totalSubmissions: response['TotalEntregados'] as int,
         lsStudentsSubmissions: lsResponse
             .map(
               (e) => StudentSubmission(
-                  submissionId: e['entregaId'] as int,
-                  studentId: e['alumnoId'] as int,
-                  userName: e['nombreUsuario'] as String,
-                  names: e['nombres'] as String,
-                  lastName: e['apellidoPaterno'] as String,
-                  lastName2: e['apellidoMaterno'] as String,
-                  submissionDate: e['fechaEntrega'].toString(),
-                  answer: e['respuesta'] as String,
-                  grade: e['calificacion'] as int),
+                  submissionId: e['EntregaId'] as int,
+                  studentId: e['AlumnoId'] as int,
+                  userName: e['NombreUsuario'] as String,
+                  names: e['Nombres'] as String,
+                  lastName: e['ApellidoPaterno'] as String,
+                  lastName2: e['ApellidoMaterno'] as String,
+                  submissionDate: e['FechaEntrega'].toString(),
+                  answer: e['Respuesta'] as String,
+                  grade: e['Calificacion'] as int),
             )
             .toList());
   }

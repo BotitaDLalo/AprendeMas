@@ -8,8 +8,9 @@ class JoinClass {
   JoinClass(
       {required this.group, required this.subject, required this.isGroup});
 
-  static JoinClass  resJsonToEntity(Map<String, dynamic> map) => JoinClass(
-      group: map['grupo'] != null ? Group.mapToEntity(map['grupo']): null,
-      subject: map['materia'] != null ? Subject.mapToEntity(map['materia']): null,
-      isGroup: map['esGrupo'] as bool);
+  static JoinClass resJsonToEntity(Map<String, dynamic> map) => JoinClass(
+      group: map['Grupo'] != null ? Group.mapToEntity(map['Grupo']) : null,
+      subject:
+          map['Materia'] != null ? Subject.mapToEntity(map['Materia']) : null,
+      isGroup: map['EsGrupo'] as bool);
 }

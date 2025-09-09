@@ -8,15 +8,17 @@ class EventMapper {
   static List<Event> fromMapList(List<Map<String, dynamic>> data) {
     return data.map((map) {
       return Event(
-        eventId: map['eventoId'] as int?,
-        teacherId: map['docenteId'] as int,
-        startDate: formatDate(map['fechaInicio']),
-        endDate: formatDate(map['fechaFinal']),
-        title: map['titulo'] as String,
-        description: map['descripcion'] as String,
-        color: map['color'] as String,
-        groupIds: (map['grupoId'] as int?) != null ? [map['grupoId'] as int] : [],
-        subjectIds: (map['materiaId'] as int?) != null ? [map['materiaId'] as int] : [],
+        eventId: map['EventoId'] as int?,
+        teacherId: map['DocenteId'] as int,
+        startDate: formatDate(map['FechaInicio']),
+        endDate: formatDate(map['FechaFinal']),
+        title: map['Titulo'] as String,
+        description: map['Descripcion'] as String,
+        color: map['Color'] as String,
+        groupIds:
+            (map['GrupoId'] as int?) != null ? [map['GrupoId'] as int] : [],
+        subjectIds:
+            (map['MateriaId'] as int?) != null ? [map['MateriaId'] as int] : [],
       );
     }).toList();
   }
@@ -30,26 +32,28 @@ class EventMapper {
       'titulo': event.title,
       'descripcion': event.description,
       'color': event.color,
-      'grupoId': event.groupIds?.isNotEmpty == true ? event.groupIds!.first : null, // 🔹 Ajustado
-      'materiaId': event.subjectIds?.isNotEmpty == true ? event.subjectIds!.first : null,
+      'grupoId': event.groupIds?.isNotEmpty == true
+          ? event.groupIds!.first
+          : null, // 🔹 Ajustado
+      'materiaId':
+          event.subjectIds?.isNotEmpty == true ? event.subjectIds!.first : null,
     };
   }
 
   static Event jsonToEntity(Map<String, dynamic> json) {
     print("Datos json: $json");
     return Event(
-      eventId: json['eventoId'] as int?,
-      teacherId: json['docenteId'] as int,
-      startDate: formatDate(json['fechaInicio']),
-      endDate: formatDate(json['fechaFinal']),
-      title: json['titulo'] as String,
-      description: json['descripcion'] as String,
-      color: json['color'] as String,
-      groupIds: json['grupoId'] != null ? [json['grupoId'] as int] : [],
-      subjectIds: json['materiaId'] != null ? [json['materiaId'] as int] : [],
+      eventId: json['EventoId'] as int?,
+      teacherId: json['DocenteId'] as int,
+      startDate: formatDate(json['FechaInicio']),
+      endDate: formatDate(json['FechaFinal']),
+      title: json['Titulo'] as String,
+      description: json['Descripcion'] as String,
+      color: json['Color'] as String,
+      groupIds: json['GrupoId'] != null ? [json['GrupoId'] as int] : [],
+      subjectIds: json['MateriaId'] != null ? [json['MateriaId'] as int] : [],
     );
   }
- 
 
   static List<Map<String, dynamic>> toMapList(List<Event> events) {
     return events.map((event) => toMap(event)).toList();

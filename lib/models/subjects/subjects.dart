@@ -25,39 +25,39 @@ class Subject {
       List<Map<String, dynamic>> subjectsJson) {
     List<Subject> lsSubjects = subjectsJson
         .map((e) => Subject(
-            materiaId: e['materiaId'],
-            nombreMateria: e['nombreMateria'],
-            descripcion: e['descripcion'],
-            codigoAcceso: e['codigoAcceso'],
-            actividades: (e['actividades'] as List<dynamic>? ?? [])
+            materiaId: e['MateriaId'],
+            nombreMateria: e['NombreMateria'],
+            descripcion: e['Descripcion'],
+            codigoAcceso: e['CodigoAcceso'],
+            actividades: (e['Actividades'] as List<dynamic>? ?? [])
                 .map((e) => Activity(
-                    activityId: e['actividadId'],
-                    nombreActividad: e['nombreActividad'],
-                    descripcion: e['descripcion'],
-                    tipoActividadId: e['tipoActividadId'],
-                    fechaCreacion: formatDate(e['fechaCreacion']),
-                    fechaLimite: formatDate(e['fechaLimite']),
-                    puntaje: e['puntaje'],
-                    materiaId: e['materiaId']))
+                    activityId: e['ActividadId'],
+                    nombreActividad: e['NombreActividad'],
+                    descripcion: e['Descripcion'],
+                    tipoActividadId: e['TipoActividadId'],
+                    fechaCreacion: formatDate(e['FechaCreacion']),
+                    fechaLimite: formatDate(e['FechaLimite']),
+                    puntaje: e['Puntaje'],
+                    materiaId: e['MateriaId']))
                 .toList()))
         .toList();
     return lsSubjects;
   }
 
   static Subject mapToEntity(Map<String, dynamic> map) => Subject(
-      materiaId: map['materiaId'],
-      nombreMateria: map['nombreMateria'],
-      descripcion: map['descripcion'],
-      codigoAcceso: map['codigoAcceso'],
-      actividades: (map['actividades'] as List<dynamic>? ?? [])
+      materiaId: map['MateriaId'],
+      nombreMateria: map['NombreMateria'],
+      descripcion: map['Descripcion'],
+      codigoAcceso: map['CodigoAcceso'],
+      actividades: (map['Actividades'] as List<dynamic>? ?? [])
           .map((e) => Activity(
-              activityId: e['actividadId'],
-              nombreActividad: e['nombreActividad'],
-              descripcion: e['descripcion'],
-              tipoActividadId: e['tipoActividadId'],
-              fechaCreacion: formatDate(e['fechaCreacion']),
-              fechaLimite: formatDate(e['fechaLimite']),
-              puntaje: e['puntaje'],
-              materiaId: e['materiaId']))
+              activityId: e['ActividadId'],
+              nombreActividad: e['NombreActividad'],
+              descripcion: e['Descripcion'],
+              tipoActividadId: e['TipoActividadId'],
+              fechaCreacion: formatDate(e['FechaCreacion']),
+              fechaLimite: formatDate(e['FechaLimite']),
+              puntaje: e['Puntaje'],
+              materiaId: e['MateriaId']))
           .toList());
 }

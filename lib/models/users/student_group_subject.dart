@@ -16,11 +16,11 @@ class StudentGroupSubject {
       List<Map<String, dynamic>> studentGroupJson) {
     return studentGroupJson.map((json) {
       return StudentGroupSubject(
-        email: json['email'] as String,
-        username: json['userName'] as String,
-        name: json['nombre'] as String,
-        lastName: json['apellidoPaterno'] as String,
-        lastName2: json['apellidoMaterno'] as String,
+        email: json['Email'] as String,
+        username: json['UserName'] as String,
+        name: json['Nombre'] as String,
+        lastName: json['ApellidoPaterno'] as String,
+        lastName2: json['ApellidoMaterno'] as String,
       );
     }).toList();
   }

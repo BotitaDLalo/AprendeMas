@@ -22,15 +22,15 @@ class Submission {
 
   static List<Submission> submissionJsonToEntity(
       Map<String, dynamic> submissionRes, int activityId) {
-    int gradeRes = submissionRes['calificacion'] as int;
+    int gradeRes = submissionRes['Calificacion'] as int;
     return [
       Submission(
-          studentActivityId: submissionRes['alumnoActividadId'],
-          submissionId: submissionRes['entregaId'],
+          studentActivityId: submissionRes['AlumnoActividadId'],
+          submissionId: submissionRes['EntregaId'],
           activityId: activityId,
-          answer: submissionRes['respuesta'],
-          submissionDate: submissionRes['fechaEntrega'],
-          status: submissionRes['status'],
+          answer: submissionRes['Respuesta'],
+          submissionDate: submissionRes['FechaEntrega'],
+          status: submissionRes['Status'],
           grade: gradeRes == 0 ? null : gradeRes.toString())
     ];
   }

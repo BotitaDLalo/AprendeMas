@@ -34,35 +34,35 @@ class Group {
 
     for (var group in groupsAndSubject) {
       List<Subject> materias =
-          (group['materias'] as List? ?? []).map((materia) {
+          (group['Materias'] as List? ?? []).map((materia) {
         List<Activity> actividades =
-            (materia['actividades'] as List).map((actividad) {
+            (materia['Actividades'] as List).map((actividad) {
           return Activity(
-              activityId: actividad['actividadId'],
-              nombreActividad: actividad['nombreActividad'],
-              descripcion: actividad['descripcion'],
-              tipoActividadId: actividad['tipoActividadId'],
-              fechaCreacion: formatDate(actividad['fechaCreacion']),
-              fechaLimite: formatDate(actividad['fechaLimite']),
-              puntaje: actividad['puntaje'],
-              materiaId: actividad['materiaId']);
+              activityId: actividad['ActividadId'],
+              nombreActividad: actividad['NombreActividad'],
+              descripcion: actividad['Descripcion'],
+              tipoActividadId: actividad['TipoActividadId'],
+              fechaCreacion: formatDate(actividad['FechaCreacion']),
+              fechaLimite: formatDate(actividad['FechaLimite']),
+              puntaje: actividad['Puntaje'],
+              materiaId: actividad['MateriaId']);
         }).toList();
 
         return Subject(
-          materiaId: materia['materiaId'],
-          nombreMateria: materia['nombreMateria'],
-          descripcion: materia['descripcion'] ?? "",
-          codigoColor: materia['codigoColor'] ?? "",
-          codigoAcceso: materia['codigoAcceso'] ?? "",
+          materiaId: materia['MateriaId'],
+          nombreMateria: materia['NombreMateria'],
+          descripcion: materia['Descripcion'] ?? "",
+          codigoColor: materia['CodigoColor'] ?? "",
+          codigoAcceso: materia['CodigoAcceso'] ?? "",
           actividades: actividades,
         );
       }).toList();
 
       groups.add(Group(
-        grupoId: group['grupoId'],
-        nombreGrupo: group['nombreGrupo'],
-        descripcion: group['descripcion'] ?? "",
-        codigoAcceso: group['codigoAcceso'] ?? "",
+        grupoId: group['GrupoId'],
+        nombreGrupo: group['NombreGrupo'],
+        descripcion: group['Descripcion'] ?? "",
+        codigoAcceso: group['CodigoAcceso'] ?? "",
         // codigoColor: mainColorToHex,
         materias: materias,
       ));
@@ -82,10 +82,10 @@ class Group {
       ));
 
   static Group groupToEntity(Map<String, dynamic> group) => Group(
-        grupoId: group['grupoId'],
-        nombreGrupo: group['nombreGrupo'],
-        descripcion: group['descripcion'],
-        codigoAcceso: group['codigoAcceso'],
+        grupoId: group['GrupoId'],
+        nombreGrupo: group['NombreGrupo'],
+        descripcion: group['Descripcion'],
+        codigoAcceso: group['CodigoAcceso'],
       );
 
   static Group queryToEntityGroup(Map<String, Object?> queryGroup) {
